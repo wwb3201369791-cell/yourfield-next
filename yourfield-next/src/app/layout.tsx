@@ -1,3 +1,5 @@
+import '@/styles/globals.css';
+
 import { headers } from 'next/headers';
 import type { ReactNode } from 'react';
 
@@ -13,7 +15,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang={locale}>
-      <body>{children}</body>
+      <body className="bg-bg text-text antialiased">{children}</body>
     </html>
   );
 }

@@ -19,12 +19,14 @@ export default async function LocalePage({ params }: LocalePageProps) {
   const t = await getTranslations({ locale: params.locale });
 
   return (
-    <main>
-      <h1>{t('common.home')}</h1>
-      <p>
+    <main className="mx-auto flex min-h-screen max-w-5xl flex-col items-start justify-center gap-4 px-6 py-16">
+      <h1 className="text-4xl font-semibold text-primary">{t('common.home')}</h1>
+      <p className="text-lg text-text-light">
         {t('nav.products')} / {t('nav.contact')}
       </p>
-      <p>Locale: {params.locale}</p>
+      <p className="rounded border border-border bg-bg-light px-3 py-1 text-sm text-text-light">
+        Locale: {params.locale}
+      </p>
     </main>
   );
 }

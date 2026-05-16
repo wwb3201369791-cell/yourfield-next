@@ -26,3 +26,10 @@
 **理由**: 保持 P0 工程仍在 `yourfield-next/` 内独立管理，同时让 Git hooks 对当前仓库真实生效，不需要把前端项目移动到仓库根。
 **影响范围**: `yourfield-next/package.json`、`yourfield-next/.husky/pre-commit`、`yourfield-next/.husky/commit-msg`，以及本地 Git `core.hooksPath`。
 **回滚成本**: 低；若未来仓库根改成 `yourfield-next/` 或拆仓，只需把 `prepare` 改回 `husky` 并调整 hook 命令路径。
+
+## 2026-05-16 — P0.S5 选择 Tailwind CSS v3.4
+**背景**: Roadmap P0.2.5 要求在 Tailwind / CSS Modules / vanilla-extract 中自决 CSS 方案，并把旧站 `:root` CSS 变量桥接到新工程。
+**选择**: 采用 `tailwindcss@3.4.19`，配合 PostCSS / Autoprefixer / `prettier-plugin-tailwindcss`；旧站色板、圆角、阴影、字体等继续保留为 CSS 变量，再映射进 `tailwind.config.js`。
+**理由**: Tailwind v3.4 在实施书允许范围内，能保持旧站视觉 token，不引入运行时 CSS-in-JS，也比 CSS Modules 更适合 P1 大量页面迁移时快速复用布局和状态样式。
+**影响范围**: `yourfield-next/package.json`、`pnpm-lock.yaml`、`tailwind.config.js`、`postcss.config.js`、`.prettierrc`、`src/styles/*`、`src/app/layout.tsx`、`docs/DECISIONS.md`。
+**回滚成本**: 中低；删除 Tailwind/PostCSS 配置和依赖、恢复普通 CSS 即可，但 P1 页面迁移中已写的 utility class 需要同步改写。
