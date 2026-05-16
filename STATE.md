@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-16 by Agent #5
+最后更新: 2026-05-17 by Agent #6
 
 ## 当前阶段
 P0 — 脚手架与配置基线
@@ -14,13 +14,14 @@ P0 — 脚手架与配置基线
 - ✅ P0.S3（Roadmap: P0.2.3）— 多语言路由占位
 - ✅ P0.S4（Roadmap: P0.2.4）— lint / format / typecheck
 - ✅ P0.S5（Roadmap: P0.2.5）— CSS 方案选定
+- ✅ P0.S6（Roadmap: P0.2.6）— 环境变量
 
 ## Next
-**P0.S6（Roadmap: P0.2.6）** — 环境变量
+**P0.S7（Roadmap: P0.2.7）** — CI 骨架
 
 ## 阻塞
 - 待用户提供 Git 远程仓库地址
-- 待用户确认 CI 平台
+- 待用户确认 CI 平台（P0.S7 会直接受影响；若开工前仍未确认，下个 agent 需先请示）
 - 待用户确认已审阅并基本认可 `升级实施书_v2` 0-4 章
 
 ## 新发现的 TODO
@@ -33,6 +34,7 @@ P0 — 脚手架与配置基线
 - 可选: 当前仓库 hooksPath 已由 Husky 设置为 `yourfield-next/.husky/_`；新环境跑 `pnpm install` / `pnpm prepare` 会重新设置
 - 可选: P0.S5 已把旧站 7 个 Inter 字体复制到 `yourfield-next/public/fonts/inter/`；P1 字体本地化时复核即可，不必重复复制
 - 可选: 旧站没有 spacing CSS 变量，Tailwind spacing 目前沿用默认刻度；P1 视觉迁移中如出现稳定间距模式，再沉淀语义 spacing token
+- 可选: P2/P3/P4/P5 真正接入 Payload、对象存储、搜索、统计、邮件、地图、CAPTCHA、监控时，把对应 env 变量从“允许为空但校验格式”升级为必填校验
 
 ## Phase 进度概览
 - [ ] P0 — 脚手架与配置基线

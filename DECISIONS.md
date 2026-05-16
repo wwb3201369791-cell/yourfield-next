@@ -33,3 +33,10 @@
 **理由**: Tailwind v3.4 在实施书允许范围内，能保持旧站视觉 token，不引入运行时 CSS-in-JS，也比 CSS Modules 更适合 P1 大量页面迁移时快速复用布局和状态样式。
 **影响范围**: `yourfield-next/package.json`、`pnpm-lock.yaml`、`tailwind.config.js`、`postcss.config.js`、`.prettierrc`、`src/styles/*`、`src/app/layout.tsx`、`docs/DECISIONS.md`。
 **回滚成本**: 中低；删除 Tailwind/PostCSS 配置和依赖、恢复普通 CSS 即可，但 P1 页面迁移中已写的 utility class 需要同步改写。
+
+## 2026-05-17 — P0.S6 对未来阶段密钥采用阶段性校验
+**背景**: 附录C要求 `src/lib/env.ts` 用 Zod 校验环境变量，但 P0 当前尚未接入 Payload / S3 / Meili / Umami / SMTP 等服务，也不能把真实密钥写入仓库；若在 P0 强制要求所有未来阶段密钥，`pnpm build` 会在无凭证环境下失败。
+**选择**: P0 阶段强校验站点基础、locale、数据库本地默认值等当前可用变量；未来阶段的密钥和第三方配置允许为空，但一旦提供就校验格式。
+**理由**: 既让应用启动时走统一 env 入口，又不要求在 P0 提前伪造或提交敏感凭证。
+**影响范围**: `yourfield-next/src/lib/env.ts`、`yourfield-next/src/lib/i18n/locale.ts`、`yourfield-next/.env.example`。
+**回滚成本**: 低；P2/P3/P4/P5 接入对应服务时，把相关变量从 optional 改为 required 并补充验收即可。

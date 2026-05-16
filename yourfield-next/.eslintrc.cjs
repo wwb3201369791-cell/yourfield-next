@@ -66,5 +66,11 @@ module.exports = {
         'no-console': 'off',
       },
     },
+    {
+      files: ['src/lib/env.ts'],
+      rules: {
+        'no-restricted-syntax': 'off',
+      },
+    },
   ],
 };
