@@ -1,8 +1,18 @@
 import { notFound } from 'next/navigation';
 import { getRequestConfig } from 'next-intl/server';
 
-import { isLocale } from '@/lib/i18n/locale';
+import { isLocale, type Locale } from '@/lib/i18n/locale';
 import { expandFlatMessages } from '@/lib/i18n/messages';
+
+import enMessages from '../messages/en.json';
+import ruMessages from '../messages/ru.json';
+import zhMessages from '../messages/zh.json';
+
+const flatMessagesByLocale = {
+  en: enMessages,
+  ru: ruMessages,
+  zh: zhMessages,
+} satisfies Record<Locale, Record<string, string>>;
 
 export default getRequestConfig(async ({ requestLocale }) => {
   const locale = await requestLocale;
@@ -11,10 +21,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     notFound();
   }
 
-  const messages = (await import(`../messages/${locale}.json`)).default as Record<string, string>;
-
   return {
     locale,
-    messages: expandFlatMessages(messages),
+    messages: expandFlatMessages(flatMessagesByLocale[locale]),
   };
 });

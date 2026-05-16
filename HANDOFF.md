@@ -1,30 +1,29 @@
 # HANDOFF — 给下一个 agent
 
 日期: 2026-05-16
-本次 Step: P0.S3 — 多语言路由占位
-Agent: #3
+本次 Step: P0.S4 — lint / format / typecheck
+Agent: #4
 
 ## 我做了什么(1-3 句话)
-- 安装 `next-intl@^3`，把旧站 `locales/zh.json`、`en.json`、`ru.json` 原样复制到 `yourfield-next/messages/`。
-- 新增 `src/i18n.ts`、`src/middleware.ts` 和 i18n routing/locale 工具，根路径会按 cookie / Accept-Language 跳转到 `/zh`、`/en`、`/ru`。
-- 首页占位页现在通过 `next-intl` 读取旧站翻译 key，并输出当前 locale。
+- 安装并配置 ESLint、Prettier、Husky、lint-staged、commitlint，补齐 `package.json` 的 `lint`、`lint:fix`、`format`、`typecheck`、`build`、`dev`、`start` 等脚本。
+- 新增 `.eslintrc.cjs`、`.prettierrc`、`.prettierignore`、`commitlint.config.cjs` 和 `.husky/pre-commit` / `.husky/commit-msg`。
+- 为通过严格 lint，整理了现有 TSX 导入顺序，并把 `src/i18n.ts` 的三语 JSON 读取改为静态映射，仍保持 `messages/*.json` 原样扁平 key。
 
 ## 我没做完什么 / 为什么停在这里
-- P0.S3 已完成；按接力协议停在 P0.S4，不继续做 eslint、prettier、husky、commitlint 或 package scripts。
+- P0.S4 已完成；按接力协议停在 P0.S5，不继续做 CSS 方案选型、Tailwind 配置、全局样式或 env。
 
 ## 下一个要注意的坑
-- 旧站 messages JSON 仍保持扁平 key（如 `common.home`）；`src/lib/i18n/messages.ts` 会在运行时展开给 `next-intl` 用，不要把三语 JSON 改成嵌套结构。
-- `package.json` 目前仍没有 `lint` / `typecheck` / `build` / `dev` scripts；这是 P0.S4 要补的内容。
-- 3000 和 3001 端口仍可能被占用；本次开发服务验证使用 4000 端口。
-- 浏览器验证时 `/favicon.ico` 返回 404；这是当前骨架缺 favicon，不影响本 Step。
-- 根目录旧静态包和实施书大多仍是 untracked；不要把它们混进 P0.S4 提交。
+- `yourfield-next/` 是仓库子目录，Husky 必须从 Git 根目录安装；当前 `prepare` 是 `cd .. && husky yourfield-next/.husky`，hooks 内部用 `pnpm --dir=yourfield-next ...` 回到子项目。
+- `pnpm install --frozen-lockfile` 会提示 `unrs-resolver@1.11.1` build scripts 被忽略；本次验证未受影响，暂不需要处理。
+- PowerShell 管道给 commitlint 输入时可能带 BOM，容易误报；验证 commitlint 请用 `pnpm exec commitlint --from HEAD~1 --to HEAD` 或 `--edit <message-file>`。
+- 根目录旧静态包和实施书大多仍是 untracked；不要把它们混进 P0.S5 提交。
 
 ## 我用了哪些库/命令/工具
-- 新装的包: `next-intl@3.26.5`
-- 关键命令(可复用): `pnpm add next-intl@^3`、`pnpm install --frozen-lockfile`、`pnpm exec tsc --noEmit`、`pnpm exec next build`、`pnpm exec next dev -p 4000`
-- 文档外的工具: Context7 查询 `next-intl` App Router / middleware 用法；Playwright 打开 `http://localhost:4000/zh` 做浏览器验证
+- 新装的包: `eslint@^8`、`prettier@^3`、`@typescript-eslint/eslint-plugin`、`@typescript-eslint/parser`、`eslint-config-next@14.2.35`、`eslint-plugin-import`、`eslint-plugin-jsx-a11y`、`eslint-config-prettier`、`eslint-import-resolver-typescript`、`husky`、`lint-staged`、`commitlint`、`@commitlint/config-conventional`
+- 关键命令(可复用): `pnpm install --frozen-lockfile`、`pnpm lint`、`pnpm typecheck`、`pnpm build`、`pnpm exec prettier --check ...`、`pnpm exec commitlint --from HEAD~1 --to HEAD`
+- 文档外的工具: 无
 
 ## 给下一个 agent 的具体建议
-- 先做 P0.S4 / Roadmap P0.2.4：安装 lint / format / hook 相关依赖，并补齐 package scripts。
-- P0.S4 验证脚本时优先使用新增的 `typecheck` / `build` scripts；不要继续推进 CSS 方案或 CI。
-- 若写 i18n 覆盖检查脚本，要按文件里的扁平 key 比对，而不是按运行时展开后的嵌套对象比对。
+- 先做 P0.S5 / Roadmap P0.2.5：CSS 方案选型，并在 `yourfield-next/docs/DECISIONS.md` 写 D-001 ADR。
+- 若选 Tailwind，再安装 Tailwind 相关包与 `prettier-plugin-tailwindcss`；当前 P0.S4 未提前安装 CSS 方案依赖。
+- 不要改 `messages/*.json` 的 key 结构；当前 `src/i18n.ts` 静态读取三语 JSON 后仍交给 `expandFlatMessages` 运行时展开。

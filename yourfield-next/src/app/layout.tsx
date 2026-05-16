@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
 import { headers } from 'next/headers';
+import type { ReactNode } from 'react';
 
 import { defaultLocale, isLocale } from '@/lib/i18n/locale';
 

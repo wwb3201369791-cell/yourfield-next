@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-16 by Agent #3
+最后更新: 2026-05-16 by Agent #4
 
 ## 当前阶段
 P0 — 脚手架与配置基线
@@ -12,9 +12,10 @@ P0 — 脚手架与配置基线
 - ✅ P0.S1（Roadmap: P0.2.1）— 初始化
 - ✅ P0.S2（Roadmap: P0.2.2）— 目录骨架
 - ✅ P0.S3（Roadmap: P0.2.3）— 多语言路由占位
+- ✅ P0.S4（Roadmap: P0.2.4）— lint / format / typecheck
 
 ## Next
-**P0.S4（Roadmap: P0.2.4）** — lint / format / typecheck
+**P0.S5（Roadmap: P0.2.5）** — CSS 方案选定
 
 ## 阻塞
 - 待用户提供 Git 远程仓库地址
@@ -27,6 +28,8 @@ P0 — 脚手架与配置基线
 - 可选: 后续 P0 配置阶段可按实际工具补齐 `.gitignore` 中与生成物相关的规则
 - 可选: 后续运行 `pnpm exec tsc --noEmit` 时避免与 `pnpm exec next build` 并行，迁移路由后并行执行可能读到旧 `.next/types`
 - 可选: 浏览器验证时 `/favicon.ico` 返回 404；不影响 P0.S3，后续 SEO / manifest 资产阶段可补齐 favicon
+- 可选: `pnpm install --frozen-lockfile` 会提示 `unrs-resolver@1.11.1` build scripts 被 pnpm 忽略；本步安装、lint、typecheck、build 均未受影响，若后续 resolver 出现异常再评估是否需要 `pnpm approve-builds`
+- 可选: 当前仓库 hooksPath 已由 Husky 设置为 `yourfield-next/.husky/_`；新环境跑 `pnpm install` / `pnpm prepare` 会重新设置
 
 ## Phase 进度概览
 - [ ] P0 — 脚手架与配置基线

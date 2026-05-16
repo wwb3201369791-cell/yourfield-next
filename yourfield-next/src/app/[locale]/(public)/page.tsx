@@ -1,5 +1,5 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { isLocale } from '@/lib/i18n/locale';
 

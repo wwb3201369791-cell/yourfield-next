@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
+import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { notFound } from 'next/navigation';
+import type { ReactNode } from 'react';
 
 import { isLocale, locales } from '@/lib/i18n/locale';
 

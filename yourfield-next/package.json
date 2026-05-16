@@ -3,6 +3,17 @@
   "private": true,
   "packageManager": "pnpm@10.28.2",
   "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint --max-warnings=0",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "prepare": "cd .. && husky yourfield-next/.husky",
+    "commitlint": "commitlint"
+  },
   "dependencies": {
     "next": "14.2.35",
     "next-intl": "^3.26.5",
@@ -11,8 +22,30 @@
     "typescript": "5.9.3"
   },
   "devDependencies": {
+    "@commitlint/config-conventional": "^21.0.1",
     "@types/node": "20.19.41",
     "@types/react": "18.3.28",
-    "@types/react-dom": "18.3.7"
+    "@types/react-dom": "18.3.7",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
+    "commitlint": "^21.0.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.35",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.5",
+    "prettier": "^3.8.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
   }
 }

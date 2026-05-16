@@ -19,3 +19,10 @@
 **理由**: 既不改旧 key / 文件结构，又能在代码中继续用 `t('common.home')` 这类旧站 key 验证翻译拉通。
 **影响范围**: `yourfield-next/src/i18n.ts`、`yourfield-next/src/lib/i18n/messages.ts`，以及后续 i18n 覆盖检查脚本。
 **回滚成本**: 中低；若未来决定改为嵌套 JSON，需要一次性转换三语 messages、更新覆盖检查脚本并全站回归 i18n。
+
+## 2026-05-16 — P0.S4 在子项目中安装 Husky hooks
+**背景**: `yourfield-next/` 是仓库子目录，直接在该目录执行 `husky` 会报 `.git can't be found`，但 P0.S4 要求启用 Husky、lint-staged 与 commitlint。
+**选择**: `package.json` 的 `prepare` 使用 `cd .. && husky yourfield-next/.husky` 从 Git 根目录安装 hooks，hook 脚本内部使用 `pnpm --dir=yourfield-next ...` 回到子项目执行检查。
+**理由**: 保持 P0 工程仍在 `yourfield-next/` 内独立管理，同时让 Git hooks 对当前仓库真实生效，不需要把前端项目移动到仓库根。
+**影响范围**: `yourfield-next/package.json`、`yourfield-next/.husky/pre-commit`、`yourfield-next/.husky/commit-msg`，以及本地 Git `core.hooksPath`。
+**回滚成本**: 低；若未来仓库根改成 `yourfield-next/` 或拆仓，只需把 `prepare` 改回 `husky` 并调整 hook 命令路径。
