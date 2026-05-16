@@ -1,0 +1,4 @@
+yourfield-next/node_modules/
+yourfield-next/.next/
+yourfield-next/.env.local
+yourfield-next/*.tsbuildinfo
