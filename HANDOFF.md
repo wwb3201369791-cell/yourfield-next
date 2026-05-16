@@ -1,31 +1,30 @@
 # HANDOFF — 给下一个 agent
 
 日期: 2026-05-17
-本次 Step: P0.S6 — 环境变量
-Agent: #6
+本次 Step: P0.S7 — CI 骨架
+Agent: #7
 
 ## 我做了什么(1-3 句话)
-- 新增 `yourfield-next/.env.example`，按附录C完整落地环境变量清单。
-- 新增 `src/lib/env.ts`，用 Zod 做统一环境变量校验，并让 root layout / locale 配置通过该入口读取站点 URL 和语言配置。
-- 补齐 `.env.*.local` 忽略规则，并把 ESLint 的 `process.env` 直读例外限制在 `src/lib/env.ts`。
+- 新增根目录 `.github/workflows/ci.yml`，配置 GitHub Actions 在 `yourfield-next` 中执行依赖安装、lint、typecheck、build。
+- CI 使用 Node.js 20、pnpm 10.28.2，并通过 `actions/setup-node` 缓存 pnpm store。
+- 已记录为什么 workflow 放在仓库根目录，而不是 `yourfield-next/.github/workflows/`。
 
 ## 我没做完什么 / 为什么停在这里
-- P0.S6 已完成；按接力协议停在 P0.S7，不继续创建 CI workflow。
-- P0.S7 会受“CI 平台未确认”影响；若用户未先确认，下个 agent 应先请示。
+- P0.S7 已完成；按接力协议停在 P0.S8，不继续做文档骨架。
+- 当前 `git remote -v` 为空，GitHub Actions 远端绿灯未验证；绑定 GitHub 远程并 push 后需要补跑一次远端验证。
 
 ## 下一个要注意的坑
-- 未来阶段的服务密钥当前允许为空，但一旦提供会校验格式；P2/P3/P4/P5 接入对应服务时，应把相关变量升级为必填。
-- `src/lib/env.ts` 是唯一允许直接读 `process.env` 的文件，不要在业务代码里绕过它。
-- `zod@4.4.3` 已作为运行依赖安装，用于启动时 env 校验。
-- 3000 和 3001 端口此前已被占用，本次开发服务验证继续使用 4000 端口。
+- GitHub Actions 只会读取仓库根目录 `.github/workflows/`，不要把真正要运行的 workflow 只放在 `yourfield-next/.github/workflows/`。
+- 当前 workflow 触发分支覆盖 `main` 和 `master`，因为本地当前分支是 `master`，实施书示例偏向 `main`。
+- 当前仓库没有 Git remote，分支保护和 PR 必须 CI 通过这两项只能等远程仓库接入后配置。
 - `pnpm install --frozen-lockfile` 仍会提示 `unrs-resolver@1.11.1` build scripts 被忽略；本次验证未受影响。
 
 ## 我用了哪些库/命令/工具
-- 新装的包: `zod@4.4.3`
-- 关键命令(可复用): `pnpm install --frozen-lockfile`、`pnpm lint`、`pnpm typecheck`、`pnpm build`、`pnpm dev -- -p 4000`
-- 验证命令: `curl.exe -sI http://localhost:4000/`、`curl.exe -sI http://localhost:4000/zh`、`git check-ignore -v yourfield-next/.env.local yourfield-next/.env.production.local`
+- 新装的包: 无
+- 关键命令(可复用): `pnpm install --frozen-lockfile`、`pnpm lint`、`pnpm typecheck`、`pnpm build`
+- 文档外的工具: `ci-cd-and-automation` skill
 
 ## 给下一个 agent 的具体建议
-- 先处理 P0.S7 / Roadmap P0.2.7：CI 骨架。
-- 若 CI 平台仍未确认，按 AGENT.md 的 BLOCKING 规则先问用户，不要直接默认 GitHub Actions。
-- 不要把 `.env.local` 或任何真实密钥加入仓库。
+- 先处理 P0.S8 / Roadmap P0.2.8：文档骨架。
+- P0.S8 需要补 `README.md`、`CONTRIBUTING.md`、`docs/OPERATIONS.md`、PR template 等；不要提前进入 P1 页面迁移。
+- 若用户在下一步提供 GitHub 远程仓库地址，可以顺手补充“远端 CI 绿灯一次”的验证记录，但不要改 CI 平台选型。

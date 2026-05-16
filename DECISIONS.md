@@ -40,3 +40,10 @@
 **理由**: 既让应用启动时走统一 env 入口，又不要求在 P0 提前伪造或提交敏感凭证。
 **影响范围**: `yourfield-next/src/lib/env.ts`、`yourfield-next/src/lib/i18n/locale.ts`、`yourfield-next/.env.example`。
 **回滚成本**: 低；P2/P3/P4/P5 接入对应服务时，把相关变量从 optional 改为 required 并补充验收即可。
+
+## 2026-05-17 — P0.S7 将 GitHub Actions workflow 放在仓库根目录
+**背景**: 实施书目录骨架中包含 `yourfield-next/.github/workflows/`，但当前 Git 仓库根目录是静态包根目录，不是 `yourfield-next/`；GitHub Actions 只会读取仓库根目录 `.github/workflows/`。
+**选择**: 将真正生效的 CI workflow 放在仓库根目录 `.github/workflows/ci.yml`，并通过 `defaults.run.working-directory: yourfield-next` 执行子项目命令。
+**理由**: 这样 push / PR 到当前仓库时 CI 才会实际运行，同时不需要移动 `yourfield-next/` 或拆仓。
+**影响范围**: `.github/workflows/ci.yml`；后续 GitHub 远程仓库、分支保护和 PR 检查都应指向这个 workflow。
+**回滚成本**: 低；若未来把 `yourfield-next/` 拆成独立仓库，可把 workflow 移入新仓库根目录，并删除 `working-directory: yourfield-next`。
