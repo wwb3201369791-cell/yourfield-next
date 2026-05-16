@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-16 by Agent #2
+最后更新: 2026-05-16 by Agent #3
 
 ## 当前阶段
 P0 — 脚手架与配置基线
@@ -11,9 +11,10 @@ P0 — 脚手架与配置基线
 - 已确认 Node.js v24.12.0 可用，pnpm 10.28.2 可用
 - ✅ P0.S1（Roadmap: P0.2.1）— 初始化
 - ✅ P0.S2（Roadmap: P0.2.2）— 目录骨架
+- ✅ P0.S3（Roadmap: P0.2.3）— 多语言路由占位
 
 ## Next
-**P0.S3（Roadmap: P0.2.3）** — 多语言路由占位
+**P0.S4（Roadmap: P0.2.4）** — lint / format / typecheck
 
 ## 阻塞
 - 待用户提供 Git 远程仓库地址
@@ -25,6 +26,7 @@ P0 — 脚手架与配置基线
 - 必做: 3000 和 3001 端口已被占用，本次开发服务验证临时使用 4000 端口
 - 可选: 后续 P0 配置阶段可按实际工具补齐 `.gitignore` 中与生成物相关的规则
 - 可选: 后续运行 `pnpm exec tsc --noEmit` 时避免与 `pnpm exec next build` 并行，迁移路由后并行执行可能读到旧 `.next/types`
+- 可选: 浏览器验证时 `/favicon.ico` 返回 404；不影响 P0.S3，后续 SEO / manifest 资产阶段可补齐 favicon
 
 ## Phase 进度概览
 - [ ] P0 — 脚手架与配置基线
