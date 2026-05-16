@@ -61,3 +61,11 @@
 **理由**: 这样后续打开 PR 时模板才能自动生效，同时与 P0.S7 的 workflow 位置保持一致。
 **影响范围**: `.github/pull_request_template.md`、`yourfield-next/README.md`、`yourfield-next/CONTRIBUTING.md`。
 **回滚成本**: 低；若未来把 `yourfield-next/` 拆成独立仓库，可把 `.github/pull_request_template.md` 移入新仓库根目录。
+
+## 2026-05-17 — P1.S3 用内部安全 key 适配旧站平铺 i18n
+
+**背景**: 旧站 `messages/*.json` 沿用点号平铺 key，且存在 `home.industry.power` 与 `home.industry.power.primary` 这类父子同名冲突；next-intl 默认按点号解析嵌套对象，普通展开会让父级字符串不可访问。
+**选择**: 保持旧 JSON key 不改名，运行时把点号 key 映射为内部安全 key，并通过项目封装的 `useTranslations` / `getTranslations` 把旧 key 转成内部 key；同时把旧站 `{{name}}` 插值兼容为 next-intl 的 `{name}`。
+**理由**: 满足“旧站 key 不得改名”和“旧站 key 全部可用”两个约束，也避免 P1/P2 大量页面迁移时遇到隐形翻译缺失。
+**影响范围**: `yourfield-next/src/lib/i18n/messages.ts`、`getMessages.ts`、`getTranslations.ts`、`useTranslations.ts`，以及后续所有读取翻译的组件。
+**回滚成本**: 中；若未来决定重写 messages 为真正嵌套结构，需要同步改三语 JSON、所有翻译调用、覆盖检查脚本，并回归父子同名 key。

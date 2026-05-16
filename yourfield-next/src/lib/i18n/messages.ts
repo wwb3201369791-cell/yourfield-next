@@ -1,30 +1,26 @@
 export type MessageTree = {
-  [key: string]: string | MessageTree;
+  [key: string]: string;
 };
 
-export function expandFlatMessages(flatMessages: Record<string, string>): MessageTree {
-  const tree: MessageTree = {};
+export type FlatMessages = Record<string, string>;
+
+const messageKeySeparator = '__dot__';
+const legacyMustacheVariablePattern = /\{\{\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\}/g;
+
+export function normalizeMessageKey(key: string) {
+  return key.replaceAll('.', messageKeySeparator);
+}
+
+export function normalizeMessageValue(message: string) {
+  return message.replace(legacyMustacheVariablePattern, '{$1}');
+}
+
+export function createNextIntlMessages(flatMessages: FlatMessages): MessageTree {
+  const messages: MessageTree = {};
 
   for (const [flatKey, message] of Object.entries(flatMessages)) {
-    const segments = flatKey.split('.');
-    let cursor = tree;
-
-    for (const segment of segments.slice(0, -1)) {
-      const current = cursor[segment];
-
-      if (typeof current !== 'object' || current === null) {
-        cursor[segment] = {};
-      }
-
-      cursor = cursor[segment] as MessageTree;
-    }
-
-    const leafKey = segments[segments.length - 1];
-
-    if (leafKey) {
-      cursor[leafKey] = message;
-    }
+    messages[normalizeMessageKey(flatKey)] = normalizeMessageValue(message);
   }
 
-  return tree;
+  return messages;
 }

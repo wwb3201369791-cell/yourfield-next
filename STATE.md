@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-17 by Agent #10
+最后更新: 2026-05-17 by Agent #11
 
 ## 当前阶段
 
@@ -21,10 +21,11 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - ✅ P0.S8（Roadmap: P0.2.8）— 文档骨架
 - ✅ P1.S1（Roadmap: P1.2.1）— 全局样式系统
 - ✅ P1.S2（Roadmap: P1.2.2）— Header / Footer / Layout
+- ✅ P1.S3（Roadmap: P1.2.3）— i18n 引擎接入
 
 ## Next
 
-**P1.S3（Roadmap: P1.2.3）** — i18n 引擎接入
+**P1.S4（Roadmap: P1.2.4）** — 9 个公开页面骨架（mock 数据）
 
 ## 阻塞
 
@@ -47,12 +48,14 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - 可选: P1.S2 新增 `footer.policePlaceholder` 三语 key，仅作为公安备案号占位；P5 获取正式公安备案号后再替换
 - 可选: P1.S2 发现 `prettier-plugin-tailwindcss` 会整理模板字符串里的 class 拼接，后续动态 class 避免依赖前导空格，优先用数组 `.filter(Boolean).join(' ')`
 - 可选: 不要在 dev server 运行期间执行 `pnpm build`；两者共用 `.next` 目录，build 会让正在跑的 dev server 缓存失效并短暂 500，重启 dev server 可恢复
+- 必做: 后续 P1 页面和组件必须通过 `@/lib/i18n/useTranslations` / `@/lib/i18n/getTranslations` 读取旧站平铺 key，不要直接从 `next-intl` 取 `useTranslations` / `getTranslations`，否则 `home.industry.power` 这类父子同名 key 会取不到
+- 可选: `pnpm script:check-i18n-coverage` 已允许 P1.S5 删除已批准的 `page.contact.introTitle`；执行 Bug 2 时仍需三语同步删除并复跑覆盖检查
 - 可选: P2/P3/P4/P5 真正接入 Payload、对象存储、搜索、统计、邮件、地图、CAPTCHA、监控时，把对应 env 变量从“允许为空但校验格式”升级为必填校验
 
 ## Phase 进度概览
 
 - [x] P0 — 脚手架与配置基线（本地验收通过；远端 CI 因无 Git remote 未验证）
-- [ ] P1 — 骨架迁移（P1.S2 已完成；继续 i18n 引擎接入）
+- [ ] P1 — 骨架迁移（P1.S3 已完成；继续 9 个公开页面骨架）
 - [ ] P2 — CMS 接入与内容迁移
 - [ ] P3 — 搜索 + 数据统计 + SEO
 - [ ] P4 — 合规 + 安全 + 性能

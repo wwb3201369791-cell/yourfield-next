@@ -1,36 +1,36 @@
 # HANDOFF — 给下一个 agent
 
 日期: 2026-05-17
-本次 Step: P1.S2 — Header / Footer / Layout
-Agent: #10
+本次 Step: P1.S3 — i18n 引擎接入
+Agent: #11
 
 ## 我做了什么(1-3 句话)
 
-- 新增 Next 版 Header / Footer / locale layout，复用旧站导航结构、Logo、搜索入口、语言菜单、Footer sitemap 和联系信息。
-- 产品中心 dropdown 已实现为竖向单列；移动端汉堡菜单和二级展开已可用。
-- 补了 `zh-CN / en / ru` 的 HTML lang 映射，语言切换会同步 cookie、URL、当前语言和 `<html lang>`。
+- 完整接入了 P1.S3 的 i18n 层：locale layout 继续用 `NextIntlClientProvider`，服务端和客户端统一通过项目封装的翻译入口读取旧站平铺 key。
+- 新增 `pnpm script:check-i18n-coverage`，会检查 zh/en/ru key 集合一致、旧站 `../locales/*.json` key 未丢失，并避开已批准后续可删除的 `page.contact.introTitle`。
+- 处理了旧站平铺 key 的父子同名冲突，以及旧站 `{{name}}` 插值到 next-intl `{name}` 的运行时兼容。
 
 ## 我没做完什么 / 为什么停在这里
 
-- P1.S3 i18n 引擎接入尚未开始；按 AGENT.md 规则本次只做 P1.S2。
-- 没有追加 DECISIONS.md；本步没有偏离实施书的新架构决策。
+- P1.S4 的 9 个公开页面骨架尚未开始；按 AGENT.md 规则本次只做 P1.S3。
+- P1.S5 的 Bug 2 尚未执行，所以 `page.contact.introTitle` 目前仍在 `messages/*.json` 中，覆盖脚本已为后续删除预留白名单。
 
 ## 下一个要注意的坑
 
-- Header/Footer 的链接已指向后续公开页，但目前除 `/<locale>` 外页面还没创建，点击 about/products 等会 404，这是 P1 后续 Step 的正常状态。
-- `prettier-plugin-tailwindcss` 会处理模板字符串中的 class 拼接，动态 class 不要依赖前导空格，优先用数组 `.filter(Boolean).join(' ')`。
-- 不要在 dev server 运行期间跑 `pnpm build`；两者共用 `.next`，会让正在跑的 dev server 短暂 500，先停 dev 再 build。
-- `footer.policePlaceholder` 只是公安备案号占位，正式号等 P5 或用户提供资料后替换。
+- 后续页面/组件不要直接从 `next-intl` 导入 `useTranslations` 或 `getTranslations` 来取旧站 key；必须用 `@/lib/i18n/useTranslations` 和 `@/lib/i18n/getTranslations`。
+- 旧站存在 `home.industry.power` 与 `home.industry.power.primary` 这类 key，不能按普通嵌套 JSON 展开。
+- 浏览器验证仍有 `/favicon.ico` 404，这是前序已记录的可选 TODO，不影响本步。
+- 3000/3001 端口此前已被占用，本次 dev 验证使用 4013 端口。
 
 ## 我用了哪些库/命令/工具
 
 - 新装的包: 无
-- 关键命令(可复用): `pnpm lint`、`pnpm typecheck`、`pnpm build`、`pnpm dev -- -p 4002`
-- 路由验证: `curl.exe -sI --max-time 8 http://localhost:4002/`、`/zh`、`/en`、`/ru`
-- 浏览器验证: Chrome DevTools MCP，桌面 1920×1080 与移动 375×667；检查无横向溢出、产品下拉竖向单列、移动菜单二级展开、语言切换同步 URL/cookie/html lang
+- 关键命令(可复用): `pnpm lint`、`pnpm typecheck`、`pnpm script:check-i18n-coverage`、`pnpm build`
+- 路由验证: `pnpm exec next dev -p 4013` 后检查 `/` 为 307，`/zh` `/en` `/ru` 为 200
+- 浏览器验证: Playwright 打开 `/zh` 与 `/en`，检查 html lang、翻译文案、skip link、footer aria label、桌面/移动端无横向溢出
 
 ## 给下一个 agent 的具体建议
 
-- 下一步做 P1.S3 / Roadmap P1.2.3 i18n 引擎接入。
-- 先复核当前 `messages/*.json` 仍是扁平 key，再做覆盖检查脚本，别改旧 key 名。
-- P1.S3 不要提前做 9 个页面骨架；页面结构迁移从 P1.S4 开始。
+- 下一步做 P1.S4 / Roadmap P1.2.4，先从首页和公共 mock 数据结构开始，不要提前接 Payload。
+- P1.S4 写页面时复用已有 Header/Footer/Layout，不要改 `messages/*.json` 的旧 key；确需新增文案时三语一起加并复跑覆盖检查。
+- 页面内翻译统一走本步封装好的 i18n helpers，别碰 `升级实施书_v2/` 原文。

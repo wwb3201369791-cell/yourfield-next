@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 
 import { Footer } from '@/components/footer/Footer';
 import { Header } from '@/components/header/Header';
+import { getTranslations } from '@/lib/i18n/getTranslations';
 import { isLocale, locales } from '@/lib/i18n/locale';
 
 type LocaleLayoutProps = Readonly<{
@@ -25,13 +26,13 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   setRequestLocale(params.locale);
 
-  const messages = await getMessages();
+  const [messages, t] = await Promise.all([getMessages(), getTranslations(params.locale)]);
 
   return (
     <NextIntlClientProvider locale={params.locale} messages={messages}>
       <div className="site-shell">
         <a className="skip-link" href="#main-content">
-          Skip to main content
+          {t('common.skipToMain')}
         </a>
         <Header locale={params.locale} />
         <main className="site-main" id="main-content">

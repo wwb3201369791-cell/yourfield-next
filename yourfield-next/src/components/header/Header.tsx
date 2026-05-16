@@ -3,12 +3,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { LanguageSwitcher } from '@/components/header/LanguageSwitcher';
 import { SearchTrigger } from '@/components/header/SearchTrigger';
 import type { Locale } from '@/lib/i18n/locale';
+import { useTranslations } from '@/lib/i18n/useTranslations';
 import { getActiveNavKey, localizeHref, mainNavigation, type NavKey } from '@/lib/navigation';
 
 type HeaderProps = Readonly<{

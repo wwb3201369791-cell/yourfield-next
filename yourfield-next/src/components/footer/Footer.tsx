@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
 
+import { getTranslations } from '@/lib/i18n/getTranslations';
 import type { Locale } from '@/lib/i18n/locale';
 import { footerGroups, localizeHref } from '@/lib/navigation';
 
@@ -10,12 +10,12 @@ type FooterProps = Readonly<{
 }>;
 
 export async function Footer({ locale }: FooterProps) {
-  const t = await getTranslations({ locale });
+  const t = await getTranslations(locale);
 
   return (
     <footer className="footer" id="site-footer" data-component-root="footer">
       <div className="container">
-        <div className="footer-sitemap" aria-label="Footer content">
+        <div className="footer-sitemap" aria-label={t('footer.contentLabel')}>
           <div className="footer-brand">
             <Link href={`/${locale}`} className="logo footer-logo" aria-label={t('nav.home')}>
               <Image

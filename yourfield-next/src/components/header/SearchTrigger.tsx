@@ -1,11 +1,11 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { type FormEvent, useEffect, useRef, useState } from 'react';
 
 import { ArrowRightIcon, CloseIcon, SearchIcon } from '@/components/ui/icons';
 import type { Locale } from '@/lib/i18n/locale';
+import { useTranslations } from '@/lib/i18n/useTranslations';
 
 type SearchTriggerProps = Readonly<{
   locale: Locale;

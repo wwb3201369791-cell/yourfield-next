@@ -1,12 +1,12 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
 import { GlobeIcon } from '@/components/ui/icons';
 import type { Locale } from '@/lib/i18n/locale';
 import { getHtmlLang, locales } from '@/lib/i18n/locale';
+import { useTranslations } from '@/lib/i18n/useTranslations';
 
 type LanguageSwitcherProps = Readonly<{
   locale: Locale;

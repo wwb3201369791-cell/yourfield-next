@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 
+import { getTranslations } from '@/lib/i18n/getTranslations';
 import { isLocale } from '@/lib/i18n/locale';
 
 type LocalePageProps = Readonly<{
@@ -16,7 +17,7 @@ export default async function LocalePage({ params }: LocalePageProps) {
 
   setRequestLocale(params.locale);
 
-  const t = await getTranslations({ locale: params.locale });
+  const t = await getTranslations(params.locale);
 
   return (
     <section className="mx-auto flex min-h-[calc(100vh-180px)] max-w-5xl flex-col items-start justify-center gap-4 px-6 py-16">
@@ -25,7 +26,7 @@ export default async function LocalePage({ params }: LocalePageProps) {
         {t('nav.products')} / {t('nav.contact')}
       </p>
       <p className="rounded border border-border bg-bg-light px-3 py-1 text-sm text-text-light">
-        Locale: {params.locale}
+        {t('common.currentLocale')}: {params.locale}
       </p>
     </section>
   );
