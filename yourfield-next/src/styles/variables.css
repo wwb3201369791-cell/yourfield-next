@@ -16,6 +16,9 @@
   --radius: 8px;
   --radius-lg: 16px;
   --transition: all 0.3s ease;
+  --focus-ring: rgba(230, 57, 70, 0.35);
+  --container-max: 1200px;
+  --container-padding: 20px;
 }
 
 html {

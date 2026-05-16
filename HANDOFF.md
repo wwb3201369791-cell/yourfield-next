@@ -1,36 +1,36 @@
 # HANDOFF — 给下一个 agent
 
 日期: 2026-05-17
-本次 Step: P0.S8 — 文档骨架
-Agent: #8
+本次 Step: P1.S1 — 全局样式系统
+Agent: #9
 
 ## 我做了什么(1-3 句话)
 
-- 新增 `yourfield-next/README.md`、`CONTRIBUTING.md`、`docs/OPERATIONS.md`，补齐本地运行、目录结构、贡献规范和运维占位。
-- 新增仓库根目录 `.github/pull_request_template.md`，并在根目录 `DECISIONS.md` 记录为什么 PR 模板放根目录。
-- P0 本地验收已通过，开发服务验证临时使用 4000 端口。
+- 补齐 `yourfield-next/src/styles/globals.css` 的全局 reset、基础排版、焦点态、移动端输入字号、减弱动画规则。
+- 在 `variables.css` 增加 `--focus-ring`、容器宽度和容器 padding 变量，并补回旧站可复用的 `.container`、`.btn`、`.section-header`、`.section-tag` 通用 class。
+- 发现 Tailwind 会清理 `@layer components` 中当前未引用的旧站桥接 class，已改为普通全局 CSS，保证后续页面迁移可直接复用。
 
 ## 我没做完什么 / 为什么停在这里
 
-- 当前没有 Git remote，GitHub Actions 远端绿灯仍未验证；只能确认本地 `pnpm install --frozen-lockfile`、`lint`、`typecheck`、`build` 和路由检查通过。
-- P0 实施步骤已完成，但进入 P1 前需要用户审阅 P0 产物并确认可以继续。
+- P1.S2 Header / Footer / Layout 尚未开始；按 AGENT.md 规则本次只做 P1.S1。
+- 没有追加 DECISIONS.md；本步没有偏离实施书的新架构决策。
 
 ## 下一个要注意的坑
 
-- `.github/pull_request_template.md` 和 `.github/workflows/ci.yml` 都在仓库根目录才会被 GitHub 识别；`yourfield-next/.github/` 只是工程骨架占位。
-- 3000 和 3001 端口已被占用，本次路由验收用的是 `pnpm dev -- -p 4000`。
-- `pnpm install --frozen-lockfile` 会提示 `unrs-resolver@1.11.1` build scripts 被 pnpm 忽略；本地验证未受影响。
-- P0 没有 `pnpm test` 脚本，PR 模板里需要写“当前阶段无测试脚本”。
+- 不要把旧站全局桥接类重新放回 Tailwind `@layer components`，否则未在当前页面引用的 `.btn` / `.section-header` 可能会被 purge。
+- 4000 端口本次出现占用且无响应，浏览器验证改用 `pnpm dev -- -p 4002`；下次先探测空闲端口。
+- `/favicon.ico` 仍会 404，这是 P0 已知可选 TODO，后续 SEO / manifest 资产阶段再补。
+- 旧静态包和实施书仍大量 untracked，不要误删或重置。
 
 ## 我用了哪些库/命令/工具
 
 - 新装的包: 无
-- 关键命令(可复用): `pnpm install --frozen-lockfile`、`pnpm lint`、`pnpm typecheck`、`pnpm build`、`pnpm dev -- -p 4000`
-- 路由验证: `curl.exe -sI http://localhost:4000/`、`/zh`、`/en`、`/ru`
-- 文档外的工具: 无
+- 关键命令(可复用): `pnpm lint`、`pnpm typecheck`、`pnpm build`、`pnpm dev -- -p 4002`
+- 路由验证: `curl.exe -sI --max-time 8 http://localhost:4002/`、`/zh`、`/en`、`/ru`
+- 浏览器验证: Playwright 打开 `/zh`，检查桌面 1440×900 与移动 375×667 无横向溢出，且 `.btn` / `.section-header` 样式实际生效
 
 ## 给下一个 agent 的具体建议
 
-- 先向用户确认是否接受 P0 产物，并确认“远端 CI 绿灯待 Git remote 接入后补验”这个限制。
-- 用户确认后再做 P1.S1 / Roadmap P1.2.1 全局样式系统；不要提前做 Header、Footer 或页面迁移。
-- 如果用户先提供 Git remote，则优先补远端 CI 验证记录，再进入 P1。
+- 下一步做 P1.S2 / Roadmap P1.2.2 Header / Footer / Layout。
+- 先读旧站 `components/header.html`、`components/footer.html` 和 `styles.css` 中 Header/Footer 相关样式，再拆 React 组件。
+- P1.S2 要包含产品下拉竖向单列、语言切换、搜索入口 UI、移动菜单和 public layout；不要提前做 9 个页面骨架。
