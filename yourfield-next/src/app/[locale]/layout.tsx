@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
+import { Footer } from '@/components/footer/Footer';
+import { Header } from '@/components/header/Header';
 import { isLocale, locales } from '@/lib/i18n/locale';
 
 type LocaleLayoutProps = Readonly<{
@@ -27,7 +29,16 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <NextIntlClientProvider locale={params.locale} messages={messages}>
-      {children}
+      <div className="site-shell">
+        <a className="skip-link" href="#main-content">
+          Skip to main content
+        </a>
+        <Header locale={params.locale} />
+        <main className="site-main" id="main-content">
+          {children}
+        </main>
+        <Footer locale={params.locale} />
+      </div>
     </NextIntlClientProvider>
   );
 }

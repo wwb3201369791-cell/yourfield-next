@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-17 by Agent #9
+最后更新: 2026-05-17 by Agent #10
 
 ## 当前阶段
 
@@ -20,10 +20,11 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - ✅ P0.S7（Roadmap: P0.2.7）— CI 骨架
 - ✅ P0.S8（Roadmap: P0.2.8）— 文档骨架
 - ✅ P1.S1（Roadmap: P1.2.1）— 全局样式系统
+- ✅ P1.S2（Roadmap: P1.2.2）— Header / Footer / Layout
 
 ## Next
 
-**P1.S2（Roadmap: P1.2.2）** — Header / Footer / Layout
+**P1.S3（Roadmap: P1.2.3）** — i18n 引擎接入
 
 ## 阻塞
 
@@ -42,12 +43,16 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - 可选: P0.S5 已把旧站 7 个 Inter 字体复制到 `yourfield-next/public/fonts/inter/`；P1 字体本地化时复核即可，不必重复复制
 - 可选: P1.S1 已补 `.btn` / `.container` / `.section-header` 旧站通用类；后续迁移若出现稳定间距模式，再沉淀语义 spacing token
 - 可选: 旧站通用 class 需要放在普通全局 CSS 中，避免 Tailwind purge 清掉当前页面暂未引用的桥接类
+- 可选: Header/Footer 已链接到 P1 后续公开页面（about/products/solutions/news/franchise/contact），当前除 `/<locale>` 外仍会 404，等 P1 页面骨架 Step 创建后自然恢复
+- 可选: P1.S2 新增 `footer.policePlaceholder` 三语 key，仅作为公安备案号占位；P5 获取正式公安备案号后再替换
+- 可选: P1.S2 发现 `prettier-plugin-tailwindcss` 会整理模板字符串里的 class 拼接，后续动态 class 避免依赖前导空格，优先用数组 `.filter(Boolean).join(' ')`
+- 可选: 不要在 dev server 运行期间执行 `pnpm build`；两者共用 `.next` 目录，build 会让正在跑的 dev server 缓存失效并短暂 500，重启 dev server 可恢复
 - 可选: P2/P3/P4/P5 真正接入 Payload、对象存储、搜索、统计、邮件、地图、CAPTCHA、监控时，把对应 env 变量从“允许为空但校验格式”升级为必填校验
 
 ## Phase 进度概览
 
 - [x] P0 — 脚手架与配置基线（本地验收通过；远端 CI 因无 Git remote 未验证）
-- [ ] P1 — 骨架迁移（P1.S1 已完成；继续 Header / Footer / Layout）
+- [ ] P1 — 骨架迁移（P1.S2 已完成；继续 i18n 引擎接入）
 - [ ] P2 — CMS 接入与内容迁移
 - [ ] P3 — 搜索 + 数据统计 + SEO
 - [ ] P4 — 合规 + 安全 + 性能
