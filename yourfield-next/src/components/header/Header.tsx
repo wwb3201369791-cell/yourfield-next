@@ -70,7 +70,6 @@ export function Header({ locale }: HeaderProps) {
             width="233"
             height="75"
             aria-hidden="true"
-            priority
           />
           <Image
             className="logo-image logo-image-dark"

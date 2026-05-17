@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-17 by Agent #18
+最后更新: 2026-05-17 by Agent #19
 
 ## 当前阶段
 
@@ -36,11 +36,18 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 
 ## 阻塞
 
-- P1.S10 本地代码验收已通过，但 P1 整阶段验收中的 Lighthouse / Google Rich Results Test 属于外部或未配置脚本项，本次未验证；进入 P2 前建议先补 P1.V1 验收结论
+- P1.V1 已完成大部分本地自动验收，但不能标记完成：生产 Lighthouse 首页分数为 Performance 78 / Accessibility 96 / Best Practices 96 / SEO 100，Performance 未达到 P1 要求的 >= 90
+- Google Rich Results Test 不能直接验证 localhost；本次只做了本地 JSON-LD 解析校验，外部富结果工具仍待用户在可公网访问地址上验证
+- `06-操作约束与验收.md` 的 P1 快捷验收把 `/privacy` 列入 P1，但 `02-目标与技术栈.md` 与 Roadmap 明确把隐私/Cookie/条款页放到 P4 合规阶段；当前 `/zh/privacy`、`/en/privacy`、`/ru/privacy` 均为 404，需要用户确认该项是否延期到 P4
+- P1 桌面/移动截图已生成，但视觉审阅仍需用户确认；如用户接受当前视觉且同意把 Lighthouse 性能修复作为后续单独任务，才能把 Next 改到 P2.S1
 - GitHub remote 已绑定 `wwb3201369791-cell/yourfield-next`，主分支远端 CI 已跑通过一次
 
 ## 新发现的 TODO
 
+- 必做: P1.V1 继续处理 Lighthouse Performance 未过线；当前主要瓶颈是首页首屏 Hero 图 LCP 约 3.5s，本次小幅资源调度修正未把分数拉过 90
+- 必做: 用户确认 P1 验收是否以 Roadmap P1.4 的 9 个公开页面为准，还是严格执行 06.4.2 中额外列出的 `/privacy`
+- 必做: 如继续优化 P1 Lighthouse，优先针对首页移动端 LCP 做专项修复；不要顺手推进 P2 CMS
+- 可选: 已提前安装 `sharp@0.34.5` 用于 Next 生产图片优化；`pnpm install` 仍提示 sharp build scripts 被忽略，但 `node -e "require('sharp')"` 可正常加载
 - 必做: 后续每个 Step push 后继续确认 GitHub Actions 绿灯；当前远端为私有仓库 `wwb3201369791-cell/yourfield-next`
 - 必做: 当前 Git 仓库是在已有静态包目录中初始化的，旧静态包和实施书大多仍是 untracked；后续需由用户决定是否单独做一次仓库基线提交
 - 必做: 3000 和 3001 端口已被占用，本次开发服务验证临时使用 4000 端口

@@ -59,6 +59,7 @@ export default async function LocalePage({ params }: LocalePageProps) {
           fill
           sizes="100vw"
           priority
+          decoding="sync"
         />
         <div className="via-primary/82 to-primary/35 absolute inset-0 -z-10 bg-gradient-to-r from-primary-dark" />
         <div className="container flex min-h-[620px] flex-col justify-center py-20 md:min-h-[680px] md:py-24 xl:min-h-[720px]">

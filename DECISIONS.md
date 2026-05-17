@@ -85,3 +85,11 @@
 **理由**: 保持旧链接可用，同时避免新站 URL 被旧 query 污染，便于后续 SEO canonical / hreflang 收敛。
 **影响范围**: `yourfield-next/next.config.js`、`yourfield-next/src/middleware.ts`。
 **回滚成本**: 低；若未来确认可以接受保留 query，删除 middleware 分支并把两条规则挪回 `next.config.js` 即可。
+
+## 2026-05-17 — P1.V1 提前安装 sharp 支撑生产图片优化
+
+**背景**: P1 整体验收跑生产 Lighthouse 时，Next.js production start 提示缺少 `sharp`，会影响生产图片优化；Roadmap 原本把 `sharp` 放在 P2 Payload 安装步骤中，但 P1 已经大量使用 `next/image` 并需要验收性能。
+**选择**: 在 P1.V1 提前安装 `sharp@0.34.5`，不等待 P2。
+**理由**: `sharp` 是 Next 生产图片优化推荐依赖，也已在实施书后续阶段列出，不改变技术栈；提前安装可以消除生产图片优化缺失提示，降低 P1 Lighthouse 受图片优化链路影响的风险。
+**影响范围**: `yourfield-next/package.json`、`yourfield-next/pnpm-lock.yaml`。
+**回滚成本**: 低；如后续确认 P1 不需要该依赖，可删除 `sharp`，但 P2 安装 Payload 时仍需重新加入。
