@@ -701,7 +701,6 @@
   "page.news.detailBack": "Back to News Center",
   "page.news.detailAlt": "News article content update pending",
   "page.contact.title": "Contact Us",
-  "page.contact.introTitle": "Get in Touch",
   "page.contact.introText": "For product inquiries, service requests, or cooperation questions, contact us below or leave a message and we will respond as soon as possible.",
   "page.contact.addressLabel": "Address",
   "page.contact.addressValue": "Huxiang Protection Science and Technology Innovation Park, No.1 Chuangye East Road, High-tech Zone, Xiangtan, Hunan, China",
@@ -894,5 +893,5 @@
   "page.contact.mapMetaCityValue": "Xiangtan, Hunan",
   "page.contact.mapMetaAccessLabel": "Access",
   "page.contact.mapMetaAccessValue": "High-tech industrial park",
-  "page.contact.openMap": "Open Google Maps"
+  "page.contact.openMap": "View in Google Maps"
 }

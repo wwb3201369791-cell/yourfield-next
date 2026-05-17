@@ -729,7 +729,6 @@
   "page.news.detailBack": "Назад в центр новостей",
   "page.news.detailAlt": "Материалы новости готовятся",
   "page.contact.title": "Контакты",
-  "page.contact.introTitle": "Свяжитесь с нами",
   "page.contact.introText": "По вопросам продукции, сервиса или сотрудничества свяжитесь с нами ниже или оставьте сообщение, и мы ответим как можно скорее.",
   "page.contact.addressLabel": "Адрес",
   "page.contact.addressValue": "Парк научно-технологических инноваций Huxiang Protection, No.1 Chuangye East Road, High-tech Zone, Xiangtan, Hunan, China",
@@ -894,5 +893,5 @@
   "page.contact.mapMetaCityValue": "Сянтан, Хунань",
   "page.contact.mapMetaAccessLabel": "Доступ",
   "page.contact.mapMetaAccessValue": "Высокотехнологичный индустриальный парк",
-  "page.contact.openMap": "Открыть Google Maps"
+  "page.contact.openMap": "Открыть в Google Maps"
 }

@@ -701,7 +701,6 @@
   "page.news.detailBack": "返回新闻中心",
   "page.news.detailAlt": "新闻内容整理中",
   "page.contact.title": "联系我们",
-  "page.contact.introTitle": "取得联系",
   "page.contact.introText": "欢迎您通过以下方式与我们联系，也可以填写留言咨询，我们将尽快与您取得联系。",
   "page.contact.addressLabel": "地址",
   "page.contact.addressValue": "湖南省湘潭市高新区创业东路1号湖湘防护科创园",
@@ -745,7 +744,7 @@
   "page.contact.mapTag": "地址",
   "page.contact.mapTitle": "公司位置",
   "page.contact.mapPlaceholder": "公司地址：湖南省湘潭市高新区创业东路1号湖湘防护科创园",
-  "page.contact.mapFrameTitle": "显示永霏集团总部位置的 Google 地图",
+  "page.contact.mapFrameTitle": "显示永霏集团总部位置的高德地图",
   "page.franchise.kicker": "湖湘防护科创园",
   "page.franchise.heroTitle": "入驻湖湘防护科创园，共建应急安全共同体",
   "page.franchise.heroText": "永霏集团诚邀制造、技术、服务与渠道伙伴入驻，共享订单协同、研发检测平台、政策支持与全球推广资源。",
@@ -894,5 +893,5 @@
   "page.contact.mapMetaCityValue": "湖南湘潭",
   "page.contact.mapMetaAccessLabel": "区位",
   "page.contact.mapMetaAccessValue": "高新区产业园",
-  "page.contact.openMap": "打开 Google 地图"
+  "page.contact.openMap": "在高德地图中查看"
 }

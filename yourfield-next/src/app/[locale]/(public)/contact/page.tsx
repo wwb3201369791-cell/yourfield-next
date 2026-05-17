@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { JsonLd } from '@/components/public/JsonLd';
 import { PageHero } from '@/components/public/PageHero';
 import { SectionIntro } from '@/components/public/SectionIntro';
+import { CompanyMap } from '@/components/ui/Map';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
 import { getProductBySlug, localized } from '@/lib/mock/products';
@@ -170,42 +171,19 @@ export default async function ContactPage({ params, searchParams }: ContactPageP
             title={t('page.contact.mapTitle')}
             text={t('page.contact.mapPanelText')}
           />
-          <div className="grid overflow-hidden rounded border border-border bg-bg-light shadow-sm lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="flex min-h-[320px] items-center justify-center bg-primary p-8 text-center text-white">
-              <div>
-                <p className="text-sm font-bold uppercase tracking-[0.14em] text-white/70">
-                  {t('page.contact.mapPanelTitle')}
-                </p>
-                <p className="mt-4 text-2xl font-bold text-white">{t('page.contact.mapAddress')}</p>
-              </div>
-            </div>
-            <div className="p-7 md:p-10">
-              <dl className="grid gap-5">
-                <div>
-                  <dt className="text-sm font-bold text-accent">
-                    {t('page.contact.mapMetaCityLabel')}
-                  </dt>
-                  <dd className="mt-1 text-lg font-bold text-primary">
-                    {t('page.contact.mapMetaCityValue')}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-bold text-accent">
-                    {t('page.contact.mapMetaAccessLabel')}
-                  </dt>
-                  <dd className="mt-1 text-lg font-bold text-primary">
-                    {t('page.contact.mapMetaAccessValue')}
-                  </dd>
-                </div>
-              </dl>
-              <Link
-                className="btn btn-secondary mt-8"
-                href="https://www.google.com/maps/search/?api=1&query=%E6%B9%96%E5%8D%97%E7%9C%81%E6%B9%98%E6%BD%AD%E5%B8%82%E9%AB%98%E6%96%B0%E5%8C%BA%E5%88%9B%E4%B8%9A%E4%B8%9C%E8%B7%AF1%E5%8F%B7"
-              >
-                {t('page.contact.openMap')}
-              </Link>
-            </div>
-          </div>
+          <CompanyMap
+            locale={locale}
+            title={t('page.contact.mapPanelTitle')}
+            text={t('page.contact.mapPanelText')}
+            address={t('page.contact.mapAddress')}
+            placeholder={t('page.contact.mapPlaceholder')}
+            frameTitle={t('page.contact.mapFrameTitle')}
+            cityLabel={t('page.contact.mapMetaCityLabel')}
+            cityValue={t('page.contact.mapMetaCityValue')}
+            accessLabel={t('page.contact.mapMetaAccessLabel')}
+            accessValue={t('page.contact.mapMetaAccessValue')}
+            openMapLabel={t('page.contact.openMap')}
+          />
         </div>
       </section>
     </>
