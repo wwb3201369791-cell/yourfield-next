@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-17 by Agent #15
+最后更新: 2026-05-17 by Agent #16
 
 ## 当前阶段
 
@@ -26,10 +26,11 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - ✅ P1.S5（Roadmap: P1.2.5）— Bug 修复（在新站）
 - ✅ P1.S6（Roadmap: P1.2.6）— 移动端汉堡 + 视觉验证
 - ✅ P1.S7（Roadmap: P1.2.7）— Embla 轮播迁移
+- ✅ P1.S8（Roadmap: P1.2.8）— 404 / error
 
 ## Next
 
-**P1.S8（Roadmap: P1.2.8）** — 404 / error
+**P1.S9（Roadmap: P1.2.9）** — 重定向
 
 ## 阻塞
 
@@ -63,11 +64,14 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - 可选: P1.S7 新增 `embla-carousel-react@8.6.0` 和 `embla-carousel-auto-scroll@8.6.0`；当前未直接 import `embla-carousel` 类型，避免 pnpm 下嵌套依赖类型不可见的问题
 - 可选: P1.S7 首页产品预览从 4 个改为全部 6 个 featured products，确保桌面 4 列视口下也有真实轮播空间；P2 接 Payload 后由 CMS/运营控制精选数量
 - 可选: P1.S7 的 `Carousel` 已覆盖 controls / counter / dots / thumbnails / auto-scroll / reduced-motion；旧站 `createRail` / `bindNativeScrollDrag` 这类横向 rail 帮助函数当前新站未用，后续若出现横向 rail 再单独抽轻量组件
+- 必做: P1.S9 只做 `next.config.js` 旧 URL 301 重定向，不要顺手推进 SEO 元数据基础（P1.S10）
+- 可选: P1.S8 同时保留 `src/app/[locale]/not-found.tsx` 与 `src/app/not-found.tsx`；根级 404 用来覆盖 `/zh/not-a-real-page` 这类完全未匹配路由，原因已写入 DECISIONS.md
+- 可选: P1.S8 验证 `pnpm start` 时 Next 提示生产图片优化建议安装 `sharp`；Roadmap P2 会引入 `sharp`，当前阶段未新增依赖
 
 ## Phase 进度概览
 
 - [x] P0 — 脚手架与配置基线（本地验收通过；远端 CI 已通过一次）
-- [ ] P1 — 骨架迁移（P1.S7 已完成；继续 404 / error）
+- [ ] P1 — 骨架迁移（P1.S8 已完成；继续重定向）
 - [ ] P2 — CMS 接入与内容迁移
 - [ ] P3 — 搜索 + 数据统计 + SEO
 - [ ] P4 — 合规 + 安全 + 性能

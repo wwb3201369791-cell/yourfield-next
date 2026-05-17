@@ -69,3 +69,11 @@
 **理由**: 满足“旧站 key 不得改名”和“旧站 key 全部可用”两个约束，也避免 P1/P2 大量页面迁移时遇到隐形翻译缺失。
 **影响范围**: `yourfield-next/src/lib/i18n/messages.ts`、`getMessages.ts`、`getTranslations.ts`、`useTranslations.ts`，以及后续所有读取翻译的组件。
 **回滚成本**: 中；若未来决定重写 messages 为真正嵌套结构，需要同步改三语 JSON、所有翻译调用、覆盖检查脚本，并回归父子同名 key。
+
+## 2026-05-17 — P1.S8 增加根级 404 兜底
+
+**背景**: Roadmap P1.2.8 明确要求 `src/app/[locale]/not-found.tsx`，但验证发现 Next App Router 对 `/zh/not-a-real-page` 这类完全未匹配路由会走根级 `/_not-found`，不会自动进入 `[locale]` 段的 not-found；只有 locale 树内主动 `notFound()` 的场景会使用 `[locale]/not-found.tsx`。
+**选择**: 同时保留 `src/app/[locale]/not-found.tsx`，并新增 `src/app/not-found.tsx` 作为根级兜底；根级 404 从 `x-next-intl-locale` 推断语言，包 `NextIntlClientProvider`，复用 Header / Footer / ErrorState。
+**理由**: 确保真实访客打开任意不存在的三语路径时看到品牌化、本地化 404，而不是 Next 默认英文 404；该实现不涉及 P1.S9 的旧 URL 重定向规则。
+**影响范围**: `yourfield-next/src/app/not-found.tsx`、`src/app/[locale]/not-found.tsx`、`src/components/public/ErrorState.tsx`、三语 `messages/*.json` 的 `error.*` key。
+**回滚成本**: 低；删除根级 not-found 即可回到 Next 默认行为，但未知路径体验会退回英文默认 404。
