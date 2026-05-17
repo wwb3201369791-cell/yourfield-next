@@ -21,7 +21,7 @@ type CarouselThumbnail = Readonly<{
   src: string;
 }>;
 
-type CarouselProps = Readonly<{
+export type CarouselProps = Readonly<{
   ariaLabel: string;
   children: ReactNode;
   autoScroll?: boolean | AutoScrollOptions;

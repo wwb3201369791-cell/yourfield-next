@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ProductCard } from '@/components/product/ProductCard';
 import { JsonLd } from '@/components/public/JsonLd';
 import { SectionIntro } from '@/components/public/SectionIntro';
-import { Carousel } from '@/components/ui/Carousel';
+import { DeferredCarousel } from '@/components/ui/DeferredCarousel';
 import { ArrowRightIcon } from '@/components/ui/icons';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
@@ -52,15 +52,24 @@ export default async function LocalePage({ params }: LocalePageProps) {
       <JsonLd data={[organizationJsonLd(locale), websiteJsonLd(locale)]} />
 
       <section className="relative isolate overflow-hidden bg-primary text-white">
-        <Image
-          className="absolute inset-0 -z-20 h-full w-full object-cover"
-          src="/images/home/hero-video-poster.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          priority
-          decoding="sync"
-        />
+        <picture className="absolute inset-0 -z-20">
+          <source
+            srcSet="/images/home/hero-video-poster-768.webp 768w, /images/home/hero-video-poster-1440.webp 1440w"
+            sizes="100vw"
+            type="image/webp"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="h-full w-full object-cover"
+            src="/images/home/hero-video-poster.jpg"
+            alt=""
+            width="1280"
+            height="720"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
+          />
+        </picture>
         <div className="via-primary/82 to-primary/35 absolute inset-0 -z-10 bg-gradient-to-r from-primary-dark" />
         <div className="container flex min-h-[620px] flex-col justify-center py-20 md:min-h-[680px] md:py-24 xl:min-h-[720px]">
           <div className="max-w-3xl">
@@ -140,7 +149,7 @@ export default async function LocalePage({ params }: LocalePageProps) {
               {t('common.viewAllProducts')}
             </Link>
           </div>
-          <Carousel
+          <DeferredCarousel
             ariaLabel={t('home.products.title')}
             autoScroll
             className="mt-2"
@@ -160,7 +169,7 @@ export default async function LocalePage({ params }: LocalePageProps) {
                 detailLabel={t('common.viewDetails')}
               />
             ))}
-          </Carousel>
+          </DeferredCarousel>
         </div>
       </section>
 

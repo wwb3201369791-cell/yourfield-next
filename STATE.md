@@ -29,24 +29,26 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - ✅ P1.S8（Roadmap: P1.2.8）— 404 / error
 - ✅ P1.S9（Roadmap: P1.2.9）— 重定向
 - ✅ P1.S10（Roadmap: P1.2.10）— SEO 元数据基础
+- ✅ P1.V1-A（Roadmap: P1.4）— 本地自动验收与 Lighthouse 修复（生产 Lighthouse 92 / 96 / 96 / 100）
 
 ## Next
 
-**P1.V1（Roadmap: P1.4）** — P1 整体验收与用户审阅（Lighthouse / Rich Results / 截图确认）
+**P1.V1-B（Roadmap: P1.4）** — 用户审阅确认（截图 / 公网 Rich Results / `/privacy` 是否延期到 P4）
 
 ## 阻塞
 
-- P1.V1 已完成大部分本地自动验收，但不能标记完成：生产 Lighthouse 首页分数为 Performance 78 / Accessibility 96 / Best Practices 96 / SEO 100，Performance 未达到 P1 要求的 >= 90
+- P1.V1 本地自动验收已补齐：生产 Lighthouse 首页分数为 Performance 92 / Accessibility 96 / Best Practices 96 / SEO 100，已达到 Performance >= 90 要求
 - Google Rich Results Test 不能直接验证 localhost；本次只做了本地 JSON-LD 解析校验，外部富结果工具仍待用户在可公网访问地址上验证
 - `06-操作约束与验收.md` 的 P1 快捷验收把 `/privacy` 列入 P1，但 `02-目标与技术栈.md` 与 Roadmap 明确把隐私/Cookie/条款页放到 P4 合规阶段；当前 `/zh/privacy`、`/en/privacy`、`/ru/privacy` 均为 404，需要用户确认该项是否延期到 P4
-- P1 桌面/移动截图已生成，但视觉审阅仍需用户确认；如用户接受当前视觉且同意把 Lighthouse 性能修复作为后续单独任务，才能把 Next 改到 P2.S1
+- P1 桌面/移动截图已重新生成，但视觉审阅仍需用户确认；如用户接受当前视觉，并确认 `/privacy` 延期到 P4，才能把 Next 改到 P2.S1
 - GitHub remote 已绑定 `wwb3201369791-cell/yourfield-next`，主分支远端 CI 已跑通过一次
 
 ## 新发现的 TODO
 
-- 必做: P1.V1 继续处理 Lighthouse Performance 未过线；当前主要瓶颈是首页首屏 Hero 图 LCP 约 3.5s，本次小幅资源调度修正未把分数拉过 90
+- 已处理: P1.V1 Lighthouse Performance 从 78 提升到 92；关键改动为裁剪客户端 i18n、延迟首页下方轮播、Hero 改静态 WebP `<picture>`
 - 必做: 用户确认 P1 验收是否以 Roadmap P1.4 的 9 个公开页面为准，还是严格执行 06.4.2 中额外列出的 `/privacy`
-- 必做: 如继续优化 P1 Lighthouse，优先针对首页移动端 LCP 做专项修复；不要顺手推进 P2 CMS
+- 必做: 用户审阅 P1 桌面/移动截图；确认视觉接受后再推进 P2.S1
+- 必做: 若用户要求严格执行 06.4.2 的 `/privacy`，需要单独决定是否提前 P4 合规页；不要默认跨阶段补页
 - 可选: 已提前安装 `sharp@0.34.5` 用于 Next 生产图片优化；`pnpm install` 仍提示 sharp build scripts 被忽略，但 `node -e "require('sharp')"` 可正常加载
 - 必做: 后续每个 Step push 后继续确认 GitHub Actions 绿灯；当前远端为私有仓库 `wwb3201369791-cell/yourfield-next`
 - 必做: 当前 Git 仓库是在已有静态包目录中初始化的，旧静态包和实施书大多仍是 untracked；后续需由用户决定是否单独做一次仓库基线提交
@@ -77,7 +79,7 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - 必做: P1.S10 只做 SEO 元数据基础，不要顺手推进 P2 CMS / Payload 接入
 - 必做: P1.S10 已按文档把 WebSite JSON-LD 的 SearchAction 指向 `/{locale}/search?q=`；该路由要到 P3 搜索阶段才实现，P3 不要忘记补齐
 - 必做: P1.S10 为 mock 新闻补了 `datePublished` 以满足 NewsArticle JSON-LD；其中只有年月的旧站日期临时用当月 1 日，P2 接 Payload 后必须替换为真实 `publishedAt`
-- 必做: P1 整体验收尚未跑 Lighthouse / Rich Results Test；若后续用户决定先进入 P2，应在 HANDOFF / STATE 明确记录“P1 外部 SEO 性能验收未验证”
+- 必做: P1.V1 已完成本地 Lighthouse 与 JSON-LD 结构检查；外部 Rich Results Test 仍需公网/staging URL
 - 可选: P1.S10 生产验证使用 4034 端口启动，但 canonical / OG URL 仍来自默认 `NEXT_PUBLIC_SITE_URL=http://localhost:3000`；这是当前 env 默认行为，不影响正式环境配置
 - 可选: P1.S8 同时保留 `src/app/[locale]/not-found.tsx` 与 `src/app/not-found.tsx`；根级 404 用来覆盖 `/zh/not-a-real-page` 这类完全未匹配路由，原因已写入 DECISIONS.md
 - 可选: P1.S8 验证 `pnpm start` 时 Next 提示生产图片优化建议安装 `sharp`；Roadmap P2 会引入 `sharp`，当前阶段未新增依赖

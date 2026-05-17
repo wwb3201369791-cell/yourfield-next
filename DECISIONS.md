@@ -93,3 +93,11 @@
 **理由**: `sharp` 是 Next 生产图片优化推荐依赖，也已在实施书后续阶段列出，不改变技术栈；提前安装可以消除生产图片优化缺失提示，降低 P1 Lighthouse 受图片优化链路影响的风险。
 **影响范围**: `yourfield-next/package.json`、`yourfield-next/pnpm-lock.yaml`。
 **回滚成本**: 低；如后续确认 P1 不需要该依赖，可删除 `sharp`，但 P2 安装 Payload 时仍需重新加入。
+
+## 2026-05-17 — P1.V1 首页首屏性能优化策略
+
+**背景**: P1.V1 生产 Lighthouse 首页 Performance 只有 78，主要受首页首屏 LCP、渲染阻塞与主线程负载影响；P1 验收要求 Performance >= 90。
+**选择**: 裁剪 `NextIntlClientProvider` 传给客户端的 messages，只保留 Header / Footer / error boundary 等客户端组件需要的 key；首页下方产品轮播改用 `DeferredCarousel`，接近视口时再加载 Embla；首页 Hero 背景图改为预生成 WebP `<picture>`，避免首屏依赖 `/_next/image` 优化路由。
+**理由**: 这些改动都只针对 P1 首页性能瓶颈，保持现有视觉和交互，不引入新技术栈，也不推进 P2 CMS；复测后 Lighthouse Performance 提升到 92。
+**影响范围**: `yourfield-next/src/app/[locale]/layout.tsx`、`yourfield-next/src/app/[locale]/(public)/page.tsx`、`yourfield-next/src/components/ui/Carousel.tsx`、`yourfield-next/src/components/ui/DeferredCarousel.tsx`、`yourfield-next/public/images/home/*webp`。
+**回滚成本**: 中低；可恢复全量 messages、直接使用 `Carousel`，并把 Hero 切回 `next/image`，但首页 Lighthouse 可能重新低于 P1 阈值。
