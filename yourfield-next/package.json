@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "script:check-i18n-coverage": "tsc -p tsconfig.scripts.json && node node_modules/.cache/yourfield-scripts/check-i18n-coverage.js",
+    "script:snapshot-mobile": "tsc -p tsconfig.scripts.json && node node_modules/.cache/yourfield-scripts/snapshot-mobile.js",
     "prepare": "cd .. && husky yourfield-next/.husky",
     "commitlint": "commitlint"
   },
@@ -40,6 +41,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.5",
+    "playwright": "1.58.0",
     "postcss": "8.5.14",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "0.8.0",

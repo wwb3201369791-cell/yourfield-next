@@ -49,6 +49,11 @@ export function Header({ locale }: HeaderProps) {
     });
   }
 
+  function closeMobileMenu() {
+    setIsMenuOpen(false);
+    setOpenDropdowns(new Set());
+  }
+
   return (
     <header
       className={['header', 'is-scrolled', isMenuOpen ? 'is-menu-open' : undefined]
@@ -110,6 +115,7 @@ export function Header({ locale }: HeaderProps) {
                     href={localizeHref(locale, item)}
                     aria-current={isActive ? 'page' : undefined}
                     data-nav={item.key}
+                    onClick={closeMobileMenu}
                   >
                     {t(item.labelKey)}
                   </Link>
@@ -134,7 +140,9 @@ export function Header({ locale }: HeaderProps) {
                       >
                         {item.children.map((child) => (
                           <li key={`${item.key}-${child.labelKey}`}>
-                            <Link href={localizeHref(locale, child)}>{t(child.labelKey)}</Link>
+                            <Link href={localizeHref(locale, child)} onClick={closeMobileMenu}>
+                              {t(child.labelKey)}
+                            </Link>
                           </li>
                         ))}
                       </ul>
@@ -156,7 +164,7 @@ export function Header({ locale }: HeaderProps) {
           type="button"
           aria-controls="primary-navigation"
           aria-expanded={isMenuOpen}
-          aria-label={t('nav.openMenu')}
+          aria-label={isMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
           onClick={() => setIsMenuOpen((current) => !current)}
         >
           <span />

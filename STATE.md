@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-17 by Agent #13
+最后更新: 2026-05-17 by Agent #14
 
 ## 当前阶段
 
@@ -24,10 +24,11 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - ✅ P1.S3（Roadmap: P1.2.3）— i18n 引擎接入
 - ✅ P1.S4（Roadmap: P1.2.4）— 9 个公开页面骨架（mock 数据）
 - ✅ P1.S5（Roadmap: P1.2.5）— Bug 修复（在新站）
+- ✅ P1.S6（Roadmap: P1.2.6）— 移动端汉堡 + 视觉验证
 
 ## Next
 
-**P1.S6（Roadmap: P1.2.6）** — 移动端汉堡 + 视觉验证
+**P1.S7（Roadmap: P1.2.7）** — Embla 轮播迁移
 
 ## 阻塞
 
@@ -56,11 +57,13 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - 可选: P1.S5 地图仍是阶段性降级实现：zh 使用静态图 + 高德外链，en/ru 使用 Google iframe + 外链；后续接入真实地图 Key / 服务时再把相关 env 从可空升级为必填
 - 可选: P1.S4 已把旧站页面所需图片复制到 `yourfield-next/public/images/` 作为阶段性静态资产；后续 Media 迁移时复核哪些需要进入 Payload Media
 - 可选: P2/P3/P4/P5 真正接入 Payload、对象存储、搜索、统计、邮件、地图、CAPTCHA、监控时，把对应 env 变量从“允许为空但校验格式”升级为必填校验
+- 可选: 新环境首次运行 `pnpm script:snapshot-mobile` 前可能需要先执行 `pnpm exec playwright install chromium` 安装 Playwright Chromium；本机本次已安装；自定义端口用 `pnpm script:snapshot-mobile -- --base-url http://localhost:4024`
+- 可选: P1.S6 已生成 `yourfield-next/tests/snapshots/p1-mobile/` 截图基线，后续移动端视觉调整后复跑脚本覆盖即可
 
 ## Phase 进度概览
 
 - [x] P0 — 脚手架与配置基线（本地验收通过；远端 CI 因无 Git remote 未验证）
-- [ ] P1 — 骨架迁移（P1.S5 已完成；继续移动端汉堡与视觉验证）
+- [ ] P1 — 骨架迁移（P1.S6 已完成；继续 Embla 轮播迁移）
 - [ ] P2 — CMS 接入与内容迁移
 - [ ] P3 — 搜索 + 数据统计 + SEO
 - [ ] P4 — 合规 + 安全 + 性能
