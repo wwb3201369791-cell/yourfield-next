@@ -1,7 +1,7 @@
 import type { Locale } from '@/lib/i18n/locale';
 import type { NewsItem } from '@/lib/mock/news';
-import { localized, specValue, type Product } from '@/lib/mock/products';
-import { absoluteUrl, localizedPath, siteName } from '@/lib/seo/metadata';
+import { localized, specValue, type Product, type ProductFaq } from '@/lib/mock/products';
+import { absoluteUrl, localizedPath, siteName } from '@/lib/seo/buildMetadata';
 
 export type BreadcrumbItem = Readonly<{
   name: string;
@@ -42,9 +42,10 @@ export function websiteJsonLd(locale: Locale) {
     '@type': 'WebSite',
     name: siteName(locale),
     url: absoluteUrl(localizedPath(locale, '/')),
+    inLanguage: locale,
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${absoluteUrl(localizedPath(locale, '/products'))}?q={search_term_string}`,
+      target: `${absoluteUrl(localizedPath(locale, '/search'))}?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
   };
@@ -63,21 +64,40 @@ export function breadcrumbJsonLd(items: readonly BreadcrumbItem[]) {
   };
 }
 
-export function collectionPageJsonLd(name: string, description: string, path: string) {
-  return {
+export function collectionPageJsonLd(
+  name: string,
+  description: string,
+  path: string,
+  hasPart: readonly BreadcrumbItem[] = [],
+) {
+  const data: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name,
     description,
     url: absoluteUrl(path),
   };
+
+  if (hasPart.length > 0) {
+    data.hasPart = hasPart.map((item) => ({
+      '@type': 'WebPage',
+      name: item.name,
+      url: absoluteUrl(item.path),
+    }));
+  }
+
+  return data;
 }
 
 export function productJsonLd(product: Product, locale: Locale) {
+  const path = localizedPath(locale, `/products/${product.id}`);
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: localized(product.name, locale),
+    url: absoluteUrl(path),
+    mainEntityOfPage: absoluteUrl(path),
     sku: product.sku || product.model,
     model: product.model,
     brand: {
@@ -95,17 +115,41 @@ export function productJsonLd(product: Product, locale: Locale) {
   };
 }
 
+export function faqPageJsonLd(faqs: readonly ProductFaq[], locale: Locale, path: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    url: absoluteUrl(path),
+    inLanguage: locale,
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: localized(faq.question, locale),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: localized(faq.answer, locale),
+      },
+    })),
+  };
+}
+
 export function newsArticleJsonLd(
   item: NewsItem,
   locale: Locale,
   title: string,
   description: string,
 ) {
+  const path = localizedPath(locale, `/news/${item.slug}`);
+
   return {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: title,
     description,
+    url: absoluteUrl(path),
+    mainEntityOfPage: absoluteUrl(path),
+    inLanguage: locale,
+    datePublished: item.datePublished,
+    dateModified: item.dateModified ?? item.datePublished,
     image: [absoluteUrl(item.image)],
     author: {
       '@type': 'Organization',
@@ -127,6 +171,8 @@ export function contactPageJsonLd(locale: Locale) {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
     name: locale === 'zh' ? '联系我们' : locale === 'ru' ? 'Контакты' : 'Contact',
+    url: absoluteUrl(localizedPath(locale, '/contact')),
+    inLanguage: locale,
     mainEntity: organizationJsonLd(locale),
   };
 }

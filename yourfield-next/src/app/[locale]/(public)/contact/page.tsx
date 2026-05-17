@@ -7,8 +7,8 @@ import { CompanyMap } from '@/components/ui/Map';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
 import { getProductBySlug, localized } from '@/lib/mock/products';
+import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, contactPageJsonLd } from '@/lib/seo/jsonld';
-import { buildPageMetadata, localizedPath } from '@/lib/seo/metadata';
 
 type ContactPageProps = Readonly<{
   params: {

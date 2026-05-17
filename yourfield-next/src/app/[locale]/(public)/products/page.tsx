@@ -13,8 +13,8 @@ import {
   products,
   type Product,
 } from '@/lib/mock/products';
+import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, collectionPageJsonLd } from '@/lib/seo/jsonld';
-import { buildPageMetadata, localizedPath } from '@/lib/seo/metadata';
 
 type ProductsPageProps = Readonly<{
   params: {

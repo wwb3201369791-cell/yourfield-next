@@ -15,8 +15,8 @@ import {
   products,
   specValue,
 } from '@/lib/mock/products';
-import { breadcrumbJsonLd, productJsonLd } from '@/lib/seo/jsonld';
-import { buildPageMetadata, localizedPath } from '@/lib/seo/metadata';
+import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
+import { breadcrumbJsonLd, faqPageJsonLd, productJsonLd } from '@/lib/seo/jsonld';
 
 type ProductDetailPageProps = Readonly<{
   params: {
@@ -64,6 +64,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       <JsonLd
         data={[
           productJsonLd(product, locale),
+          faqPageJsonLd(product.faqs, locale, localizedPath(locale, `/products/${product.id}`)),
           breadcrumbJsonLd([
             { name: t('nav.home'), path: localizedPath(locale, '/') },
             { name: t('page.products.title'), path: localizedPath(locale, '/products') },

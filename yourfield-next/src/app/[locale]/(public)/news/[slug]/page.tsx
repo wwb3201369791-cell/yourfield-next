@@ -8,8 +8,8 @@ import { locales } from '@/lib/i18n/locale';
 import { resolveRouteLocale } from '@/lib/i18n/route';
 import { getNewsBySlug, newsBodyFallback, newsItems } from '@/lib/mock/news';
 import { localized } from '@/lib/mock/products';
+import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, newsArticleJsonLd } from '@/lib/seo/jsonld';
-import { buildPageMetadata, localizedPath } from '@/lib/seo/metadata';
 
 type NewsDetailPageProps = Readonly<{
   params: {

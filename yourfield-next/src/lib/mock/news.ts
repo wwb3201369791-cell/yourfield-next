@@ -8,6 +8,8 @@ export type NewsItem = Readonly<{
   titleKey: string;
   excerptKey: string;
   image: string;
+  datePublished: string;
+  dateModified?: string;
 }>;
 
 export const newsItems: readonly NewsItem[] = [
@@ -18,6 +20,7 @@ export const newsItems: readonly NewsItem[] = [
     titleKey: 'page.news.companyTitle',
     excerptKey: 'page.news.companyText',
     image: '/images/news-placeholder.svg',
+    datePublished: '2026-05-01',
   },
   {
     slug: 'hunan-labor-award-publicity',
@@ -26,6 +29,7 @@ export const newsItems: readonly NewsItem[] = [
     titleKey: 'page.news.productsTitle',
     excerptKey: 'page.news.productsText',
     image: '/images/news-placeholder.svg',
+    datePublished: '2026-04-30',
   },
   {
     slug: 'yonghe-protection-established',
@@ -34,6 +38,7 @@ export const newsItems: readonly NewsItem[] = [
     titleKey: 'page.news.contactTitle',
     excerptKey: 'page.news.contactText',
     image: '/images/news-placeholder.svg',
+    datePublished: '2026-01-22',
   },
   {
     slug: 'advanced-emergency-equipment-catalog',
@@ -42,6 +47,7 @@ export const newsItems: readonly NewsItem[] = [
     titleKey: 'page.news.channel4Title',
     excerptKey: 'page.news.channel4Text',
     image: '/images/news-placeholder.svg',
+    datePublished: '2026-01-01',
   },
   {
     slug: 'provincial-technology-platform',
@@ -50,6 +56,7 @@ export const newsItems: readonly NewsItem[] = [
     titleKey: 'page.news.channel5Title',
     excerptKey: 'page.news.channel5Text',
     image: '/images/news-placeholder.svg',
+    datePublished: '2026-01-01',
   },
   {
     slug: 'li-wenhui-hunan-entrepreneur',
@@ -58,6 +65,7 @@ export const newsItems: readonly NewsItem[] = [
     titleKey: 'page.news.channel6Title',
     excerptKey: 'page.news.channel6Text',
     image: '/images/news-placeholder.svg',
+    datePublished: '2025-12-01',
   },
   {
     slug: 'strategy-seminar-2026',
@@ -66,6 +74,7 @@ export const newsItems: readonly NewsItem[] = [
     titleKey: 'page.news.channel7Title',
     excerptKey: 'page.news.channel7Text',
     image: '/images/news-placeholder.svg',
+    datePublished: '2025-12-01',
   },
   {
     slug: 'textile-brand-cultivation',
@@ -74,6 +83,7 @@ export const newsItems: readonly NewsItem[] = [
     titleKey: 'page.news.channel8Title',
     excerptKey: 'page.news.channel8Text',
     image: '/images/news-placeholder.svg',
+    datePublished: '2025-12-01',
   },
 ];
 

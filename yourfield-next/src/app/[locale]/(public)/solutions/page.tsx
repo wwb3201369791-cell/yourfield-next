@@ -8,8 +8,8 @@ import { SectionIntro } from '@/components/public/SectionIntro';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
 import { industryCases, solutionProfiles } from '@/lib/mock/solutions';
+import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, collectionPageJsonLd } from '@/lib/seo/jsonld';
-import { buildPageMetadata, localizedPath } from '@/lib/seo/metadata';
 
 type SolutionsPageProps = Readonly<{
   params: {

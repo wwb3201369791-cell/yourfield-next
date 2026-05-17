@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-17 by Agent #17
+最后更新: 2026-05-17 by Agent #18
 
 ## 当前阶段
 
@@ -28,14 +28,16 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - ✅ P1.S7（Roadmap: P1.2.7）— Embla 轮播迁移
 - ✅ P1.S8（Roadmap: P1.2.8）— 404 / error
 - ✅ P1.S9（Roadmap: P1.2.9）— 重定向
+- ✅ P1.S10（Roadmap: P1.2.10）— SEO 元数据基础
 
 ## Next
 
-**P1.S10（Roadmap: P1.2.10）** — SEO 元数据基础
+**P1.V1（Roadmap: P1.4）** — P1 整体验收与用户审阅（Lighthouse / Rich Results / 截图确认）
 
 ## 阻塞
 
-- 当前无阻塞；GitHub remote 已绑定 `wwb3201369791-cell/yourfield-next`，主分支远端 CI 已跑通过一次
+- P1.S10 本地代码验收已通过，但 P1 整阶段验收中的 Lighthouse / Google Rich Results Test 属于外部或未配置脚本项，本次未验证；进入 P2 前建议先补 P1.V1 验收结论
+- GitHub remote 已绑定 `wwb3201369791-cell/yourfield-next`，主分支远端 CI 已跑通过一次
 
 ## 新发现的 TODO
 
@@ -66,6 +68,10 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - 可选: P1.S7 首页产品预览从 4 个改为全部 6 个 featured products，确保桌面 4 列视口下也有真实轮播空间；P2 接 Payload 后由 CMS/运营控制精选数量
 - 可选: P1.S7 的 `Carousel` 已覆盖 controls / counter / dots / thumbnails / auto-scroll / reduced-motion；旧站 `createRail` / `bindNativeScrollDrag` 这类横向 rail 帮助函数当前新站未用，后续若出现横向 rail 再单独抽轻量组件
 - 必做: P1.S10 只做 SEO 元数据基础，不要顺手推进 P2 CMS / Payload 接入
+- 必做: P1.S10 已按文档把 WebSite JSON-LD 的 SearchAction 指向 `/{locale}/search?q=`；该路由要到 P3 搜索阶段才实现，P3 不要忘记补齐
+- 必做: P1.S10 为 mock 新闻补了 `datePublished` 以满足 NewsArticle JSON-LD；其中只有年月的旧站日期临时用当月 1 日，P2 接 Payload 后必须替换为真实 `publishedAt`
+- 必做: P1 整体验收尚未跑 Lighthouse / Rich Results Test；若后续用户决定先进入 P2，应在 HANDOFF / STATE 明确记录“P1 外部 SEO 性能验收未验证”
+- 可选: P1.S10 生产验证使用 4034 端口启动，但 canonical / OG URL 仍来自默认 `NEXT_PUBLIC_SITE_URL=http://localhost:3000`；这是当前 env 默认行为，不影响正式环境配置
 - 可选: P1.S8 同时保留 `src/app/[locale]/not-found.tsx` 与 `src/app/not-found.tsx`；根级 404 用来覆盖 `/zh/not-a-real-page` 这类完全未匹配路由，原因已写入 DECISIONS.md
 - 可选: P1.S8 验证 `pnpm start` 时 Next 提示生产图片优化建议安装 `sharp`；Roadmap P2 会引入 `sharp`，当前阶段未新增依赖
 - 可选: P1.S9 的带 query 旧详情页在 middleware 中做 308 干净跳转；当前只接受小写字母、数字和连字符组成的 `id`，若后续发现旧站外链存在其它 id 形态，再补显式映射
@@ -73,7 +79,7 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 ## Phase 进度概览
 
 - [x] P0 — 脚手架与配置基线（本地验收通过；远端 CI 已通过一次）
-- [ ] P1 — 骨架迁移（P1.S9 已完成；继续 SEO 元数据基础）
+- [ ] P1 — 骨架迁移（P1.S1-S10 任务项已完成；待 P1.V1 整体验收 / 用户审阅）
 - [ ] P2 — CMS 接入与内容迁移
 - [ ] P3 — 搜索 + 数据统计 + SEO
 - [ ] P4 — 合规 + 安全 + 性能

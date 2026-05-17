@@ -10,8 +10,8 @@ import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
 import { newsItems } from '@/lib/mock/news';
 import { featuredProducts } from '@/lib/mock/products';
+import { buildPageMetadata } from '@/lib/seo/buildMetadata';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo/jsonld';
-import { buildPageMetadata } from '@/lib/seo/metadata';
 
 type LocalePageProps = Readonly<{
   params: {

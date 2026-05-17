@@ -5,8 +5,8 @@ import { PageHero } from '@/components/public/PageHero';
 import { SectionIntro } from '@/components/public/SectionIntro';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
+import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd } from '@/lib/seo/jsonld';
-import { buildPageMetadata, localizedPath } from '@/lib/seo/metadata';
 
 type AboutPageProps = Readonly<{
   params: {
