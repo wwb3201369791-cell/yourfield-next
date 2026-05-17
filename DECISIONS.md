@@ -77,3 +77,11 @@
 **理由**: 确保真实访客打开任意不存在的三语路径时看到品牌化、本地化 404，而不是 Next 默认英文 404；该实现不涉及 P1.S9 的旧 URL 重定向规则。
 **影响范围**: `yourfield-next/src/app/not-found.tsx`、`src/app/[locale]/not-found.tsx`、`src/components/public/ErrorState.tsx`、三语 `messages/*.json` 的 `error.*` key。
 **回滚成本**: 低；删除根级 not-found 即可回到 Next 默认行为，但未知路径体验会退回英文默认 404。
+
+## 2026-05-17 — P1.S9 用 middleware 处理带 query 的旧详情页
+
+**背景**: Roadmap P1.2.9 示例把 `product-detail.html?id=...` 和 `news-detail.html?id=...` 放在 `next.config.js` redirects 中，但实测 Next 配置型 redirect 会保留原始 query，导致新 URL 变成 `/zh/products/slug?id=slug`。
+**选择**: 普通旧静态 URL 继续放在 `next.config.js`；两个带 `id` query 的旧详情页改由 middleware 识别并 308 跳转到干净路径。
+**理由**: 保持旧链接可用，同时避免新站 URL 被旧 query 污染，便于后续 SEO canonical / hreflang 收敛。
+**影响范围**: `yourfield-next/next.config.js`、`yourfield-next/src/middleware.ts`。
+**回滚成本**: 低；若未来确认可以接受保留 query，删除 middleware 分支并把两条规则挪回 `next.config.js` 即可。
