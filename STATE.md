@@ -1,6 +1,6 @@
 # STATE — 当前进度
 
-最后更新: 2026-05-17 by Agent #14
+最后更新: 2026-05-17 by Agent #15
 
 ## 当前阶段
 
@@ -25,18 +25,19 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - ✅ P1.S4（Roadmap: P1.2.4）— 9 个公开页面骨架（mock 数据）
 - ✅ P1.S5（Roadmap: P1.2.5）— Bug 修复（在新站）
 - ✅ P1.S6（Roadmap: P1.2.6）— 移动端汉堡 + 视觉验证
+- ✅ P1.S7（Roadmap: P1.2.7）— Embla 轮播迁移
 
 ## Next
 
-**P1.S7（Roadmap: P1.2.7）** — Embla 轮播迁移
+**P1.S8（Roadmap: P1.2.8）** — 404 / error
 
 ## 阻塞
 
-- 待用户提供 Git 远程仓库地址；当前只能完成本地 CI 配置和本地命令验证，GitHub Actions 远端绿灯未验证
+- 当前无阻塞；GitHub remote 已绑定 `wwb3201369791-cell/yourfield-next`，主分支远端 CI 已跑通过一次
 
 ## 新发现的 TODO
 
-- 必做: 当前没有 Git remote，P0.S7 只能完成本地 CI 配置和本地命令验证；绑定 GitHub 远程并 push 后，需要确认 GitHub Actions 至少绿灯一次
+- 必做: 后续每个 Step push 后继续确认 GitHub Actions 绿灯；当前远端为私有仓库 `wwb3201369791-cell/yourfield-next`
 - 必做: 当前 Git 仓库是在已有静态包目录中初始化的，旧静态包和实施书大多仍是 untracked；后续需由用户决定是否单独做一次仓库基线提交
 - 必做: 3000 和 3001 端口已被占用，本次开发服务验证临时使用 4000 端口
 - 可选: 本次 P1.S1 验证时 4000 端口被无响应进程占用，最终改用 4002；后续浏览器验证优先先探测空闲端口
@@ -59,11 +60,14 @@ P1 — 骨架迁移（页面结构 + i18n + 视觉还原）
 - 可选: P2/P3/P4/P5 真正接入 Payload、对象存储、搜索、统计、邮件、地图、CAPTCHA、监控时，把对应 env 变量从“允许为空但校验格式”升级为必填校验
 - 可选: 新环境首次运行 `pnpm script:snapshot-mobile` 前可能需要先执行 `pnpm exec playwright install chromium` 安装 Playwright Chromium；本机本次已安装；自定义端口用 `pnpm script:snapshot-mobile -- --base-url http://localhost:4024`
 - 可选: P1.S6 已生成 `yourfield-next/tests/snapshots/p1-mobile/` 截图基线，后续移动端视觉调整后复跑脚本覆盖即可
+- 可选: P1.S7 新增 `embla-carousel-react@8.6.0` 和 `embla-carousel-auto-scroll@8.6.0`；当前未直接 import `embla-carousel` 类型，避免 pnpm 下嵌套依赖类型不可见的问题
+- 可选: P1.S7 首页产品预览从 4 个改为全部 6 个 featured products，确保桌面 4 列视口下也有真实轮播空间；P2 接 Payload 后由 CMS/运营控制精选数量
+- 可选: P1.S7 的 `Carousel` 已覆盖 controls / counter / dots / thumbnails / auto-scroll / reduced-motion；旧站 `createRail` / `bindNativeScrollDrag` 这类横向 rail 帮助函数当前新站未用，后续若出现横向 rail 再单独抽轻量组件
 
 ## Phase 进度概览
 
-- [x] P0 — 脚手架与配置基线（本地验收通过；远端 CI 因无 Git remote 未验证）
-- [ ] P1 — 骨架迁移（P1.S6 已完成；继续 Embla 轮播迁移）
+- [x] P0 — 脚手架与配置基线（本地验收通过；远端 CI 已通过一次）
+- [ ] P1 — 骨架迁移（P1.S7 已完成；继续 404 / error）
 - [ ] P2 — CMS 接入与内容迁移
 - [ ] P3 — 搜索 + 数据统计 + SEO
 - [ ] P4 — 合规 + 安全 + 性能

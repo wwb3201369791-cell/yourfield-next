@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { CtaBand } from '@/components/public/CtaBand';
 import { JsonLd } from '@/components/public/JsonLd';
+import { Carousel } from '@/components/ui/Carousel';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { locales } from '@/lib/i18n/locale';
 import { resolveRouteLocale } from '@/lib/i18n/route';
@@ -76,35 +77,36 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
       <section className="bg-bg-light py-16 md:py-24">
         <div className="container grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div className="grid gap-4">
-            <div className="relative aspect-[4/3] overflow-hidden rounded bg-white shadow-lg">
-              <Image
-                className="h-full w-full object-contain p-8"
-                src={product.image}
-                alt={localized(product.name, locale)}
-                fill
-                priority
-                sizes="(min-width: 1024px) 45vw, 100vw"
-              />
-            </div>
-            <div className="grid grid-cols-4 gap-3">
-              {product.images.slice(0, 4).map((image, index) => (
-                <div
-                  key={image}
-                  className="relative aspect-square overflow-hidden rounded border border-border bg-white"
-                >
-                  <Image
-                    className="h-full w-full object-contain p-3"
-                    src={image}
-                    alt={localized(product.name, locale)}
-                    fill
-                    priority={index === 0}
-                    sizes="120px"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <Carousel
+            ariaLabel={t('product.detail.gallery')}
+            className="min-w-0"
+            containerClassName="-ml-4"
+            controls={{
+              previousLabel: t('product.detail.carouselPrevious'),
+              nextLabel: t('product.detail.carouselNext'),
+            }}
+            counter
+            slideClassName="pl-4"
+            thumbnails={product.images.map((image, index) => ({
+              alt: localized(product.name, locale),
+              label: `${t('product.detail.viewImage')} ${index + 1}`,
+              src: image,
+            }))}
+            viewportClassName="rounded bg-white shadow-lg"
+          >
+            {product.images.map((image, index) => (
+              <div key={image} className="relative aspect-[4/3] bg-white">
+                <Image
+                  className="h-full w-full object-contain p-8"
+                  src={image}
+                  alt={localized(product.name, locale)}
+                  fill
+                  priority={index === 0}
+                  sizes="(min-width: 1024px) 45vw, 100vw"
+                />
+              </div>
+            ))}
+          </Carousel>
 
           <div>
             <p className="section-tag">{localized(product.categoryName, locale)}</p>

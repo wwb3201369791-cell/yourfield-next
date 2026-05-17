@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ProductCard } from '@/components/product/ProductCard';
 import { JsonLd } from '@/components/public/JsonLd';
 import { SectionIntro } from '@/components/public/SectionIntro';
+import { Carousel } from '@/components/ui/Carousel';
 import { ArrowRightIcon } from '@/components/ui/icons';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: LocalePageProps) {
 export default async function LocalePage({ params }: LocalePageProps) {
   const locale = resolveRouteLocale(params.locale);
   const t = await getTranslations(locale);
-  const previewProducts = featuredProducts.slice(0, 4);
+  const previewProducts = featuredProducts;
   const previewNews = newsItems.slice(0, 3);
 
   return (
@@ -138,7 +139,18 @@ export default async function LocalePage({ params }: LocalePageProps) {
               {t('common.viewAllProducts')}
             </Link>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <Carousel
+            ariaLabel={t('home.products.title')}
+            autoScroll
+            className="mt-2"
+            containerClassName="-ml-6"
+            controls={{
+              previousLabel: t('home.products.previous'),
+              nextLabel: t('home.products.next'),
+            }}
+            options={{ loop: true }}
+            slideClassName="flex-[0_0_86%] pl-6 sm:flex-[0_0_50%] xl:flex-[0_0_25%]"
+          >
             {previewProducts.map((product) => (
               <ProductCard
                 key={product.id}
@@ -147,7 +159,7 @@ export default async function LocalePage({ params }: LocalePageProps) {
                 detailLabel={t('common.viewDetails')}
               />
             ))}
-          </div>
+          </Carousel>
         </div>
       </section>
 
