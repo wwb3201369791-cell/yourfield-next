@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ['src/**/*.js'],
   extends: [
     'next/core-web-vitals',
     'plugin:@typescript-eslint/recommended',

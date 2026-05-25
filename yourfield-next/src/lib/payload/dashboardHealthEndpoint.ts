@@ -78,9 +78,18 @@ async function handleDashboardHealthEndpoint(
   try {
     const [products, productGroups, news, overdueSubmissions] = await Promise.all([
       findDocs(req, 'products', {
-        _status: {
-          equals: 'published',
-        },
+        and: [
+          {
+            _status: {
+              equals: 'published',
+            },
+          },
+          {
+            publishedAt: {
+              greater_than: '1970-01-01T00:00:00.000Z',
+            },
+          },
+        ],
       }),
       findDocs(req, 'product-groups', {
         showOnFrontend: {

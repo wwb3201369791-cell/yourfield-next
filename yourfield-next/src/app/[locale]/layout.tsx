@@ -3,13 +3,20 @@ import { NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
+import { UmamiScript } from '@/components/analytics/UmamiScript';
+import { CookieBanner, type CookieBannerCopy } from '@/components/compliance/CookieBanner';
 import { Footer } from '@/components/footer/Footer';
 import { Header } from '@/components/header/Header';
+import { CtaBand } from '@/components/public/CtaBand';
+import { HashScrollManager } from '@/components/public/HashScrollManager';
+import { getCmsNavigation } from '@/lib/cms/navigation';
+import { getCmsSiteSettings } from '@/lib/cms/site-settings';
+import { buildSiteCta } from '@/lib/content/siteCta';
+import { env } from '@/lib/env';
 import { getMessagesForLocale } from '@/lib/i18n/getMessages';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { isLocale, locales } from '@/lib/i18n/locale';
 import { normalizeMessageKey, type MessageTree } from '@/lib/i18n/messages';
-import { mainNavigation, type NavigationItem } from '@/lib/navigation';
 
 type LocaleLayoutProps = Readonly<{
   children: ReactNode;
@@ -22,16 +29,9 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-function collectNavigationKeys(items: readonly NavigationItem[]): string[] {
-  return items.flatMap((item) => [
-    item.labelKey,
-    ...(item.children ? collectNavigationKeys(item.children) : []),
-  ]);
-}
-
 const clientMessageKeys = Array.from(
   new Set([
-    ...collectNavigationKeys(mainNavigation),
+    'nav.home',
     'language.label',
     'language.switching',
     'nav.openMenu',
@@ -40,6 +40,7 @@ const clientMessageKeys = Array.from(
     'search.shortPlaceholder',
     'search.clear',
     'search.submit',
+    'search.suggestions',
     'error.runtime.eyebrow',
     'error.runtime.title',
     'error.runtime.text',
@@ -78,6 +79,19 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     Promise.resolve(getClientMessages(params.locale)),
     getTranslations(params.locale),
   ]);
+  const [navigation, siteSettings] = await Promise.all([
+    getCmsNavigation(params.locale),
+    getCmsSiteSettings(params.locale),
+  ]);
+
+  const cookieBannerCopy: CookieBannerCopy = {
+    body: t('cookie.notice.body'),
+    close: t('cookie.notice.close'),
+    linkLabel: t('cookie.notice.linkLabel'),
+    title: t('cookie.notice.title'),
+  };
+  const umamiWebsiteId = siteSettings.analytics.umamiWebsiteId || env.UMAMI_WEBSITE_ID;
+  const siteCta = buildSiteCta(params.locale, t);
 
   return (
     <NextIntlClientProvider locale={params.locale} messages={messages}>
@@ -85,11 +99,31 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <a className="skip-link" href="#main-content">
           {t('common.skipToMain')}
         </a>
-        <Header locale={params.locale} />
+        <Header
+          locale={params.locale}
+          navigation={navigation.mainNav}
+          siteSettings={siteSettings}
+        />
+        <HashScrollManager />
         <main className="site-main" id="main-content">
           {children}
+          <CtaBand {...siteCta} />
         </main>
-        <Footer locale={params.locale} />
+        <Footer
+          footerNavigation={navigation.footerNav}
+          locale={params.locale}
+          siteSettings={siteSettings}
+        />
+        <CookieBanner
+          cookiesHref={`/${params.locale}/cookies`}
+          enabled={siteSettings.cookieConsent.enabled}
+          copy={cookieBannerCopy}
+        />
+        <UmamiScript
+          enabled={siteSettings.analytics.enabled}
+          scriptUrl={env.UMAMI_SCRIPT_URL}
+          websiteId={umamiWebsiteId}
+        />
       </div>
     </NextIntlClientProvider>
   );

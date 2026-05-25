@@ -102,7 +102,7 @@ export type DashboardFormSummary = Readonly<{
 
 export type DashboardMetricTone = 'blue' | 'red' | 'navy' | 'amber';
 
-export type DashboardMetricVisual = 'search' | 'leads' | 'products' | 'groups';
+export type DashboardMetricVisual = 'search' | 'leads' | 'products' | 'groups' | 'zero-results';
 
 export type DashboardMetricTrendTone = 'up' | 'down' | 'flat';
 

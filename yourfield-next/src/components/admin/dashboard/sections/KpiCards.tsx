@@ -3,6 +3,7 @@
 import { ArrowRight } from 'lucide-react';
 import React from 'react';
 
+import { displayableOperationalTopKeywords } from '../deriveSearchStats';
 import { numberFormat, percentFormat, rangeStartDate, safeNumber } from '../format';
 import { buildAdminCollectionHref } from '../health';
 import type {
@@ -76,12 +77,19 @@ function KpiCard({ metric, resetKey }: Readonly<{ metric: DashboardMetric; reset
 export function KpiCards({ adminBase, data, rangeDays, rangeLabel }: KpiCardsProps) {
   const rangeStartIso = rangeStartDate(rangeDays).toISOString();
   const totalSearches = safeNumber(data.searchStats.totalSearches);
+  const zeroResultSearches = safeNumber(data.searchStats.zeroResultSearches);
   const currentForms = safeNumber(data.formSubmissions.totalDocs);
   const pendingForms = safeNumber(data.newFormSubmissions.totalDocs);
   const productCount = safeNumber(data.products.totalDocs);
   const productGroupCount = safeNumber(data.productGroups.totalDocs);
   const formsTrend = trendFor(currentForms, safeNumber(data.previousFormSubmissions.totalDocs));
   const searchesTrend = trendFor(totalSearches, safeNumber(data.previousSearchLogs.totalDocs));
+  const zeroResultKeywords =
+    displayableOperationalTopKeywords(data.searchStats.topKeywords)
+      ?.filter((keyword) => safeNumber(keyword.zeroResultSearches) > 0)
+      .map((keyword) => keyword.query?.trim())
+      .filter(Boolean)
+      .slice(0, 2) ?? [];
 
   const metrics: DashboardMetric[] = [
     {
@@ -111,6 +119,21 @@ export function KpiCards({ adminBase, data, rangeDays, rangeLabel }: KpiCardsPro
       trendTone: searchesTrend.tone,
       value: totalSearches,
       visual: 'search',
+    },
+    {
+      href: buildAdminCollectionHref(adminBase, 'search-logs', {
+        'where[createdAt][greater_than_equal]': rangeStartIso,
+        'where[eventType][equals]': 'search',
+        'where[hits][less_than_equal]': '0',
+      }),
+      label: '零结果搜索',
+      meta:
+        zeroResultSearches > 0 && zeroResultKeywords.length > 0
+          ? `需补内容：${zeroResultKeywords.join('、')}`
+          : `${rangeLabel}暂无零结果搜索`,
+      tone: 'amber',
+      value: zeroResultSearches,
+      visual: 'zero-results',
     },
     {
       href: buildAdminCollectionHref(adminBase, 'products', {

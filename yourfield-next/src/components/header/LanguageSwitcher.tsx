@@ -32,7 +32,7 @@ const languageOptions: Record<Locale, { code: string; name: string; lang: string
 
 export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   const t = useTranslations();
-  const pathname = usePathname();
+  const pathname = usePathname() ?? `/${locale}`;
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);

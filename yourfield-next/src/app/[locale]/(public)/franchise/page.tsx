@@ -1,10 +1,18 @@
-import Image from 'next/image';
+import '@/styles/legacy-franchise.css';
 
+import Image from 'next/image';
+import Link from 'next/link';
+import { Fragment } from 'react';
+
+import { LeadSubmitForm } from '@/components/forms/LeadSubmitForm';
+import { getLeadFormCopy } from '@/components/forms/leadFormCopy';
 import { JsonLd } from '@/components/public/JsonLd';
-import { PageHero } from '@/components/public/PageHero';
-import { SectionIntro } from '@/components/public/SectionIntro';
+import { getCmsPageByKey } from '@/lib/cms/pages';
+import { getCmsSiteSettings } from '@/lib/cms/site-settings';
+import { env } from '@/lib/env';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
+import { isDraftModeEnabled } from '@/lib/preview/draft';
 import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, collectionPageJsonLd } from '@/lib/seo/jsonld';
 
@@ -14,7 +22,19 @@ type FranchisePageProps = Readonly<{
   };
 }>;
 
-const policies = [1, 2, 3, 4, 5, 6] as const;
+const valueMetrics = [1, 2, 3] as const;
+const benefitItems = [1, 2, 3] as const;
+const targetRows = [1, 2, 3, 4] as const;
+
+const policies = [
+  { id: 1, icon: '/images/franchise/policy-tax.svg' },
+  { id: 2, icon: '/images/franchise/policy-space.svg' },
+  { id: 3, icon: '/images/franchise/policy-rd.svg' },
+  { id: 4, icon: '/images/franchise/policy-cross-border.svg' },
+  { id: 5, icon: '/images/franchise/policy-talent.svg' },
+  { id: 6, icon: '/images/franchise/policy-finance.svg' },
+] as const;
+
 const supportItems = [
   {
     id: 1,
@@ -35,20 +55,33 @@ const supportItems = [
 
 export async function generateMetadata({ params }: FranchisePageProps) {
   const locale = resolveRouteLocale(params.locale);
+  const isDraft = isDraftModeEnabled();
   const t = await getTranslations(locale);
+  const page = await getCmsPageByKey(locale, 'franchise', isDraft);
 
   return buildPageMetadata({
     locale,
     path: '/franchise',
-    title: t('nav.franchise'),
-    description: t('page.franchise.heroText'),
-    image: '/images/headers/franchise-partnership-hero-full.jpg',
+    title: page?.seoTitle || page?.title || t('nav.franchise'),
+    description: page?.seoDescription || t('page.franchise.heroText'),
+    image:
+      page?.seoImage || page?.heroImage || '/images/headers/franchise-partnership-hero-full.jpg',
+    noIndex: isDraft || Boolean(page?.noIndex),
   });
 }
 
 export default async function FranchisePage({ params }: FranchisePageProps) {
   const locale = resolveRouteLocale(params.locale);
+  const isDraft = isDraftModeEnabled();
   const t = await getTranslations(locale);
+  const [page, siteSettings] = await Promise.all([
+    getCmsPageByKey(locale, 'franchise', isDraft),
+    getCmsSiteSettings(locale),
+  ]);
+  const heroImage = page?.heroImage || '/images/headers/franchise-partnership.png';
+  const formCopy = getLeadFormCopy(locale);
+  const contactEmail = siteSettings.contact.email || t('page.contact.emailValue');
+  const turnstileSiteKey = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   return (
     <>
@@ -65,183 +98,306 @@ export default async function FranchisePage({ params }: FranchisePageProps) {
           ]),
         ]}
       />
-      <PageHero
-        eyebrow={t('page.franchise.kicker')}
-        title={t('page.franchise.heroTitle')}
-        description={t('page.franchise.heroText')}
-        image="/images/headers/franchise-partnership-hero-full.jpg"
-        imageAlt={t('page.franchise.parkImageAlt')}
-        actions={[
-          {
-            href: `/${locale}/contact`,
-            label: t('page.franchise.primaryCta'),
-          },
-          {
-            href: '#franchise-targets',
-            label: t('page.franchise.secondaryCta'),
-            variant: 'secondary',
-          },
-        ]}
-        priority
-      />
 
-      <section id="franchise-value" className="bg-white py-16 md:py-24">
-        <div className="container grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-          <div>
-            <p className="section-tag">{t('page.franchise.valueTag')}</p>
-            <h2>{t('page.franchise.valueTitle')}</h2>
-            <p className="mt-4">{t('page.franchise.valueText')}</p>
-            <ul className="mt-6 grid gap-3">
-              {['benefit1', 'benefit2', 'benefit3'].map((key) => (
-                <li key={key} className="flex gap-3 font-semibold text-primary">
-                  <span className="mt-2 h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
-                  {t(`page.franchise.${key}`)}
-                </li>
-              ))}
-            </ul>
+      <main className="franchise-page">
+        {page?.heroEnabled !== false ? (
+          <section
+            className="franchise-hero"
+            style={{ backgroundImage: `url("${heroImage}")` }}
+            aria-labelledby="franchise-hero-title"
+          >
+            <div className="container">
+              <div className="franchise-hero-copy">
+                <span className="franchise-kicker">{t('page.franchise.kicker')}</span>
+                <h1 id="franchise-hero-title">
+                  {page?.heroTitle || t('page.franchise.heroTitle')}
+                </h1>
+                <p>{page?.heroSubtitle || t('page.franchise.heroText')}</p>
+                <div className="franchise-actions">
+                  <Link className="btn btn-primary btn-large" href="#franchise-inquiry">
+                    {t('page.franchise.primaryCta')}
+                  </Link>
+                  <Link className="btn btn-outline btn-large" href="#franchise-targets">
+                    {t('page.franchise.secondaryCta')}
+                  </Link>
+                </div>
+              </div>
+
+              <div
+                className="franchise-stats"
+                aria-label={t('page.franchise.valueHighlightsLabel')}
+              >
+                <article className="franchise-stat">
+                  <Image
+                    className="franchise-stat-media"
+                    src="/images/about/built-up-area-stat.jpg"
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 360px, 100vw"
+                  />
+                  <div className="franchise-stat-copy">
+                    <strong>{t('page.franchise.statAreaValue')}</strong>
+                    <span>{t('page.franchise.statAreaLabel')}</span>
+                  </div>
+                </article>
+                <article className="franchise-stat">
+                  <Image
+                    className="franchise-stat-media"
+                    src="/images/about/investment-amount-stat.png"
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 360px, 100vw"
+                  />
+                  <div className="franchise-stat-copy">
+                    <strong>{t('page.franchise.statInvestmentValue')}</strong>
+                    <span>{t('page.franchise.statInvestmentLabel')}</span>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        <section className="franchise-section white" id="franchise-value">
+          <div className="park-layout container">
+            <figure className="park-image">
+              <Image
+                src="/images/about/franchise-campus.jpg"
+                alt={t('page.franchise.parkImageAlt')}
+                width={900}
+                height={620}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+              />
+              <figcaption className="park-image-caption" aria-hidden="true">
+                <span className="park-image-stat">
+                  <strong>{t('page.franchise.statAreaValue')}</strong>
+                  <span>{t('page.franchise.statAreaLabel')}</span>
+                </span>
+                <span className="park-image-stat">
+                  <strong>{t('page.franchise.statInvestmentValue')}</strong>
+                  <span>{t('page.franchise.statInvestmentLabel')}</span>
+                </span>
+              </figcaption>
+            </figure>
+
+            <div className="value-copy">
+              <div className="franchise-heading">
+                <span className="section-tag">{t('page.franchise.valueTag')}</span>
+                <h2>{t('page.franchise.valueTitle')}</h2>
+                <p>{t('page.franchise.valueText')}</p>
+              </div>
+
+              <ul
+                className="value-highlights"
+                aria-label={t('page.franchise.valueHighlightsLabel')}
+              >
+                {valueMetrics.map((item) => (
+                  <li className="value-highlight" key={item}>
+                    <strong>{t(`page.franchise.valueMetric${item}Value`)}</strong>
+                    <em>{t(`page.franchise.valueMetric${item}Label`)}</em>
+                  </li>
+                ))}
+              </ul>
+
+              <ul className="benefit-list">
+                {benefitItems.map((item, index) => (
+                  <li
+                    className={index === 0 ? 'benefit-item is-active' : 'benefit-item'}
+                    key={item}
+                  >
+                    <span aria-hidden="true">{item}</span>
+                    <p>{t(`page.franchise.benefit${item}`)}</p>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="strategy-copy">
+                <h3>{t('page.franchise.strategyTitle')}</h3>
+                <p>{t('page.franchise.strategyText')}</p>
+              </div>
+            </div>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded bg-bg-light shadow-lg">
-            <Image
-              className="h-full w-full object-cover"
-              src="/images/home/franchise-campus-clean-hd-full.jpg"
-              alt={t('page.franchise.parkImageAlt')}
-              fill
-              sizes="(min-width: 1024px) 45vw, 100vw"
+        </section>
+
+        <section className="franchise-section" id="franchise-targets">
+          <div className="container">
+            <div className="franchise-heading">
+              <span className="section-tag">{t('page.franchise.targetTag')}</span>
+              <h2>{t('page.franchise.targetTitle')}</h2>
+            </div>
+
+            <div className="target-table-wrap">
+              <table className="target-table">
+                <colgroup>
+                  <col />
+                  <col />
+                  <col />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th scope="col">{t('page.franchise.targetTypeTitle')}</th>
+                    <th scope="col">{t('page.franchise.targetFieldTitle')}</th>
+                    <th scope="col">{t('page.franchise.targetStrategyTitle')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {targetRows.map((row) => (
+                    <tr key={row}>
+                      <td>{t(`page.franchise.targetType${row}`)}</td>
+                      <td>
+                        <span className="target-mobile-label">
+                          {t('page.franchise.targetFieldTitle')}
+                        </span>
+                        {t(`page.franchise.targetField${row}`)}
+                      </td>
+                      <td>
+                        <span className="target-mobile-label">
+                          {t('page.franchise.targetStrategyTitle')}
+                        </span>
+                        {t(`page.franchise.targetStrategy${row}`)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section className="franchise-section dark" id="franchise-policy">
+          <div className="container">
+            <div className="franchise-heading center">
+              <span className="section-tag">{t('page.franchise.policyTag')}</span>
+              <h2>{t('page.franchise.policyTitle')}</h2>
+            </div>
+
+            <div className="policy-grid">
+              {policies.map((policy, index) => (
+                <article
+                  className={index === 0 ? 'policy-card is-active' : 'policy-card'}
+                  key={policy.id}
+                >
+                  <div>
+                    <div className="policy-card-header">
+                      <h3>{t(`page.franchise.policy${policy.id}Title`)}</h3>
+                      <span className="policy-icon-slot" aria-hidden="true">
+                        <Image
+                          className="policy-icon"
+                          src={policy.icon}
+                          alt=""
+                          width={40}
+                          height={40}
+                        />
+                      </span>
+                    </div>
+                    <p>{t(`page.franchise.policy${policy.id}Text`)}</p>
+                  </div>
+                  <span className="policy-number" aria-hidden="true">
+                    {policy.id}
+                  </span>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="franchise-section white" id="franchise-support">
+          <div className="container">
+            <div className="franchise-heading center">
+              <span className="section-tag">{t('page.franchise.supportTag')}</span>
+              <h2>{t('page.franchise.supportTitle')}</h2>
+            </div>
+
+            <div className="support-grid">
+              {supportItems.map((item) => (
+                <Fragment key={item.id}>
+                  <article className="support-item" key={`copy-${item.id}`}>
+                    <h3>{t(`page.franchise.support${item.id}Title`)}</h3>
+                    <strong>{t(`page.franchise.support${item.id}Sub`)}</strong>
+                    <p>{t(`page.franchise.support${item.id}Text`)}</p>
+                  </article>
+                  <div className="support-item image" key={`image-${item.id}`}>
+                    <Image
+                      src={item.image}
+                      alt={t(item.altKey)}
+                      width={720}
+                      height={420}
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                    />
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="franchise-section franchise-form-section" id="franchise-inquiry">
+          <div className="franchise-form-layout container">
+            <div className="franchise-form-copy">
+              <h2>{t('page.franchise.formTitle')}</h2>
+              <div className="divider" aria-hidden="true" />
+              <p>{t('page.franchise.formText')}</p>
+              <p className="franchise-form-summary">{formCopy.summary}</p>
+            </div>
+
+            <LeadSubmitForm
+              className="franchise-form"
+              controlClassName="franchise-control"
+              defaultInquiryType="franchise"
+              fieldGridClassName="franchise-form-row"
+              fields={[
+                {
+                  autoComplete: 'name',
+                  label: t('page.franchise.formNameLabel'),
+                  name: 'name',
+                  placeholder: t('page.franchise.formNamePlaceholder'),
+                  required: true,
+                  type: 'text',
+                },
+                {
+                  autoComplete: 'tel',
+                  label: t('page.franchise.formMobileLabel'),
+                  name: 'mobile',
+                  placeholder: t('page.franchise.formMobilePlaceholder'),
+                  type: 'tel',
+                },
+                {
+                  autoComplete: 'email',
+                  label: t('page.franchise.formEmailLabel'),
+                  name: 'email',
+                  placeholder: t('page.franchise.formEmailPlaceholder'),
+                  type: 'email',
+                },
+                {
+                  autoComplete: 'organization',
+                  label: t('page.franchise.formCompanyLabel'),
+                  name: 'company',
+                  placeholder: t('page.franchise.formCompanyPlaceholder'),
+                  type: 'text',
+                },
+              ]}
+              locale={locale}
+              mailtoCopy={{
+                companyLabel: t('page.contact.mailCompany'),
+                countryLabel: t('page.contact.mailCountry'),
+                emailLabel: t('page.contact.mailEmail'),
+                inquiryTypeLabel: t('page.contact.mailInquiryType'),
+                inquiryTypeValue: t('page.contact.inquiryTypeFranchise'),
+                messageLabel: t('page.contact.mailMessage'),
+                mobileLabel: t('page.contact.mailMobile'),
+                nameLabel: t('page.contact.mailName'),
+                recipient: contactEmail,
+                subject: t('page.contact.mailSubject'),
+              }}
+              messageLabel={t('page.franchise.formMessageLabel')}
+              messagePlaceholder={t('page.franchise.formMessagePlaceholder')}
+              submitLabel={t('page.franchise.formSubmit')}
+              textareaClassName="franchise-textarea"
+              {...(turnstileSiteKey ? { turnstileSiteKey } : {})}
             />
           </div>
-        </div>
-      </section>
-
-      <section id="franchise-targets" className="bg-bg-light py-16 md:py-24">
-        <div className="container">
-          <SectionIntro
-            eyebrow={t('page.franchise.targetTag')}
-            title={t('page.franchise.targetTitle')}
-            text={t('page.franchise.strategyText')}
-          />
-          <div className="grid gap-6 lg:grid-cols-3">
-            {['targetType', 'targetField', 'targetStrategy'].map((group) => (
-              <article key={group} className="rounded border border-border bg-white p-6 shadow-sm">
-                <h3 className="text-xl font-bold text-primary">
-                  {t(`page.franchise.${group}Title`)}
-                </h3>
-                <ul className="mt-5 grid gap-3">
-                  {[1, 2, 3, 4].map((item) => (
-                    <li key={item} className="text-sm leading-7 text-text-light">
-                      {t(`page.franchise.${group}${item}`)}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="franchise-policy" className="bg-white py-16 md:py-24">
-        <div className="container">
-          <SectionIntro
-            eyebrow={t('page.franchise.policyTag')}
-            title={t('page.franchise.policyTitle')}
-            text={t('page.franchise.strategyText')}
-          />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {policies.map((item) => (
-              <article key={item} className="rounded border border-border bg-bg-light p-6">
-                <span className="text-sm font-bold text-accent">0{item}</span>
-                <h3 className="mt-3 text-xl font-bold text-primary">
-                  {t(`page.franchise.policy${item}Title`)}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-text-light">
-                  {t(`page.franchise.policy${item}Text`)}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="franchise-support" className="bg-bg-light py-16 md:py-24">
-        <div className="container">
-          <SectionIntro
-            eyebrow={t('page.franchise.supportTag')}
-            title={t('page.franchise.supportTitle')}
-          />
-          <div className="grid gap-6 lg:grid-cols-3">
-            {supportItems.map((item) => (
-              <article
-                key={item.id}
-                className="overflow-hidden rounded border border-border bg-white shadow-sm"
-              >
-                <div className="relative aspect-[4/3]">
-                  <Image
-                    className="h-full w-full object-cover"
-                    src={item.image}
-                    alt={t(item.altKey)}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, 100vw"
-                  />
-                </div>
-                <div className="p-6">
-                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-accent">
-                    {t(`page.franchise.support${item.id}Sub`)}
-                  </p>
-                  <h3 className="mt-3 text-xl font-bold text-primary">
-                    {t(`page.franchise.support${item.id}Title`)}
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-text-light">
-                    {t(`page.franchise.support${item.id}Text`)}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="franchise-inquiry" className="bg-white py-16 md:py-24">
-        <div className="container grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
-            <p className="section-tag">{t('page.franchise.formTitle')}</p>
-            <h2>{t('page.franchise.formTitle')}</h2>
-            <p className="mt-4">{t('page.franchise.formText')}</p>
-          </div>
-          <form
-            className="grid gap-4 rounded border border-border bg-bg-light p-6"
-            action="mailto:hnyf@yourfield.net"
-            method="post"
-            encType="text/plain"
-          >
-            {[
-              ['name', 'formNameLabel', 'formNamePlaceholder', 'text'],
-              ['mobile', 'formMobileLabel', 'formMobilePlaceholder', 'tel'],
-              ['email', 'formEmailLabel', 'formEmailPlaceholder', 'email'],
-              ['company', 'formCompanyLabel', 'formCompanyPlaceholder', 'text'],
-            ].map(([name, labelKey, placeholderKey, type]) => (
-              <label key={name} className="grid gap-2 text-sm font-bold text-primary">
-                {t(`page.franchise.${labelKey}`)}
-                <input
-                  className="min-h-12 rounded border border-border bg-white px-4 text-base font-normal text-text"
-                  name={name}
-                  type={type}
-                  placeholder={t(`page.franchise.${placeholderKey}`)}
-                />
-              </label>
-            ))}
-            <label className="grid gap-2 text-sm font-bold text-primary">
-              {t('page.franchise.formMessageLabel')}
-              <textarea
-                className="min-h-32 rounded border border-border bg-white px-4 py-3 text-base font-normal text-text"
-                name="message"
-                placeholder={t('page.franchise.formMessagePlaceholder')}
-              />
-            </label>
-            <button className="btn btn-primary justify-self-start" type="submit">
-              {t('page.franchise.formSubmit')}
-            </button>
-          </form>
-        </div>
-      </section>
+        </section>
+      </main>
     </>
   );
 }

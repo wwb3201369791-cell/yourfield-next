@@ -1,20 +1,18 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
-
+import type { CmsMapServiceName } from '@/lib/cms/site-settings';
 import type { Locale } from '@/lib/i18n/locale';
 
 type CompanyMapProps = Readonly<{
   locale: Locale;
+  coordinates: {
+    lat: number;
+    lng: number;
+    zoom: number;
+  };
+  mapService: CmsMapServiceName;
   title: string;
   text: string;
-  address: string;
   placeholder: string;
   frameTitle: string;
-  cityLabel: string;
-  cityValue: string;
-  accessLabel: string;
-  accessValue: string;
   openMapLabel: string;
 }>;
 
@@ -24,37 +22,112 @@ type MapService = Readonly<{
   iframeUrl: string | null;
 }>;
 
-const coordinates = {
-  amap: '112.989066,27.816329',
-  google: '27.816329,112.989066',
-};
+const GCJ_PI = Math.PI;
+const GCJ_A = 6378245.0;
+const GCJ_EE = 0.006693421622965943;
 
-function buildMapService(locale: Locale): MapService {
-  if (locale === 'zh') {
+function transformLat(x: number, y: number) {
+  let result = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y;
+  result += 0.2 * Math.sqrt(Math.abs(x));
+  result += ((20.0 * Math.sin(6.0 * x * GCJ_PI) + 20.0 * Math.sin(2.0 * x * GCJ_PI)) * 2.0) / 3.0;
+  result += ((20.0 * Math.sin(y * GCJ_PI) + 40.0 * Math.sin((y / 3.0) * GCJ_PI)) * 2.0) / 3.0;
+  result +=
+    ((160.0 * Math.sin((y / 12.0) * GCJ_PI) + 320 * Math.sin((y * GCJ_PI) / 30.0)) * 2.0) / 3.0;
+  return result;
+}
+
+function transformLng(x: number, y: number) {
+  let result = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y;
+  result += 0.1 * Math.sqrt(Math.abs(x));
+  result += ((20.0 * Math.sin(6.0 * x * GCJ_PI) + 20.0 * Math.sin(2.0 * x * GCJ_PI)) * 2.0) / 3.0;
+  result += ((20.0 * Math.sin(x * GCJ_PI) + 40.0 * Math.sin((x / 3.0) * GCJ_PI)) * 2.0) / 3.0;
+  result +=
+    ((150.0 * Math.sin((x / 12.0) * GCJ_PI) + 300.0 * Math.sin((x / 30.0) * GCJ_PI)) * 2.0) / 3.0;
+  return result;
+}
+
+function outOfChina(lng: number, lat: number) {
+  return lng < 72.004 || lng > 137.8347 || lat < 0.8293 || lat > 55.8271;
+}
+
+function gcj02ToWgs84(lng: number, lat: number) {
+  if (outOfChina(lng, lat)) {
+    return { lat, lng };
+  }
+
+  let dLat = transformLat(lng - 105.0, lat - 35.0);
+  let dLng = transformLng(lng - 105.0, lat - 35.0);
+  const radLat = (lat / 180.0) * GCJ_PI;
+  let magic = Math.sin(radLat);
+  magic = 1 - GCJ_EE * magic * magic;
+  const sqrtMagic = Math.sqrt(magic);
+  dLat = (dLat * 180.0) / (((GCJ_A * (1 - GCJ_EE)) / (magic * sqrtMagic)) * GCJ_PI);
+  dLng = (dLng * 180.0) / ((GCJ_A / sqrtMagic) * Math.cos(radLat) * GCJ_PI);
+  const mgLat = lat + dLat;
+  const mgLng = lng + dLng;
+
+  return {
+    lat: lat * 2 - mgLat,
+    lng: lng * 2 - mgLng,
+  };
+}
+
+function buildOpenStreetMapFrameUrl(
+  coordinates: CompanyMapProps['coordinates'],
+  useGcjOffset: boolean,
+) {
+  const normalized = useGcjOffset ? gcj02ToWgs84(coordinates.lng, coordinates.lat) : coordinates;
+  const viewportSize = Math.max(0.004, 0.07 / Math.max(1, coordinates.zoom - 8));
+  const frameUrl = new URL('https://www.openstreetmap.org/export/embed.html');
+
+  frameUrl.searchParams.set(
+    'bbox',
+    [
+      normalized.lng - viewportSize,
+      normalized.lat - viewportSize,
+      normalized.lng + viewportSize,
+      normalized.lat + viewportSize,
+    ].join(','),
+  );
+  frameUrl.searchParams.set('layer', 'mapnik');
+  frameUrl.searchParams.set('marker', `${normalized.lat},${normalized.lng}`);
+
+  return frameUrl.toString();
+}
+
+function buildMapService(
+  locale: Locale,
+  mapService: CmsMapServiceName,
+  coordinates: CompanyMapProps['coordinates'],
+): MapService {
+  const amapCoordinates = `${coordinates.lng},${coordinates.lat}`;
+  const googleCoordinates = `${coordinates.lat},${coordinates.lng}`;
+
+  if (mapService === 'amap') {
     const url = new URL('https://uri.amap.com/marker');
-    url.searchParams.set('position', coordinates.amap);
+    url.searchParams.set('position', amapCoordinates);
     url.searchParams.set('name', '湖南永霏特种防护用品有限公司');
     url.searchParams.set('src', 'yourfield');
     url.searchParams.set('coordinate', 'gaode');
     url.searchParams.set('callnative', '0');
 
     return {
-      badge: '高德地图',
+      badge: '地图预览',
       externalUrl: url.toString(),
-      iframeUrl: null,
+      iframeUrl: buildOpenStreetMapFrameUrl(coordinates, true),
     };
   }
 
   const language = locale === 'ru' ? 'ru' : 'en';
   const frameUrl = new URL('https://www.google.com/maps');
-  frameUrl.searchParams.set('q', coordinates.google);
-  frameUrl.searchParams.set('z', '15');
+  frameUrl.searchParams.set('q', googleCoordinates);
+  frameUrl.searchParams.set('z', String(coordinates.zoom));
   frameUrl.searchParams.set('output', 'embed');
   frameUrl.searchParams.set('hl', language);
 
   const externalUrl = new URL('https://www.google.com/maps/search/');
   externalUrl.searchParams.set('api', '1');
-  externalUrl.searchParams.set('query', coordinates.google);
+  externalUrl.searchParams.set('query', googleCoordinates);
   externalUrl.searchParams.set('hl', language);
 
   return {
@@ -66,107 +139,38 @@ function buildMapService(locale: Locale): MapService {
 
 export function CompanyMap({
   locale,
+  coordinates,
+  mapService: mapServiceName,
   title,
   text,
-  address,
   placeholder,
   frameTitle,
-  cityLabel,
-  cityValue,
-  accessLabel,
-  accessValue,
   openMapLabel,
 }: CompanyMapProps) {
-  const mapService = buildMapService(locale);
-  const timeoutRef = useRef<number | null>(null);
-  const [isFrameLoaded, setIsFrameLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsFrameLoaded(false);
-
-    if (!mapService.iframeUrl) {
-      return undefined;
-    }
-
-    timeoutRef.current = window.setTimeout(() => {
-      setIsFrameLoaded(false);
-    }, 6500);
-
-    return () => {
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [mapService.iframeUrl]);
-
-  function handleFrameLoad() {
-    if (timeoutRef.current) {
-      window.clearTimeout(timeoutRef.current);
-    }
-
-    setIsFrameLoaded(true);
-  }
-
-  function handleFrameError() {
-    if (timeoutRef.current) {
-      window.clearTimeout(timeoutRef.current);
-    }
-
-    setIsFrameLoaded(false);
-  }
+  const mapService = buildMapService(locale, mapServiceName, coordinates);
 
   return (
-    <div
-      className="relative min-h-[540px] overflow-hidden rounded-lg border border-[rgba(30,58,95,0.12)] bg-[#eef3f7] shadow-lg"
-      aria-label={frameTitle}
-    >
-      <div
-        className="absolute inset-0 bg-[url('/images/headers/contact-us.png')] bg-cover bg-center"
-        aria-hidden="true"
-      >
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(13,31,53,0.86),rgba(30,58,95,0.72))]" />
-        <div className="absolute inset-0 opacity-45">
-          <div className="absolute left-[12%] top-[24%] h-px w-[72%] rotate-[-14deg] bg-white/45" />
-          <div className="absolute left-[18%] top-[58%] h-px w-[70%] rotate-[12deg] bg-white/35" />
-          <div className="absolute left-[34%] top-[9%] h-[82%] w-px rotate-[18deg] bg-white/30" />
-          <div className="absolute left-[66%] top-[12%] h-[78%] w-px rotate-[-17deg] bg-white/25" />
+    <div className="map-shell" aria-label={frameTitle}>
+      <div className="map-container">
+        <div className="map-fallback">
+          <p>{placeholder}</p>
         </div>
-        <div className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent text-white shadow-lg">
-          <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 21s7-5.1 7-11a7 7 0 1 0-14 0c0 5.9 7 11 7 11z"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-            />
-            <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="2" />
-          </svg>
-        </div>
+
+        {mapService.iframeUrl ? (
+          <iframe
+            className="map-frame"
+            title={frameTitle}
+            src={mapService.iframeUrl}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        ) : null}
       </div>
 
-      {mapService.iframeUrl ? (
-        <iframe
-          className={[
-            'absolute inset-0 h-full w-full border-0 transition-opacity duration-300',
-            isFrameLoaded ? 'opacity-100' : 'opacity-0',
-          ].join(' ')}
-          title={frameTitle}
-          src={mapService.iframeUrl}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          onLoad={handleFrameLoad}
-          onError={handleFrameError}
-        />
-      ) : null}
-
-      <div className="absolute left-4 right-4 top-4 z-10 grid gap-4 rounded border border-white/70 bg-white/75 p-5 shadow-lg backdrop-blur md:left-6 md:right-auto md:top-6 md:w-[min(360px,calc(100%-48px))]">
-        <div className="flex items-start gap-3">
-          <span
-            className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-accent text-white shadow"
-            aria-hidden="true"
-          >
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+      <div className="map-panel">
+        <button className="map-panel__trigger" type="button" aria-label={title}>
+          <span className="map-panel__pin" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
               <path
                 d="M12 21s7-5.1 7-11a7 7 0 1 0-14 0c0 5.9 7 11 7 11z"
                 stroke="currentColor"
@@ -177,44 +181,29 @@ export function CompanyMap({
               <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="2" />
             </svg>
           </span>
-          <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-accent">
-              {mapService.badge}
-            </p>
-            <h3 className="mt-2 text-xl font-bold leading-7 text-primary">{title}</h3>
-            <address className="text-primary/70 mt-2 text-sm not-italic leading-6">
-              {address}
-            </address>
+        </button>
+
+        <div className="map-panel__detail">
+          <div className="map-panel__head">
+            <span className="map-service-badge">{mapService.badge}</span>
+            <h3>{title}</h3>
           </div>
+
+          <p className="map-panel-text">{text}</p>
+
+          <a
+            className="map-open-link"
+            href={mapService.externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{openMapLabel}</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 17 17 7" />
+              <path d="M9 7h8v8" />
+            </svg>
+          </a>
         </div>
-
-        <p className="text-sm leading-6 text-text-light">{text}</p>
-
-        <dl className="grid grid-cols-2 gap-4 border-y border-white/70 py-4">
-          <div>
-            <dt className="text-xs font-bold uppercase tracking-[0.1em] text-accent">
-              {cityLabel}
-            </dt>
-            <dd className="mt-1 text-sm font-bold text-primary">{cityValue}</dd>
-          </div>
-          <div>
-            <dt className="text-xs font-bold uppercase tracking-[0.1em] text-accent">
-              {accessLabel}
-            </dt>
-            <dd className="mt-1 text-sm font-bold text-primary">{accessValue}</dd>
-          </div>
-        </dl>
-
-        <p className="text-primary/60 text-xs leading-5">{placeholder}</p>
-
-        <a
-          className="btn btn-secondary justify-self-start"
-          href={mapService.externalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {openMapLabel}
-        </a>
       </div>
     </div>
   );

@@ -10,7 +10,6 @@ import type {
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { buildConfig } from 'payload/config';
 import type { PayloadBundler } from 'payload/dist/bundlers/types';
-import payloadTranslations from 'payload/dist/translations';
 import { createElement } from 'react';
 
 import { AuditLogs } from './collections/AuditLogs';
@@ -42,7 +41,9 @@ import { Navigation } from './globals/Navigation';
 import { SiteSettings } from './globals/SiteSettings';
 import { env } from './lib/env';
 import { maxConfiguredMediaUploadBytes } from './lib/media/uploadLimits';
+import { adminI18nResources } from './lib/payload/adminI18nResources';
 import { createDashboardHealthEndpoint } from './lib/payload/dashboardHealthEndpoint';
+import { localizeLexicalFeatures } from './lib/payload/localizeLexicalEditor';
 import { createPayloadCloudStoragePlugin } from './lib/payload/storage';
 
 const bundler = webpackBundler() as PayloadBundler;
@@ -53,31 +54,6 @@ const databasePoolMax = isProductionBuild
   ? Math.min(env.DATABASE_POOL_MAX, 2)
   : env.DATABASE_POOL_MAX;
 const createPostgresAdapter = allowDatabasePush ? postgresAdapter : createNonPushingPostgresAdapter;
-const adminI18nResources = {
-  ...payloadTranslations,
-  zh: {
-    ...payloadTranslations.zh,
-    authentication: {
-      ...payloadTranslations.zh.authentication,
-      forgotPasswordEmailInstructions: '请输入登录账号，系统会发送密码重置说明。',
-      loginUser: '登录永霏网站运营后台',
-    },
-    error: {
-      ...payloadTranslations.zh.error,
-      emailOrPasswordIncorrect: '账号或密码不正确。',
-      missingEmail: '请输入登录账号。',
-    },
-    general: {
-      ...payloadTranslations.zh.general,
-      email: '登录账号',
-      emailAddress: '登录账号',
-    },
-    validation: {
-      ...payloadTranslations.zh.validation,
-      emailAddress: '请输入有效的登录账号。',
-    },
-  },
-};
 
 function AdminOperationsDashboardWithRoutes() {
   return createElement(AdminOperationsDashboard, {
@@ -201,12 +177,16 @@ export default buildConfig({
           ...config.resolve,
           alias: {
             ...config.resolve?.alias,
+            '@': path.resolve(process.cwd(), 'src'),
             crypto: false,
             webpack: false,
           },
         },
         plugins: [
           ...(config.plugins || []),
+          new webpack.ProvidePlugin({
+            React: 'react',
+          }),
           new webpack.NormalModuleReplacementPlugin(/^node:/, (resource: any) => {
             resource.request = resource.request.replace(/^node:/, '');
           }),
@@ -230,7 +210,9 @@ export default buildConfig({
       max: databasePoolMax,
     },
   }),
-  editor: lexicalEditor({}),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => localizeLexicalFeatures(defaultFeatures),
+  }),
   localization: {
     locales: [
       { label: '简体中文', code: 'zh', fallbackLocale: 'en' },

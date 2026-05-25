@@ -3,13 +3,13 @@
   "compilerOptions": {
     "declaration": false,
     "incremental": false,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmit": false,
     "outDir": "node_modules/.cache/yourfield-scripts",
-    "rootDir": "scripts",
+    "rootDir": ".",
     "sourceMap": false,
     "tsBuildInfoFile": "node_modules/.cache/yourfield-scripts/tsconfig.scripts.tsbuildinfo"
   },
-  "include": ["scripts/check-i18n-coverage.ts", "scripts/snapshot-mobile.ts"]
+  "include": ["scripts/**/*.ts"]
 }

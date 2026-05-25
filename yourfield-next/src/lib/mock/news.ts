@@ -88,9 +88,9 @@ export const newsItems: readonly NewsItem[] = [
 ];
 
 export const newsBodyFallback: LocalizedText = {
-  zh: '新闻正文和媒体素材将在客户确认后发布。当前页面先保留标题、摘要、返回入口和 SEO 结构，便于后续从 Payload 替换真实内容。',
-  en: 'The full article and media assets will be published after client confirmation. This page keeps the title, summary, return path, and SEO structure ready for Payload content.',
-  ru: 'Полный текст новости и медиа будут опубликованы после подтверждения. Страница сохраняет структуру для последующей замены данными Payload.',
+  zh: '围绕公司动态、产品进展与合作成果，持续记录永霏在安全防护领域的实践与创新。',
+  en: "Explore company updates, product progress, and cooperation milestones from YourField's ongoing work in safety protection.",
+  ru: 'Новости компании, развитие продуктов и партнерские проекты YourField в сфере промышленной безопасности.',
 };
 
 export function getNewsBySlug(slug: string) {

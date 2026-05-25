@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuth } from 'payload/dist/admin/components/utilities/Auth';
 import { useLocale } from 'payload/dist/admin/components/utilities/Locale';
 import { usePreferences } from 'payload/dist/admin/components/utilities/Preferences';
 import type { ReactNode } from 'react';
@@ -18,12 +19,17 @@ function replaceAdminLocaleParam(nextLocale: string) {
 }
 
 export function AdminLocaleGuard({ children }: AdminLocaleGuardProps) {
+  const { user } = useAuth();
   const locale = useLocale();
   const { setPreference } = usePreferences();
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     void setPreference('locale', adminContentLocale);
-  }, [setPreference]);
+  }, [setPreference, user]);
 
   useEffect(() => {
     const url = new URL(window.location.href);

@@ -8,6 +8,7 @@ import { rangeLabelFor, safeNumber } from './format';
 import { buildChartPoints, latestForms, operationsInsight } from './presentation';
 import { DashboardHealthPanel } from './sections/DashboardHealthPanel';
 import { DashboardTodoStrip } from './sections/DashboardTodoStrip';
+import { DashboardWelcome } from './sections/DashboardWelcome';
 import { FormSubmissionsList } from './sections/FormSubmissionsList';
 import { KpiCards } from './sections/KpiCards';
 import { RangeSwitcher } from './sections/RangeSwitcher';
@@ -56,6 +57,7 @@ export function DashboardReady({
   return (
     <section className="yourfield-ops-dashboard">
       <div className="yourfield-ops-dashboard__visual" aria-hidden="true" />
+      <DashboardWelcome adminBase={adminBase} data={data} rangeLabel={rangeLabel} />
       <div className="yourfield-ops-dashboard__head">
         <div>
           <p className="yourfield-ops-dashboard__eyebrow">运营数据</p>

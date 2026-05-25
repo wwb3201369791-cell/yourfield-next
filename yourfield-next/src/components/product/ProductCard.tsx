@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArrowRightIcon } from '@/components/ui/icons';
+import { shouldUseUnoptimizedImage } from '@/lib/cms/media';
 import type { Locale } from '@/lib/i18n/locale';
 import { localized, type Product } from '@/lib/mock/products';
 
@@ -12,26 +13,38 @@ type ProductCardProps = Readonly<{
 }>;
 
 export function ProductCard({ product, locale, detailLabel }: ProductCardProps) {
+  const isCmsMediaImage = shouldUseUnoptimizedImage(product.image);
+  const productTitle = localized(product.name, locale);
+  const productCategory = localized(product.categoryName, locale);
+
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded border border-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
       <Link
         className="relative block aspect-[4/3] bg-bg-light"
         href={`/${locale}/products/${product.id}`}
-        aria-label={`${detailLabel}: ${localized(product.name, locale)}`}
+        aria-label={`${detailLabel}: ${productTitle}`}
       >
-        <Image
-          className="h-full w-full object-contain p-6 transition duration-300 group-hover:scale-105"
-          src={product.image}
-          alt={localized(product.name, locale)}
-          fill
-          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-        />
+        {product.image ? (
+          <Image
+            className="h-full w-full object-contain p-6 transition duration-300 group-hover:scale-105"
+            src={product.image}
+            alt={productTitle}
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            unoptimized={isCmsMediaImage}
+          />
+        ) : (
+          <span className="product-image-empty product-image-empty--card" aria-label={productTitle}>
+            <strong>{productCategory}</strong>
+            <span>{productTitle}</span>
+          </span>
+        )}
       </Link>
       <div className="flex flex-1 flex-col p-5">
         <p className="text-xs font-bold uppercase tracking-[0.12em] text-accent">
-          {localized(product.categoryName, locale)}
+          {productCategory}
         </p>
-        <h3 className="mt-3 text-xl font-bold text-primary">{localized(product.name, locale)}</h3>
+        <h3 className="mt-3 text-xl font-bold text-primary">{productTitle}</h3>
         <p className="mt-3 line-clamp-3 text-sm leading-6 text-text-light">
           {localized(product.description, locale)}
         </p>

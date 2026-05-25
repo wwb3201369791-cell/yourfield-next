@@ -24,7 +24,7 @@ function resolveClientLocale(value: string | string[] | undefined) {
 
 export default function LocaleErrorPage({ error, reset }: ErrorPageProps) {
   const params = useParams();
-  const locale = resolveClientLocale(params.locale);
+  const locale = resolveClientLocale(params?.locale);
   const t = useTranslations();
   const errorId = useMemo(() => createErrorId(error, 'runtime'), [error]);
 

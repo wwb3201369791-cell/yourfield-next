@@ -1,0 +1,3 @@
+CREATE USER umami WITH PASSWORD 'umami_password';
+CREATE DATABASE umami OWNER umami;
+GRANT ALL PRIVILEGES ON DATABASE umami TO umami;

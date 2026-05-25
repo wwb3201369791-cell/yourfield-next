@@ -14,9 +14,29 @@ const optionalString = z.preprocess(emptyStringToUndefined, z.string().min(1).op
 const optionalUrl = z.preprocess(emptyStringToUndefined, z.string().url().optional());
 const optionalEmail = z.preprocess(emptyStringToUndefined, z.string().email().optional());
 
+const s3StorageRequiredEnvKeys = [
+  'S3_ENDPOINT',
+  'S3_REGION',
+  'S3_BUCKET',
+  'S3_ACCESS_KEY_ID',
+  'S3_SECRET_ACCESS_KEY',
+] as const;
+
+const productionRequiredSecretKeys = [
+  'CRON_SECRET',
+  'REVALIDATE_SECRET',
+  'PAYLOAD_PREVIEW_SECRET',
+] as const;
+
 const booleanFlag = z
   .union([z.literal('true'), z.literal('false'), z.literal('1'), z.literal('0')])
   .transform((value) => value === 'true' || value === '1');
+
+const positiveIntegerWithDefault = (defaultValue: number) =>
+  z.preprocess(
+    emptyStringToUndefined,
+    z.coerce.number().int().positive().optional().default(defaultValue),
+  );
 
 const localeList = z
   .string()
@@ -50,18 +70,31 @@ const envSchema = z
     NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
     NEXT_PUBLIC_DEFAULT_LOCALE: z.enum(localeValues).default('zh'),
     NEXT_PUBLIC_LOCALES: localeList,
+    APP_VERSION: z.string().min(1).default('0.0.0-local'),
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: optionalString,
+    NEXT_PHASE: optionalString,
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
     PAYLOAD_SECRET: z.preprocess(emptyStringToUndefined, z.string().min(32).optional()),
     PAYLOAD_PUBLIC_SERVER_URL: z.string().url().default('http://localhost:3000'),
     PAYLOAD_CONFIG_PATH: z.string().min(1).default('src/payload.config.ts'),
     PAYLOAD_PUBLIC_ADMIN_PATH: z.string().startsWith('/').default('/admin'),
+    PAYLOAD_ADMIN_LOCALE: z.enum(localeValues).default('zh'),
+    PAYLOAD_PUBLIC_API_PATH: z.string().startsWith('/').default('/payload-api'),
+    PAYLOAD_PUBLIC_GRAPHQL_PATH: z.string().startsWith('/').default('/payload-graphql'),
+    PAYLOAD_PUBLIC_GRAPHQL_PLAYGROUND_PATH: z
+      .string()
+      .startsWith('/')
+      .default('/payload-graphql-playground'),
+    PAYLOAD_DB_PUSH: booleanFlag.default(false),
+    PORT: z.coerce.number().int().positive().default(3000),
+    COOKIE_DOMAIN: optionalString,
 
     DATABASE_URI: z
       .string()
       .startsWith('postgresql://')
       .default('postgresql://postgres:password@localhost:5432/yourfield_dev'),
-    DATABASE_POOL_MIN: z.coerce.number().int().positive().default(2),
+    DATABASE_POOL_MIN: z.coerce.number().int().nonnegative().default(0),
     DATABASE_POOL_MAX: z.coerce.number().int().positive().default(10),
     DATABASE_SLOW_QUERY_MS: z.coerce.number().int().positive().default(500),
 
@@ -71,6 +104,10 @@ const envSchema = z
     S3_ACCESS_KEY_ID: optionalString,
     S3_SECRET_ACCESS_KEY: optionalString,
     S3_PUBLIC_URL_BASE: optionalUrl,
+
+    MEDIA_UPLOAD_IMAGE_MAX_BYTES: positiveIntegerWithDefault(10 * 1024 * 1024),
+    MEDIA_UPLOAD_PDF_MAX_BYTES: positiveIntegerWithDefault(20 * 1024 * 1024),
+    MEDIA_UPLOAD_VIDEO_MAX_BYTES: positiveIntegerWithDefault(100 * 1024 * 1024),
 
     MEILI_HOST: z.string().url().default('http://localhost:7700'),
     MEILI_MASTER_KEY: optionalString,
@@ -96,8 +133,8 @@ const envSchema = z
     GOOGLE_MAPS_KEY: optionalString,
     YANDEX_MAPS_KEY: optionalString,
 
-    TURNSTILE_SITE_KEY: optionalString,
     TURNSTILE_SECRET: optionalString,
+    CONTACT_FORM_TRUST_PROXY_HEADERS: booleanFlag.default(false),
 
     SENTRY_DSN: optionalUrl,
     SENTRY_ORG: optionalString,
@@ -107,12 +144,14 @@ const envSchema = z
 
     NEXT_TELEMETRY_DISABLED: booleanFlag.default(true),
     SKIP_ENV_VALIDATION: booleanFlag.default(false),
+    PAYLOAD_SEED_MODE: booleanFlag.default(false),
     CRON_SECRET: optionalString,
     REVALIDATE_SECRET: optionalString,
     PAYLOAD_PREVIEW_SECRET: optionalString,
 
     SUPERADMIN_EMAIL: optionalEmail,
     SUPERADMIN_PASSWORD: optionalString,
+    SUPERADMIN_USERNAME: optionalString,
   })
   .superRefine((data, context) => {
     if (!data.NEXT_PUBLIC_LOCALES.includes(data.NEXT_PUBLIC_DEFAULT_LOCALE)) {
@@ -120,6 +159,52 @@ const envSchema = z
         code: 'custom',
         path: ['NEXT_PUBLIC_DEFAULT_LOCALE'],
         message: 'NEXT_PUBLIC_DEFAULT_LOCALE must be listed in NEXT_PUBLIC_LOCALES',
+      });
+    }
+
+    if (data.TURNSTILE_SECRET && !data.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+      context.addIssue({
+        code: 'custom',
+        path: ['NEXT_PUBLIC_TURNSTILE_SITE_KEY'],
+        message: 'NEXT_PUBLIC_TURNSTILE_SITE_KEY is required when TURNSTILE_SECRET is configured',
+      });
+    }
+
+    if (data.NODE_ENV === 'production' && !data.TURNSTILE_SECRET) {
+      context.addIssue({
+        code: 'custom',
+        path: ['TURNSTILE_SECRET'],
+        message: 'TURNSTILE_SECRET is required in production',
+      });
+    }
+
+    if (data.NODE_ENV === 'production' && !data.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+      context.addIssue({
+        code: 'custom',
+        path: ['NEXT_PUBLIC_TURNSTILE_SITE_KEY'],
+        message: 'NEXT_PUBLIC_TURNSTILE_SITE_KEY is required in production',
+      });
+    }
+
+    if (data.NODE_ENV === 'production') {
+      productionRequiredSecretKeys.forEach((key) => {
+        if (!data[key]) {
+          context.addIssue({
+            code: 'custom',
+            path: [key],
+            message: `${key} is required in production`,
+          });
+        }
+      });
+    }
+
+    const missingS3Keys = s3StorageRequiredEnvKeys.filter((key) => data[key] === undefined);
+
+    if (missingS3Keys.length > 0 && missingS3Keys.length < s3StorageRequiredEnvKeys.length) {
+      context.addIssue({
+        code: 'custom',
+        path: ['S3_ENDPOINT'],
+        message: `S3 object storage env must be fully configured or left fully empty. Missing: ${missingS3Keys.join(', ')}`,
       });
     }
   });

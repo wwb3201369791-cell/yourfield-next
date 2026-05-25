@@ -14,13 +14,15 @@
 cd yourfield-next
 pnpm install
 cp .env.example .env.local
-pnpm dev
+pnpm dev:warm
 ```
 
-如果 3000 端口被占用:
+`pnpm dev:warm` 会启动本地开发服务并预热公开页顶部导航常用路由，适合本地质检时使用，避免首次点击页面才触发冷编译。
+
+如果只需要启动底层开发服务、不做页面预热:
 
 ```bash
-pnpm dev -- -p 4000
+pnpm dev
 ```
 
 健康检查方式:
@@ -30,6 +32,21 @@ curl -sI http://localhost:3000/zh
 curl -sI http://localhost:3000/en
 curl -sI http://localhost:3000/ru
 ```
+
+## 产品可视化编辑器
+
+产品编辑运营说明见 [`PRODUCT_EDITOR.md`](./PRODUCT_EDITOR.md)。
+
+核心入口:
+
+```text
+/admin/collections/products
+/admin/collections/products/:id?view=classic
+```
+
+- 默认编辑页为产品可视化编辑器。
+- `?view=classic` 保留 Payload 原生表单逃生口。
+- 图片字段不再限制 20 张；30+ 图片建议在经典表单中用 Payload 原生上传控件维护。
 
 ## 生产构建验证
 

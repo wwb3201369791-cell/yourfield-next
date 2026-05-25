@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Children, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@/components/ui/icons';
+import { shouldUseUnoptimizedImage } from '@/lib/cms/media';
 
 type EmblaOptions = NonNullable<Parameters<typeof useEmblaCarousel>[0]>;
 type AutoScrollOptions = NonNullable<Parameters<typeof AutoScroll>[0]>;
@@ -252,6 +253,7 @@ export function Carousel({
                 alt={thumbnail.alt}
                 fill
                 sizes="120px"
+                unoptimized={shouldUseUnoptimizedImage(thumbnail.src)}
               />
             </button>
           ))}

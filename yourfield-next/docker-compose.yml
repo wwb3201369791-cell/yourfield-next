@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: yourfield-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: yourfield_dev
+      UMAMI_DATABASE_PASSWORD: umami_password
+    ports:
+      - '5432:5432'
+    volumes:
+      - yourfield_postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d yourfield_dev']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.13
+    container_name: yourfield-meilisearch
+    restart: unless-stopped
+    environment:
+      MEILI_ENV: development
+      MEILI_MASTER_KEY: dev-only-meili-master-key-change-before-production
+      MEILI_NO_ANALYTICS: 'true'
+    ports:
+      - '7700:7700'
+    volumes:
+      - yourfield_meili_data:/meili_data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'wget --no-verbose --spider http://127.0.0.1:7700/health || exit 1',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-v2.18.1
+    container_name: yourfield-umami
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://umami:umami_password@postgres:5432/umami
+      DATABASE_TYPE: postgresql
+      APP_SECRET: dev-only-umami-app-secret-change-before-production
+    ports:
+      - '3002:3000'
+
+volumes:
+  yourfield_postgres_data:
+  yourfield_meili_data:

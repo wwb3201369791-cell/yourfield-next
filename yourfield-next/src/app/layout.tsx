@@ -12,6 +12,12 @@ type RootLayoutProps = Readonly<{
 }>;
 
 export const metadata: Metadata = {
+  icons: {
+    apple: [{ sizes: '180x180', url: '/apple-touch-icon.png' }],
+    icon: [{ sizes: '64x64', type: 'image/png', url: '/favicon.png' }],
+    shortcut: ['/favicon.png'],
+  },
+  manifest: '/manifest.webmanifest',
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
 };
 

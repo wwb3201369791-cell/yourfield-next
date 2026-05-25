@@ -1,0 +1,5064 @@
+{
+  "source": "拆分结果_20260514_133531_高清优化",
+  "contentSource": "拆分结果_20260514_133531",
+  "imageSource": "拆分结果_20260514_133531_高清优化",
+  "originalProductCount": 104,
+  "productCount": 99,
+  "imageCount": 431,
+  "excludedProducts": [
+    {
+      "imageCount": 0,
+      "name": "B级空调焊接服",
+      "reason": "missing product images"
+    },
+    {
+      "imageCount": 6,
+      "name": "应急救援服（连体）（不推了）",
+      "reason": "marked as internal or not ready"
+    },
+    {
+      "imageCount": 0,
+      "name": "应急救援连体服（不推了）",
+      "reason": "marked as internal or not ready"
+    },
+    {
+      "imageCount": 0,
+      "name": "消防员抢险救援服（冬款）",
+      "reason": "missing product images"
+    },
+    {
+      "imageCount": 2,
+      "name": "矿山救援服（需换款）",
+      "reason": "marked as internal or not ready"
+    }
+  ],
+  "generatedAt": "2026-05-23T20:06:18.464Z",
+  "products": [
+    {
+      "id": "live-line-shielding-suit",
+      "model": "HYF-3703",
+      "sku": "HYF-3703",
+      "categoryId": "shielding",
+      "categoryName": "带电作业用屏蔽服",
+      "groupId": "electrical-protection",
+      "name": "1000kV带电作业用屏蔽服",
+      "description": "等电位作业时，等电位作业时，人体直接接触高压带电部分，会有危险电流流过，危及人身安全。人体通过穿全套屏蔽服(等电位均压服)，构成良好的导电系统，即衣服和手套、裤子连接，裤子和袜子鞋子连接，使人体与高电压设备环境形成等电位，运用这种原理，起到屏蔽防护的作用，从而保证工作人员的人身安全。",
+      "image": "/images/products/extracted/live-line-shielding-suit/image-001.png",
+      "images": [
+        "/images/products/extracted/live-line-shielding-suit/image-001.png",
+        "/images/products/extracted/live-line-shielding-suit/image-002.png",
+        "/images/products/extracted/live-line-shielding-suit/image-003.png",
+        "/images/products/extracted/live-line-shielding-suit/image-004.png",
+        "/images/products/extracted/live-line-shielding-suit/image-005.png",
+        "/images/products/extracted/live-line-shielding-suit/image-006.png",
+        "/images/products/extracted/live-line-shielding-suit/image-007.png",
+        "/images/products/extracted/live-line-shielding-suit/image-008.png",
+        "/images/products/extracted/live-line-shielding-suit/image-009.jpeg",
+        "/images/products/extracted/live-line-shielding-suit/image-010.jpeg",
+        "/images/products/extracted/live-line-shielding-suit/image-011.jpeg",
+        "/images/products/extracted/live-line-shielding-suit/image-012.png",
+        "/images/products/extracted/live-line-shielding-suit/image-013.png",
+        "/images/products/extracted/live-line-shielding-suit/image-014.png",
+        "/images/products/extracted/live-line-shielding-suit/image-015.png",
+        "/images/products/extracted/live-line-shielding-suit/image-016.jpeg"
+      ],
+      "standards": [
+        "GB/T 6568-2024",
+        "《带电作业用屏蔽服装》",
+        "GB/T6568-2024《带电作业用屏蔽服装》"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "架空输电线路（1000kV及以下电压等级的电器设备）在不停电的线路上进行检修",
+        "测试",
+        "维修时穿着的。"
+      ],
+      "features": [
+        "整套服装能覆盖身体裸露的部分，采用三连体款式设计 ，版型宽松，穿着舒适，活动不受限；上衣为连帽款式 ，左右各有翻盖贴袋 ，方便储存工具物品。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3703"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB/T 6568-2024 《带电作业用屏蔽服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "浅石灰色"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据电压等级选择，此款推荐电压范围：1000kV及以下电压等级"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有检测报告"
+        }
+      ],
+      "sourceFolder": "1000kV带电作业用屏蔽服",
+      "sourceMarkdown": "1000kV带电作业用屏蔽服/1000kV带电作业用屏蔽服.md"
+    },
+    {
+      "id": "1-7-shi-sen-lin-fang-huo-fu",
+      "model": "HYF-5317",
+      "sku": "HYF-5317",
+      "categoryId": "forest-fire",
+      "categoryName": "森林灭火防护装备",
+      "groupId": "fire-rescue",
+      "name": "17式森林防火服",
+      "description": "在进行灭火救援时对救援者进行保护，防御火焰和炙热物体等的伤害。",
+      "image": "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-001.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-002.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-003.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-004.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-005.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-006.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-007.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-008.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-009.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-010.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-011.jpeg",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-012.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-013.png",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-014.jpeg",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-015.jpeg",
+        "/images/products/extracted/1-7-shi-sen-lin-fang-huo-fu/image-016.png"
+      ],
+      "standards": [
+        "GB/T 33536-2017 《森林防火服》",
+        "GB∕T33536-2017《防护服装 森林防火服》"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于森林",
+        "草原火灾",
+        "山地救援等场景",
+        "具备复杂地形环境中作业人员对高温"
+      ],
+      "features": [
+        "产品性能：采用阻燃芳纶纤维面料，具有阻燃、防静电、耐磨、防撕破等性能。",
+        "产品结构：服装为上下分体结构 。上衣穿着时盖住裤子部位超过200mm，上衣袖口、裤子脚口设置魔术贴调节袢，加强作业时闭合性，提高防护性能。",
+        "反光带：前胸、后背、袖口、腿部均设有360度环绕可见阻燃反光标志带，加强防护人员相互间的夜间可视度，提高警示作用。",
+        "印字：后背可根据需求增加反光印字设计。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-5317"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB/T 33536-2017 《森林防火服》"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "包装",
+          "value": "14套/箱"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有报告"
+        }
+      ],
+      "sourceFolder": "17式森林防火服",
+      "sourceMarkdown": "17式森林防火服/17式森林防火服.md"
+    },
+    {
+      "id": "arc-flash-suit",
+      "model": "HYF-3802",
+      "sku": "HYF-3802",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "1级防电弧服（夹克款）",
+      "description": "电力电网、光伏、新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。",
+      "image": "/images/products/extracted/arc-flash-suit/image-001.png",
+      "images": [
+        "/images/products/extracted/arc-flash-suit/image-001.png",
+        "/images/products/extracted/arc-flash-suit/image-002.png",
+        "/images/products/extracted/arc-flash-suit/image-003.png"
+      ],
+      "standards": [
+        "DL/T 320-2019 个人电弧防护用品通用技术要求",
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。"
+      ],
+      "features": [
+        "低压配电房、日常巡检、轻型电气作业、低电弧风险环境。（具体适用性根据实际作业场景的电弧能量值进行评估选定）。",
+        "有GB 8965.4-2022 检测报告 2级防电弧服标品款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3802"
+        },
+        {
+          "label": "执行标准",
+          "value": "DL/T 320-2019 个人电弧防护用品通用技术要求 GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "浅蓝、藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "低压配电房、日常巡检、轻型电气作业、低电弧风险环境。（具体适用性根据实际作业场景的电弧能量值进行评估选定）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有GB 8965.4-2022 检测报告 2级防电弧服标品款"
+        }
+      ],
+      "sourceFolder": "1级防电弧服（夹克款）",
+      "sourceMarkdown": "1级防电弧服（夹克款）/1级防电弧服（夹克款）.md"
+    },
+    {
+      "id": "1-ji-fang-dian-hu-fu-chen-shan-kuan",
+      "model": "HYF-3801",
+      "sku": "HYF-3801",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "1级防电弧服（衬衫款）",
+      "description": "电力电网、光伏、新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。",
+      "image": "/images/products/extracted/1-ji-fang-dian-hu-fu-chen-shan-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/1-ji-fang-dian-hu-fu-chen-shan-kuan/image-001.png",
+        "/images/products/extracted/1-ji-fang-dian-hu-fu-chen-shan-kuan/image-002.png"
+      ],
+      "standards": [
+        "DL/T 320-2019 个人电弧防护用品通用技术要求",
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。"
+      ],
+      "features": [
+        "低压配电房、日常巡检、轻型电气作业、低电弧风险环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。",
+        "有GB 8965.4-2022 检测报告 1级防电弧服标品款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3801"
+        },
+        {
+          "label": "执行标准",
+          "value": "DL/T 320-2019 个人电弧防护用品通用技术要求 GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "浅蓝、藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "低压配电房、日常巡检、轻型电气作业、低电弧风险环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有GB 8965.4-2022 检测报告 1级防电弧服标品款"
+        }
+      ],
+      "sourceFolder": "1级防电弧服（衬衫款）",
+      "sourceMarkdown": "1级防电弧服（衬衫款）/1级防电弧服（衬衫款）.md"
+    },
+    {
+      "id": "2-5-0-g-1-6-c-a-l-cheng-se-fang-dian-hu-da-gua",
+      "model": "HYF-3893",
+      "sku": "HYF-3893",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "250g 16CAL橙色防电弧大褂",
+      "description": "250g 16CAL橙色防电弧大褂",
+      "image": "/images/products/extracted/2-5-0-g-1-6-c-a-l-cheng-se-fang-dian-hu-da-gua/image-001.png",
+      "images": [
+        "/images/products/extracted/2-5-0-g-1-6-c-a-l-cheng-se-fang-dian-hu-da-gua/image-001.png",
+        "/images/products/extracted/2-5-0-g-1-6-c-a-l-cheng-se-fang-dian-hu-da-gua/image-002.png"
+      ],
+      "standards": [
+        "GB 8965.4-2022"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3893"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.4-2022"
+        },
+        {
+          "label": "颜色",
+          "value": "橙色"
+        },
+        {
+          "label": "尺码",
+          "value": "M-3X"
+        }
+      ],
+      "sourceFolder": "250g_16CAL橙色防电弧大褂",
+      "sourceMarkdown": "250g_16CAL橙色防电弧大褂/250g_16CAL橙色防电弧大褂.md"
+    },
+    {
+      "id": "2-ji-fang-dian-hu-fu-da-gua-kuan",
+      "model": "HYF-3809",
+      "sku": "HYF-3809",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "2级防电弧服（大褂款）",
+      "description": "电力电网、光伏、新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。",
+      "image": "/images/products/extracted/2-ji-fang-dian-hu-fu-da-gua-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/2-ji-fang-dian-hu-fu-da-gua-kuan/image-001.png",
+        "/images/products/extracted/2-ji-fang-dian-hu-fu-da-gua-kuan/image-002.png"
+      ],
+      "standards": [
+        "DL/T 320-2019 个人电弧防护用品通用技术要求",
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。"
+      ],
+      "features": [
+        "中压开关柜作业、电站常规检修、中等电弧暴露风险（具体适用性根据实际作业场景的电弧能量值进行评估选定）。",
+        "有GB 8965.4-2022检测报告 3级防电弧服标品款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3809"
+        },
+        {
+          "label": "执行标准",
+          "value": "DL/T 320-2019 个人电弧防护用品通用技术要求 GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红 深蓝"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "中压开关柜作业、电站常规检修、中等电弧暴露风险（具体适用性根据实际作业场景的电弧能量值进行评估选定）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有GB 8965.4-2022检测报告 3级防电弧服标品款"
+        }
+      ],
+      "sourceFolder": "2级防电弧服（大褂款）",
+      "sourceMarkdown": "2级防电弧服（大褂款）/2级防电弧服（大褂款）.md"
+    },
+    {
+      "id": "2-ji-fang-dian-hu-fu-jia-ke-kuan",
+      "model": "HYF-3853",
+      "sku": "HYF-3853",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "2级防电弧服（夹克款）",
+      "description": "电力电网、光伏、新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。",
+      "image": "/images/products/extracted/2-ji-fang-dian-hu-fu-jia-ke-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/2-ji-fang-dian-hu-fu-jia-ke-kuan/image-001.png",
+        "/images/products/extracted/2-ji-fang-dian-hu-fu-jia-ke-kuan/image-002.png",
+        "/images/products/extracted/2-ji-fang-dian-hu-fu-jia-ke-kuan/image-003.png",
+        "/images/products/extracted/2-ji-fang-dian-hu-fu-jia-ke-kuan/image-004.jpeg",
+        "/images/products/extracted/2-ji-fang-dian-hu-fu-jia-ke-kuan/image-005.png"
+      ],
+      "standards": [
+        "DL/T 320-2019 个人电弧防护用品通用技术要求",
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。"
+      ],
+      "features": [
+        "中压开关柜作业、电站常规检修、中等电弧暴露风险。（具体适用性根据实际作业场景的电弧能量值进行评估选定）。",
+        "有GB 8965.4-2022/DL/T 320-2019/劳安检测报告 2级防电弧服标品款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3853"
+        },
+        {
+          "label": "执行标准",
+          "value": "DL/T 320-2019 个人电弧防护用品通用技术要求 GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "浅蓝、藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "中压开关柜作业、电站常规检修、中等电弧暴露风险。（具体适用性根据实际作业场景的电弧能量值进行评估选定）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有GB 8965.4-2022/DL/T 320-2019/劳安检测报告 2级防电弧服标品款"
+        }
+      ],
+      "sourceFolder": "2级防电弧服（夹克款）",
+      "sourceMarkdown": "2级防电弧服（夹克款）/2级防电弧服（夹克款）.md"
+    },
+    {
+      "id": "3-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-3-4-c-a-l",
+      "model": "HYF-3821/HYF-3856",
+      "sku": "HYF-3821/HYF-3856",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "3级防电弧服（大褂、背带裤款）34cal",
+      "description": "电力电网、光伏、新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景，",
+      "image": "/images/products/extracted/3-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-3-4-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-3-4-c-a-l/image-001.png",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-3-4-c-a-l/image-002.png",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-3-4-c-a-l/image-003.jpeg",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-3-4-c-a-l/image-004.jpeg",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-3-4-c-a-l/image-005.png",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-3-4-c-a-l/image-006.png"
+      ],
+      "standards": [
+        "DL/T 320-2019 个人电弧防护用品通用技术要求",
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景"
+      ],
+      "features": [
+        "高压变电站、电厂运维、故障抢修、较高电弧能量环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。",
+        "有GB 8965.4-2022/DL/T 320-2019检测报告 4级防电弧服标品款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3821/HYF-3856"
+        },
+        {
+          "label": "执行标准",
+          "value": "DL/T 320-2019 个人电弧防护用品通用技术要求 GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "高压变电站、电厂运维、故障抢修、较高电弧能量环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有GB 8965.4-2022/DL/T 320-2019检测报告 4级防电弧服标品款"
+        }
+      ],
+      "sourceFolder": "3级防电弧服（大褂、背带裤款）34cal",
+      "sourceMarkdown": "3级防电弧服（大褂、背带裤款）34cal/3级防电弧服（大褂、背带裤款）34cal.md"
+    },
+    {
+      "id": "3-ji-fang-dian-hu-fu-jia-ke-kuan-3-4-c-a-l",
+      "model": "HYF-3819",
+      "sku": "HYF-3819",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "3级防电弧服（夹克款）34cal",
+      "description": "电力电网、光伏、新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。",
+      "image": "/images/products/extracted/3-ji-fang-dian-hu-fu-jia-ke-kuan-3-4-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-jia-ke-kuan-3-4-c-a-l/image-001.png",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-jia-ke-kuan-3-4-c-a-l/image-002.png",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-jia-ke-kuan-3-4-c-a-l/image-003.jpeg",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-jia-ke-kuan-3-4-c-a-l/image-004.png",
+        "/images/products/extracted/3-ji-fang-dian-hu-fu-jia-ke-kuan-3-4-c-a-l/image-005.jpeg"
+      ],
+      "standards": [
+        "DL/T 320-2019 个人电弧防护用品通用技术要求",
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。"
+      ],
+      "features": [
+        "高压变电站、电厂运维、故障抢修、较高电弧能量环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。",
+        "有GB 8965.4-2022/DL/T 320-2019检测报告 3级防电弧服标品款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3819"
+        },
+        {
+          "label": "执行标准",
+          "value": "DL/T 320-2019 个人电弧防护用品通用技术要求 GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "高压变电站、电厂运维、故障抢修、较高电弧能量环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有GB 8965.4-2022/DL/T 320-2019检测报告 3级防电弧服标品款"
+        }
+      ],
+      "sourceFolder": "3级防电弧服（夹克款）34cal",
+      "sourceMarkdown": "3级防电弧服（夹克款）34cal/3级防电弧服（夹克款）34cal.md"
+    },
+    {
+      "id": "4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-4-1-c-a-l",
+      "model": "HYF-3827/HYF-3828",
+      "sku": "HYF-3827/HYF-3828",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "4级防电弧服（大褂、背带裤款）41cal",
+      "description": "电力电网、光伏、新能源及工业企业变电站等可能受电弧伤害的电气作业场景。",
+      "image": "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-4-1-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-4-1-c-a-l/image-001.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-4-1-c-a-l/image-002.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-4-1-c-a-l/image-003.jpeg",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-4-1-c-a-l/image-004.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-4-1-c-a-l/image-005.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-4-1-c-a-l/image-006.jpeg"
+      ],
+      "standards": [
+        "DL/T 320-2019 个人电弧防护用品通用技术要求",
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站等可能受电弧伤害的电气作业场景。"
+      ],
+      "features": [
+        "特高压电站、短路试验、故障强电弧、极端危险环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。",
+        "有GB 8965.4-2022/DL/T 320-2019检测报告 定制款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3827/HYF-3828"
+        },
+        {
+          "label": "执行标准",
+          "value": "DL/T 320-2019 个人电弧防护用品通用技术要求 GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "特高压电站、短路试验、故障强电弧、极端危险环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有GB 8965.4-2022/DL/T 320-2019检测报告 定制款"
+        }
+      ],
+      "sourceFolder": "4级防电弧服（大褂、背带裤款）41cal",
+      "sourceMarkdown": "4级防电弧服（大褂、背带裤款）41cal/4级防电弧服（大褂、背带裤款）41cal.md"
+    },
+    {
+      "id": "4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l",
+      "model": "HYF-3841/HYF-3842",
+      "sku": "HYF-3841/HYF-3842",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "4级防电弧服（大褂、背带裤款）80cal",
+      "description": "4级防电弧服（大褂、背带裤款）80cal",
+      "image": "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l/image-001.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l/image-002.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l/image-003.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l/image-004.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l/image-005.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l/image-006.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-da-gua-bei-dai-ku-kuan-8-0-c-a-l/image-007.png"
+      ],
+      "standards": [
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3841/HYF-3842"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "S-5X 定制款"
+        }
+      ],
+      "sourceFolder": "4级防电弧服（大褂、背带裤款）80cal",
+      "sourceMarkdown": "4级防电弧服（大褂、背带裤款）80cal/4级防电弧服（大褂、背带裤款）80cal.md"
+    },
+    {
+      "id": "4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l",
+      "model": "HYF-3826",
+      "sku": "HYF-3826",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "4级防电弧服（夹克款）41cal",
+      "description": "电力电网、光伏、新能源及工业企业变电站等可能受电弧伤害的电气作业场景。",
+      "image": "/images/products/extracted/4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l/image-001.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l/image-002.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l/image-003.jpeg",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l/image-004.png",
+        "/images/products/extracted/4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l/image-005.jpeg"
+      ],
+      "standards": [
+        "DL/T 320-2019 个人电弧防护用品通用技术要求",
+        "GB 8965.4-2022 防护服装 防电弧服"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站等可能受电弧伤害的电气作业场景。"
+      ],
+      "features": [
+        "特高压电站、短路试验、故障强电弧、极端危险环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。",
+        "有GB 8965.4-2022/DL/T 320-2019检测报告 4级防电弧服标品款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3826"
+        },
+        {
+          "label": "执行标准",
+          "value": "DL/T 320-2019 个人电弧防护用品通用技术要求 GB 8965.4-2022 防护服装 防电弧服"
+        },
+        {
+          "label": "颜色",
+          "value": "藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "特高压电站、短路试验、故障强电弧、极端危险环境（具体适用性根据实际作业场景的电弧能量值进行评估选定）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有GB 8965.4-2022/DL/T 320-2019检测报告 4级防电弧服标品款"
+        }
+      ],
+      "sourceFolder": "4级防电弧服（夹克款）41cal",
+      "sourceMarkdown": "4级防电弧服（夹克款）41cal/4级防电弧服（夹克款）41cal.md"
+    },
+    {
+      "id": "5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu",
+      "model": "HYF-3901",
+      "sku": "HYF-3901",
+      "categoryId": "high-voltage-static",
+      "categoryName": "交流高压静电服",
+      "groupId": "electrical-protection",
+      "name": "500kV交流高压静电服",
+      "description": "避免在带电作业设备和强电场下作业，因感应麻电和静电积累而对人体产生的生态影响。交流高压静电防护服是用导电材料与纺织纤维混纺交织成布后做成的防护服装，具有较高的屏蔽效率，较小的表面电阻及较好的手感、外观和穿用性能，能有效地保护线路和变电站巡视及地电位作业人员免受交流高压电场的影响。",
+      "image": "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-001.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-002.jpeg",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-003.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-004.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-005.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-006.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-007.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-008.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-009.jpeg",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-010.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-011.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-012.jpeg",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-013.png",
+        "/images/products/extracted/5-0-0-k-v-jiao-liu-gao-ya-jing-dian-fu/image-014.png"
+      ],
+      "standards": [
+        "GB/T 18136-2008《交流高压静电防护服装及试验方法》",
+        "GB/T 18136-2008 《交流高压静电防护服装及试验方法》"
+      ],
+      "materials": [
+        "阻燃芳纶纤维+导电纤维 面料克重：200gsm±5%"
+      ],
+      "applications": [
+        "电力电网",
+        "输电线路",
+        "输电线路及地电位作业中心",
+        "交流输电线路和变电站巡视及地电位作业人员"
+      ],
+      "features": [
+        "采用分体式、双层面料设计，上衣为连帽款式，前襟为纽扣开合，左右各有翻盖贴袋，方便储存工具物品；",
+        "左袖臂缝制永久性屏蔽标识；"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3901"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB/T 18136-2008《交流高压静电防护服装及试验方法》"
+        },
+        {
+          "label": "颜色",
+          "value": "蓝色"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据电压等级选择，此款推荐电压范围：110（66）kV-500kV。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有检测报告"
+        }
+      ],
+      "sourceFolder": "500kV交流高压静电服",
+      "sourceMarkdown": "500kV交流高压静电服/500kV交流高压静电服.md"
+    },
+    {
+      "id": "5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu",
+      "model": "HYF-3701",
+      "sku": "HYF-3701",
+      "categoryId": "shielding",
+      "categoryName": "带电作业用屏蔽服",
+      "groupId": "electrical-protection",
+      "name": "500kV带电作业用屏蔽服",
+      "description": "等电位作业时，人体直接接触高压带电部分，会有危险电流流过，危及人身安全。人体通过穿全套屏蔽服(等电位均压服)，构成良好的导电系统，即衣服和手套、裤子连接，裤子和袜子鞋子连接，使人体与高电压设备环境形成等电位，运用这种原理，起到屏蔽防护的作用，从而保证工作人员的人身安全。",
+      "image": "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-001.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-002.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-003.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-004.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-005.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-006.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-007.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-008.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-009.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-010.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-011.jpeg",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-012.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-013.png",
+        "/images/products/extracted/5-0-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-014.jpeg"
+      ],
+      "standards": [
+        "GB/T 6568-2024《带电作业用屏蔽服装》",
+        "GB/T6568-2024《带电作业用屏蔽服装》"
+      ],
+      "materials": [
+        "芳纶/金属纤维 面料克重：(250±5%)g/㎡"
+      ],
+      "applications": [
+        "电力电网",
+        "架空输电线路（500kV及以下电压等级的电器设备）在不停电的线路上进行检修",
+        "测试",
+        "维修时穿着。"
+      ],
+      "features": [
+        "500kV带电作业用屏蔽服采用分体式、双层面料设计，上衣为连帽款式，前襟为纽扣开合，左右各有翻盖贴袋，方便储存工具物品； 整套服装尽量覆盖身体裸露的部分，分体式设计上下装之间覆盖部分不少于 200mm。",
+        "左袖臂缝制永久性屏蔽标识；"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3701"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB/T 6568-2024《带电作业用屏蔽服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "浅石灰色"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据电压等级选择，此款推荐电压范围：在500kV及以下电压等级"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有检测报告"
+        }
+      ],
+      "sourceFolder": "500kV带电作业用屏蔽服",
+      "sourceMarkdown": "500kV带电作业用屏蔽服/500kV带电作业用屏蔽服.md"
+    },
+    {
+      "id": "7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu",
+      "model": "HYF-3702",
+      "sku": "HYF-3702",
+      "categoryId": "shielding",
+      "categoryName": "带电作业用屏蔽服",
+      "groupId": "electrical-protection",
+      "name": "750kV带电作业用屏蔽服",
+      "description": "电力电网、架空输电线路（750kV及以下电压等级的电器设备）在不停电的线路上进行检修、测试、维修时穿着。",
+      "image": "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-001.png",
+        "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-002.png",
+        "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-003.png",
+        "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-004.png",
+        "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-005.png",
+        "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-006.png",
+        "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-007.png",
+        "/images/products/extracted/7-5-0-k-v-dai-dian-zuo-ye-yong-ping-bi-fu/image-008.png"
+      ],
+      "standards": [
+        "GB/T 6568-2024《带电作业用屏蔽服装》"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "架空输电线路（750kV及以下电压等级的电器设备）在不停电的线路上进行检修",
+        "测试",
+        "维修时穿着。"
+      ],
+      "features": [
+        "根据电压等级选择，此款推荐电压范围：750kV及以下电压等级",
+        "有检测报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3702"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB/T 6568-2024《带电作业用屏蔽服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "浅石灰色"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据电压等级选择，此款推荐电压范围：750kV及以下电压等级"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有检测报告"
+        }
+      ],
+      "sourceFolder": "750kV带电作业用屏蔽服",
+      "sourceMarkdown": "750kV带电作业用屏蔽服/750kV带电作业用屏蔽服.md"
+    },
+    {
+      "id": "a-ji-han-jie-fen-ti-tao-zhuang",
+      "model": "YF-016",
+      "sku": "",
+      "categoryId": "welding",
+      "categoryName": "焊接服",
+      "groupId": "thermal-welding",
+      "name": "A级焊接分体套装",
+      "description": "用于防护从事焊接作业人员可能遭受的熔融物质及其热伤害 ，在接触火焰及炽热物体后 ， 一定时间内能阻止本身被点燃 、 有焰燃烧和阴燃的防护服 ， 火源移开后燃烧部分迅速炭化而不产生熔融、 滴落，给人时间脱掉衣服或撤离燃烧现场，减少或避免烧伤烫伤 ， 以保护人 体。",
+      "image": "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-001.jpeg",
+      "images": [
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-001.jpeg",
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-002.png",
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-003.png",
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-004.png",
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-005.jpeg",
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-006.png",
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-007.png",
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-008.png",
+        "/images/products/extracted/a-ji-han-jie-fen-ti-tao-zhuang/image-009.png"
+      ],
+      "standards": [
+        "GB 8965.2-2022《防护服装 焊接服》"
+      ],
+      "materials": [
+        "腈氯纶/纤维素纤维/芳纶"
+      ],
+      "applications": [
+        "机械加工",
+        "钢铁冶炼",
+        "金属热加工",
+        "石油石化"
+      ],
+      "features": [
+        "两用立领 ，服装前胸风琴褶设计 ，褶内设有挖袋 ， 明省 、活褶向下倒 ， 以免积存熔融物质；",
+        "腋下设计通风孔 ， 增加作业人员换气空间 ，舒适透气；",
+        "袖身两片袖结构 ， 袖臂设计挂袢 ，袖口采用魔术贴搭扣闭合 ， 内增加防护贴 ， 有效防止飞溅的炽热金属或火花从接合部位进入 ， 便于活动同时更好防护；",
+        "前幅 、袖肘、臀部 、膝盖等采用双层面料加强防护 ， 以防止焊渣 、火花等高温物体对皮肤造成伤害；服装各接缝处均使用加固缝制工艺 ， 耐磨更耐用；",
+        "符合人体工学原理 ，整体协调 ， 穿着舒适 ，适用于夏季或春秋季在有明火 、 散发火花、或在有易燃物质并有轰燃风险危险场所的防护穿着。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "本白"
+        }
+      ],
+      "sourceFolder": "A级焊接分体套装",
+      "sourceMarkdown": "A级焊接分体套装/A级焊接分体套装.md"
+    },
+    {
+      "id": "welding-protective-clothing",
+      "model": "HYF-3241",
+      "sku": "HYF-3241",
+      "categoryId": "welding",
+      "categoryName": "焊接服",
+      "groupId": "thermal-welding",
+      "name": "A级焊接服",
+      "description": "船舶制造、钢结构加工、机械制造等行业，针对各种仰焊位置、高空或狭窄空间操作高危级别的焊接作业人员可能遭受的熔融物质及其热伤害。",
+      "image": "/images/products/extracted/welding-protective-clothing/image-001.jpeg",
+      "images": [
+        "/images/products/extracted/welding-protective-clothing/image-001.jpeg",
+        "/images/products/extracted/welding-protective-clothing/image-002.jpeg",
+        "/images/products/extracted/welding-protective-clothing/image-003.png",
+        "/images/products/extracted/welding-protective-clothing/image-004.jpeg",
+        "/images/products/extracted/welding-protective-clothing/image-005.jpeg",
+        "/images/products/extracted/welding-protective-clothing/image-006.jpeg",
+        "/images/products/extracted/welding-protective-clothing/image-007.png"
+      ],
+      "standards": [
+        "GB 8965.2-2020《防护服装 焊接服》"
+      ],
+      "materials": [],
+      "applications": [
+        "船舶制造",
+        "钢结构加工",
+        "机械制造等行业",
+        "针对各种仰焊位置"
+      ],
+      "features": [
+        "A级焊接服高风险作业的必备防护，仰焊作业、高空焊接作业、狭窄空间焊接。",
+        "有第三方检测报告（GB 8965.2-2020）合格 B级焊接服标品款2(配件还在完善中，会加入焊接眼镜）"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3241"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.2-2020《防护服装 焊接服》"
+        },
+        {
+          "label": "颜色",
+          "value": "本白"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "A级焊接服高风险作业的必备防护，仰焊作业、高空焊接作业、狭窄空间焊接。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有第三方检测报告（GB 8965.2-2020）合格 B级焊接服标品款2(配件还在完善中，会加入焊接眼镜）"
+        }
+      ],
+      "sourceFolder": "A级焊接服",
+      "sourceMarkdown": "A级焊接服/A级焊接服.md"
+    },
+    {
+      "id": "a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang",
+      "model": "HYF-3163",
+      "sku": "HYF-3163",
+      "categoryId": "flame-retardant",
+      "categoryName": "阻燃服",
+      "groupId": "thermal-welding",
+      "name": "A级阻燃春秋分体套装",
+      "description": "适用于烟花爆竹生产、石油钻井平台作业、煤矿井下瓦斯风险等领域中，存在高风险明火、高温及易燃物引燃风险的作业场所。",
+      "image": "/images/products/extracted/a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-002.jpeg",
+        "/images/products/extracted/a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-003.jpeg",
+        "/images/products/extracted/a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-004.jpeg",
+        "/images/products/extracted/a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-005.png",
+        "/images/products/extracted/a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-006.png",
+        "/images/products/extracted/a-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-007.jpeg"
+      ],
+      "standards": [
+        "GB 8965.1-2020《防护服装 阻燃服》"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于烟花爆竹生产",
+        "石油钻井平台作业",
+        "煤矿井下瓦斯风险等领域中",
+        "存在高风险明火"
+      ],
+      "features": [
+        "A 级阻燃服是对存在高风险明火、高温及爆燃、轰燃场景的必备防护。",
+        "有SINOPPE认证，A级深蓝色没有报告 B款阻燃服标品款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3163"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.1-2020《防护服装 阻燃服》"
+        },
+        {
+          "label": "颜色",
+          "value": "深蓝，撞色桔色"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "A 级阻燃服是对存在高风险明火、高温及爆燃、轰燃场景的必备防护。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有SINOPPE认证，A级深蓝色没有报告 B款阻燃服标品款"
+        }
+      ],
+      "sourceFolder": "A级阻燃春秋分体套装",
+      "sourceMarkdown": "A级阻燃春秋分体套装/A级阻燃春秋分体套装.md"
+    },
+    {
+      "id": "b-ji-han-jie-fen-ti-tao-zhuang",
+      "model": "HYF-3230",
+      "sku": "HYF-3230",
+      "categoryId": "welding",
+      "categoryName": "焊接服",
+      "groupId": "thermal-welding",
+      "name": "B级焊接分体套装",
+      "description": "用于防护焊接作业人员可能遭受的熔融物质及其热伤害。",
+      "image": "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-001.jpeg",
+      "images": [
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-001.jpeg",
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-002.jpeg",
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-003.png",
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-004.jpeg",
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-005.png",
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-006.png",
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-007.png",
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-008.png",
+        "/images/products/extracted/b-ji-han-jie-fen-ti-tao-zhuang/image-009.png"
+      ],
+      "standards": [
+        "GB 8965.2-2022 防护服装 焊接服"
+      ],
+      "materials": [
+        "全棉斜纹阻燃面料 面料克重：(400±5%)g/m2"
+      ],
+      "applications": [
+        "机械加工",
+        "钢铁冶炼",
+        "金属热加工",
+        "石油石化等行业。"
+      ],
+      "features": [
+        "服装为上下分体结构 ，必须与其他焊接装备一起使用。",
+        "产品上衣领口、前门襟及袋盖设置魔术贴闭合，防止飞溅的炽热金属或火花从接合部位进入；上衣袖口、裤子脚口设置调节绊，方便不同型体的作业人员舒适穿着，且增加其防护性能。",
+        "前胸、后背均采用银灰色反光带，既增加作业者相互间的可视性 ，又增强警示性。",
+        "手臂配设有插笔孔口袋 ，袋上方绣焊接服标识。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3230 HYF-3230"
+        },
+        {
+          "label": "颜色",
+          "value": "藏蓝色、墨绿色"
+        }
+      ],
+      "sourceFolder": "B级焊接分体套装",
+      "sourceMarkdown": "B级焊接分体套装/B级焊接分体套装.md"
+    },
+    {
+      "id": "b-ji-han-jie-fu",
+      "model": "HYF-3244（墨绿）",
+      "sku": "HYF-3244（墨绿）",
+      "categoryId": "welding",
+      "categoryName": "焊接服",
+      "groupId": "thermal-welding",
+      "name": "B级焊接服",
+      "description": "船舶制造、钢结构加工、机械制造等行业，针对除A级焊接服高危操作位置及环境的焊接作业人员可能遭受的熔融物质及其热伤害。",
+      "image": "/images/products/extracted/b-ji-han-jie-fu/image-001.jpeg",
+      "images": [
+        "/images/products/extracted/b-ji-han-jie-fu/image-001.jpeg",
+        "/images/products/extracted/b-ji-han-jie-fu/image-002.jpeg",
+        "/images/products/extracted/b-ji-han-jie-fu/image-003.jpeg",
+        "/images/products/extracted/b-ji-han-jie-fu/image-004.png",
+        "/images/products/extracted/b-ji-han-jie-fu/image-005.png",
+        "/images/products/extracted/b-ji-han-jie-fu/image-006.jpeg",
+        "/images/products/extracted/b-ji-han-jie-fu/image-007.jpeg"
+      ],
+      "standards": [
+        "GB 8965.2-2020《防护服装 焊接服》"
+      ],
+      "materials": [],
+      "applications": [
+        "船舶制造",
+        "钢结构加工",
+        "机械制造等行业",
+        "针对除A级焊接服高危操作位置及环境的焊接作业人员可能遭受的熔融物质及其热伤害。"
+      ],
+      "features": [
+        "B级焊接服适用于风险相对较低的常规焊接作业，平焊、立焊、横焊等常规位置、开阔作业空间。",
+        "墨绿色（LA认证含检测报告）。藏蓝色有第三方检测报告，符合（GB 8965.2-2020） A级焊接服定制款"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3244（墨绿）、HYF-3230（藏蓝）"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.2-2020《防护服装 焊接服》"
+        },
+        {
+          "label": "颜色",
+          "value": "墨绿 藏蓝"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "B级焊接服适用于风险相对较低的常规焊接作业，平焊、立焊、横焊等常规位置、开阔作业空间。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "墨绿色（LA认证含检测报告）。藏蓝色有第三方检测报告，符合（GB 8965.2-2020） A级焊接服定制款"
+        }
+      ],
+      "sourceFolder": "B级焊接服",
+      "sourceMarkdown": "B级焊接服/B级焊接服.md"
+    },
+    {
+      "id": "b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang",
+      "model": "HYF-3102",
+      "sku": "HYF-3102",
+      "categoryId": "flame-retardant",
+      "categoryName": "阻燃服",
+      "groupId": "thermal-welding",
+      "name": "B级阻燃春秋分体套装",
+      "description": "适用于冶金炉前作业、加油站常规作业、木材加工、粮食加工等领域中，存在明火、高温及易燃物引燃风险的作业场所。",
+      "image": "/images/products/extracted/b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-002.png",
+        "/images/products/extracted/b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-003.jpeg",
+        "/images/products/extracted/b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-004.png",
+        "/images/products/extracted/b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-005.jpeg",
+        "/images/products/extracted/b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-006.jpeg",
+        "/images/products/extracted/b-ji-zu-ran-chun-qiu-fen-ti-tao-zhuang/image-007.jpeg"
+      ],
+      "standards": [
+        "GB 8965.1-2020《防护服装 阻燃服》"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于冶金炉前作业",
+        "加油站常规作业",
+        "木材加工",
+        "粮食加工等领域中"
+      ],
+      "features": [
+        "B 级阻燃服适用于风险相对较小的明火、火花、易燃易爆作业场景防护。",
+        "有第三方检测报告 A级阻燃服定制款(图片还在生成中）"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3102"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.1-2020《防护服装 阻燃服》"
+        },
+        {
+          "label": "颜色",
+          "value": "铁灰色"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "B 级阻燃服适用于风险相对较小的明火、火花、易燃易爆作业场景防护。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有第三方检测报告 A级阻燃服定制款(图片还在生成中）"
+        }
+      ],
+      "sourceFolder": "B级阻燃春秋分体套装",
+      "sourceMarkdown": "B级阻燃春秋分体套装/B级阻燃春秋分体套装.md"
+    },
+    {
+      "id": "i-i-i-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-3-3-c-a-l",
+      "model": "YF-023",
+      "sku": "",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "III 级防电弧中长款大褂套装（ 33cal）",
+      "description": "用来保护可能发生电弧伤害的作业人员 ， 降低在潜在电弧危险环境中受到伤害的概率 。",
+      "image": "/images/products/extracted/i-i-i-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-3-3-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-3-3-c-a-l/image-001.png",
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-3-3-c-a-l/image-002.png",
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-3-3-c-a-l/image-003.png"
+      ],
+      "standards": [
+        "DL/T 320-2019《个人电弧防护用品通用技术要求》",
+        "ASTM F1959《测定服装材料 电弧热值的标准试验方法》",
+        "GB 8965.4-2022《防护服装 防电弧服》"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站"
+      ],
+      "features": [
+        "整体设计符合人体工程学，注重细节与色彩，科学合理，保障电力工作者安全。",
+        "衣领 ：直立式与翻开式两种穿法 ，适应不同作业环境。",
+        "拉链： 内衬双层防护 ，外覆门襟 ，双重保护，增加舒适感 。",
+        "头罩： ELVEX 43CAL 聚碳酸酯防电弧面屏 ，高透光、四级防护 ， 超大视野 ，外防刮擦 ， 内防雾。",
+        "袖口 ：可调节式设计 ，提升舒适度。",
+        "背带裤： 5线锁边，高腰设计覆盖前胸，背带和裤脚可调节 ，裤腿配高亮阻燃反光条，轻便且安全。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "荧光黄"
+        }
+      ],
+      "sourceFolder": "III_级防电弧中长款大褂套装（_33cal）",
+      "sourceMarkdown": "III_级防电弧中长款大褂套装（_33cal）/III_级防电弧中长款大褂套装（_33cal）.md"
+    },
+    {
+      "id": "i-i-i-ji-fang-dian-hu-fu-jia-ke-fen-ti-tao-zhuang-2-7-c-a-l",
+      "model": "YF-024",
+      "sku": "",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "III级防电弧服夹克分体套装（27cal）",
+      "description": "用来保护可能发生电弧伤害的所有人员 ，主要用来防护高温和火焰伤害;降低在潜在电 弧危险环境中受到伤害的概率 ， 电弧爆炸事故逃生时穿着(在电弧爆炸发生时 ，织物迅速膨胀、炭化，防电弧面料变紧并变厚迅速形成保护层，从而将人体皮肤与电弧热能的接触伤害 降至最低)。",
+      "image": "/images/products/extracted/i-i-i-ji-fang-dian-hu-fu-jia-ke-fen-ti-tao-zhuang-2-7-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-fu-jia-ke-fen-ti-tao-zhuang-2-7-c-a-l/image-001.png",
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-fu-jia-ke-fen-ti-tao-zhuang-2-7-c-a-l/image-002.png",
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-fu-jia-ke-fen-ti-tao-zhuang-2-7-c-a-l/image-003.png",
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-fu-jia-ke-fen-ti-tao-zhuang-2-7-c-a-l/image-004.png",
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-fu-jia-ke-fen-ti-tao-zhuang-2-7-c-a-l/image-005.png",
+        "/images/products/extracted/i-i-i-ji-fang-dian-hu-fu-jia-ke-fen-ti-tao-zhuang-2-7-c-a-l/image-006.png"
+      ],
+      "standards": [
+        "DL/T 320-2019《个人电弧防护用品通用技术要求》",
+        "ASTM F1959《测定服装材料 电弧热值的标准试验方法》",
+        "GB 8965.4-2022《防护服装 防电弧服》"
+      ],
+      "materials": [
+        "腈氯纶/芳纶/阻燃黏胶/静电纤维"
+      ],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站"
+      ],
+      "features": [
+        "直立式与翻开式两种穿法，适应不同作业环境。",
+        "“拉链式的门襟”是特种劳动防护服装的最佳选择。内衬双层防护，外覆门襟，双重保护，增加舒适感。",
+        "左臂插笔袋：可放置登记笔，袋盖设计贴合标准要求，提升安全实用性。",
+        "前胸翻盖暗袋：袋盖外置的暗袋设计符合特种劳动防护服装的设计要求，袋盖上的阻燃反光带既是点缀 ，又提升了夜间及低光环境下的安全可视性。",
+        "斜插袋：斜插袋设计简洁流畅，可放置随身携带的物品。",
+        "后背活动双褶：双褶设计给作业人员提供更大的活动空间，褶上方的阻燃反光带设计提升了夜间及低光环境下的安全可视性。",
+        "裤腰为两侧松紧式 ，符合人体工程学。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "藏青+浅蓝"
+        }
+      ],
+      "sourceFolder": "III级防电弧服夹克分体套装（27cal）",
+      "sourceMarkdown": "III级防电弧服夹克分体套装（27cal）/III级防电弧服夹克分体套装（27cal）.md"
+    },
+    {
+      "id": "i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l",
+      "model": "YF-025",
+      "sku": "",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "II级防电弧服夹克套装（12cal）",
+      "description": "用来保护可能发生电弧伤害的所有人员， 主要用来防护高温和火焰伤害;降低在潜在电弧危险环境中受到伤害的概率， 电弧爆炸事故逃生时穿着(在电弧爆炸发生时，织物迅速膨胀、炭化，防电弧面料变紧并变厚迅速形成保护层 ，从而将人体皮肤与电弧热能的接触伤害降至最低)。",
+      "image": "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l/image-001.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l/image-002.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l/image-003.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l/image-004.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l/image-005.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l/image-006.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-1-2-c-a-l/image-007.png"
+      ],
+      "standards": [
+        "DL/T 320-2019《个人电弧防护用品通用技术要求》",
+        "ASTM F1959《测定服装材料 电弧热值的标准试验方法》",
+        "GB 8965.4-2022《防护服装 防电弧服》"
+      ],
+      "materials": [
+        "兰精阻燃莫代尔/芳纶/静电纤维"
+      ],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站"
+      ],
+      "features": [
+        "直立式与翻开式两种穿法，适应不同作业环境。",
+        "“拉链式的门襟”是特种劳动防护服装的最佳选择。内衬双层防护，外覆门襟，双重保护，增加舒适感。",
+        "左臂插笔袋：可放置登记笔，袋盖设计贴合标准要求，提升安全实用性。",
+        "前胸翻盖暗袋：袋盖外置的暗袋设计符合特种劳动防护服装的设计要求，袋盖上的阻燃反光带既是点缀 ，又提升了夜间及低光环境下的安全可视性。",
+        "斜插袋：斜插袋设计简洁流畅，可放置随身携带的物品。",
+        "后背活动双褶：双褶设计给作业人员提供更大的活动空间，褶上方的阻燃反光带设计提升了夜间及低光环境下的安全可视性。",
+        "裤腰为两侧松紧式 ，符合人体工程学。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "橙色，深蓝"
+        }
+      ],
+      "sourceFolder": "II级防电弧服夹克套装（12cal）",
+      "sourceMarkdown": "II级防电弧服夹克套装（12cal）/II级防电弧服夹克套装（12cal）.md"
+    },
+    {
+      "id": "i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-8-5-c-a-l",
+      "model": "HYF-3803",
+      "sku": "HYF-3803",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "II级防电弧服夹克套装（8.5cal）",
+      "description": "用来保护可能发生电弧伤害的所有人员， 主要用来防护高温和火焰伤害;降低在潜在电弧危险环境中受到伤害的概率， 电弧爆炸事故逃生时穿着(在电弧爆炸发生时，织物迅速膨胀、炭化，防电弧面料变紧并变厚迅速形成保护层 ，从而将人体皮肤与电弧热能的接触伤害降至最低)。",
+      "image": "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-8-5-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-8-5-c-a-l/image-001.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-8-5-c-a-l/image-002.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-8-5-c-a-l/image-003.png",
+        "/images/products/extracted/i-i-ji-fang-dian-hu-fu-jia-ke-tao-zhuang-8-5-c-a-l/image-004.png"
+      ],
+      "standards": [
+        "DL/T 320-2019《个人电弧防护用品通用技术要求》",
+        "ASTM F1959《测定服装材料 电弧热值的标准试验方法》",
+        "GB 8965.4-2022《防护服装 防电弧服》"
+      ],
+      "materials": [
+        "腈氯纶/芳纶/静电纤维"
+      ],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站"
+      ],
+      "features": [
+        "直立式与翻开式两种穿法，适应不同作业环境；",
+        "“拉链式的门襟”是特种劳动防护服装的最佳选择。内衬双层防护，外覆门襟，双重保护，增加舒适感。",
+        "左臂插笔袋：可放置登记笔，袋上斜角设计着重考虑到插笔瞬间的角度。",
+        "前胸翻盖暗袋：袋盖外置的暗袋设计符合特种劳动防护服装的设计要求，袋盖上的阻燃反光带既是点缀 ，又提升了夜间及低光环境下的安全可视性。",
+        "斜插袋：斜插袋设计简洁流畅，可放置随身携带的物品。",
+        "后背活动双褶：双褶设计给作业人员提供更大的活动空间，褶上方的阻燃反光带设计提升了夜间及低光环境下的安全可视性。",
+        "裤腰为两侧松紧式，符合人体工程学。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3803 HYF-3803"
+        },
+        {
+          "label": "颜色",
+          "value": "浅蓝 宝蓝"
+        }
+      ],
+      "sourceFolder": "II级防电弧服夹克套装（8.5cal）",
+      "sourceMarkdown": "II级防电弧服夹克套装（8.5cal）/II级防电弧服夹克套装（8.5cal）.md"
+    },
+    {
+      "id": "i-v-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-5-3-c-a-l",
+      "model": "YF-027",
+      "sku": "",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "IV级防电弧中长款大褂套装（ 53cal）",
+      "description": "用来保护可能发生电弧伤害的所有人员， 主要用来防护高温和火焰伤害；降低在潜在电弧危险环境中受到伤害的概率，电弧爆炸事故逃生时穿着(在电弧爆炸发生时，织物迅速膨胀、炭化，防电弧面料变紧、变厚迅速形成保护层，从而将人体皮肤与电弧热能的接触伤害降至最低)。",
+      "image": "/images/products/extracted/i-v-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-5-3-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/i-v-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-5-3-c-a-l/image-001.png",
+        "/images/products/extracted/i-v-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-5-3-c-a-l/image-002.png",
+        "/images/products/extracted/i-v-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-5-3-c-a-l/image-003.png",
+        "/images/products/extracted/i-v-ji-fang-dian-hu-zhong-chang-kuan-da-gua-tao-zhuang-5-3-c-a-l/image-004.png"
+      ],
+      "standards": [
+        "DL/T 320-2019《个人电弧防护用品通用技术要求》",
+        "ASTM F1959《测定服装材料 电弧热值的标准试验方法》",
+        "GB 8965.4-2022《防护服装 防电弧服》"
+      ],
+      "materials": [],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站"
+      ],
+      "features": [
+        "整体设计符合人体工程学，科学合理，保障电力工作者安全；",
+        "大褂：衣领可作“直立式”、“翻开式”和“封闭式”三种穿法，适应不同的作业环境；双层内衬设计，门襟配备阻燃树脂拉链与魔术贴双重闭合，外覆门襟，安全又舒适；左臂设插笔口袋，方便取用小工具；腰部松紧设计，贴合人体曲线，袖口可调节设计，提升穿着舒适度；",
+        "背带裤：5线锁边，高腰设计覆盖前胸，背带和裤脚可调节设计 ，适应各种体型穿着；",
+        "头罩：PAULSON 75cal聚碳酸酯防电弧双层面屏，高级防护涂层+高透明；",
+        "手套及脚套魔术贴搭扣可调节，适应不同作业动作幅度，防止异物卷入；",
+        "头罩、手套和脚套多处均有反光条，增强低光环境下的可视性，全方位保障穿着者的安全。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "藏青色"
+        }
+      ],
+      "sourceFolder": "IV级防电弧中长款大褂套装（_53cal）",
+      "sourceMarkdown": "IV级防电弧中长款大褂套装（_53cal）/IV级防电弧中长款大褂套装（_53cal）.md"
+    },
+    {
+      "id": "i-v-ji-fang-dian-hu-da-gua-tao-zhuang-4-1-c-a-l",
+      "model": "HYF-38121 产品货号：HYF-38122",
+      "sku": "HYF-38121 产品货号：HYF-38122",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "IV级防电弧大褂套装（ 41cal）",
+      "description": "用来保护可能发生电弧伤害的所有人员， 主要用来防护高温和火焰伤害；降低在潜在电弧危险环境中受到伤害的概率， 电弧爆炸事故逃生时穿着(在电弧爆炸发生时，织物迅速膨胀、炭化，防电弧面料变紧并变厚迅速形成保护层，从而将人体皮肤与电弧热能的接触伤害降至最低)。",
+      "image": "/images/products/extracted/i-v-ji-fang-dian-hu-da-gua-tao-zhuang-4-1-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/i-v-ji-fang-dian-hu-da-gua-tao-zhuang-4-1-c-a-l/image-001.png",
+        "/images/products/extracted/i-v-ji-fang-dian-hu-da-gua-tao-zhuang-4-1-c-a-l/image-002.png",
+        "/images/products/extracted/i-v-ji-fang-dian-hu-da-gua-tao-zhuang-4-1-c-a-l/image-003.png",
+        "/images/products/extracted/i-v-ji-fang-dian-hu-da-gua-tao-zhuang-4-1-c-a-l/image-004.png",
+        "/images/products/extracted/i-v-ji-fang-dian-hu-da-gua-tao-zhuang-4-1-c-a-l/image-005.jpeg"
+      ],
+      "standards": [
+        "DL/T 320-2019《个人电弧防护用品通用技术要求》",
+        "ASTM F1959《测定服装材料 电弧热值的标准试验方法》",
+        "GB 8965.4-2022《防护服装 防电弧服》"
+      ],
+      "materials": [
+        "腈氯纶/芳纶/阻燃黏胶/静电纤维 面 料材质：腈氯纶/芳纶/阻燃黏胶/静电纤维"
+      ],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站"
+      ],
+      "features": [
+        "双层面料，上衣立领设计 ，夹克款式，插袋处阻燃反光条，提升夜间及低光环境下的安全可视性。下摆两侧松紧调节，满足各种体型需求。",
+        "裤腰采用松紧调节设计，使穿着更合体，满足各种尺寸需求。",
+        "大褂款式，立领设计，更好防护颈部，领口及袖口魔术搭扣调节，腰部松紧设计，贴合人体曲线。 袖子可调节式设计，增加舒适感。",
+        "头罩： ELVEX 43cal 聚碳酸酯防电弧面屏 ，高透光，四级防护 、超大视野 ，外防刮擦， 内防雾。",
+        "手套及脚套橡筋及魔术搭扣设计，增强安全防护。",
+        "主要部位双线缝纫，增强服装牢固度。",
+        "、"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-38121 产品货号：HYF-38122 HYF-38121 产品货号：HYF-38122"
+        },
+        {
+          "label": "颜色",
+          "value": "藏青 +浅蓝 颜 色： 藏青+浅蓝"
+        }
+      ],
+      "sourceFolder": "IV级防电弧大褂套装（_41cal）",
+      "sourceMarkdown": "IV级防电弧大褂套装（_41cal）/IV级防电弧大褂套装（_41cal）.md"
+    },
+    {
+      "id": "i-ji-fang-dian-hu-fu-chen-yi-tao-zhuang-6-9-c-a-l",
+      "model": "HYF-3801",
+      "sku": "HYF-3801",
+      "categoryId": "arc-flash",
+      "categoryName": "防电弧服",
+      "groupId": "electrical-protection",
+      "name": "I级防电弧服衬衣套装（6.9cal）",
+      "description": "用来保护可能发生电弧伤害的所有人员， 主要用来防护高温和火焰伤害;降低在潜在电弧危险环境中受到伤害的概率， 电弧爆炸事故逃生时穿着(在电弧爆炸发生时，织物迅速膨胀、炭化，防电弧面料变紧并变厚迅速形成保护层 ，从而将人体皮肤与电弧热能的接触伤害降至最低)。",
+      "image": "/images/products/extracted/i-ji-fang-dian-hu-fu-chen-yi-tao-zhuang-6-9-c-a-l/image-001.png",
+      "images": [
+        "/images/products/extracted/i-ji-fang-dian-hu-fu-chen-yi-tao-zhuang-6-9-c-a-l/image-001.png",
+        "/images/products/extracted/i-ji-fang-dian-hu-fu-chen-yi-tao-zhuang-6-9-c-a-l/image-002.png",
+        "/images/products/extracted/i-ji-fang-dian-hu-fu-chen-yi-tao-zhuang-6-9-c-a-l/image-003.png",
+        "/images/products/extracted/i-ji-fang-dian-hu-fu-chen-yi-tao-zhuang-6-9-c-a-l/image-004.png"
+      ],
+      "standards": [
+        "DL/T 320-2019《个人电弧防护用品通用技术要求》",
+        "ASTM F1959《测定服装材料 电弧热值的标准试验方法》",
+        "GB 8965.4-2022《防护服装 防电弧服》"
+      ],
+      "materials": [
+        "阻燃腈纶+芳纶+静电纤维"
+      ],
+      "applications": [
+        "电力电网",
+        "光伏",
+        "新能源及工业企业变电站"
+      ],
+      "features": [
+        "该款式采用经典衬衫版型，简洁大方，翻领设计搭配精致纽扣，不仅穿着方便，还尽显干练气质。长袖设计，可调节袖口贴合手腕，活动自如，适应不同工作场景。",
+        "采用高科技防电弧面料，能有效抵御电弧伤害，提供全方位的安全防护。还具备出色的耐磨、耐撕裂性能，适应各种复杂工作环境。",
+        "服装贴袋设计，能放置小型工具，方便物品存放，又为服装增添视觉元素，美观又实用。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3801 HYF-3801"
+        },
+        {
+          "label": "颜色",
+          "value": "浅蓝 藏青"
+        }
+      ],
+      "sourceFolder": "I级防电弧服衬衣套装（6.9cal）",
+      "sourceMarkdown": "I级防电弧服衬衣套装（6.9cal）/I级防电弧服衬衣套装（6.9cal）.md"
+    },
+    {
+      "id": "chemical-protective-suit",
+      "model": "HYF-6733",
+      "sku": "HYF-6733",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "一次性化学防护服",
+      "description": "有效防护粉尘和液体喷溅",
+      "image": "/images/products/extracted/chemical-protective-suit/image-001.png",
+      "images": [
+        "/images/products/extracted/chemical-protective-suit/image-001.png",
+        "/images/products/extracted/chemical-protective-suit/image-002.png",
+        "/images/products/extracted/chemical-protective-suit/image-003.jpeg",
+        "/images/products/extracted/chemical-protective-suit/image-004.png"
+      ],
+      "standards": [
+        "GB 24539-2021 《防护服装 化学防护服》",
+        "EN 14605:2005+A1:2009",
+        "ISO 13688:2013",
+        "EN 1149-5:2018"
+      ],
+      "materials": [
+        "高密度聚乙烯无纺布"
+      ],
+      "applications": [
+        "主要应用于汽车喷漆",
+        "木材加工",
+        "风力发电",
+        "农药喷洒"
+      ],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6733 HYF-6733"
+        },
+        {
+          "label": "颜色",
+          "value": "白色"
+        }
+      ],
+      "sourceFolder": "一次性化学防护服",
+      "sourceMarkdown": "一次性化学防护服/一次性化学防护服.md"
+    },
+    {
+      "id": "yi-ci-xing-gong-ye-fang-hu-fu",
+      "model": "HYF-6811",
+      "sku": "HYF-6811",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "一次性工业防护服",
+      "description": "主要应用于汽车喷漆、木材加工、风力发电、农药喷洒、机械维修、发电厂煤尘防护。",
+      "image": "/images/products/extracted/yi-ci-xing-gong-ye-fang-hu-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/yi-ci-xing-gong-ye-fang-hu-fu/image-001.png"
+      ],
+      "standards": [
+        "GB 24539-2021",
+        "EN 1149-5:2018"
+      ],
+      "materials": [],
+      "applications": [
+        "主要应用于汽车喷漆",
+        "木材加工",
+        "风力发电",
+        "农药喷洒"
+      ],
+      "features": [
+        "/",
+        "无检测报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6811"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 24539-2021,EN 1149-5:2018"
+        },
+        {
+          "label": "颜色",
+          "value": "白"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "无检测报告"
+        }
+      ],
+      "sourceFolder": "一次性工业防护服",
+      "sourceMarkdown": "一次性工业防护服/一次性工业防护服.md"
+    },
+    {
+      "id": "yi-ji-hua-xue-pin-fang-hu-fu",
+      "model": "HYF-9903",
+      "sku": "HYF-9903",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "一级化学品防护服",
+      "description": "一级化学品防护服适用于在危险化学品、腐蚀性物品环境中进行现场操作；在危化品泄露、化学灾害现场、生化恐怖袭击中进行救援；处置危化品、毒气、微生物时提供单体全封闭式的专业防护装备。",
+      "image": "/images/products/extracted/yi-ji-hua-xue-pin-fang-hu-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/yi-ji-hua-xue-pin-fang-hu-fu/image-001.png"
+      ],
+      "standards": [
+        "XF770-2008《消防员化学防护服装》"
+      ],
+      "materials": [],
+      "applications": [
+        "一级化学品防护服适用于在危险化学品",
+        "腐蚀性物品环境中进行现场操作",
+        "在危化品泄露",
+        "化学灾害现场"
+      ],
+      "features": [
+        "/",
+        "生产厂家有（上消所委托检测报告）"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9903"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF770-2008《消防员化学防护服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "橙色"
+        },
+        {
+          "label": "尺码",
+          "value": "165-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "生产厂家有（上消所委托检测报告）"
+        }
+      ],
+      "sourceFolder": "一级化学品防护服",
+      "sourceMarkdown": "一级化学品防护服/一级化学品防护服.md"
+    },
+    {
+      "id": "san-lian-ti-cha-jian-xiu-jie-jing-fu",
+      "model": "HYF-6A06",
+      "sku": "HYF-6A06",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "三连体插肩袖洁净服",
+      "description": "常用于电子行业（芯片 / 半导体 / 精密电子等）",
+      "image": "/images/products/extracted/san-lian-ti-cha-jian-xiu-jie-jing-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/san-lian-ti-cha-jian-xiu-jie-jing-fu/image-001.png",
+        "/images/products/extracted/san-lian-ti-cha-jian-xiu-jie-jing-fu/image-002.png",
+        "/images/products/extracted/san-lian-ti-cha-jian-xiu-jie-jing-fu/image-003.png",
+        "/images/products/extracted/san-lian-ti-cha-jian-xiu-jie-jing-fu/image-004.png"
+      ],
+      "standards": [
+        "SJ/T 11412-2010 防静电洁净工作服及织物通用规范（电子行业）"
+      ],
+      "materials": [],
+      "applications": [
+        "常用于电子行业（芯片 / 半导体 / 精密电子等）"
+      ],
+      "features": [
+        "根据不同使用岗位人员可用不同颜色区分（以下为推荐）。",
+        "无检测报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6A06"
+        },
+        {
+          "label": "执行标准",
+          "value": "SJ/T 11412-2010 防静电洁净工作服及织物通用规范（电子行业）"
+        },
+        {
+          "label": "颜色",
+          "value": "白/蓝/黄/粉"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据不同使用岗位人员可用不同颜色区分（以下为推荐）。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "无检测报告"
+        }
+      ],
+      "sourceFolder": "三连体插肩袖洁净服",
+      "sourceMarkdown": "三连体插肩袖洁净服/三连体插肩袖洁净服.md"
+    },
+    {
+      "id": "san-lian-ti-jie-jing-fu-qian-ji",
+      "model": "HYF-6A03（以此款为准-有级别",
+      "sku": "HYF-6A03（以此款为准-有级别",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "三连体洁净服（千级）",
+      "description": "洁净服是在洁净室及相关受控环境中穿着的，用以防止静电放电损害产品及保护洁净室环境符合洁净度要求的服装。洁净服可以有效防止工作人员将灰尘、皮屑、头发、细菌等微小颗粒物质带入洁净室，保持洁净室的洁净度，并且导电纤维通过相应密度的织造，具备防静电功能，能够保护产品质量不受影响。",
+      "image": "/images/products/extracted/san-lian-ti-jie-jing-fu-qian-ji/image-001.png",
+      "images": [
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-qian-ji/image-001.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-qian-ji/image-002.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-qian-ji/image-003.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-qian-ji/image-004.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-qian-ji/image-005.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-qian-ji/image-006.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-qian-ji/image-007.png"
+      ],
+      "standards": [
+        "GB/T 24249-2009 《防静电洁净织物》",
+        "FZ/T 80014-2012 《洁净室服装 通用技术规范》"
+      ],
+      "materials": [
+        "98%涤纶长丝+2%导电纤维"
+      ],
+      "applications": [
+        "电子等行业"
+      ],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6A03（以此款为准-有级别，款号：YFTG-JJF23229） HYF-6A03（以此款为准-有级别，款号：YFTG-JJF23229）"
+        },
+        {
+          "label": "颜色",
+          "value": "白色/黄色/蓝色（可以选择彩色拍摄）"
+        }
+      ],
+      "sourceFolder": "三连体洁净服（千级）",
+      "sourceMarkdown": "三连体洁净服（千级）/三连体洁净服（千级）.md"
+    },
+    {
+      "id": "san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai",
+      "model": "HYF-6A43",
+      "sku": "HYF-6A43",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "三连体洁净服（带洁净服收纳袋）",
+      "description": "洁净服是在洁净室及相关受控环境中穿着的，用以防止静电放电损害产品及保护洁净室环境符合洁净度要求的服装。洁净服可以有效防止工作人员将灰尘、皮屑、头发、细菌等微小颗粒物质带入洁净室，保持洁净室的洁净度，并且导电纤维通过相应密度的织造，具备防静电功能，能够保护产品质量不受影响。",
+      "image": "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-001.jpeg",
+      "images": [
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-001.jpeg",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-002.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-003.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-004.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-005.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-006.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-007.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-008.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-009.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-010.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-011.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-012.png",
+        "/images/products/extracted/san-lian-ti-jie-jing-fu-dai-jie-jing-fu-shou-na-dai/image-013.png"
+      ],
+      "standards": [
+        "GB/T 24249-2009 《防静电洁净织物》",
+        "FZ/T 80014-2012 《洁净室服装 通用技术规范》"
+      ],
+      "materials": [
+        "98%涤纶2%导电丝"
+      ],
+      "applications": [
+        "医药等行业"
+      ],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6A43"
+        },
+        {
+          "label": "颜色",
+          "value": "白/黄/蓝"
+        }
+      ],
+      "sourceFolder": "三连体洁净服（带洁净服收纳袋）",
+      "sourceMarkdown": "三连体洁净服（带洁净服收纳袋）/三连体洁净服（带洁净服收纳袋）.md"
+    },
+    {
+      "id": "guo-jia-wei-sheng-ying-ji-fu-chun-qiu-kuan",
+      "model": "HYF-5128",
+      "sku": "HYF-5128",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "国家卫生应急服春秋款",
+      "description": "适用于突发公共卫生事件及各类灾害救援等场景，具备复杂环境下救援人员基础防护。",
+      "image": "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-kuan/image-001.png",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-kuan/image-002.png"
+      ],
+      "standards": [
+        "《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》",
+        "GB 12014-2019 防护服装 防静电服"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于突发公共卫生事件及各类灾害救援等场景",
+        "具备复杂环境下救援人员基础防护。"
+      ],
+      "features": [
+        "/",
+        "无报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-5128"
+        },
+        {
+          "label": "执行标准",
+          "value": "《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》 GB 12014-2019 防护服装 防静电服"
+        },
+        {
+          "label": "颜色",
+          "value": "哈佛红+深藏蓝"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "无报告"
+        }
+      ],
+      "sourceFolder": "国家卫生应急服春秋款",
+      "sourceMarkdown": "国家卫生应急服春秋款/国家卫生应急服春秋款.md"
+    },
+    {
+      "id": "guo-jia-wei-sheng-ying-ji-fu-chun-qiu-zhuang",
+      "model": "HYF-WSYJ22189",
+      "sku": "HYF-WSYJ22189",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "国家卫生应急服春秋装",
+      "description": "国家卫生应急队伍建设配置基本装备，该系统由卫生应急队伍服装、个人携行装备、臂 章、 队旗、身份识别牌、应急警戒带、荧光标识条等部分组成。",
+      "image": "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-zhuang/image-001.png",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-zhuang/image-002.jpeg",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-zhuang/image-003.jpeg",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-zhuang/image-004.jpeg",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-zhuang/image-005.png",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-qiu-zhuang/image-006.png"
+      ],
+      "standards": [
+        "《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》",
+        "GB 12014-2019 防护服装 防静电服"
+      ],
+      "materials": [
+        "100%聚酯纤维（含导电纤维）"
+      ],
+      "applications": [
+        "用于突发公共卫生应急救援",
+        "应急救援演练等场所。"
+      ],
+      "features": [
+        "产品性能：上衣的主面料采用防水、透气的贴胶尼龙牛津纺布料，以充分保证野外工作基本的防雨、防风、防雪要求。",
+        "产品结构：上下分体式结构，上衣采用红色（哈佛红）冲锋夹克，腋下采用透气式设计，腰位收腰设计，内里配有可拆分的抓绒保暖内胆；裤子为深藏蓝 ，裤口紧缩式设计。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-WSYJ22189"
+        },
+        {
+          "label": "颜色",
+          "value": "哈佛红/深藏蓝"
+        }
+      ],
+      "sourceFolder": "国家卫生应急服春秋装",
+      "sourceMarkdown": "国家卫生应急服春秋装/国家卫生应急服春秋装.md"
+    },
+    {
+      "id": "guo-jia-wei-sheng-ying-ji-fu-chun-zhuang-ma-jia-kuan-ku-zi",
+      "model": "HYF-WSYJ22188",
+      "sku": "HYF-WSYJ22188",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "国家卫生应急服春装马甲款+裤子",
+      "description": "国家卫生应急队伍建设配置基本装备，该系统由卫生应急队伍服装、个人携行装备、臂 章、 队旗、身份识别牌、应急警戒带、荧光标识条等部分组成。",
+      "image": "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-zhuang-ma-jia-kuan-ku-zi/image-001.png",
+      "images": [
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-zhuang-ma-jia-kuan-ku-zi/image-001.png",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-zhuang-ma-jia-kuan-ku-zi/image-002.png",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-zhuang-ma-jia-kuan-ku-zi/image-003.png",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-chun-zhuang-ma-jia-kuan-ku-zi/image-004.png"
+      ],
+      "standards": [
+        "《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》",
+        "GB 12014-2019 防护服装 防静电服"
+      ],
+      "materials": [
+        "100%聚酯纤维（含导电纤维）"
+      ],
+      "applications": [
+        "用于突发公共卫生应急救援",
+        "应急救援演练等场所。"
+      ],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-WSYJ22188"
+        },
+        {
+          "label": "颜色",
+          "value": "哈佛红/深藏蓝"
+        }
+      ],
+      "sourceFolder": "国家卫生应急服春装马甲款+裤子",
+      "sourceMarkdown": "国家卫生应急服春装马甲款+裤子/国家卫生应急服春装马甲款+裤子.md"
+    },
+    {
+      "id": "guo-jia-wei-sheng-ying-ji-fu-ma-jia-ku-zi",
+      "model": "HYF-5127",
+      "sku": "HYF-5127",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "国家卫生应急服（马甲+裤子）",
+      "description": "适用于突发公共卫生事件及各类灾害救援等场景，具备复杂环境下救援人员基础防护。",
+      "image": "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-ma-jia-ku-zi/image-001.png",
+      "images": [
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-ma-jia-ku-zi/image-001.png",
+        "/images/products/extracted/guo-jia-wei-sheng-ying-ji-fu-ma-jia-ku-zi/image-002.png"
+      ],
+      "standards": [
+        "《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》",
+        "GB 12014-2019 防护服装 防静电服"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于突发公共卫生事件及各类灾害救援等场景",
+        "具备复杂环境下救援人员基础防护。"
+      ],
+      "features": [
+        "/",
+        "无报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-5127"
+        },
+        {
+          "label": "执行标准",
+          "value": "《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》 GB 12014-2019 防护服装 防静电服"
+        },
+        {
+          "label": "颜色",
+          "value": "哈佛红+深藏蓝"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "无报告"
+        }
+      ],
+      "sourceFolder": "国家卫生应急服（马甲+裤子）",
+      "sourceMarkdown": "国家卫生应急服（马甲+裤子）/国家卫生应急服（马甲+裤子）.md"
+    },
+    {
+      "id": "guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang",
+      "model": "HYF-3307",
+      "sku": "HYF-3307",
+      "categoryId": "high-voltage-static",
+      "categoryName": "交流高压静电服",
+      "groupId": "electrical-protection",
+      "name": "国家电网建设检修夏季套装",
+      "description": "国家电网国家电网建设检修夏季套装在电力系统中发挥着重要作用，不仅提供了必要的防护功能，还提高了工作人员的舒适性和可见度，确保了电力系统的安全和高效运行 。",
+      "image": "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-001.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-002.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-003.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-004.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-005.jpeg",
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-006.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-007.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-008.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-she-jian-xiu-xia-ji-tao-zhuang/image-009.png"
+      ],
+      "standards": [
+        "《建设检修夏职业装L3 技术规范书》",
+        "DL/T 320-2019《个人电弧防护用品通用技术要求》GB 8965.1-2020 《防护服装 阻燃服》",
+        "GB 12014-2019 《防护服装 防静电服》",
+        "GB 18401-2010 《国家纺织产品基本安全技术规范》"
+      ],
+      "materials": [
+        "芳纶",
+        "改性腈纶",
+        "新型再纤",
+        "防静电复合纤维",
+        "其他纤维"
+      ],
+      "applications": [
+        "主要应用于电力检修",
+        "日常巡检",
+        "特殊作业和培训演练等多个领域。"
+      ],
+      "features": [
+        "本款为夹克式衬衫，衬衫领，舒适有型；上下分体式结构，符合人体工学原理，整体协调，穿着舒适。",
+        "前幅：采用设计了风琴担干，左胸袋上方为缝制公司logo胸章，右边缝制带魔术贴名字序号，右袖臂设有臂章，体现公司文化以及员工识别。肩部设计有挂袢用于插挂对讲机、记录仪等设备；胸袋为内袋，采用拉链开合，隐藏在风琴下方，既美观又实用，下方设计有插袋，方便物品存放；…",
+        "长裤为直筒裤型，方便工作穿着，大方得体；腰部两侧采用了松紧，可调节腰部舒适度，后幅采用飞机头分割结构，适合穿着者蹲、起的灵活性；前门襟拉链设计，拉链经久耐用；膝盖部等部位有耐磨加强层，服装采用大容量贴袋设计，简洁方便放置随身携带的物品，拥有足够的物品储存空间。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3307"
+        },
+        {
+          "label": "颜色",
+          "value": "浅青绿/深青绿"
+        },
+        {
+          "label": "包装",
+          "value": "25套/箱"
+        }
+      ],
+      "sourceFolder": "国家电网建设检修夏季套装",
+      "sourceMarkdown": "国家电网建设检修夏季套装/国家电网建设检修夏季套装.md"
+    },
+    {
+      "id": "guo-jia-dian-wang-jian-xiu-gong-zuo-fu",
+      "model": "YF-041",
+      "sku": "",
+      "categoryId": "high-voltage-static",
+      "categoryName": "交流高压静电服",
+      "groupId": "electrical-protection",
+      "name": "国家电网检修工作服",
+      "description": "国家电网应急救援春秋装在电力系统中发挥着重要作用，不仅提供了必要的防护功能，还提高了工作人员的舒适性和可见度，确保了电力系统的安全和高效运行 。",
+      "image": "/images/products/extracted/guo-jia-dian-wang-jian-xiu-gong-zuo-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/guo-jia-dian-wang-jian-xiu-gong-zuo-fu/image-001.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-xiu-gong-zuo-fu/image-002.png",
+        "/images/products/extracted/guo-jia-dian-wang-jian-xiu-gong-zuo-fu/image-003.png"
+      ],
+      "standards": [
+        "ZSJS-HW-LBYP-02 《直属单位技术规范书模板-专业职业装分册》",
+        "DL/T 320-2019 《个人电弧防护用品通用技术要求》",
+        "GB 8965.1-2020 《防护服装 阻燃服》",
+        "GB 12014-2019 《防护服装 防静电服》",
+        "GB 18401-2010 《国家纺织产品基本安全技术规范》"
+      ],
+      "materials": [
+        "3芳纶+改性腈纶+防静电复合纤维+其他纤维"
+      ],
+      "applications": [
+        "主要应用于电力抢修",
+        "应急救援",
+        "日常巡检",
+        "特殊作业和培训演练等多个领域。"
+      ],
+      "features": [
+        "服装款式：为分体式结构，可调节帽子，穿着舒适，宽松的设计便于活动，不会束缚身体，适合长时间户外作业，服装的肘部、膝盖等部位有耐磨加强层，腋下等部位设计有透气设计；",
+        "物理防护：防刮、耐磨，保护工作人员在作业过程中免受物理伤害。",
+        "电气防护：采用抗静电材料，减少静电积聚，防止电击事故。",
+        "阻燃防护：面料具有阻燃性能，有较高的耐热性能，可以在高温环境下保持结构完整，延长服装使用寿命。",
+        "高可视性：鲜艳的颜色和反光条设计使工作人员更容易被识别，腰部、袖臂和裤腿等处均牢固缝合有反光标志带，起到明显的警示作用，提高安全警示功能，增加安全系数及提高安全警示视觉效果，减少事故发生的风险。",
+        "功能口袋：多个功能性口袋方便携带工具、其他必需品，提高工作效率，口袋设计合理，方便快速取物，减少作业中断。",
+        "身份识别：服装上有明显的标志和编号，便于识别工作人员的身份和职责。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "荧光绿色 14-0443 TPG"
+        }
+      ],
+      "sourceFolder": "国家电网检修工作服",
+      "sourceMarkdown": "国家电网检修工作服/国家电网检修工作服.md"
+    },
+    {
+      "id": "guo-jia-dian-wang-zhi-ye-yong-fang-yu-fu",
+      "model": "YF-042",
+      "sku": "",
+      "categoryId": "high-voltage-static",
+      "categoryName": "交流高压静电服",
+      "groupId": "electrical-protection",
+      "name": "国家电网职业用防雨服",
+      "description": "雨衣套装主要用于保护电力工作人员在户外作业时免受恶劣天气的影响，确保他们在各种天气条件下都能安全、高效地完成工作任务。",
+      "image": "/images/products/extracted/guo-jia-dian-wang-zhi-ye-yong-fang-yu-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/guo-jia-dian-wang-zhi-ye-yong-fang-yu-fu/image-001.png",
+        "/images/products/extracted/guo-jia-dian-wang-zhi-ye-yong-fang-yu-fu/image-002.png",
+        "/images/products/extracted/guo-jia-dian-wang-zhi-ye-yong-fang-yu-fu/image-003.png"
+      ],
+      "standards": [
+        "ZSJS-HW-LBYP-02 《直属单位技术规范书模板-专业职业装分册》",
+        "QB/T 4999-2016 《日用防雨品 雨披雨衣》"
+      ],
+      "materials": [
+        "100%聚酯纤维"
+      ],
+      "applications": [
+        "主要应用电力线路检修",
+        "变电站维护",
+        "抢修应急",
+        "施工安装等。"
+      ],
+      "features": [
+        "服装款式：为分体式结构，可调节帽子，防风防雨；穿着舒适，宽松的设计便于活动，不会束缚身体，适合长时间户外作业；",
+        "防水性能：雨衣套装采用防水材料制成，能够有效阻挡雨水渗透，保持身体干燥。",
+        "防溅水：即使在暴雨或溅水的情况下，也能保持内部干燥，确保工作人员的舒适度和工作效率。",
+        "耐磨材料：采用耐磨材料，能够承受户外作业中的摩擦和磨损。",
+        "透气材料：虽然防水，但部分雨衣套装采用透气材料，有助于排除体内的湿气，减少闷热感。",
+        "高可视性：鲜艳的颜色和反光条设计使工作人员更容易被识别，前胸后背为高可视热转印公司标识，前后多个关键部位设有反光警示带，增加安全系数及提高安全警示视觉效果，减少事故发生的风险。",
+        "功能口袋：多个功能性口袋方便携带工具、其他必需品，提高工作效率，口袋设计合理，方便快速取物，减少作业中断。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "荧光绿色 14-0443 TPG"
+        }
+      ],
+      "sourceFolder": "国家电网职业用防雨服",
+      "sourceMarkdown": "国家电网职业用防雨服/国家电网职业用防雨服.md"
+    },
+    {
+      "id": "da-yin-liang-jiu-sheng-kou-shao",
+      "model": "HYF-9A06",
+      "sku": "HYF-9A06",
+      "categoryId": "water-rescue-accessories",
+      "categoryName": "水域救援配套装备",
+      "groupId": "water-rescue",
+      "name": "大音量救生口哨",
+      "description": "大音量救生口哨",
+      "image": "/images/products/extracted/da-yin-liang-jiu-sheng-kou-shao/image-001.png",
+      "images": [
+        "/images/products/extracted/da-yin-liang-jiu-sheng-kou-shao/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9A06"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "荧光橙"
+        },
+        {
+          "label": "尺码",
+          "value": "/ 报告情况 无报告"
+        }
+      ],
+      "sourceFolder": "大音量救生口哨",
+      "sourceMarkdown": "大音量救生口哨/大音量救生口哨.md"
+    },
+    {
+      "id": "gong-ye-ji-yi-ci-xing-fang-hu-fu",
+      "model": "YF-044",
+      "sku": "",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "工业级一次性防护服",
+      "description": "有效防护粉尘和液体喷溅",
+      "image": "/images/products/extracted/gong-ye-ji-yi-ci-xing-fang-hu-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/gong-ye-ji-yi-ci-xing-fang-hu-fu/image-001.png",
+        "/images/products/extracted/gong-ye-ji-yi-ci-xing-fang-hu-fu/image-002.png"
+      ],
+      "standards": [
+        "GB 24539-2021 《防护服装 化学防护服》"
+      ],
+      "materials": [
+        "高密度聚乙烯无纺布"
+      ],
+      "applications": [
+        "主要应用于汽车喷漆",
+        "木材加工",
+        "风力发电",
+        "农药喷洒"
+      ],
+      "features": [],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "白色"
+        }
+      ],
+      "sourceFolder": "工业级一次性防护服",
+      "sourceMarkdown": "工业级一次性防护服/工业级一次性防护服.md"
+    },
+    {
+      "id": "gan-shi-shui-yu-jiu-yuan-fu",
+      "model": "HYF-9905",
+      "sku": "HYF-9905",
+      "categoryId": "water-rescue-suit",
+      "categoryName": "水域救援服",
+      "groupId": "water-rescue",
+      "name": "干式水域救援服",
+      "description": "专门为水域救援战土抗洪抢险、进行水域救援工作所研制，满足在冬季气温寒冷的环境下进行水域救援作业",
+      "image": "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-001.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-002.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-003.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-004.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-005.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-006.jpeg",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-007.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-008.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-009.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-010.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-011.png",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-012.jpeg",
+        "/images/products/extracted/gan-shi-shui-yu-jiu-yuan-fu/image-013.png"
+      ],
+      "standards": [
+        "/ 暂无标准",
+        "BS EN 14225-1-2017"
+      ],
+      "materials": [
+        "尼龙透气面料"
+      ],
+      "applications": [
+        "干式水域救援服适用于寒冷季节或低温水域救援",
+        "抗洪抢险与洪涝灾害处置",
+        "激流",
+        "滩涂"
+      ],
+      "features": [
+        "整体采用性能为 500D Cordura防水三层复合面料，具有耐水、耐磨、透气等特点;",
+        "在臀部、肘部、膝盖等部位用 KEVLER加固处理，夹层填充 3MM 海绵;",
+        "手腕，脖子，袜套为乳胶材料;",
+        "前斜开防水 YKK 干式拉链，裆部有同材质同品牌的防水拉链:",
+        "腰部有可调节带，宽度为2.5CM 织带加可调节插扣;",
+        "内置可调节，可拆卸宽度为 3.8CM 高弹力松紧带;根据人的身高可调节;",
+        "领口，袖口，裤口橡胶外围附加一层保护层，用潜水料加 OK 布可以调节松紧;",
+        "袖口、腿部、胸围、后背增加反光条，在黑暗环境中依然有效识别性;"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9905"
+        },
+        {
+          "label": "执行标准",
+          "value": "/ 暂无标准"
+        },
+        {
+          "label": "颜色",
+          "value": "红色"
+        },
+        {
+          "label": "尺码",
+          "value": "S-XXL"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "厂家有对应检测报告"
+        }
+      ],
+      "sourceFolder": "干式水域救援服",
+      "sourceMarkdown": "干式水域救援服/干式水域救援服.md"
+    },
+    {
+      "id": "ying-ji-bei-nang",
+      "model": "HYF-9A03",
+      "sku": "HYF-9A03",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "应急背囊",
+      "description": "应急背囊",
+      "image": "/images/products/extracted/ying-ji-bei-nang/image-001.png",
+      "images": [
+        "/images/products/extracted/ying-ji-bei-nang/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9A03"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 无"
+        }
+      ],
+      "sourceFolder": "应急背囊",
+      "sourceMarkdown": "应急背囊/应急背囊.md"
+    },
+    {
+      "id": "wei-bo-fu-she-fang-hu-fu-fen-ti-tao-zhuang",
+      "model": "YF-049",
+      "sku": "",
+      "categoryId": "microwave-radiation",
+      "categoryName": "微波辐射防护服",
+      "groupId": "chemical-medical",
+      "name": "微波辐射防护服分体套装",
+      "description": "通过屏蔽和吸收微波辐射，可反射或衰减作用于人体的电磁能量，提高职业和公共安全。",
+      "image": "/images/products/extracted/wei-bo-fu-she-fang-hu-fu-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/wei-bo-fu-she-fang-hu-fu-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/wei-bo-fu-she-fang-hu-fu-fen-ti-tao-zhuang/image-002.png"
+      ],
+      "standards": [
+        "GB/T 23463-2009 《防护服装 微波辐射防护服》"
+      ],
+      "materials": [
+        "棉/聚酯纤维/金属纤维"
+      ],
+      "applications": [
+        "适用于微波通信设备安装",
+        "调试",
+        "维护",
+        "以及微波炉"
+      ],
+      "features": [
+        "服装款式：三紧式设计，前襟采用拉链和四合扣闭合，方便穿脱，前胸左右设有挖袋，下摆左右两侧设有斜插眼袋，方便携带工具和小物品。袖口和下摆设有四合扣调节袢，防止微波辐射从缝隙中进入，裤子为直筒裤型，裤脚设有魔术贴调节袢，防止微波辐射从裤脚进入。前腰采用松紧带设计…",
+        "材料：优选21s棉/聚酯纤维/金属纤维精梳混纺纱，辅以斜纹组织，透气舒适，整衣使用导电缝纫线，可反射或衰减电磁能量，有效保护人体免受电磁辐射。",
+        "图案：部分款式可印制公司logo或标识，增强企业形象；",
+        "尺码：提供多种尺码，满足不同体型的需求；"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "藏青色+粉色"
+        },
+        {
+          "label": "尺码",
+          "value": "提供多种尺码，满足不同体型的需求"
+        }
+      ],
+      "sourceFolder": "微波辐射防护服分体套装",
+      "sourceMarkdown": "微波辐射防护服分体套装/微波辐射防护服分体套装.md"
+    },
+    {
+      "id": "wei-bo-fu-she-fang-hu-fu-da-gua",
+      "model": "YF-050",
+      "sku": "",
+      "categoryId": "microwave-radiation",
+      "categoryName": "微波辐射防护服",
+      "groupId": "chemical-medical",
+      "name": "微波辐射防护服（大褂）",
+      "description": "通过屏蔽和吸收微波辐射，可反射或衰减作用于人体的电磁能量，提高职业和公共安全。",
+      "image": "/images/products/extracted/wei-bo-fu-she-fang-hu-fu-da-gua/image-001.jpeg",
+      "images": [
+        "/images/products/extracted/wei-bo-fu-she-fang-hu-fu-da-gua/image-001.jpeg",
+        "/images/products/extracted/wei-bo-fu-she-fang-hu-fu-da-gua/image-002.png",
+        "/images/products/extracted/wei-bo-fu-she-fang-hu-fu-da-gua/image-003.png"
+      ],
+      "standards": [
+        "GB/T 23463-2009 《防护服装 微波辐射防护服》"
+      ],
+      "materials": [
+        "棉/聚酯纤维/金属纤维"
+      ],
+      "applications": [
+        "适用于微波通信设备安装",
+        "调试",
+        "维护",
+        "以及微波炉"
+      ],
+      "features": [
+        "服装款式：连帽设计，帽子与大褂一体，提供额外的头部保护；整体设计较为宽松，便于活动，适合长时间工作；长袖设计，袖口带有松紧带，防止灰尘和杂质进入，前襟采用纽扣设计，方便穿脱；",
+        "材料：优选21s棉/聚酯纤维/金属纤维精梳混纺纱，辅以斜纹组织，透气舒适，整衣使用导电缝纫线，可反射或衰减电磁能量，有效保护人体免受电磁辐射。",
+        "口袋设计：在两侧左右设有口袋，方便携带工具和小物品；",
+        "图案：部分款式可印制公司logo或标识，增强企业形象；",
+        "尺码：提供多种尺码，满足不同体型的需求；"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "藏青色"
+        },
+        {
+          "label": "尺码",
+          "value": "提供多种尺码，满足不同体型的需求"
+        }
+      ],
+      "sourceFolder": "微波辐射防护服（大褂）",
+      "sourceMarkdown": "微波辐射防护服（大褂）/微波辐射防护服（大褂）.md"
+    },
+    {
+      "id": "pu-huo-xie",
+      "model": "HYF-9605",
+      "sku": "HYF-9605",
+      "categoryId": "forest-fire",
+      "categoryName": "森林灭火防护装备",
+      "groupId": "fire-rescue",
+      "name": "扑火鞋",
+      "description": "扑火鞋",
+      "image": "/images/products/extracted/pu-huo-xie/image-001.png",
+      "images": [
+        "/images/products/extracted/pu-huo-xie/image-001.png"
+      ],
+      "standards": [
+        "XF633-2006《消防员抢险救援防护服装》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9605"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF633-2006《消防员抢险救援防护服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "棕色"
+        },
+        {
+          "label": "尺码",
+          "value": "35-46 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "扑火鞋",
+      "sourceMarkdown": "扑火鞋/扑火鞋.md"
+    },
+    {
+      "id": "qiang-xian-jiu-yuan-tou-kui-dai-hu-mu-jing-xuan-pei",
+      "model": "HYF-9103",
+      "sku": "HYF-9103",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "抢险救援头盔（带护目镜选配）",
+      "description": "抢险救援头盔（带护目镜选配）",
+      "image": "/images/products/extracted/qiang-xian-jiu-yuan-tou-kui-dai-hu-mu-jing-xuan-pei/image-001.png",
+      "images": [
+        "/images/products/extracted/qiang-xian-jiu-yuan-tou-kui-dai-hu-mu-jing-xuan-pei/image-001.png"
+      ],
+      "standards": [
+        "XF633-2006《消防员抢险救援防护服装》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9103"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF633-2006《消防员抢险救援防护服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "抢险救援头盔（带护目镜选配）",
+      "sourceMarkdown": "抢险救援头盔（带护目镜选配）/抢险救援头盔（带护目镜选配）.md"
+    },
+    {
+      "id": "qiang-xian-jiu-yuan-xing-jun-mao",
+      "model": "HYF-9105",
+      "sku": "HYF-9105",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "抢险救援行军帽",
+      "description": "抢险救援行军帽",
+      "image": "/images/products/extracted/qiang-xian-jiu-yuan-xing-jun-mao/image-001.png",
+      "images": [
+        "/images/products/extracted/qiang-xian-jiu-yuan-xing-jun-mao/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9105"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 无"
+        }
+      ],
+      "sourceFolder": "抢险救援行军帽",
+      "sourceMarkdown": "抢险救援行军帽/抢险救援行军帽.md"
+    },
+    {
+      "id": "qiang-xian-jiu-yuan-fang-hu-shou-tao",
+      "model": "HYF-7502",
+      "sku": "HYF-7502",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "抢险救援防护手套",
+      "description": "抢险救援防护手套",
+      "image": "/images/products/extracted/qiang-xian-jiu-yuan-fang-hu-shou-tao/image-001.png",
+      "images": [
+        "/images/products/extracted/qiang-xian-jiu-yuan-fang-hu-shou-tao/image-001.png"
+      ],
+      "standards": [
+        "XF633-2006《消防员抢险救援防护服装》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-7502"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF633-2006《消防员抢险救援防护服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色+灰色+黑色"
+        },
+        {
+          "label": "尺码",
+          "value": "S-XL 报告情况 有"
+        }
+      ],
+      "sourceFolder": "抢险救援防护手套",
+      "sourceMarkdown": "抢险救援防护手套/抢险救援防护手套.md"
+    },
+    {
+      "id": "qiang-xian-jiu-yuan-fang-hu-yao-dai",
+      "model": "HYF-9A02",
+      "sku": "HYF-9A02",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "抢险救援防护腰带",
+      "description": "抢险救援防护腰带",
+      "image": "/images/products/extracted/qiang-xian-jiu-yuan-fang-hu-yao-dai/image-001.png",
+      "images": [
+        "/images/products/extracted/qiang-xian-jiu-yuan-fang-hu-yao-dai/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9A02"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 无"
+        }
+      ],
+      "sourceFolder": "抢险救援防护腰带",
+      "sourceMarkdown": "抢险救援防护腰带/抢险救援防护腰带.md"
+    },
+    {
+      "id": "qiang-xian-jiu-yuan-fang-hu-xue",
+      "model": "HYF-9602",
+      "sku": "HYF-9602",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "抢险救援防护靴",
+      "description": "抢险救援防护靴",
+      "image": "/images/products/extracted/qiang-xian-jiu-yuan-fang-hu-xue/image-001.png",
+      "images": [
+        "/images/products/extracted/qiang-xian-jiu-yuan-fang-hu-xue/image-001.png"
+      ],
+      "standards": [
+        "XF633-2006《消防员抢险救援防护服装》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9602"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF633-2006《消防员抢险救援防护服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "黑色"
+        },
+        {
+          "label": "尺码",
+          "value": "38-46 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "抢险救援防护靴",
+      "sourceMarkdown": "抢险救援防护靴/抢险救援防护靴.md"
+    },
+    {
+      "id": "hu-mu-jing",
+      "model": "HYF-7201",
+      "sku": "HYF-7201",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "护目镜",
+      "description": "护目镜",
+      "image": "/images/products/extracted/hu-mu-jing/image-001.png",
+      "images": [
+        "/images/products/extracted/hu-mu-jing/image-001.png"
+      ],
+      "standards": [
+        "XF 1273-2015《消防员防护辅助装备 消防护目镜》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-7201"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF 1273-2015《消防员防护辅助装备 消防护目镜》"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 有"
+        }
+      ],
+      "sourceFolder": "护目镜",
+      "sourceMarkdown": "护目镜/护目镜.md"
+    },
+    {
+      "id": "jiu-yuan-fu-chun-qiu-fen-ti-tao-zhuang",
+      "model": "ZHK-ZRJD21131",
+      "sku": "ZHK-ZRJD21131",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "救援服春秋分体套装",
+      "description": "适用在安全生产事故现场的应急救援人员穿着 ，不适用于抢险救援等特殊环境中穿着。",
+      "image": "/images/products/extracted/jiu-yuan-fu-chun-qiu-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/jiu-yuan-fu-chun-qiu-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/jiu-yuan-fu-chun-qiu-fen-ti-tao-zhuang/image-002.jpeg",
+        "/images/products/extracted/jiu-yuan-fu-chun-qiu-fen-ti-tao-zhuang/image-003.jpeg",
+        "/images/products/extracted/jiu-yuan-fu-chun-qiu-fen-ti-tao-zhuang/image-004.jpeg",
+        "/images/products/extracted/jiu-yuan-fu-chun-qiu-fen-ti-tao-zhuang/image-005.png",
+        "/images/products/extracted/jiu-yuan-fu-chun-qiu-fen-ti-tao-zhuang/image-006.png"
+      ],
+      "standards": [
+        "GB 8965.1-2020 防护服装 阻燃服",
+        "GB 12014-2019 防护服装 防静电服"
+      ],
+      "materials": [
+        "1314芳纶+导电纤维 颜 色 ：红色"
+      ],
+      "applications": [
+        "用于山野救援",
+        "城市救援",
+        "自然灾害救援",
+        "安全生产事故救援"
+      ],
+      "features": [
+        "产品性能： 服装面料材质芳纶+防静电材质 ，具有阻燃防静电性能，耐磨、耐洗、抗撕裂等特点。",
+        "产品结构：上下分体式结构，三紧式设计 。",
+        "安全性能： 服装上的反光条、缝纫线、魔术贴、拉链、纽扣等辅料均采用阻燃材质，安全性能优异。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "ZHK-ZRJD21131 ZHK-ZRJD21131"
+        },
+        {
+          "label": "颜色",
+          "value": "红色"
+        },
+        {
+          "label": "包装",
+          "value": "1套/箱"
+        }
+      ],
+      "sourceFolder": "救援服春秋分体套装",
+      "sourceMarkdown": "救援服春秋分体套装/救援服春秋分体套装.md"
+    },
+    {
+      "id": "chun-qiu-zu-ran-fang-jing-dian-fu-shuang-ceng-jia-ke-kuan",
+      "model": "HYF-3316",
+      "sku": "HYF-3316",
+      "categoryId": "fr-anti-static",
+      "categoryName": "阻燃防静电服",
+      "groupId": "chemical-medical",
+      "name": "春秋阻燃防静电服（双层夹克款）",
+      "description": "接触火焰或炽热物体时，在一定时间内能阻止本身被点燃，防止有焰燃烧和阴燃。在火源移开后，燃烧部分能迅速碳化而不产生熔融、滴落，让使用者能争取到脱掉衣服或撤离现场的时间，减少或避免烧伤烫伤，以达到保护人体的效果。在有可能发生电击、火花 、爆炸危险的场所中，可以防止静电积聚，保护人体免受静电造成的伤害。",
+      "image": "/images/products/extracted/chun-qiu-zu-ran-fang-jing-dian-fu-shuang-ceng-jia-ke-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/chun-qiu-zu-ran-fang-jing-dian-fu-shuang-ceng-jia-ke-kuan/image-001.png",
+        "/images/products/extracted/chun-qiu-zu-ran-fang-jing-dian-fu-shuang-ceng-jia-ke-kuan/image-002.png",
+        "/images/products/extracted/chun-qiu-zu-ran-fang-jing-dian-fu-shuang-ceng-jia-ke-kuan/image-003.png",
+        "/images/products/extracted/chun-qiu-zu-ran-fang-jing-dian-fu-shuang-ceng-jia-ke-kuan/image-004.png"
+      ],
+      "standards": [
+        "GB8965.1-2020《防护服装 阻燃服》",
+        "GB12014-2019《防护服装 防静电服》"
+      ],
+      "materials": [
+        "间位芳纶/对位芳纶/静电纤维混纺面料"
+      ],
+      "applications": [
+        "石油化工",
+        "煤炭",
+        "液化",
+        "燃气"
+      ],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3316"
+        },
+        {
+          "label": "颜色",
+          "value": "湖光宝蓝 包装：20套/箱"
+        },
+        {
+          "label": "包装",
+          "value": "20套/箱"
+        }
+      ],
+      "sourceFolder": "春秋阻燃防静电服（双层夹克款）",
+      "sourceMarkdown": "春秋阻燃防静电服（双层夹克款）/春秋阻燃防静电服（双层夹克款）.md"
+    },
+    {
+      "id": "zhi-neng-jiang-wen-kong-tiao-han-jie-fen-ti-tao-zhuang",
+      "model": "HYF-3240 包 装：5套/箱(内含专用箱)",
+      "sku": "HYF-3240 包 装：5套/箱(内含专用箱)",
+      "categoryId": "welding",
+      "categoryName": "焊接服",
+      "groupId": "thermal-welding",
+      "name": "智能降温空调焊接分体套装",
+      "description": "用于防护从事焊接作业人员可能遭受的熔融物质及其热伤害，在接触火焰及炽热物体后，一定时间内能阻止本身被点燃、有焰燃烧和阴燃的防护服，火源移开后燃烧部分迅速炭化而不产生熔融、滴落，给人时间脱掉衣服或撤离燃烧现场，减少或避免烧伤烫伤，以保护人体。",
+      "image": "/images/products/extracted/zhi-neng-jiang-wen-kong-tiao-han-jie-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/zhi-neng-jiang-wen-kong-tiao-han-jie-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/zhi-neng-jiang-wen-kong-tiao-han-jie-fen-ti-tao-zhuang/image-002.png",
+        "/images/products/extracted/zhi-neng-jiang-wen-kong-tiao-han-jie-fen-ti-tao-zhuang/image-003.png",
+        "/images/products/extracted/zhi-neng-jiang-wen-kong-tiao-han-jie-fen-ti-tao-zhuang/image-004.png"
+      ],
+      "standards": [
+        "GB 8965.2-2022《防护服装 焊接服》"
+      ],
+      "materials": [],
+      "applications": [
+        "机械加工",
+        "钢铁冶炼",
+        "金属热加工",
+        "石油石化等行业。l 适合环境：l 适合环境："
+      ],
+      "features": [
+        "当产品遇潮湿后，需尽快晾干，如有污渍应尽快洗涤，除去污渍并晾干，以免发生霉变。",
+        "焊接服与普通服装应分开洗涤，避免从其他织物上粘附可燃物，如有油渍等污渍，洗涤前请先用干洗剂涂抹手揉或毛刷轻搓干净并用清水冲洗。",
+        "洗涤后放置在通风、透气区域，避免长时间阳光曝晒或荧光灯等下暴露，以防紫外线对服装力学性能的损害，影响织物的色牢度。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3240 包 装：5套/箱(内含专用箱) HYF-3240 包 装：5套/箱(内含专用箱)"
+        },
+        {
+          "label": "颜色",
+          "value": "藏蓝色 墨绿色"
+        }
+      ],
+      "sourceFolder": "智能降温空调焊接分体套装",
+      "sourceMarkdown": "智能降温空调焊接分体套装/智能降温空调焊接分体套装.md"
+    },
+    {
+      "id": "fu-zhuang-shang-de-fan-guang-tiao-feng-ren-xian-mo-shu-tie-la-lian-niu-kou-deng-fu-liao-jun-cai-yong-zu-ran-cai-zhi-an-quan-xing-neng-you-yi",
+      "model": "YF-061",
+      "sku": "",
+      "categoryId": "flame-retardant",
+      "categoryName": "阻燃服",
+      "groupId": "thermal-welding",
+      "name": "服装上的反光条、缝纫线、魔术贴、拉链、纽扣等辅料均采用阻燃材质，安全性能优异。",
+      "description": "服装上的反光条、缝纫线、魔术贴、拉链、纽扣等辅料均采用阻燃材质，安全性能优异。",
+      "image": "/images/products/extracted/fu-zhuang-shang-de-fan-guang-tiao-feng-ren-xian-mo-shu-tie-la-lian-niu-kou-deng-fu-liao-jun-cai-yong-zu-ran-cai-zhi-an-quan-xing-neng-you-yi/image-001.png",
+      "images": [
+        "/images/products/extracted/fu-zhuang-shang-de-fan-guang-tiao-feng-ren-xian-mo-shu-tie-la-lian-niu-kou-deng-fu-liao-jun-cai-yong-zu-ran-cai-zhi-an-quan-xing-neng-you-yi/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [],
+      "sourceFolder": "服装上的反光条、缝纫线、魔术贴、拉链、纽扣等辅料均采用阻燃材质，安全性能优异。",
+      "sourceMarkdown": "服装上的反光条、缝纫线、魔术贴、拉链、纽扣等辅料均采用阻燃材质，安全性能优异。/服装上的反光条、缝纫线、魔术贴、拉链、纽扣等辅料均采用阻燃材质，安全性能优异。.md"
+    },
+    {
+      "id": "sen-lin-fang-huo-tou-kui",
+      "model": "HYF-7101",
+      "sku": "HYF-7101",
+      "categoryId": "forest-fire",
+      "categoryName": "森林灭火防护装备",
+      "groupId": "fire-rescue",
+      "name": "森林防火头盔",
+      "description": "森林防火头盔",
+      "image": "/images/products/extracted/sen-lin-fang-huo-tou-kui/image-001.png",
+      "images": [
+        "/images/products/extracted/sen-lin-fang-huo-tou-kui/image-001.png"
+      ],
+      "standards": [
+        "XF 44-2015《消防头盔》/XF 633-2006/GB2811-2019"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-7101"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF 44-2015《消防头盔》/XF 633-2006/GB2811-2019"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 有"
+        }
+      ],
+      "sourceFolder": "森林防火头盔",
+      "sourceMarkdown": "森林防火头盔/森林防火头盔.md"
+    },
+    {
+      "id": "sen-lin-fang-huo-tou-zhao",
+      "model": "HYF-5319",
+      "sku": "HYF-5319",
+      "categoryId": "forest-fire",
+      "categoryName": "森林灭火防护装备",
+      "groupId": "fire-rescue",
+      "name": "森林防火头罩",
+      "description": "森林防火头罩",
+      "image": "/images/products/extracted/sen-lin-fang-huo-tou-zhao/image-001.png",
+      "images": [
+        "/images/products/extracted/sen-lin-fang-huo-tou-zhao/image-001.png"
+      ],
+      "standards": [
+        "XF 869-2010《消防员灭火防护头套》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-5319"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF 869-2010《消防员灭火防护头套》"
+        },
+        {
+          "label": "颜色",
+          "value": "卡其色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 有"
+        }
+      ],
+      "sourceFolder": "森林防火头罩",
+      "sourceMarkdown": "森林防火头罩/森林防火头罩.md"
+    },
+    {
+      "id": "sen-lin-fang-huo-shou-tao",
+      "model": "HYF-7503",
+      "sku": "HYF-7503",
+      "categoryId": "forest-fire",
+      "categoryName": "森林灭火防护装备",
+      "groupId": "fire-rescue",
+      "name": "森林防火手套",
+      "description": "森林防火手套",
+      "image": "/images/products/extracted/sen-lin-fang-huo-shou-tao/image-001.png",
+      "images": [
+        "/images/products/extracted/sen-lin-fang-huo-shou-tao/image-001.png"
+      ],
+      "standards": [
+        "符合XF 7-2004《消防手套》/XF 633-2006《消防员抢险救援防护服装》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-7503"
+        },
+        {
+          "label": "执行标准",
+          "value": "符合XF 7-2004《消防手套》/XF 633-2006《消防员抢险救援防护服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 有"
+        }
+      ],
+      "sourceFolder": "森林防火手套",
+      "sourceMarkdown": "森林防火手套/森林防火手套.md"
+    },
+    {
+      "id": "shui-yu-jiu-yuan-ge-sheng-dao",
+      "model": "HYF-9A07",
+      "sku": "HYF-9A07",
+      "categoryId": "water-rescue-accessories",
+      "categoryName": "水域救援配套装备",
+      "groupId": "water-rescue",
+      "name": "水域救援割绳刀",
+      "description": "水域救援割绳刀",
+      "image": "/images/products/extracted/shui-yu-jiu-yuan-ge-sheng-dao/image-001.png",
+      "images": [
+        "/images/products/extracted/shui-yu-jiu-yuan-ge-sheng-dao/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9A07"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "黑色、钛色"
+        },
+        {
+          "label": "尺码",
+          "value": "/ 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "水域救援割绳刀",
+      "sourceMarkdown": "水域救援割绳刀/水域救援割绳刀.md"
+    },
+    {
+      "id": "shui-yu-jiu-yuan-tou-kui",
+      "model": "HYF-9106",
+      "sku": "HYF-9106",
+      "categoryId": "water-rescue-accessories",
+      "categoryName": "水域救援配套装备",
+      "groupId": "water-rescue",
+      "name": "水域救援头盔",
+      "description": "水域救援头盔",
+      "image": "/images/products/extracted/shui-yu-jiu-yuan-tou-kui/image-001.png",
+      "images": [
+        "/images/products/extracted/shui-yu-jiu-yuan-tou-kui/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9106"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "红色"
+        },
+        {
+          "label": "尺码",
+          "value": "均码 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "水域救援头盔",
+      "sourceMarkdown": "水域救援头盔/水域救援头盔.md"
+    },
+    {
+      "id": "shui-yu-jiu-yuan-shou-tao",
+      "model": "HYF-9503",
+      "sku": "HYF-9503",
+      "categoryId": "water-rescue-accessories",
+      "categoryName": "水域救援配套装备",
+      "groupId": "water-rescue",
+      "name": "水域救援手套",
+      "description": "水域救援手套",
+      "image": "/images/products/extracted/shui-yu-jiu-yuan-shou-tao/image-001.png",
+      "images": [
+        "/images/products/extracted/shui-yu-jiu-yuan-shou-tao/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9503"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "红色"
+        },
+        {
+          "label": "尺码",
+          "value": "S-XL 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "水域救援手套",
+      "sourceMarkdown": "水域救援手套/水域救援手套.md"
+    },
+    {
+      "id": "shui-yu-jiu-yuan-xue",
+      "model": "HYF-9609",
+      "sku": "HYF-9609",
+      "categoryId": "water-rescue-accessories",
+      "categoryName": "水域救援配套装备",
+      "groupId": "water-rescue",
+      "name": "水域救援靴",
+      "description": "水域救援靴",
+      "image": "/images/products/extracted/shui-yu-jiu-yuan-xue/image-001.png",
+      "images": [
+        "/images/products/extracted/shui-yu-jiu-yuan-xue/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9609"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "银色"
+        },
+        {
+          "label": "尺码",
+          "value": "36-45码 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "水域救援靴",
+      "sourceMarkdown": "水域救援靴/水域救援靴.md"
+    },
+    {
+      "id": "jiang-su-hong-ye-jie-jing-fu",
+      "model": "HYF-6A41",
+      "sku": "HYF-6A41",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "江苏弘业洁净服",
+      "description": "在电子、半导体、医药、食品等行业的洁净室及相关受控环境穿着使用，具有防静电洁净功能，防止静电放电损害产品，并保护洁净室环境符合洁净度要求。",
+      "image": "/images/products/extracted/jiang-su-hong-ye-jie-jing-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/jiang-su-hong-ye-jie-jing-fu/image-001.png",
+        "/images/products/extracted/jiang-su-hong-ye-jie-jing-fu/image-002.png",
+        "/images/products/extracted/jiang-su-hong-ye-jie-jing-fu/image-003.png",
+        "/images/products/extracted/jiang-su-hong-ye-jie-jing-fu/image-004.png",
+        "/images/products/extracted/jiang-su-hong-ye-jie-jing-fu/image-005.png"
+      ],
+      "standards": [
+        "GB/T 24249-2009 《防静电洁净织物》",
+        "FZ/T 80014-2012 《洁净室服装 通用技术规范》",
+        "GB 12014-2019 《防护服装 防静电服》"
+      ],
+      "materials": [
+        "聚酯纤维（含导电纤维）"
+      ],
+      "applications": [
+        "医药",
+        "微电子",
+        "精密仪表",
+        "精密机械"
+      ],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6A41 HYF-6A41"
+        },
+        {
+          "label": "颜色",
+          "value": "白色"
+        }
+      ],
+      "sourceFolder": "江苏弘业洁净服",
+      "sourceMarkdown": "江苏弘业洁净服/江苏弘业洁净服.md"
+    },
+    {
+      "id": "xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan",
+      "model": "YF-070",
+      "sku": "",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "消防员抢险救援服冬款",
+      "description": "用来保护作业人员在进行抢险救援作业时 ， 用来对其躯干 、颈部 、 手臂 、 手腕和腿部提供保护。",
+      "image": "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan/image-001.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan/image-002.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan/image-003.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan/image-004.jpeg",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan/image-005.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan/image-006.jpeg",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-dong-kuan/image-007.jpeg"
+      ],
+      "standards": [
+        "XF 633-2006 消防员抢险救援防护服装"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于消防员秋冬季抢险救援作业时穿着",
+        "如地震",
+        "泥石流",
+        "建筑物倒塌救援"
+      ],
+      "features": [
+        "产品性能：由外层、防水透气层、舒适层三层结构设计，外层具有阻燃防静电、耐磨、防撕破性等性能，防水透气层具有防水透气、阻燃等性能，舒适层具有阻燃、柔软舒适等性能。",
+        "整体设计：采用夹克式上衣搭配长裤的款式，上衣与裤子通过阻燃拉链相连，实现一体化功能。上下分体拉链环绕至前襟，可有效阻挡异物从缝隙进入，强化防护性能。同时，上下连接的拉链处均设有挡布，既能进一步提升防护性，又能避免拉链摩擦身体，增强穿着舒适度。",
+        "反光带：前胸为V字造型，后背呈水平样式，袖口和脚口均配备高可视阻燃反光警示带，提升辨识度的同时增加夜视及微光环境下的可视度。",
+        "补强：上衣肩、肘及裤子膝、臀、裆部均有耐磨菱形格加强面料，既增强了补强部位的耐磨性能，同时也提高了防护性能，延长使用时效。",
+        "印字：后背可根据需求增加反光印字设计。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "橘红色 +火焰蓝"
+        },
+        {
+          "label": "包装",
+          "value": "5套/箱"
+        }
+      ],
+      "sourceFolder": "消防员抢险救援服冬款",
+      "sourceMarkdown": "消防员抢险救援服冬款/消防员抢险救援服冬款.md"
+    },
+    {
+      "id": "xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan",
+      "model": "YF-071",
+      "sku": "",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "消防员抢险救援服夏款",
+      "description": "用来保护作业人员在进行抢险救援作业时 ， 用来对其躯干 、 颈部 、 手臂 、 手腕和腿部提供保护。",
+      "image": "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan/image-001.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan/image-002.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan/image-003.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan/image-004.jpeg",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan/image-005.jpeg",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan/image-006.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan/image-007.jpeg"
+      ],
+      "standards": [
+        "XF 633-2006 消防员抢险救援防护服装"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于消防员春夏季抢险救援作业时穿着",
+        "如地震",
+        "泥石流",
+        "建筑物倒塌救援"
+      ],
+      "features": [
+        "产品性能：面料采用双层结构织法，具有阻燃防静电、耐磨防撕破性、外防内吸、柔软舒适、有弹性、轻便等性能。",
+        "产品结构：",
+        "◎产品为上下分体式结构，上衣和裤子间重叠部分超过120mm，腋下设透气孔利于散热透气；",
+        "◎上衣采用撞色设计，肩背部和胸前的贴袋袋盖为火焰蓝色，与橘红色拼接，对比色的增加，进一步提高了消防员的可见性和辨识度；腋下有透气孔，利于散热和透气；产品挂袢均采用双线加套结的工艺，使其更加牢固耐用；",
+        "◎上衣及裤子门襟均采用阻燃拉链；",
+        "◎裤子腰头左右设置橡筋，适用于不同型体的防护人员穿着，后腰设置防滑橡筋，保持裤子的稳固。",
+        "反光带：前胸呈V字型、后背为水平型，袖口及脚口均配有冲孔反光警示带。",
+        "调节袢：上衣袖口及裤子脚口均设置收紧调节袢，方便穿戴救援手套和穿脱救援靴。"
+      ],
+      "specifications": [
+        {
+          "label": "颜色",
+          "value": "橘红色 +火焰蓝"
+        },
+        {
+          "label": "包装",
+          "value": "12套/箱"
+        }
+      ],
+      "sourceFolder": "消防员抢险救援服夏款",
+      "sourceMarkdown": "消防员抢险救援服夏款/消防员抢险救援服夏款.md"
+    },
+    {
+      "id": "xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2",
+      "model": "HYF-5221",
+      "sku": "HYF-5221",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "消防员抢险救援服（夏款）",
+      "description": "消防员夏季抢险救援作业，适用于应急抢险、防汛抗灾、城市内涝等场景下，作业人员对高温、高湿环境下执行非火灾类应急救援任务综合防护需求。",
+      "image": "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-001.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-002.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-003.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-004.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-005.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-006.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-007.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-008.png",
+        "/images/products/extracted/xiao-fang-yuan-qiang-xian-jiu-yuan-fu-xia-kuan-2/image-009.png"
+      ],
+      "standards": [
+        "XF 633-2006《消防员抢险救援防护服装》"
+      ],
+      "materials": [],
+      "applications": [
+        "消防员夏季抢险救援作业",
+        "适用于应急抢险",
+        "防汛抗灾",
+        "城市内涝等场景下"
+      ],
+      "features": [
+        "/",
+        "有报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-5221"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF 633-2006《消防员抢险救援防护服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色撞火焰蓝"
+        },
+        {
+          "label": "尺码",
+          "value": "165A-190B"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有报告"
+        }
+      ],
+      "sourceFolder": "消防员抢险救援服（夏款）",
+      "sourceMarkdown": "消防员抢险救援服（夏款）/消防员抢险救援服（夏款）.md"
+    },
+    {
+      "id": "xiao-fang-yuan-mie-huo-fang-hu-tou-kui-zuo-zhan-kuan",
+      "model": "HYF-9102",
+      "sku": "HYF-9102",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防员灭火防护头盔（作战款）",
+      "description": "消防员灭火防护头盔（作战款）",
+      "image": "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-tou-kui-zuo-zhan-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-tou-kui-zuo-zhan-kuan/image-001.png"
+      ],
+      "standards": [
+        "XF44-2015《消防头盔》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9102"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF44-2015《消防头盔》"
+        },
+        {
+          "label": "颜色",
+          "value": "黄色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "消防员灭火防护头盔（作战款）",
+      "sourceMarkdown": "消防员灭火防护头盔（作战款）/消防员灭火防护头盔（作战款）.md"
+    },
+    {
+      "id": "xiao-fang-yuan-mie-huo-fang-hu-tou-kui-zhi-hui-kuan",
+      "model": "HYF-9101",
+      "sku": "HYF-9101",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防员灭火防护头盔（指挥款）",
+      "description": "消防员灭火防护头盔（指挥款）",
+      "image": "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-tou-kui-zhi-hui-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-tou-kui-zhi-hui-kuan/image-001.png"
+      ],
+      "standards": [
+        "XF44-2015《消防头盔》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9101"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF44-2015《消防头盔》"
+        },
+        {
+          "label": "颜色",
+          "value": "红色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "消防员灭火防护头盔（指挥款）",
+      "sourceMarkdown": "消防员灭火防护头盔（指挥款）/消防员灭火防护头盔（指挥款）.md"
+    },
+    {
+      "id": "firefighter-suit-combat",
+      "model": "YF-076",
+      "sku": "",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防员灭火防护服（作战款）",
+      "description": "消防员在进行灭火救援时对躯干、头颈、手臂和腿部进行防护的专用防护服装，主要用来防御火焰、炙热物体的伤害。",
+      "image": "/images/products/extracted/firefighter-suit-combat/image-001.png",
+      "images": [
+        "/images/products/extracted/firefighter-suit-combat/image-001.png",
+        "/images/products/extracted/firefighter-suit-combat/image-002.png",
+        "/images/products/extracted/firefighter-suit-combat/image-003.png",
+        "/images/products/extracted/firefighter-suit-combat/image-004.png",
+        "/images/products/extracted/firefighter-suit-combat/image-005.png",
+        "/images/products/extracted/firefighter-suit-combat/image-006.png",
+        "/images/products/extracted/firefighter-suit-combat/image-007.png",
+        "/images/products/extracted/firefighter-suit-combat/image-008.png",
+        "/images/products/extracted/firefighter-suit-combat/image-009.png",
+        "/images/products/extracted/firefighter-suit-combat/image-010.png",
+        "/images/products/extracted/firefighter-suit-combat/image-011.png",
+        "/images/products/extracted/firefighter-suit-combat/image-012.png",
+        "/images/products/extracted/firefighter-suit-combat/image-013.png",
+        "/images/products/extracted/firefighter-suit-combat/image-014.jpeg",
+        "/images/products/extracted/firefighter-suit-combat/image-015.png",
+        "/images/products/extracted/firefighter-suit-combat/image-016.jpeg",
+        "/images/products/extracted/firefighter-suit-combat/image-017.jpeg",
+        "/images/products/extracted/firefighter-suit-combat/image-018.png",
+        "/images/products/extracted/firefighter-suit-combat/image-019.png",
+        "/images/products/extracted/firefighter-suit-combat/image-020.png",
+        "/images/products/extracted/firefighter-suit-combat/image-021.png"
+      ],
+      "standards": [
+        "XF10-2014《消防员灭火防护服》",
+        "XF 10-2014 消防员灭火防护服"
+      ],
+      "materials": [
+        "三层芳纶复合结构",
+        "阻燃隔热",
+        "防水透湿",
+        "高强耐用",
+        "体重kg"
+      ],
+      "applications": [
+        "适用于消防员灭火救援作业",
+        "同时可满足应急抢险",
+        "灾害处置等场景下",
+        "作业人员对高温"
+      ],
+      "features": [
+        "多层复合防护：采用芳纶外层、PTFE 防水透气隔热层、阻燃舒适层组合结构，全方位满足灭火救援防护需求。",
+        "优异阻燃隔热：各层均具备阻燃无熔滴、耐高温特性，隔热性能优良，有效抵御高温热辐射侵袭。",
+        "防水透湿舒适：搭载 PTFE 透湿膜，实现防水拒油与高透湿透气平衡，减少闷热感，提升穿戴舒适度。",
+        "高强耐用稳定：外层芳纶材质高强耐磨、耐撕破，整体面料低缩水、尺寸稳定，适应复杂救援环境。",
+        "功能配置全面：兼具防沾水、导电防静电等性能，防护与实用性能兼顾，安全可靠。",
+        "量身定制服务：可提供一对一量体裁衣服务。",
+        "消防员灭火防护服采用上下分体式结构，上衣配置了DRD救生拖拉带，当消防人员在危险环境中失去行动能力时，可快速将其转移到安全区域。下裤为背带式，背带可调节长度，可拆卸。上衣和裤子间重叠部分超过200mm，加强保障，防止异物伤害消防员安全。",
+        "在上衣胸口、下摆、袖口、裤子裤腿等部位设有360度环形反光标志带。反光带阻燃、耐高温、耐洗涤。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "待定"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF10-2014《消防员灭火防护服》"
+        },
+        {
+          "label": "颜色",
+          "value": "藏蓝色"
+        },
+        {
+          "label": "尺码",
+          "value": "165A-190B"
+        },
+        {
+          "label": "包装",
+          "value": "5套/箱"
+        },
+        {
+          "label": "产品结构及性能",
+          "value": "三层芳纶复合结构，阻燃隔热、防水透湿、高强耐用 体重kg 身高cm 50-55 55-65 65-75 75-85 80-90 90-100 100-110 163-167 165A 165B 168-172 170A 170B 173-177 175A 175B 178-182 180A 180B 183-187 185A 185B 188-192 190A 190B"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据热防护值及性能参数可选择不同的产品"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有报告、有认证"
+        },
+        {
+          "label": "报告",
+          "value": "有报告、有认证"
+        },
+        {
+          "label": "注意事项",
+          "value": "1.洗涤需使用中性洗涤剂，禁止使用漂白剂、酸性洗涤剂及柔软剂； 2.洗涤水温不得超过 40℃； 3.出现磨损、烧毁等损伤，须专业修复或更换，禁用普通材料修补； 4.损坏无法修复的，严禁继续使用。"
+        }
+      ],
+      "sourceFolder": "消防员灭火防护服（作战款）",
+      "sourceMarkdown": "消防员灭火防护服（作战款）/消防员灭火防护服（作战款）.md"
+    },
+    {
+      "id": "xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan",
+      "model": "HYF-5531",
+      "sku": "HYF-5531",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防员灭火防护服（指挥款）",
+      "description": "消防员在进行灭火救援时对躯干、头颈、手臂和腿部进行防护。",
+      "image": "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-001.png",
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-002.jpeg",
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-003.png",
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-004.jpeg",
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-005.jpeg",
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-006.png",
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-007.png",
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-008.png",
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-fu-zhi-hui-kuan/image-009.png"
+      ],
+      "standards": [
+        "XF10-2014《消防员灭火防护服》",
+        "XF 10-2014 消防员灭火防护服"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于消防员灭火救援作业",
+        "同时可满足应急抢险",
+        "灾害处置等场景下",
+        "作业人员对高温"
+      ],
+      "features": [
+        "消防员灭火指挥服采用上下分体式结构，上衣款式为风衣式，配置了DRD救生拖拉带，上衣下摆后部设有开叉，与背带式防护裤配套使用，背带可调节长度，可拆卸。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-5531"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF10-2014《消防员灭火防护服》"
+        },
+        {
+          "label": "颜色",
+          "value": "藏蓝色"
+        },
+        {
+          "label": "尺码",
+          "value": "165A-190B"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据热防护值及性能参数可选择不同的产品"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有报告、有认证"
+        }
+      ],
+      "sourceFolder": "消防员灭火防护服（指挥款）",
+      "sourceMarkdown": "消防员灭火防护服（指挥款）/消防员灭火防护服（指挥款）.md"
+    },
+    {
+      "id": "xiao-fang-yuan-mie-huo-fang-hu-xue",
+      "model": "HYF-9601",
+      "sku": "HYF-9601",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防员灭火防护靴",
+      "description": "消防员灭火防护靴",
+      "image": "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-xue/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-mie-huo-fang-hu-xue/image-001.png"
+      ],
+      "standards": [
+        "XF6-2004《消防员灭火防护靴》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9601"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF6-2004《消防员灭火防护靴》"
+        },
+        {
+          "label": "颜色",
+          "value": "黄色+黑色"
+        },
+        {
+          "label": "尺码",
+          "value": "38-49 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "消防员灭火防护靴",
+      "sourceMarkdown": "消防员灭火防护靴/消防员灭火防护靴.md"
+    },
+    {
+      "id": "xiao-fang-yuan-fang-feng-fu",
+      "model": "HYF-9902",
+      "sku": "HYF-9902",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防员防蜂服",
+      "description": "消防员防蜂服是专为摘除马蜂窝并应对与蜂群相关的危险情况而设计的防护装备。",
+      "image": "/images/products/extracted/xiao-fang-yuan-fang-feng-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-fang-feng-fu/image-001.png",
+        "/images/products/extracted/xiao-fang-yuan-fang-feng-fu/image-002.png"
+      ],
+      "standards": [
+        "XF3008-2020《消防员防蜂服》"
+      ],
+      "materials": [],
+      "applications": [
+        "消防员防蜂服是专为摘除马蜂窝并应对与蜂群相关的危险情况而设计的防护装备。"
+      ],
+      "features": [
+        "/",
+        "生产厂家有（上消所委托检测报告）"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9902"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF3008-2020《消防员防蜂服》"
+        },
+        {
+          "label": "颜色",
+          "value": "白色"
+        },
+        {
+          "label": "尺码",
+          "value": "165-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "生产厂家有（上消所委托检测报告）"
+        }
+      ],
+      "sourceFolder": "消防员防蜂服",
+      "sourceMarkdown": "消防员防蜂服/消防员防蜂服.md"
+    },
+    {
+      "id": "xiao-fang-yuan-ge-re-fang-hu-fu",
+      "model": "HYF-9901",
+      "sku": "HYF-9901",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防员隔热防护服",
+      "description": "适用于在火灾现场及高温作业场所等场景下，作业人员对高温、火焰、热辐射损伤的综合防护需求。适用于焊接、冶金、玻璃、陶瓷、石油化工等行业高温场景下全身防护。",
+      "image": "/images/products/extracted/xiao-fang-yuan-ge-re-fang-hu-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yuan-ge-re-fang-hu-fu/image-001.png",
+        "/images/products/extracted/xiao-fang-yuan-ge-re-fang-hu-fu/image-002.png"
+      ],
+      "standards": [
+        "XF634-2015《消防员隔热防护服》"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于在火灾现场及高温作业场所等场景下",
+        "作业人员对高温",
+        "火焰",
+        "热辐射损伤的综合防护需求。适用于焊接"
+      ],
+      "features": [
+        "/",
+        "生产厂家有（国家消防装备质量监督检验中心型式检测报告）"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9901"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF634-2015《消防员隔热防护服》"
+        },
+        {
+          "label": "颜色",
+          "value": "银色"
+        },
+        {
+          "label": "尺码",
+          "value": "165-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "生产厂家有（国家消防装备质量监督检验中心型式检测报告）"
+        }
+      ],
+      "sourceFolder": "消防员隔热防护服",
+      "sourceMarkdown": "消防员隔热防护服/消防员隔热防护服.md"
+    },
+    {
+      "id": "xiao-fang-shou-tao",
+      "model": "HYF-7501",
+      "sku": "HYF-7501",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防手套",
+      "description": "消防手套",
+      "image": "/images/products/extracted/xiao-fang-shou-tao/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-shou-tao/image-001.png"
+      ],
+      "standards": [
+        "XF7-2004《消防手套》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-7501"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF7-2004《消防手套》"
+        },
+        {
+          "label": "颜色",
+          "value": "藏蓝色"
+        },
+        {
+          "label": "尺码",
+          "value": "S-XL 报告情况 有"
+        }
+      ],
+      "sourceFolder": "消防手套",
+      "sourceMarkdown": "消防手套/消防手套.md"
+    },
+    {
+      "id": "xiao-fang-yao-dai",
+      "model": "HYF-9A01",
+      "sku": "HYF-9A01",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "消防腰带",
+      "description": "消防腰带",
+      "image": "/images/products/extracted/xiao-fang-yao-dai/image-001.png",
+      "images": [
+        "/images/products/extracted/xiao-fang-yao-dai/image-001.png"
+      ],
+      "standards": [
+        "XF494-2023《消防用防坠落装备》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9A01"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF494-2023《消防用防坠落装备》"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红+黑色"
+        },
+        {
+          "label": "尺码",
+          "value": "不分码 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "消防腰带",
+      "sourceMarkdown": "消防腰带/消防腰带.md"
+    },
+    {
+      "id": "shi-shi-shui-yu-jiu-yuan-fu",
+      "model": "HYF-9906",
+      "sku": "HYF-9906",
+      "categoryId": "water-rescue-suit",
+      "categoryName": "水域救援服",
+      "groupId": "water-rescue",
+      "name": "湿式水域救援服",
+      "description": "专门为水域救援战土抗洪抢险、进行水域救援工作所研制，满足在夏季或水温26℃左右进行水域救援作业",
+      "image": "/images/products/extracted/shi-shi-shui-yu-jiu-yuan-fu/image-001.jpeg",
+      "images": [
+        "/images/products/extracted/shi-shi-shui-yu-jiu-yuan-fu/image-001.jpeg",
+        "/images/products/extracted/shi-shi-shui-yu-jiu-yuan-fu/image-002.jpeg",
+        "/images/products/extracted/shi-shi-shui-yu-jiu-yuan-fu/image-003.png"
+      ],
+      "standards": [
+        "/暂无标准",
+        "EN14225-2-2017"
+      ],
+      "materials": [],
+      "applications": [
+        "湿式水域救援服适用于水温较高",
+        "短期",
+        "低风险‌的水域救援场景：如夏季河流救援",
+        "城市内涝抗洪抢险与排水管网应急"
+      ],
+      "features": [
+        "主要材质：3MM带有钛金属的氯丁橡胶材质，采用连体式设计；",
+        "双向前置拉链；",
+        "腕部和踝部的拉链可以帮助将袖口和裤腿收紧；",
+        "所有的缝线都是四针六线缝制，并且都做加固压胶处理；",
+        "在膝盖和小腿处都有聚氨酯涂层垫，可以提供额外的保护；",
+        "手臂和腿部有荧光反射区，并且有救援字样；",
+        "主要性能：接缝抗拉强度：面料的每个接缝处承受150N拉力荷载10S而不 会破裂(提供国家认可的第三方检测机构出具的检测报告);",
+        "耐磨性能：面料经2010次循环摩擦后，表层不被磨穿，耐磨加固层面料经6010次循环摩擦后，试样不被磨穿(提供国家认可的第三 方检测机构出具的检测报告);"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9906"
+        },
+        {
+          "label": "执行标准",
+          "value": "/暂无标准"
+        },
+        {
+          "label": "颜色",
+          "value": "红色"
+        },
+        {
+          "label": "尺码",
+          "value": "S-XXL"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "厂家有对应检测报告 以下是参考资料"
+        }
+      ],
+      "sourceFolder": "湿式水域救援服",
+      "sourceMarkdown": "湿式水域救援服/湿式水域救援服.md"
+    },
+    {
+      "id": "ji-liu-jiu-sheng-yi",
+      "model": "HYF-9907",
+      "sku": "HYF-9907",
+      "categoryId": "water-rescue-accessories",
+      "categoryName": "水域救援配套装备",
+      "groupId": "water-rescue",
+      "name": "激流救生衣",
+      "description": "激流救生衣",
+      "image": "/images/products/extracted/ji-liu-jiu-sheng-yi/image-001.png",
+      "images": [
+        "/images/products/extracted/ji-liu-jiu-sheng-yi/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9907"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "红色"
+        },
+        {
+          "label": "尺码",
+          "value": "S-2XL 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "激流救生衣",
+      "sourceMarkdown": "激流救生衣/激流救生衣.md"
+    },
+    {
+      "id": "rong-rong-jin-shu-fei-jian-fu",
+      "model": "HYF-3501 包装规格：20套/箱",
+      "sku": "HYF-3501 包装规格：20套/箱",
+      "categoryId": "splash-protection",
+      "categoryName": "防喷溅服",
+      "groupId": "thermal-welding",
+      "name": "熔融金属飞溅服",
+      "description": "在接触火焰及炽热物体后，在一定时间内能阻止本身被点燃、有焰燃烧和阴燃，并且火源移开后燃烧部分迅速炭化而不产生熔融、滴落，给人时间脱掉衣服或撤离燃烧现场，减少或避免烧伤烫伤，保护工人避免受到大的熔融金属喷溅物造成严重甚至是致命的灼伤。",
+      "image": "/images/products/extracted/rong-rong-jin-shu-fei-jian-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/rong-rong-jin-shu-fei-jian-fu/image-001.png",
+        "/images/products/extracted/rong-rong-jin-shu-fei-jian-fu/image-002.png",
+        "/images/products/extracted/rong-rong-jin-shu-fei-jian-fu/image-003.png"
+      ],
+      "standards": [
+        "GB 8965.3-2022 防护服装 熔融金属飞溅防护服",
+        "EN11612-2015 防护服 防止高温和火焰的服装 最低性能要求",
+        "FZ/T64083-2021 熔融金属飞溅织物"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于金属冶炼及材料回收企业的炉前工作业服",
+        "铸造",
+        "锻压工作服",
+        "冶炼"
+      ],
+      "features": [
+        "领口及袖口均采用订扣款式，作业过程中不易脱开",
+        "胸前、后背均采用阻燃反光条，提高作业者的可视性，保障个人安全",
+        "腋下设计透气网眼布 ， 增加作业人员换气空间 ，舒适透气"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3501 包装规格：20套/箱 HYF-3501 包装规格：20套/箱"
+        },
+        {
+          "label": "颜色",
+          "value": "藏青"
+        }
+      ],
+      "sourceFolder": "熔融金属飞溅服",
+      "sourceMarkdown": "熔融金属飞溅服/熔融金属飞溅服.md"
+    },
+    {
+      "id": "niu-wei-sheng",
+      "model": "HYF-9A08",
+      "sku": "HYF-9A08",
+      "categoryId": "water-rescue-accessories",
+      "categoryName": "水域救援配套装备",
+      "groupId": "water-rescue",
+      "name": "牛尾绳",
+      "description": "牛尾绳",
+      "image": "/images/products/extracted/niu-wei-sheng/image-001.png",
+      "images": [
+        "/images/products/extracted/niu-wei-sheng/image-001.png"
+      ],
+      "standards": [],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9A08"
+        },
+        {
+          "label": "执行标准",
+          "value": "/"
+        },
+        {
+          "label": "颜色",
+          "value": "黑色"
+        },
+        {
+          "label": "尺码",
+          "value": "/ 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "牛尾绳",
+      "sourceMarkdown": "牛尾绳/牛尾绳.md"
+    },
+    {
+      "id": "sheng-wu-zhi-yao-fen-ti-jie-jing-fu",
+      "model": "HYF-6A45",
+      "sku": "HYF-6A45",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "生物制药分体洁净服",
+      "description": "常用于生物制药（无菌制剂 / 疫苗 / 生物发酵等）。",
+      "image": "/images/products/extracted/sheng-wu-zhi-yao-fen-ti-jie-jing-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/sheng-wu-zhi-yao-fen-ti-jie-jing-fu/image-001.png",
+        "/images/products/extracted/sheng-wu-zhi-yao-fen-ti-jie-jing-fu/image-002.png",
+        "/images/products/extracted/sheng-wu-zhi-yao-fen-ti-jie-jing-fu/image-003.png"
+      ],
+      "standards": [
+        "GB 12014-2019《防护服装 防静电服》",
+        "GB/T 21655.1-2023《纺织品 吸湿速干性的评定 第1部分:单项组合试验法》",
+        "YY/T 0506.1-2023 《医用手术单",
+        "手术衣和洁净服 第1部分：通用要求》"
+      ],
+      "materials": [],
+      "applications": [
+        "常用于生物制药（无菌制剂 / 疫苗 / 生物发酵等）。"
+      ],
+      "features": [
+        "根据不同使用岗位人员可用不同颜色区分（以下为推荐）。 白色：第一线操作人员、 蓝色：班长 黄色：工程师/设备维护、 粉色：质检",
+        "无检测报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6A45"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 12014-2019《防护服装 防静电服》 GB/T 21655.1-2023《纺织品 吸湿速干性的评定 第1部分:单项组合试验法》 YY/T 0506.1-2023 《医用手术单、手术衣和洁净服 第1部分：通用要求》"
+        },
+        {
+          "label": "颜色",
+          "value": "白/蓝/黄/粉"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据不同使用岗位人员可用不同颜色区分（以下为推荐）。 白色：第一线操作人员、 蓝色：班长 黄色：工程师/设备维护、 粉色：质检"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "无检测报告"
+        }
+      ],
+      "sourceFolder": "生物制药分体洁净服",
+      "sourceMarkdown": "生物制药分体洁净服/生物制药分体洁净服.md"
+    },
+    {
+      "id": "sheng-wu-zhi-yao-yong-san-lian-ti-jie-jing-fu",
+      "model": "HYF-6A27",
+      "sku": "HYF-6A27",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "生物制药用三连体洁净服",
+      "description": "常用于生物制药（无菌制剂 / 疫苗 / 生物发酵等）。",
+      "image": "/images/products/extracted/sheng-wu-zhi-yao-yong-san-lian-ti-jie-jing-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/sheng-wu-zhi-yao-yong-san-lian-ti-jie-jing-fu/image-001.png"
+      ],
+      "standards": [
+        "YY/T 0506.1-2023 医用手术单",
+        "手术衣和洁净服 第1部分：通用要求"
+      ],
+      "materials": [],
+      "applications": [
+        "常用于生物制药（无菌制剂 / 疫苗 / 生物发酵等）。"
+      ],
+      "features": [
+        "一次性使用，有无菌要求环境推荐使用。",
+        "有检测报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6A27"
+        },
+        {
+          "label": "执行标准",
+          "value": "YY/T 0506.1-2023 医用手术单、手术衣和洁净服 第1部分：通用要求"
+        },
+        {
+          "label": "颜色",
+          "value": "白"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "一次性使用，有无菌要求环境推荐使用。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有检测报告"
+        }
+      ],
+      "sourceFolder": "生物制药用三连体洁净服",
+      "sourceMarkdown": "生物制药用三连体洁净服/生物制药用三连体洁净服.md"
+    },
+    {
+      "id": "nai-suan-jian-gong-zuo-fu-tao-zhuang",
+      "model": "HYF-6711",
+      "sku": "HYF-6711",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "耐酸碱工作服套装",
+      "description": "由机织面料构成，能够防护液态酸性、或/和碱性化学品(不包括氢氟酸、氨水和有机酸碱)的防护服。",
+      "image": "/images/products/extracted/nai-suan-jian-gong-zuo-fu-tao-zhuang/image-001.jpeg",
+      "images": [
+        "/images/products/extracted/nai-suan-jian-gong-zuo-fu-tao-zhuang/image-001.jpeg",
+        "/images/products/extracted/nai-suan-jian-gong-zuo-fu-tao-zhuang/image-002.png",
+        "/images/products/extracted/nai-suan-jian-gong-zuo-fu-tao-zhuang/image-003.png",
+        "/images/products/extracted/nai-suan-jian-gong-zuo-fu-tao-zhuang/image-004.png",
+        "/images/products/extracted/nai-suan-jian-gong-zuo-fu-tao-zhuang/image-005.png"
+      ],
+      "standards": [
+        "GB24539-2021《防护服装化学防护服》"
+      ],
+      "materials": [
+        "100%聚酯纤维（含导电纤维）"
+      ],
+      "applications": [
+        "工业作业场所作业人员使用的防护液态酸碱类化学品防护服。(注:本产品防护对象无法涵盖所有液态酸碱类化学品",
+        "使用者应根据作业现场的实际情况选择合适的防护装备)。"
+      ],
+      "features": [
+        "款式为分体三紧式夹克款，翻领设计，主色选用宝蓝色，搭配修身版型彰显企业高效、准确、稳健的形象。整体设计协调统一，符合人体工学原理，穿着舒适。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6711 HYF-6711"
+        },
+        {
+          "label": "颜色",
+          "value": "宝蓝"
+        }
+      ],
+      "sourceFolder": "耐酸碱工作服套装",
+      "sourceMarkdown": "耐酸碱工作服套装/耐酸碱工作服套装.md"
+    },
+    {
+      "id": "lan-tian-jiu-yuan-fen-ti-tao-zhuang",
+      "model": "HYF-5202",
+      "sku": "HYF-5202",
+      "categoryId": "rescue-suit",
+      "categoryName": "消防员抢险救援服",
+      "groupId": "fire-rescue",
+      "name": "蓝天救援分体套装",
+      "description": "用来保护作业人员在进行抢险救援作业时 ， 用来对其躯干 、颈部 、 手臂 、 手腕和腿部提供保护。",
+      "image": "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-002.png",
+        "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-003.png",
+        "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-004.png",
+        "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-005.png",
+        "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-006.png",
+        "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-007.png",
+        "/images/products/extracted/lan-tian-jiu-yuan-fen-ti-tao-zhuang/image-008.png"
+      ],
+      "standards": [
+        "GB8965.1-2020防护服装阻燃服",
+        "GB12014-2019防护服装防静电服"
+      ],
+      "materials": [],
+      "applications": [
+        "适用在安全生产事故现场的应急救援人员穿着",
+        "不适用于抢险救援时特殊环境中穿着。应用领域：用于山野救援",
+        "城市救援",
+        "自然灾害救援"
+      ],
+      "features": [
+        "分体款式。领部为披领 ，既能舒适穿着 ，又能防护 ，属于“三紧”款式。",
+        "前胸和袖臂处采用多种工具袋设计 ，方便作业人员携带工具进行工作。",
+        "整体颜色为大红色 ，醒目亮眼。",
+        "前胸 ，后背、袖身、裤腿上均有反光带 ， 360°环绕 ，提高警示作用。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-5202 HYF-5202"
+        },
+        {
+          "label": "颜色",
+          "value": "大红 +深蓝"
+        }
+      ],
+      "sourceFolder": "蓝天救援分体套装",
+      "sourceMarkdown": "蓝天救援分体套装/蓝天救援分体套装.md"
+    },
+    {
+      "id": "lian-mao-jie-jing-da-gua",
+      "model": "HYF-6A06",
+      "sku": "HYF-6A06",
+      "categoryId": "chemical",
+      "categoryName": "防化服",
+      "groupId": "chemical-medical",
+      "name": "连帽洁净大褂",
+      "description": "常用于电子、生物制药行业（芯片 / 半导体 / 精密电子等）",
+      "image": "/images/products/extracted/lian-mao-jie-jing-da-gua/image-001.png",
+      "images": [
+        "/images/products/extracted/lian-mao-jie-jing-da-gua/image-001.png",
+        "/images/products/extracted/lian-mao-jie-jing-da-gua/image-002.png",
+        "/images/products/extracted/lian-mao-jie-jing-da-gua/image-003.png",
+        "/images/products/extracted/lian-mao-jie-jing-da-gua/image-004.png",
+        "/images/products/extracted/lian-mao-jie-jing-da-gua/image-005.png",
+        "/images/products/extracted/lian-mao-jie-jing-da-gua/image-006.png"
+      ],
+      "standards": [
+        "SJ/T 11412-2010 防静电洁净工作服及织物通用规范（电子行业）",
+        "GB/T24249-2009《防静电洁净织物》",
+        "FZ/T80014-2012《洁净室服装通用技术规范》"
+      ],
+      "materials": [],
+      "applications": [
+        "常用于电子",
+        "生物制药行业（芯片 / 半导体 / 精密电子等）"
+      ],
+      "features": [
+        "根据不同使用岗位人员可用不同颜色区分（以下为推荐）。 在电子行业（基础款-在要求度不高的车间） 主要用于客户/访客-选用浅灰色 白色：第一线操作人员、 蓝色：班长 黄色：工程师/设备维护、 粉色：质检",
+        "无检测报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6A06"
+        },
+        {
+          "label": "执行标准",
+          "value": "SJ/T 11412-2010 防静电洁净工作服及织物通用规范（电子行业） GB/T24249-2009《防静电洁净织物》 FZ/T80014-2012《洁净室服装通用技术规范》"
+        },
+        {
+          "label": "颜色",
+          "value": "白/蓝/黄/粉"
+        },
+        {
+          "label": "尺码",
+          "value": "160-190"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "根据不同使用岗位人员可用不同颜色区分（以下为推荐）。 在电子行业（基础款-在要求度不高的车间） 主要用于客户/访客-选用浅灰色 白色：第一线操作人员、 蓝色：班长 黄色：工程师/设备维护、 粉色：质检"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "无检测报告"
+        }
+      ],
+      "sourceFolder": "连帽洁净大褂",
+      "sourceMarkdown": "连帽洁净大褂/连帽洁净大褂.md"
+    },
+    {
+      "id": "bi-huo-fu",
+      "model": "FGR-F/A",
+      "sku": "FGR-F/A",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "避火服",
+      "description": "在使用人员全身形成有效的耐火保护层，可以防止使用人员被高温物体烫伤具有良好的耐火、隔热性能，可短时间承受1000℃C的火焰温度。",
+      "image": "/images/products/extracted/bi-huo-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/bi-huo-fu/image-001.png",
+        "/images/products/extracted/bi-huo-fu/image-002.png"
+      ],
+      "standards": [
+        "XF 634 - 2015《消防员隔热防护服》"
+      ],
+      "materials": [],
+      "applications": [
+        "可用于消防员在穿越火焰区进行灭火救援时穿着",
+        "还可用于石油",
+        "化工",
+        "玻璃"
+      ],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "FGR-F/A FGR-F/A"
+        },
+        {
+          "label": "颜色",
+          "value": "银色"
+        }
+      ],
+      "sourceFolder": "避火服",
+      "sourceMarkdown": "避火服/避火服.md"
+    },
+    {
+      "id": "fang-pen-jian-fen-ti-tao-zhuang",
+      "model": "HYF-3542",
+      "sku": "HYF-3542",
+      "categoryId": "splash-protection",
+      "categoryName": "防喷溅服",
+      "groupId": "thermal-welding",
+      "name": "防喷溅分体套装",
+      "description": "适用于金属冶炼、铸造、金属热加工等行业中，存在熔融金属飞溅、滴落、喷溅风险的作业场所，用于防护熔融金属高温烫伤与穿透伤害。",
+      "image": "/images/products/extracted/fang-pen-jian-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/fang-pen-jian-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/fang-pen-jian-fen-ti-tao-zhuang/image-002.jpeg",
+        "/images/products/extracted/fang-pen-jian-fen-ti-tao-zhuang/image-003.jpeg",
+        "/images/products/extracted/fang-pen-jian-fen-ti-tao-zhuang/image-004.jpeg",
+        "/images/products/extracted/fang-pen-jian-fen-ti-tao-zhuang/image-005.jpeg"
+      ],
+      "standards": [
+        "GB 8965.3-2022《防护服装 防喷溅服》"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于金属冶炼",
+        "铸造",
+        "金属热加工等行业中",
+        "存在熔融金属飞溅"
+      ],
+      "features": [
+        "存在上千摄氏度的熔融金属大量飞溅风险时，就必须使用熔融金属飞溅服防护。",
+        "有成衣检测报告2份 阻燃防静电服标品款1"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-3542"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.3-2022《防护服装 防喷溅服》"
+        },
+        {
+          "label": "颜色",
+          "value": "藏青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "存在上千摄氏度的熔融金属大量飞溅风险时，就必须使用熔融金属飞溅服防护。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有成衣检测报告2份 阻燃防静电服标品款1"
+        }
+      ],
+      "sourceFolder": "防喷溅分体套装",
+      "sourceMarkdown": "防喷溅分体套装/防喷溅分体套装.md"
+    },
+    {
+      "id": "fang-huo-xue",
+      "model": "HYF-9603",
+      "sku": "HYF-9603",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "防火靴",
+      "description": "防火靴",
+      "image": "/images/products/extracted/fang-huo-xue/image-001.png",
+      "images": [
+        "/images/products/extracted/fang-huo-xue/image-001.png"
+      ],
+      "standards": [
+        "XF633-2006《消防员抢险救援防护服装》"
+      ],
+      "materials": [],
+      "applications": [],
+      "features": [],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-9603"
+        },
+        {
+          "label": "执行标准",
+          "value": "XF633-2006《消防员抢险救援防护服装》"
+        },
+        {
+          "label": "颜色",
+          "value": "黑色"
+        },
+        {
+          "label": "尺码",
+          "value": "35-46 报告情况 有供应商报告"
+        }
+      ],
+      "sourceFolder": "防火靴",
+      "sourceMarkdown": "防火靴/防火靴.md"
+    },
+    {
+      "id": "fang-feng-fu",
+      "model": "ZFFF-XL I",
+      "sku": "ZFFF-XL I",
+      "categoryId": "firefighter-suit",
+      "categoryName": "消防员灭火防护服",
+      "groupId": "fire-rescue",
+      "name": "防蜂服",
+      "description": "具有防蜂蛰、耐磨、轻便透气等特性。是消防人员在摘除蜂窝时穿着的一种最基本的功能型防护服。",
+      "image": "/images/products/extracted/fang-feng-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/fang-feng-fu/image-001.png"
+      ],
+      "standards": [
+        "XF 3008 - 2020《消防员防蜂服》"
+      ],
+      "materials": [],
+      "applications": [
+        "防蜂服是作业人员在有蜂群场所进行抢险救援",
+        "除险时为保护自身安全而穿着的防护服装。"
+      ],
+      "features": [
+        "该服装由双层高强力耐刺穿面料制成；手套另外配备，其他部位连为一体，成型不锈钢网面罩具有透气性好视野清晰、穿着舒适、耐折耐压、回弹性好等特点，能很好地保护使用者的面部。",
+        "主要性能指标",
+        "阻燃性能：损毁长度<100mm，续燃时间<2s",
+        "耐磨性能：在9Kpa的压力下 2000次循环摩擦，表面无破损",
+        "断裂强力：经、纬向≥650N;撕破强力:经、纬向>60N",
+        "甲醛含量：未检出",
+        "手套耐切割性能>5N",
+        "靴子的防滑性能：始滑角>15°耐穿刺性能：≥1500N"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "ZFFF-XL I ZFFF-XL I"
+        },
+        {
+          "label": "颜色",
+          "value": "白色"
+        }
+      ],
+      "sourceFolder": "防蜂服",
+      "sourceMarkdown": "防蜂服/防蜂服.md"
+    },
+    {
+      "id": "fang-jing-dian-xia-ji-fen-ti-tao-zhuang",
+      "model": "HYF-6106",
+      "sku": "HYF-6106",
+      "categoryId": "anti-static",
+      "categoryName": "防静电服",
+      "groupId": "electrical-protection",
+      "name": "防静电夏季分体套装",
+      "description": "轨道交通、汽车制造、新能源装备、石油化工、天然气场站、实验室等存在静电积聚风险的作业场所。",
+      "image": "/images/products/extracted/fang-jing-dian-xia-ji-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/fang-jing-dian-xia-ji-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/fang-jing-dian-xia-ji-fen-ti-tao-zhuang/image-002.png"
+      ],
+      "standards": [
+        "GB 12014-2019《防护服装 防静电服》"
+      ],
+      "materials": [],
+      "applications": [
+        "轨道交通",
+        "汽车制造",
+        "新能源装备",
+        "石油化工"
+      ],
+      "features": [
+        "夏季作业场景中存在静电风险，没有明火、突发起火的风险的防护。",
+        "无 防静电服标品款2"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6106"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 12014-2019《防护服装 防静电服》"
+        },
+        {
+          "label": "颜色",
+          "value": "灰色撞桔红"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "夏季作业场景中存在静电风险，没有明火、突发起火的风险的防护。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "无 防静电服标品款2"
+        }
+      ],
+      "sourceFolder": "防静电夏季分体套装",
+      "sourceMarkdown": "防静电夏季分体套装/防静电夏季分体套装.md"
+    },
+    {
+      "id": "fang-jing-dian-xia-ji-lian-ti-fu",
+      "model": "HYF-6102",
+      "sku": "HYF-6102",
+      "categoryId": "anti-static",
+      "categoryName": "防静电服",
+      "groupId": "electrical-protection",
+      "name": "防静电夏季连体服",
+      "description": "轨道交通、汽车制造、新能源装备、石油化工、天然气场站、实验室等存在静电积聚风险的作业场所。",
+      "image": "/images/products/extracted/fang-jing-dian-xia-ji-lian-ti-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/fang-jing-dian-xia-ji-lian-ti-fu/image-001.png",
+        "/images/products/extracted/fang-jing-dian-xia-ji-lian-ti-fu/image-002.jpeg"
+      ],
+      "standards": [
+        "GB 12014-2019《防护服装 防静电服》"
+      ],
+      "materials": [],
+      "applications": [
+        "轨道交通",
+        "汽车制造",
+        "新能源装备",
+        "石油化工"
+      ],
+      "features": [
+        "夏季作业场景中存在静电风险，没有明火、突发起火的风险的防护。",
+        "有 防静电服标品款3"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6102"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 12014-2019《防护服装 防静电服》"
+        },
+        {
+          "label": "颜色",
+          "value": "深灰"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "夏季作业场景中存在静电风险，没有明火、突发起火的风险的防护。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有 防静电服标品款3"
+        }
+      ],
+      "sourceFolder": "防静电夏季连体服",
+      "sourceMarkdown": "防静电夏季连体服/防静电夏季连体服.md"
+    },
+    {
+      "id": "fang-jing-dian-chun-qiu-fen-ti-tao-zhuang",
+      "model": "HYF-6107",
+      "sku": "HYF-6107",
+      "categoryId": "anti-static",
+      "categoryName": "防静电服",
+      "groupId": "electrical-protection",
+      "name": "防静电春秋分体套装",
+      "description": "轨道交通、汽车制造、新能源装备、石油化工、天然气场站、实验室等存在静电积聚风险的作业场所。",
+      "image": "/images/products/extracted/fang-jing-dian-chun-qiu-fen-ti-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/fang-jing-dian-chun-qiu-fen-ti-tao-zhuang/image-001.png",
+        "/images/products/extracted/fang-jing-dian-chun-qiu-fen-ti-tao-zhuang/image-002.png"
+      ],
+      "standards": [
+        "GB 12014-2019《防护服装 防静电服》"
+      ],
+      "materials": [],
+      "applications": [
+        "轨道交通",
+        "汽车制造",
+        "新能源装备",
+        "石油化工"
+      ],
+      "features": [
+        "春秋季作业场景中存在静电风险，没有明火、突发起火的风险的防护。",
+        "无 A级焊接服标品款1(配件还在完善中，会加入焊接眼镜）"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-6107"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 12014-2019《防护服装 防静电服》"
+        },
+        {
+          "label": "颜色",
+          "value": "蟹青"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "春秋季作业场景中存在静电风险，没有明火、突发起火的风险的防护。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "无 A级焊接服标品款1(配件还在完善中，会加入焊接眼镜）"
+        }
+      ],
+      "sourceFolder": "防静电春秋分体套装",
+      "sourceMarkdown": "防静电春秋分体套装/防静电春秋分体套装.md"
+    },
+    {
+      "id": "fang-jing-dian-lian-ti-fu",
+      "model": "GQSL-JD16226",
+      "sku": "GQSL-JD16226",
+      "categoryId": "anti-static",
+      "categoryName": "防静电服",
+      "groupId": "electrical-protection",
+      "name": "防静电连体服",
+      "description": "在特定环境中防止静电积聚和放电，从而保护敏感设备和产品，以及确保工作人员的安全",
+      "image": "/images/products/extracted/fang-jing-dian-lian-ti-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/fang-jing-dian-lian-ti-fu/image-001.png",
+        "/images/products/extracted/fang-jing-dian-lian-ti-fu/image-002.png",
+        "/images/products/extracted/fang-jing-dian-lian-ti-fu/image-003.png"
+      ],
+      "standards": [
+        "GB 12014-2019《防护服装 防静电服》"
+      ],
+      "materials": [
+        "聚酯纤维（含导电纤维）"
+      ],
+      "applications": [
+        "电子制造业",
+        "半导体行业",
+        "制药行业",
+        "医疗行业"
+      ],
+      "features": [
+        "三连体防静电连体服，耳廓部位采用透气网布，柔软舒适，不磨耳。后帽中采用松紧，可很好的贴合头部轮廓，同样采用松紧带调节袖口、脚口以及腰部。在后背上设计透气窗，能缓解工作时闷汗情况。前胸左右两个胸袋，魔术贴粘合，方便存放物品。插肩袖设计，更方便人体活动，符合人体…"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "GQSL-JD16226 GQSL-JD16226"
+        },
+        {
+          "label": "颜色",
+          "value": "白色"
+        }
+      ],
+      "sourceFolder": "防静电连体服",
+      "sourceMarkdown": "防静电连体服/防静电连体服.md"
+    },
+    {
+      "id": "zu-ran-pu-huo-fu",
+      "model": "HYF-5322",
+      "sku": "HYF-5322",
+      "categoryId": "forest-fire",
+      "categoryName": "森林灭火防护装备",
+      "groupId": "fire-rescue",
+      "name": "阻燃扑火服",
+      "description": "适用于森林、草原火灾、山地救援、野外火情巡查与监控等场景，具备复杂地形环境中作业人员对高温、高热辐射环境下执行初步救援任务的防护需求。",
+      "image": "/images/products/extracted/zu-ran-pu-huo-fu/image-001.png",
+      "images": [
+        "/images/products/extracted/zu-ran-pu-huo-fu/image-001.png",
+        "/images/products/extracted/zu-ran-pu-huo-fu/image-002.png"
+      ],
+      "standards": [
+        "GB 8965.1-2020 防护服装 阻燃服",
+        "GB 12014-2019 防护服装 防静电服"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于森林",
+        "草原火灾",
+        "山地救援",
+        "野外火情巡查与监控等场景"
+      ],
+      "features": [
+        "/",
+        "有报告"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-5322"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.1-2020 防护服装 阻燃服 GB 12014-2019 防护服装 防静电服"
+        },
+        {
+          "label": "颜色",
+          "value": "橘红色"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "/"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "有报告"
+        }
+      ],
+      "sourceFolder": "阻燃扑火服",
+      "sourceMarkdown": "阻燃扑火服/阻燃扑火服.md"
+    },
+    {
+      "id": "zu-ran-fang-jing-dian-quan-mian-qiu-ji-tao-zhuang",
+      "model": "HYF-33106",
+      "sku": "HYF-33106",
+      "categoryId": "fr-anti-static",
+      "categoryName": "阻燃防静电服",
+      "groupId": "chemical-medical",
+      "name": "阻燃防静电全棉秋季套装",
+      "description": "适用于炼油厂与化工厂作业、油气开采与运输、加油站与油库管理等行业中，对静电敏感，存在火灾、爆炸风险的场所。",
+      "image": "/images/products/extracted/zu-ran-fang-jing-dian-quan-mian-qiu-ji-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/zu-ran-fang-jing-dian-quan-mian-qiu-ji-tao-zhuang/image-001.png",
+        "/images/products/extracted/zu-ran-fang-jing-dian-quan-mian-qiu-ji-tao-zhuang/image-002.png",
+        "/images/products/extracted/zu-ran-fang-jing-dian-quan-mian-qiu-ji-tao-zhuang/image-003.png",
+        "/images/products/extracted/zu-ran-fang-jing-dian-quan-mian-qiu-ji-tao-zhuang/image-004.png"
+      ],
+      "standards": [
+        "GB 8965.1-2020《防护服装 阻燃服》B级",
+        "GB 12014-2019《防护服装 防静电服》"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于炼油厂与化工厂作业",
+        "油气开采与运输",
+        "加油站与油库管理等行业中",
+        "对静电敏感"
+      ],
+      "features": [
+        "工作场所存在可燃气体或可燃粉尘，静电火花可能引发爆炸或火灾，以及存在明火、高温火花或突发起火的风险的场所选用。",
+        "公司有检测报告 阻燃防静电服标品款2"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-33106"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.1-2020《防护服装 阻燃服》B级 GB 12014-2019《防护服装 防静电服》"
+        },
+        {
+          "label": "颜色",
+          "value": "铁灰、其他颜色（采购正在询问）"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "工作场所存在可燃气体或可燃粉尘，静电火花可能引发爆炸或火灾，以及存在明火、高温火花或突发起火的风险的场所选用。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "公司有检测报告 阻燃防静电服标品款2"
+        }
+      ],
+      "sourceFolder": "阻燃防静电全棉秋季套装",
+      "sourceMarkdown": "阻燃防静电全棉秋季套装/阻燃防静电全棉秋季套装.md"
+    },
+    {
+      "id": "zu-ran-fang-jing-dian-xia-ji-tao-zhuang",
+      "model": "HYF-33107",
+      "sku": "HYF-33107",
+      "categoryId": "fr-anti-static",
+      "categoryName": "阻燃防静电服",
+      "groupId": "chemical-medical",
+      "name": "阻燃防静电夏季套装",
+      "description": "适用于炼油厂与化工厂作业、油气开采与运输、加油站与油库管理等行业中，对静电敏感，存在火灾、爆炸风险的场所。",
+      "image": "/images/products/extracted/zu-ran-fang-jing-dian-xia-ji-tao-zhuang/image-001.png",
+      "images": [
+        "/images/products/extracted/zu-ran-fang-jing-dian-xia-ji-tao-zhuang/image-001.png",
+        "/images/products/extracted/zu-ran-fang-jing-dian-xia-ji-tao-zhuang/image-002.png",
+        "/images/products/extracted/zu-ran-fang-jing-dian-xia-ji-tao-zhuang/image-003.png",
+        "/images/products/extracted/zu-ran-fang-jing-dian-xia-ji-tao-zhuang/image-004.png"
+      ],
+      "standards": [
+        "GB 8965.1-2020《防护服装 阻燃服》B级",
+        "GB 12014-2019《防护服装 防静电服》"
+      ],
+      "materials": [],
+      "applications": [
+        "适用于炼油厂与化工厂作业",
+        "油气开采与运输",
+        "加油站与油库管理等行业中",
+        "对静电敏感"
+      ],
+      "features": [
+        "工作场所存在可燃气体或可燃粉尘，静电火花可能引发爆炸或火灾，以及存在明火、高温火花或突发起火的风险的场所选用。",
+        "公司有检测报告 防静电服标品款1"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-33107"
+        },
+        {
+          "label": "执行标准",
+          "value": "GB 8965.1-2020《防护服装 阻燃服》B级 GB 12014-2019《防护服装 防静电服》"
+        },
+        {
+          "label": "颜色",
+          "value": "湖光宝蓝"
+        },
+        {
+          "label": "尺码",
+          "value": "160-195"
+        },
+        {
+          "label": "产品如何选用",
+          "value": "工作场所存在可燃气体或可燃粉尘，静电火花可能引发爆炸或火灾，以及存在明火、高温火花或突发起火的风险的场所选用。"
+        },
+        {
+          "label": "检测报告说明",
+          "value": "公司有检测报告 防静电服标品款1"
+        }
+      ],
+      "sourceFolder": "阻燃防静电夏季套装",
+      "sourceMarkdown": "阻燃防静电夏季套装/阻燃防静电夏季套装.md"
+    },
+    {
+      "id": "gao-ke-shi-jing-shi-fen-ti-fu-zu-ran-fang-jing-dian-nai-suan-jian",
+      "model": "HYF-JS22037",
+      "sku": "HYF-JS22037",
+      "categoryId": "fr-anti-static",
+      "categoryName": "阻燃防静电服",
+      "groupId": "chemical-medical",
+      "name": "高可视警示分体服（阻燃防静电耐酸碱）",
+      "description": "高可视警示分体服（阻燃防静电耐酸碱）",
+      "image": "/images/products/extracted/gao-ke-shi-jing-shi-fen-ti-fu-zu-ran-fang-jing-dian-nai-suan-jian/image-001.png",
+      "images": [
+        "/images/products/extracted/gao-ke-shi-jing-shi-fen-ti-fu-zu-ran-fang-jing-dian-nai-suan-jian/image-001.png",
+        "/images/products/extracted/gao-ke-shi-jing-shi-fen-ti-fu-zu-ran-fang-jing-dian-nai-suan-jian/image-002.png",
+        "/images/products/extracted/gao-ke-shi-jing-shi-fen-ti-fu-zu-ran-fang-jing-dian-nai-suan-jian/image-003.jpeg",
+        "/images/products/extracted/gao-ke-shi-jing-shi-fen-ti-fu-zu-ran-fang-jing-dian-nai-suan-jian/image-004.png",
+        "/images/products/extracted/gao-ke-shi-jing-shi-fen-ti-fu-zu-ran-fang-jing-dian-nai-suan-jian/image-005.png"
+      ],
+      "standards": [
+        "GB 20653-2006 防护服装 职业用高可视警示服",
+        "GB 8965. 1 -2020 防护服装 阻燃服",
+        "GB 12014-2019 防护服装 防静电服",
+        "GB 24539-2021 防护服装 化学防护服"
+      ],
+      "materials": [
+        "芳纶（含导电纤维）防酸碱面料"
+      ],
+      "applications": [
+        "交通",
+        "铁路",
+        "公安",
+        "工矿"
+      ],
+      "features": [
+        "此款为分体款式。上衣袖口有搭袢 ，裤脚有魔术贴调节袢 ，可收缩尺寸。",
+        "前胸位置处设有口袋 ，袋盖对称覆盖袋口 ，每边长度应大于袋口长度至少1cm。大身使用撞色拼接 ， 口袋处使用撞色设计 ，增加服装的细节设计。",
+        "前胸、后背 ，袖身 ，裤腿上均有反光带 ，5CM 宽 ，360°环绕 ，提高警示作用。反光带使用鱼骨形的构造 ，使整体服装亮度增加。膝盖处强补 ，活动时可保护膝盖不受伤害。",
+        "分体服穿着上衣需覆盖裤子 20cm 以上长度 ，进行全身包裹防护。",
+        "服装面料材质为多功能材质，具有阻燃、防静电、耐酸碱灯防护作用，耐摩、耐洗、抗撕裂强度高等特点。"
+      ],
+      "specifications": [
+        {
+          "label": "货号",
+          "value": "HYF-JS22037 HYF-JS22037"
+        },
+        {
+          "label": "颜色",
+          "value": "柠檬绿"
+        }
+      ],
+      "sourceFolder": "高可视警示分体服（阻燃防静电耐酸碱）",
+      "sourceMarkdown": "高可视警示分体服（阻燃防静电耐酸碱）/高可视警示分体服（阻燃防静电耐酸碱）.md"
+    }
+  ]
+}

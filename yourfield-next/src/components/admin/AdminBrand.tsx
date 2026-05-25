@@ -5,14 +5,6 @@ import { AdminLoginEnhancer } from './AdminLoginEnhancer';
 
 const adminRoute = '/admin';
 
-const dashboardShortcuts = [
-  { label: '咨询表单', href: `${adminRoute}/collections/form-submissions` },
-  { label: '产品目录', href: `${adminRoute}/collections/product-groups` },
-  { label: '产品内容', href: `${adminRoute}/collections/products` },
-  { label: '新闻动态', href: `${adminRoute}/collections/news` },
-  { label: '联系方式', href: `${adminRoute}/globals/site-settings` },
-] as const;
-
 export function YourfieldAdminLogo() {
   return (
     <React.Fragment>
@@ -71,13 +63,6 @@ export function AdminDashboardIntro() {
         <h1>永霏集团官网运营工作台</h1>
         <p>从这里维护产品资料、解决方案、新闻动态、咨询表单和联系方式。</p>
       </div>
-      <nav className="yourfield-dashboard-intro__shortcuts" aria-label="常用后台模块">
-        {dashboardShortcuts.map((shortcut) => (
-          <a href={shortcut.href} key={shortcut.href}>
-            {shortcut.label}
-          </a>
-        ))}
-      </nav>
     </section>
   );
 }

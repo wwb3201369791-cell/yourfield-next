@@ -1,18 +1,29 @@
+import '@/styles/legacy-products.css';
+
 import Link from 'next/link';
 
-import { ProductCard } from '@/components/product/ProductCard';
-import { CtaBand } from '@/components/public/CtaBand';
+import {
+  ProductCatalog,
+  type OfficialCatalogSlotView,
+  type ProductCatalogGroupView,
+} from '@/components/product/ProductCatalog';
 import { JsonLd } from '@/components/public/JsonLd';
-import { PageHero } from '@/components/public/PageHero';
+import { getCmsProductGroups, getCmsProducts, type CmsProductGroup } from '@/lib/cms/products';
+import {
+  buildCatalogSlots,
+  catalogSlotNumber,
+  catalogCategories,
+  catalogGroups,
+  filterCatalogSlots,
+  getCatalogHashTargets,
+  localized,
+  type CatalogSlot,
+  type LocalizedText,
+} from '@/lib/content/productCatalog';
+import { productPrimaryImage } from '@/lib/content/productVisuals';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocale } from '@/lib/i18n/route';
-import {
-  getProductsByGroup,
-  localized,
-  productGroups,
-  products,
-  type Product,
-} from '@/lib/mock/products';
+import { isDraftModeEnabled } from '@/lib/preview/draft';
 import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, collectionPageJsonLd } from '@/lib/seo/jsonld';
 
@@ -21,70 +32,132 @@ type ProductsPageProps = Readonly<{
     locale: string;
   };
   searchParams?: {
+    group?: string;
     q?: string;
   };
 }>;
 
-function filterProducts(locale: ReturnType<typeof resolveRouteLocale>, query: string) {
-  const normalizedQuery = query.trim().toLowerCase();
+type ProductGroupDefinition = Readonly<{
+  description?: string;
+  id: string;
+  title: string;
+}>;
 
-  if (!normalizedQuery) {
-    return products;
-  }
+export const revalidate = 300;
 
-  return products.filter((product) => {
-    const haystack = [
-      product.id,
-      product.model,
-      product.sku,
-      localized(product.name, locale),
-      localized(product.categoryName, locale),
-      localized(product.description, locale),
-      ...product.standards,
-      ...product.features.map((feature) => localized(feature, locale)),
-    ]
-      .filter(Boolean)
-      .join(' ')
-      .toLowerCase();
+const productGroupDisplayOrder = [
+  'fire-rescue',
+  'electrical-protection',
+  'thermal-welding',
+  'chemical-medical',
+  'water-rescue',
+] as const;
 
-    return haystack.includes(normalizedQuery);
+const representativeProductDisplayOrder = [
+  'firefighter-suit-combat',
+  'arc-flash-suit',
+  'welding-protective-clothing',
+  'chemical-protective-suit',
+  'gan-shi-shui-yu-jiu-yuan-fu',
+] as const;
+
+const categoryDisplayOrder = new Map(
+  catalogCategories.map((category, index) => [category.id, index]),
+);
+const representativeProductOrder = new Map<string, number>(
+  representativeProductDisplayOrder.map((productId, index) => [productId, index]),
+);
+
+function productGroupOrder(groupId: string) {
+  const index = productGroupDisplayOrder.indexOf(
+    groupId as (typeof productGroupDisplayOrder)[number],
+  );
+
+  return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+}
+
+function productCategoryOrder(categoryId: string) {
+  return categoryDisplayOrder.get(categoryId) ?? Number.MAX_SAFE_INTEGER;
+}
+
+function representativeProductPriority(slotId: string) {
+  const index = representativeProductOrder.get(slotId);
+
+  return index === undefined ? Number.MAX_SAFE_INTEGER : index;
+}
+
+function sortCatalogSlots(left: CatalogSlot, right: CatalogSlot) {
+  return (
+    representativeProductPriority(left.slotId) - representativeProductPriority(right.slotId) ||
+    productCategoryOrder(left.categoryId) - productCategoryOrder(right.categoryId) ||
+    left.sequence - right.sequence
+  );
+}
+
+function localizedText(value: string): LocalizedText {
+  return {
+    zh: value,
+    en: value,
+    ru: value,
+  };
+}
+
+function buildCmsCatalogSlots(
+  products: Awaited<ReturnType<typeof getCmsProducts>>,
+  groups: readonly ProductGroupDefinition[],
+): readonly CatalogSlot[] {
+  const groupById = new Map(groups.map((group) => [group.id, group]));
+
+  return products.map((product, index) => {
+    const sequence = index + 1;
+    const group = groupById.get(product.groupId);
+    const groupTitle = group?.title ?? localized(product.categoryName, 'zh') ?? product.groupId;
+    const groupDescription =
+      group?.description ?? localized(product.description, 'zh') ?? groupTitle;
+
+    return {
+      categoryDescription: localizedText(groupDescription),
+      categoryId: product.groupId || product.id,
+      categoryIndex: sequence,
+      categoryTitle: localizedText(groupTitle),
+      cmsProduct: product,
+      description: product.description,
+      fallbackTitle: product.name,
+      groupId: product.groupId,
+      image: productPrimaryImage(product),
+      model: product.model,
+      number: catalogSlotNumber(sequence),
+      sequence,
+      slotId: product.id,
+      standards: product.standards,
+      status: 'published',
+      title: product.name,
+    } satisfies CatalogSlot;
   });
 }
 
-function ProductSection({
-  locale,
-  title,
-  products: sectionProducts,
-  detailLabel,
-}: Readonly<{
-  locale: ReturnType<typeof resolveRouteLocale>;
-  title: string;
-  products: readonly Product[];
-  detailLabel: string;
-}>) {
-  if (sectionProducts.length === 0) {
-    return null;
+function buildDynamicHashTargets(groups: readonly Pick<CmsProductGroup, 'id'>[]) {
+  const targets: Record<string, ReturnType<typeof getCatalogHashTargets>[string]> = {};
+
+  for (const group of groups) {
+    targets[group.id] = {
+      categoryIds: [],
+      groupId: group.id,
+    };
   }
 
-  return (
-    <section className="scroll-mt-28 py-8">
-      <h2 className="mb-5 text-2xl font-bold text-primary">{title}</h2>
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        {sectionProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            locale={locale}
-            detailLabel={detailLabel}
-          />
-        ))}
-      </div>
-    </section>
-  );
+  return targets;
+}
+
+function catalogSummary(items: readonly string[], maxItems = 4) {
+  return Array.from(new Set(items.map((item) => item.trim()).filter(Boolean)))
+    .slice(0, maxItems)
+    .join(' / ');
 }
 
 export async function generateMetadata({ params }: ProductsPageProps) {
   const locale = resolveRouteLocale(params.locale);
+  const isDraft = isDraftModeEnabled();
   const t = await getTranslations(locale);
 
   return buildPageMetadata({
@@ -93,14 +166,113 @@ export async function generateMetadata({ params }: ProductsPageProps) {
     title: t('page.products.title'),
     description: t('home.products.description'),
     image: '/images/headers/products-center.png',
+    noIndex: isDraft,
   });
 }
 
 export default async function ProductsPage({ params, searchParams }: ProductsPageProps) {
   const locale = resolveRouteLocale(params.locale);
+  const isDraft = isDraftModeEnabled();
   const t = await getTranslations(locale);
   const query = searchParams?.q ?? '';
-  const visibleProducts = filterProducts(locale, query);
+  const [cmsProducts, cmsProductGroups] = await Promise.all([
+    getCmsProducts(locale, isDraft),
+    getCmsProductGroups(locale),
+  ]);
+  const useCmsCatalog = cmsProductGroups.length > 0;
+  const groupDefinitions: ProductGroupDefinition[] = (
+    useCmsCatalog
+      ? cmsProductGroups.map((group) => ({
+          ...(group.description ? { description: group.description } : {}),
+          id: group.id,
+          title: group.title,
+        }))
+      : catalogGroups.map((group) => ({
+          id: group.id,
+          title: t(group.titleKey),
+        }))
+  ).sort((left, right) => productGroupOrder(left.id) - productGroupOrder(right.id));
+  const categoryDefinitions = useCmsCatalog
+    ? []
+    : catalogCategories.map((category) => ({
+        id: category.id,
+        groupId: category.groupId,
+        title: localized(category.title, locale),
+      }));
+  const groupTitleById = new Map(groupDefinitions.map((group) => [group.id, group.title]));
+  const catalogSlots = useCmsCatalog
+    ? buildCmsCatalogSlots(cmsProducts, groupDefinitions)
+    : buildCatalogSlots(cmsProducts);
+  const filteredCatalogSlots = filterCatalogSlots(catalogSlots, locale, query);
+
+  function catalogSlotView(slot: CatalogSlot, displaySequence: number): OfficialCatalogSlotView {
+    const detailAvailable = slot.status === 'published' && Boolean(slot.cmsProduct);
+    const productSlug = slot.cmsProduct?.id ?? slot.slotId;
+
+    return {
+      categoryDescription: localized(slot.description, locale),
+      categoryId: slot.categoryId,
+      categoryTitle: localized(slot.categoryTitle, locale),
+      ctaLabel: detailAvailable ? t('common.viewDetails') : t('common.contactSales'),
+      detailAvailable,
+      groupId: slot.groupId,
+      groupTitle: groupTitleById.get(slot.groupId) ?? slot.groupId,
+      href: detailAvailable
+        ? `/${locale}/products/${productSlug}`
+        : `/${locale}/contact?product=${encodeURIComponent(slot.slotId)}`,
+      image: slot.image,
+      model: slot.model,
+      number: catalogSlotNumber(displaySequence),
+      sequence: displaySequence,
+      slotId: slot.slotId,
+      standards: slot.standards,
+      status: slot.status,
+      statusLabel: detailAvailable
+        ? t('products.catalog.detailReady')
+        : t('products.catalog.placeholderReady'),
+      title: localized(slot.title, locale),
+    };
+  }
+
+  let displaySequence = 0;
+  const catalogGroupViews = groupDefinitions
+    .map<ProductCatalogGroupView | null>((group) => {
+      const groupSlots = filteredCatalogSlots
+        .filter((slot) => slot.groupId === group.id)
+        .sort(sortCatalogSlots);
+
+      if (groupSlots.length === 0) {
+        return null;
+      }
+
+      const categoryTitles = useCmsCatalog
+        ? []
+        : categoryDefinitions
+            .filter((category) => category.groupId === group.id)
+            .map((category) => category.title);
+      const categorySummary =
+        catalogSummary(
+          categoryTitles.length > 0
+            ? categoryTitles
+            : groupSlots.map((slot) => localized(slot.title, locale)),
+        ) ||
+        group.description ||
+        group.title;
+
+      return {
+        categorySummary,
+        id: group.id,
+        slots: groupSlots.map((slot) => {
+          displaySequence += 1;
+          return catalogSlotView(slot, displaySequence);
+        }),
+        title: group.title,
+      };
+    })
+    .filter((group): group is ProductCatalogGroupView => Boolean(group));
+  const catalogHashTargets = useCmsCatalog
+    ? buildDynamicHashTargets(cmsProductGroups)
+    : getCatalogHashTargets();
 
   return (
     <>
@@ -110,6 +282,10 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
             t('page.products.title'),
             t('home.products.description'),
             localizedPath(locale, '/products'),
+            cmsProducts.map((product) => ({
+              name: localized(product.name, locale),
+              path: localizedPath(locale, `/products/${product.id}`),
+            })),
           ),
           breadcrumbJsonLd([
             { name: t('nav.home'), path: localizedPath(locale, '/') },
@@ -117,70 +293,52 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
           ]),
         ]}
       />
-      <PageHero
-        title={t('page.products.title')}
-        description={t('home.products.description')}
-        image="/images/headers/products-center.png"
-        imageAlt={t('page.products.title')}
-        priority
-      />
 
-      <section className="bg-bg-light py-10">
-        <div className="container flex flex-wrap gap-3">
-          {productGroups.map((group) => (
-            <Link
-              key={group.id}
-              className="border-primary/15 rounded-full border bg-white px-4 py-2 text-sm font-bold text-primary hover:border-accent hover:text-accent"
-              href={`#${group.id}`}
-            >
-              {t(group.titleKey)}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-white py-14 md:py-20">
+      <section className="page-header products-page-header" aria-labelledby="products-page-title">
         <div className="container">
-          {query.trim() ? (
-            <div className="mb-8 rounded border border-border bg-bg-light p-5">
-              <p className="text-sm font-semibold text-text-light">
-                {t('search.results')}: <span className="text-primary">{query}</span>
-              </p>
-            </div>
-          ) : null}
-
-          {productGroups.map((group) => (
-            <div key={group.id} id={group.id}>
-              <ProductSection
-                locale={locale}
-                title={t(group.titleKey)}
-                products={
-                  query.trim()
-                    ? visibleProducts.filter((product) => product.groupId === group.id)
-                    : getProductsByGroup(group.id)
-                }
-                detailLabel={t('common.viewDetails')}
-              />
-            </div>
-          ))}
-
-          {visibleProducts.length === 0 ? (
-            <div className="rounded border border-border bg-bg-light p-8 text-center">
-              <h2 className="text-2xl font-bold text-primary">{t('search.noResultsTitle')}</h2>
-              <p className="mt-3">{t('search.noResults')}</p>
-            </div>
-          ) : null}
+          <h1 id="products-page-title">{t('page.products.title')}</h1>
+          <div className="divider" aria-hidden="true" />
+          <nav className="breadcrumb" aria-label="Breadcrumb">
+            <Link href={`/${locale}`}>{t('nav.home')}</Link>
+            <span aria-hidden="true">/</span>
+            <span>{t('page.products.title')}</span>
+          </nav>
         </div>
       </section>
 
-      <CtaBand
-        title={t('page.products.ctaTitle')}
-        text={t('page.products.ctaText')}
-        primaryHref={`/${locale}/contact`}
-        primaryLabel={t('common.contactSales')}
-        secondaryHref={`/${locale}/solutions`}
-        secondaryLabel={t('page.products.viewSolutions')}
-      />
+      <section className="product-categories">
+        <div className="container" data-product-catalog>
+          <ProductCatalog
+            emptyState={
+              query.trim()
+                ? {
+                    text: t('search.noResults'),
+                    title: t('search.noResultsTitle'),
+                  }
+                : {
+                    text: t('products.catalog.emptyFilterText'),
+                    title: t('products.catalog.emptyFilterTitle'),
+                  }
+            }
+            groups={catalogGroupViews}
+            hashTargets={catalogHashTargets}
+            labels={{
+              categoryFilter: t('products.catalog.filterLabel'),
+              coverage: t('products.catalog.coverage'),
+              next: t('products.catalog.railNext'),
+              previous: t('products.catalog.railPrevious'),
+              queryPrefix: t('search.results'),
+            }}
+            overview={{
+              eyebrow: t('products.catalog.officialTaxonomy'),
+              text: t('products.catalog.currentPublishedText'),
+              title: t('products.catalog.taxonomyTitle'),
+            }}
+            query={query}
+          />
+        </div>
+      </section>
+
     </>
   );
 }

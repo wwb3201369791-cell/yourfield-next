@@ -1,5 +1,6 @@
+import type { NewsItem } from '@/lib/cms/news';
+import type { CmsSiteSettings } from '@/lib/cms/site-settings';
 import type { Locale } from '@/lib/i18n/locale';
-import type { NewsItem } from '@/lib/mock/news';
 import { localized, specValue, type Product, type ProductFaq } from '@/lib/mock/products';
 import { absoluteUrl, localizedPath, siteName } from '@/lib/seo/buildMetadata';
 
@@ -8,39 +9,62 @@ export type BreadcrumbItem = Readonly<{
   path: string;
 }>;
 
-export function organizationJsonLd(locale: Locale) {
+function organizationName(locale: Locale, settings?: CmsSiteSettings) {
+  return settings?.siteName || siteName(locale);
+}
+
+function organizationLogo(settings?: CmsSiteSettings) {
+  return absoluteUrl(settings?.logoDark.src ?? '/images/brand/yourfield-logo-official-b.png');
+}
+
+function organizationTelephone(settings?: CmsSiteSettings) {
+  return settings?.contact.phoneHref.replace(/^tel:/, '') || '+86-400-680-0181';
+}
+
+function organizationEmail(settings?: CmsSiteSettings) {
+  return settings?.contact.email || 'hnyf@yourfield.net';
+}
+
+function organizationStreetAddress(locale: Locale, settings?: CmsSiteSettings) {
+  if (settings?.contact.address) {
+    return settings.contact.address;
+  }
+
+  return locale === 'zh'
+    ? '湖南省湘潭市高新区创业东路1号湖湘防护科创园'
+    : 'No. 1 Chuangye East Road, Xiangtan High-Tech Zone, Hunan, China';
+}
+
+export function organizationJsonLd(locale: Locale, settings?: CmsSiteSettings) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: siteName(locale),
+    name: organizationName(locale, settings),
     url: absoluteUrl(localizedPath(locale, '/')),
-    logo: absoluteUrl('/images/brand/yourfield-logo-official-b.png'),
+    logo: organizationLogo(settings),
     foundingDate: '2002',
     address: {
       '@type': 'PostalAddress',
       addressCountry: 'CN',
       addressRegion: 'Hunan',
       addressLocality: 'Xiangtan',
-      streetAddress:
-        locale === 'zh'
-          ? '湖南省湘潭市高新区创业东路1号湖湘防护科创园'
-          : 'No. 1 Chuangye East Road, Xiangtan High-Tech Zone, Hunan, China',
+      streetAddress: organizationStreetAddress(locale, settings),
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+86-400-680-0181',
-      email: 'hnyf@yourfield.net',
+      telephone: organizationTelephone(settings),
+      email: organizationEmail(settings),
       contactType: 'customer service',
       areaServed: ['CN', 'US', 'RU'],
     },
   };
 }
 
-export function websiteJsonLd(locale: Locale) {
+export function websiteJsonLd(locale: Locale, settings?: CmsSiteSettings) {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: siteName(locale),
+    name: organizationName(locale, settings),
     url: absoluteUrl(localizedPath(locale, '/')),
     inLanguage: locale,
     potentialAction: {
@@ -89,7 +113,7 @@ export function collectionPageJsonLd(
   return data;
 }
 
-export function productJsonLd(product: Product, locale: Locale) {
+export function productJsonLd(product: Product, locale: Locale, settings?: CmsSiteSettings) {
   const path = localizedPath(locale, `/products/${product.id}`);
 
   return {
@@ -102,11 +126,11 @@ export function productJsonLd(product: Product, locale: Locale) {
     model: product.model,
     brand: {
       '@type': 'Brand',
-      name: siteName(locale),
+      name: organizationName(locale, settings),
     },
     category: localized(product.categoryName, locale),
     description: localized(product.description, locale),
-    image: product.images.map((image) => absoluteUrl(image)),
+    image: product.images.filter(Boolean).map((image) => absoluteUrl(image)),
     additionalProperty: product.specifications.map((item) => ({
       '@type': 'PropertyValue',
       name: localized(item.label, locale),
@@ -137,6 +161,7 @@ export function newsArticleJsonLd(
   locale: Locale,
   title: string,
   description: string,
+  settings?: CmsSiteSettings,
 ) {
   const path = localizedPath(locale, `/news/${item.slug}`);
 
@@ -153,26 +178,26 @@ export function newsArticleJsonLd(
     image: [absoluteUrl(item.image)],
     author: {
       '@type': 'Organization',
-      name: siteName(locale),
+      name: organizationName(locale, settings),
     },
     publisher: {
       '@type': 'Organization',
-      name: siteName(locale),
+      name: organizationName(locale, settings),
       logo: {
         '@type': 'ImageObject',
-        url: absoluteUrl('/images/brand/yourfield-logo-official-b.png'),
+        url: organizationLogo(settings),
       },
     },
   };
 }
 
-export function contactPageJsonLd(locale: Locale) {
+export function contactPageJsonLd(locale: Locale, settings?: CmsSiteSettings) {
   return {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
     name: locale === 'zh' ? '联系我们' : locale === 'ru' ? 'Контакты' : 'Contact',
     url: absoluteUrl(localizedPath(locale, '/contact')),
     inLanguage: locale,
-    mainEntity: organizationJsonLd(locale),
+    mainEntity: organizationJsonLd(locale, settings),
   };
 }

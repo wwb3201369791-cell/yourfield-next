@@ -68,7 +68,10 @@ export function buildPageMetadata({
 }: BuildPageMetadataArgs): Metadata {
   const url = absoluteUrl(localizedPath(locale, path));
   const imageUrl = absoluteUrl(image);
-  const fullTitle = `${title} | ${siteName(locale)}`;
+  const fullTitle = `${siteName(locale)} | ${title}`;
+  const alternateOgLocales = Object.entries(ogLocaleByLocale)
+    .filter(([alternateLocale]) => alternateLocale !== locale)
+    .map(([, ogLocale]) => ogLocale);
 
   const metadata: Metadata = {
     metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
@@ -85,6 +88,7 @@ export function buildPageMetadata({
       description,
       siteName: siteName(locale),
       locale: ogLocaleByLocale[locale],
+      alternateLocale: alternateOgLocales,
       images: [{ url: imageUrl, width: 1200, height: 630, alt: imageAlt }],
     },
     twitter: {

@@ -2,30 +2,271 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState, type FocusEvent, type MouseEvent, type ReactNode } from 'react';
 
 import { LanguageSwitcher } from '@/components/header/LanguageSwitcher';
 import { SearchTrigger } from '@/components/header/SearchTrigger';
+import { shouldUseUnoptimizedImage } from '@/lib/cms/media';
+import type { CmsSiteSettings } from '@/lib/cms/site-settings';
 import type { Locale } from '@/lib/i18n/locale';
 import { useTranslations } from '@/lib/i18n/useTranslations';
-import { getActiveNavKey, localizeHref, mainNavigation, type NavKey } from '@/lib/navigation';
+import {
+  getActiveNavigationKey,
+  getFallbackNavigation,
+  isExternalNavigationHref,
+  localizeNavigationHref,
+  type SiteNavigationItem,
+} from '@/lib/navigation';
 
 type HeaderProps = Readonly<{
   locale: Locale;
+  navigation?: readonly SiteNavigationItem[];
+  siteSettings?: Pick<CmsSiteSettings, 'logoDark' | 'logoLight'>;
 }>;
 
-export function Header({ locale }: HeaderProps) {
+const warmedNavigationHrefs = new Set<string>();
+const suppressedDropdownBodyClass = 'is-nav-dropdown-suppressed';
+
+function shouldWarmNavigationOnIntent() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  const hostname = window.location.hostname.toLowerCase();
+
+  return hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '::1';
+}
+
+function normalizedInternalNavigationHref(href: string) {
+  if (isExternalNavigationHref(href)) {
+    return null;
+  }
+
+  try {
+    const url = new URL(href, window.location.origin);
+
+    if (url.origin !== window.location.origin) {
+      return null;
+    }
+
+    url.hash = '';
+
+    return `${url.pathname}${url.search}`;
+  } catch {
+    return null;
+  }
+}
+
+function warmInternalNavigationHref(href: string, prefetch: (prefetchHref: string) => void) {
+  if (!shouldWarmNavigationOnIntent()) {
+    return;
+  }
+
+  const prefetchHref = normalizedInternalNavigationHref(href);
+
+  if (!prefetchHref || warmedNavigationHrefs.has(prefetchHref)) {
+    return;
+  }
+
+  warmedNavigationHrefs.add(prefetchHref);
+  prefetch(prefetchHref);
+}
+
+function navigationPathname(href: string) {
+  try {
+    return new URL(href, 'https://yourfield.local').pathname;
+  } catch {
+    return href.split(/[?#]/)[0] || '/';
+  }
+}
+
+function linkRel(item: SiteNavigationItem) {
+  return item.target === '_blank' ? 'noopener noreferrer' : undefined;
+}
+
+function NavigationLink({
+  ariaCurrent,
+  children,
+  className,
+  dataNav,
+  item,
+  locale,
+  onClick,
+  onNavigateStart,
+  pathname,
+}: Readonly<{
+  ariaCurrent?: 'page' | undefined;
+  children: ReactNode;
+  className?: string | undefined;
+  dataNav?: string | undefined;
+  item: SiteNavigationItem;
+  locale: Locale;
+  onClick?: ((event: MouseEvent<HTMLAnchorElement>) => void) | undefined;
+  onNavigateStart?: (() => void) | undefined;
+  pathname: string;
+}>) {
+  const router = useRouter();
+  const href = localizeNavigationHref(locale, item.href);
+  const rel = linkRel(item);
+  const optionalProps = {
+    ...(ariaCurrent ? { 'aria-current': ariaCurrent } : {}),
+    ...(className ? { className } : {}),
+    ...(dataNav ? { 'data-nav': dataNav } : {}),
+    ...(rel ? { rel } : {}),
+  };
+  const isExternal = isExternalNavigationHref(href);
+
+  function prefetchLink() {
+    if (!isExternal && item.target !== '_blank') {
+      warmInternalNavigationHref(href, (prefetchHref) => router.prefetch(prefetchHref));
+    }
+  }
+
+  function handleClick(event: MouseEvent<HTMLAnchorElement>) {
+    onClick?.(event);
+
+    if (
+      isExternal ||
+      item.target === '_blank' ||
+      event.defaultPrevented ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      event.button !== 0
+    ) {
+      return;
+    }
+
+    prefetchLink();
+
+    if (navigationPathname(href) !== pathname) {
+      onNavigateStart?.();
+    }
+  }
+
+  if (isExternal) {
+    return (
+      <a {...optionalProps} href={href} target={item.target} onClick={handleClick}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      {...optionalProps}
+      href={href}
+      prefetch={false}
+      target={item.target}
+      onClick={handleClick}
+      onFocus={prefetchLink}
+      onMouseEnter={prefetchLink}
+      onPointerDown={prefetchLink}
+    >
+      {children}
+    </Link>
+  );
+}
+
+const fallbackLogos: Record<Locale, Pick<CmsSiteSettings, 'logoDark' | 'logoLight'>> = {
+  zh: {
+    logoLight: {
+      alt: '永霏防护',
+      height: 75,
+      src: '/images/brand/yourfield-logo-official-a.png',
+      width: 233,
+    },
+    logoDark: {
+      alt: '永霏防护',
+      height: 75,
+      src: '/images/brand/yourfield-logo-official-b.png',
+      width: 233,
+    },
+  },
+  en: {
+    logoLight: {
+      alt: 'YourField Group',
+      height: 75,
+      src: '/images/brand/yourfield-logo-official-a.png',
+      width: 233,
+    },
+    logoDark: {
+      alt: 'YourField Group',
+      height: 75,
+      src: '/images/brand/yourfield-logo-official-b.png',
+      width: 233,
+    },
+  },
+  ru: {
+    logoLight: {
+      alt: 'YourField Group',
+      height: 75,
+      src: '/images/brand/yourfield-logo-official-a.png',
+      width: 233,
+    },
+    logoDark: {
+      alt: 'YourField Group',
+      height: 75,
+      src: '/images/brand/yourfield-logo-official-b.png',
+      width: 233,
+    },
+  },
+};
+
+function resolveHeaderNavigation(
+  navigation: readonly SiteNavigationItem[] | undefined,
+  t: ReturnType<typeof useTranslations>,
+) {
+  return navigation && navigation.length > 0 ? navigation : getFallbackNavigation(t).mainNav;
+}
+
+export function Header({ locale, navigation, siteSettings }: HeaderProps) {
   const t = useTranslations();
-  const pathname = usePathname();
-  const activeKey = getActiveNavKey(pathname, locale);
+  const pathname = usePathname() ?? `/${locale}`;
+  const resolvedNavigation = resolveHeaderNavigation(navigation, t);
+  const activeKey = getActiveNavigationKey(pathname, locale, resolvedNavigation);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdowns, setOpenDropdowns] = useState<Set<NavKey>>(() => new Set());
+  const [openDropdowns, setOpenDropdowns] = useState<Set<string>>(() => new Set());
+  const [desktopDropdownKey, setDesktopDropdownKey] = useState<string | null>(null);
+  const [isRoutePending, setIsRoutePending] = useState(false);
+  const [suppressedDropdownKey, setSuppressedDropdownKey] = useState<string | null>(null);
+  const fallbackLogo = fallbackLogos[locale];
+  const logoLight = siteSettings?.logoLight ?? fallbackLogo.logoLight;
+  const logoDark = siteSettings?.logoDark ?? fallbackLogo.logoDark;
+  const [hasLightLogoError, setHasLightLogoError] = useState(false);
+  const [hasDarkLogoError, setHasDarkLogoError] = useState(false);
+  const displayedLogoLight = hasLightLogoError ? fallbackLogo.logoLight : logoLight;
+  const displayedLogoDark = hasDarkLogoError ? fallbackLogo.logoDark : logoDark;
+
+  useEffect(() => {
+    setHasLightLogoError(false);
+  }, [logoLight.src]);
+
+  useEffect(() => {
+    setHasDarkLogoError(false);
+  }, [logoDark.src]);
 
   useEffect(() => {
     setIsMenuOpen(false);
     setOpenDropdowns(new Set());
+    setIsRoutePending(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!isRoutePending) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsRoutePending(false);
+    }, 6000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [isRoutePending]);
 
   useEffect(() => {
     document.body.classList.toggle('is-nav-open', isMenuOpen);
@@ -35,7 +276,21 @@ export function Header({ locale }: HeaderProps) {
     };
   }, [isMenuOpen]);
 
-  function toggleDropdown(key: NavKey) {
+  useEffect(() => {
+    const clearSuppressedDropdown = () => {
+      document.body.classList.remove(suppressedDropdownBodyClass);
+    };
+
+    document.addEventListener('pointermove', clearSuppressedDropdown, { passive: true });
+    document.addEventListener('keydown', clearSuppressedDropdown);
+
+    return () => {
+      document.removeEventListener('pointermove', clearSuppressedDropdown);
+      document.removeEventListener('keydown', clearSuppressedDropdown);
+    };
+  }, []);
+
+  function toggleDropdown(key: string) {
     setOpenDropdowns((current) => {
       const next = new Set(current);
 
@@ -54,9 +309,41 @@ export function Header({ locale }: HeaderProps) {
     setOpenDropdowns(new Set());
   }
 
+  function suppressDropdownAfterClick(key: string, event: MouseEvent<HTMLAnchorElement>) {
+    closeMobileMenu();
+    setDesktopDropdownKey(null);
+    setSuppressedDropdownKey(key);
+    document.body.classList.add(suppressedDropdownBodyClass);
+    event.currentTarget.blur();
+  }
+
+  function openDesktopDropdown(key: string) {
+    document.body.classList.remove(suppressedDropdownBodyClass);
+    setDesktopDropdownKey(key);
+  }
+
+  function closeDesktopDropdown(key: string) {
+    setDesktopDropdownKey((current) => (current === key ? null : current));
+  }
+
+  function clearSuppressedDropdown(key: string) {
+    setSuppressedDropdownKey((current) => (current === key ? null : current));
+  }
+
+  function handleDropdownBlur(key: string, event: FocusEvent<HTMLLIElement>) {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      closeDesktopDropdown(key);
+    }
+  }
+
   return (
     <header
-      className={['header', 'is-scrolled', isMenuOpen ? 'is-menu-open' : undefined]
+      className={[
+        'header',
+        'is-scrolled',
+        isMenuOpen ? 'is-menu-open' : undefined,
+        isRoutePending ? 'is-route-pending' : undefined,
+      ]
         .filter(Boolean)
         .join(' ')}
       data-component-root="header"
@@ -65,20 +352,24 @@ export function Header({ locale }: HeaderProps) {
         <Link className="logo" href={`/${locale}`} aria-label={t('nav.home')} data-nav="home">
           <Image
             className="logo-image logo-image-light"
-            src="/images/brand/yourfield-logo-official-a.png"
+            src={displayedLogoLight.src}
             alt=""
-            width="233"
-            height="75"
+            width={displayedLogoLight.width}
+            height={displayedLogoLight.height}
             aria-hidden="true"
+            onError={() => setHasLightLogoError(true)}
+            unoptimized={shouldUseUnoptimizedImage(displayedLogoLight.src)}
           />
           <Image
             className="logo-image logo-image-dark"
-            src="/images/brand/yourfield-logo-official-b.png"
+            src={displayedLogoDark.src}
             alt=""
-            width="233"
-            height="75"
+            width={displayedLogoDark.width}
+            height={displayedLogoDark.height}
             aria-hidden="true"
             priority
+            onError={() => setHasDarkLogoError(true)}
+            unoptimized={shouldUseUnoptimizedImage(displayedLogoDark.src)}
           />
         </Link>
 
@@ -89,35 +380,60 @@ export function Header({ locale }: HeaderProps) {
           data-mobile-open={isMenuOpen}
         >
           <ul>
-            {mainNavigation.map((item) => {
+            {resolvedNavigation.map((item) => {
               const isActive = activeKey === item.key;
               const dropdownId = `nav-dropdown-${item.key}`;
               const isDropdownOpen = openDropdowns.has(item.key);
+              const isDropdownSuppressed = suppressedDropdownKey === item.key;
+              const isDesktopDropdownOpen = desktopDropdownKey === item.key;
+              const isProductsItem =
+                item.href === '/products' || item.href.startsWith('/products?');
 
               return (
                 <li
-                  key={item.labelKey}
+                  key={item.key}
                   className={[
                     item.children ? 'dropdown' : undefined,
                     isDropdownOpen ? 'is-open' : undefined,
+                    isDesktopDropdownOpen ? 'is-dropdown-open' : undefined,
+                    isDropdownSuppressed ? 'is-dropdown-suppressed' : undefined,
                   ]
                     .filter(Boolean)
                     .join(' ')}
+                  onBlurCapture={(event) => handleDropdownBlur(item.key, event)}
+                  onFocusCapture={() => openDesktopDropdown(item.key)}
+                  onMouseEnter={() => openDesktopDropdown(item.key)}
+                  onMouseLeave={() => {
+                    closeDesktopDropdown(item.key);
+                    clearSuppressedDropdown(item.key);
+                  }}
+                  onPointerEnter={() => openDesktopDropdown(item.key)}
+                  onPointerLeave={() => {
+                    closeDesktopDropdown(item.key);
+                    clearSuppressedDropdown(item.key);
+                  }}
                 >
-                  <Link
+                  <NavigationLink
+                    ariaCurrent={isActive ? 'page' : undefined}
                     className={[
                       isActive ? 'active' : undefined,
                       item.isContact ? 'nav-contact-link' : undefined,
                     ]
                       .filter(Boolean)
                       .join(' ')}
-                    href={localizeHref(locale, item)}
-                    aria-current={isActive ? 'page' : undefined}
-                    data-nav={item.key}
-                    onClick={closeMobileMenu}
+                    dataNav={item.key}
+                    item={item}
+                    locale={locale}
+                    onClick={(event) =>
+                      item.children
+                        ? suppressDropdownAfterClick(item.key, event)
+                        : closeMobileMenu()
+                    }
+                    onNavigateStart={() => setIsRoutePending(true)}
+                    pathname={pathname}
                   >
-                    {t(item.labelKey)}
-                  </Link>
+                    {item.label}
+                  </NavigationLink>
 
                   {item.children ? (
                     <>
@@ -126,22 +442,26 @@ export function Header({ locale }: HeaderProps) {
                         type="button"
                         aria-expanded={isDropdownOpen}
                         aria-controls={dropdownId}
-                        aria-label={t(item.labelKey)}
+                        aria-label={item.label}
                         onClick={() => toggleDropdown(item.key)}
                       >
                         <span aria-hidden="true">{isDropdownOpen ? '-' : '+'}</span>
                       </button>
                       <ul
                         id={dropdownId}
-                        className={
-                          item.key === 'products' ? 'dropdown-menu product-menu' : 'dropdown-menu'
-                        }
+                        className={isProductsItem ? 'dropdown-menu product-menu' : 'dropdown-menu'}
                       >
                         {item.children.map((child) => (
-                          <li key={`${item.key}-${child.labelKey}`}>
-                            <Link href={localizeHref(locale, child)} onClick={closeMobileMenu}>
-                              {t(child.labelKey)}
-                            </Link>
+                          <li key={child.key}>
+                            <NavigationLink
+                              item={child}
+                              locale={locale}
+                              onClick={(event) => suppressDropdownAfterClick(item.key, event)}
+                              onNavigateStart={() => setIsRoutePending(true)}
+                              pathname={pathname}
+                            >
+                              {child.label}
+                            </NavigationLink>
                           </li>
                         ))}
                       </ul>

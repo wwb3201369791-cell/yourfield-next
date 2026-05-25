@@ -1,23 +1,59 @@
 import type { Locale } from '@/lib/i18n/locale';
 
-export type NavKey = 'home' | 'about' | 'products' | 'solutions' | 'news' | 'franchise' | 'contact';
+export type NavKey =
+  | 'home'
+  | 'about'
+  | 'products'
+  | 'solutions'
+  | 'news'
+  | 'franchise'
+  | 'contact'
+  | 'privacy'
+  | 'cookies'
+  | 'terms';
 
-export type NavigationItem = Readonly<{
+type NavigationTarget = '_self' | '_blank';
+
+type FallbackNavigationItem = Readonly<{
   key: NavKey;
   labelKey: string;
   path: string;
   hash?: string;
-  isContact?: boolean;
-  children?: readonly NavigationItem[];
+  children?: readonly FallbackNavigationItem[];
 }>;
 
-export type FooterGroup = Readonly<{
+type FallbackFooterGroup = Readonly<{
   key: string;
   labelKey: string;
-  links: readonly NavigationItem[];
+  links: readonly FallbackNavigationItem[];
 }>;
 
-export const mainNavigation: readonly NavigationItem[] = [
+export type SiteNavigationItem = Readonly<{
+  key: string;
+  label: string;
+  href: string;
+  target: NavigationTarget;
+  isContact: boolean;
+  children?: readonly SiteNavigationItem[];
+}>;
+
+export type SiteFooterGroup = Readonly<{
+  key: string;
+  label: string;
+  links: readonly SiteNavigationItem[];
+}>;
+
+export type SiteNavigation = Readonly<{
+  mainNav: readonly SiteNavigationItem[];
+  mobileNav: readonly SiteNavigationItem[];
+  footerNav: readonly SiteFooterGroup[];
+}>;
+
+type NavigationTranslator = (key: string) => string;
+
+const localePathPattern = /^\/(zh|en|ru)(?=\/|$)/;
+
+const fallbackMainNavigation: readonly FallbackNavigationItem[] = [
   {
     key: 'home',
     labelKey: 'nav.home',
@@ -47,7 +83,6 @@ export const mainNavigation: readonly NavigationItem[] = [
     labelKey: 'nav.products',
     path: '/products',
     children: [
-      { key: 'products', labelKey: 'nav.allProducts', path: '/products' },
       {
         key: 'products',
         labelKey: 'product.group.fireRescue',
@@ -71,6 +106,12 @@ export const mainNavigation: readonly NavigationItem[] = [
         labelKey: 'product.group.chemicalMedical',
         path: '/products',
         hash: 'chemical-medical',
+      },
+      {
+        key: 'products',
+        labelKey: 'product.group.waterRescue',
+        path: '/products',
+        hash: 'water-rescue',
       },
     ],
   },
@@ -109,10 +150,6 @@ export const mainNavigation: readonly NavigationItem[] = [
     key: 'news',
     labelKey: 'nav.news',
     path: '/news',
-    children: [
-      { key: 'news', labelKey: 'nav.companyNews', path: '/news', hash: 'company-news' },
-      { key: 'news', labelKey: 'nav.events', path: '/news', hash: 'events' },
-    ],
   },
   {
     key: 'franchise',
@@ -123,11 +160,10 @@ export const mainNavigation: readonly NavigationItem[] = [
     key: 'contact',
     labelKey: 'nav.contact',
     path: '/contact',
-    isContact: true,
   },
 ];
 
-export const footerGroups: readonly FooterGroup[] = [
+const fallbackFooterGroups: readonly FallbackFooterGroup[] = [
   {
     key: 'about',
     labelKey: 'nav.about',
@@ -149,7 +185,6 @@ export const footerGroups: readonly FooterGroup[] = [
     key: 'products',
     labelKey: 'nav.products',
     links: [
-      { key: 'products', labelKey: 'nav.allProducts', path: '/products' },
       {
         key: 'products',
         labelKey: 'product.group.fireRescue',
@@ -173,6 +208,12 @@ export const footerGroups: readonly FooterGroup[] = [
         labelKey: 'product.group.chemicalMedical',
         path: '/products',
         hash: 'chemical-medical',
+      },
+      {
+        key: 'products',
+        labelKey: 'product.group.waterRescue',
+        path: '/products',
+        hash: 'water-rescue',
       },
     ],
   },
@@ -209,11 +250,7 @@ export const footerGroups: readonly FooterGroup[] = [
   {
     key: 'news',
     labelKey: 'nav.news',
-    links: [
-      { key: 'news', labelKey: 'nav.companyNews', path: '/news', hash: 'company-news' },
-      { key: 'news', labelKey: 'nav.events', path: '/news', hash: 'events' },
-      { key: 'news', labelKey: 'page.news.partnersTag', path: '/news', hash: 'partner-network' },
-    ],
+    links: [],
   },
   {
     key: 'franchise',
@@ -252,35 +289,128 @@ export const footerGroups: readonly FooterGroup[] = [
       },
     ],
   },
+  {
+    key: 'legal',
+    labelKey: 'page.compliance.statusTitle',
+    links: [
+      { key: 'privacy', labelKey: 'page.compliance.privacy.title', path: '/privacy' },
+      { key: 'cookies', labelKey: 'page.compliance.cookies.title', path: '/cookies' },
+      { key: 'terms', labelKey: 'page.compliance.terms.title', path: '/terms' },
+    ],
+  },
 ];
 
-const activePathMap: readonly [string, NavKey][] = [
-  ['/about', 'about'],
-  ['/products', 'products'],
-  ['/categories', 'products'],
-  ['/solutions', 'solutions'],
-  ['/news', 'news'],
-  ['/franchise', 'franchise'],
-  ['/contact', 'contact'],
-];
-
-export function localizeHref(locale: Locale, item: Pick<NavigationItem, 'path' | 'hash'>) {
-  const localizedPath = item.path === '/' ? `/${locale}` : `/${locale}${item.path}`;
-  return item.hash ? `${localizedPath}#${item.hash}` : localizedPath;
+function fallbackHref(item: Pick<FallbackNavigationItem, 'path' | 'hash'>) {
+  return item.hash ? `${item.path}#${item.hash}` : item.path;
 }
 
-export function getActiveNavKey(pathname: string, locale: Locale): NavKey {
-  const localePrefix = `/${locale}`;
-  const pathWithoutLocale =
-    pathname === localePrefix
-      ? '/'
-      : pathname.startsWith(`${localePrefix}/`)
-        ? pathname.slice(localePrefix.length)
-        : pathname;
+function fallbackItemToSiteItem(
+  item: FallbackNavigationItem,
+  t: NavigationTranslator,
+  keyPrefix: string = item.key,
+): SiteNavigationItem {
+  const children = item.children?.map((child, index) =>
+    fallbackItemToSiteItem(child, t, `${keyPrefix}-${index}`),
+  );
+  const href = fallbackHref(item);
 
-  if (pathWithoutLocale === '/' || pathWithoutLocale === '') {
-    return 'home';
+  return {
+    key: keyPrefix,
+    label: t(item.labelKey),
+    href,
+    target: '_self',
+    isContact: isContactNavigationHref(href),
+    ...(children && children.length > 0 ? { children } : {}),
+  };
+}
+
+export function getFallbackNavigation(t: NavigationTranslator): SiteNavigation {
+  const mainNav = fallbackMainNavigation.map((item) => fallbackItemToSiteItem(item, t));
+
+  return {
+    mainNav,
+    mobileNav: mainNav,
+    footerNav: fallbackFooterGroups.map((group) => ({
+      key: group.key,
+      label: t(group.labelKey),
+      links: group.links.map((item, index) =>
+        fallbackItemToSiteItem(item, t, `${group.key}-${index}`),
+      ),
+    })),
+  };
+}
+
+export function isExternalNavigationHref(href: string) {
+  return /^(?:[a-z][a-z\d+.-]*:)?\/\//i.test(href) || /^[a-z][a-z\d+.-]*:/i.test(href);
+}
+
+export function localizeNavigationHref(locale: Locale, href: string) {
+  const cleanHref = href.trim() || '/';
+
+  if (isExternalNavigationHref(cleanHref)) {
+    return cleanHref;
   }
 
-  return activePathMap.find(([path]) => pathWithoutLocale.startsWith(path))?.[1] ?? 'home';
+  if (cleanHref.startsWith('#')) {
+    return `/${locale}${cleanHref}`;
+  }
+
+  if (localePathPattern.test(cleanHref)) {
+    return cleanHref;
+  }
+
+  if (cleanHref === '/') {
+    return `/${locale}`;
+  }
+
+  return cleanHref.startsWith('/') ? `/${locale}${cleanHref}` : cleanHref;
+}
+
+function getLocalizedPathname(locale: Locale, href: string) {
+  if (isExternalNavigationHref(href)) {
+    return null;
+  }
+
+  try {
+    return new URL(localizeNavigationHref(locale, href), 'https://yourfield.local').pathname;
+  } catch {
+    return null;
+  }
+}
+
+export function isContactNavigationHref(href: string) {
+  const pathname = getLocalizedPathname('zh', href);
+  const pathWithoutLocale = pathname?.replace(localePathPattern, '') || pathname;
+
+  return pathWithoutLocale === '/contact' || Boolean(pathWithoutLocale?.startsWith('/contact/'));
+}
+
+export function getActiveNavigationKey(
+  pathname: string,
+  locale: Locale,
+  items: readonly SiteNavigationItem[],
+) {
+  const localeRoot = `/${locale}`;
+
+  for (const item of items) {
+    const itemPathname = getLocalizedPathname(locale, item.href);
+
+    if (!itemPathname) {
+      continue;
+    }
+
+    if (itemPathname === localeRoot) {
+      if (pathname === localeRoot || pathname === `${localeRoot}/`) {
+        return item.key;
+      }
+
+      continue;
+    }
+
+    if (pathname === itemPathname || pathname.startsWith(`${itemPathname}/`)) {
+      return item.key;
+    }
+  }
+
+  return items[0]?.key ?? 'home';
 }

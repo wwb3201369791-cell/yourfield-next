@@ -31,13 +31,15 @@
 cd yourfield-next
 pnpm install
 cp .env.example .env.local
-pnpm dev
+pnpm dev:warm
 ```
 
-默认开发地址是 `http://localhost:3000`。如果 3000 端口被占用，可以临时使用:
+默认开发地址是 `http://localhost:3000`。`pnpm dev:warm` 会先启动开发服务器，再预热首页、关于、产品、方案、新闻、招商、联系等质检常用页面，避免首次点击顶部导航时才触发 Next.js 冷编译。
+
+如果只需要启动底层开发服务、不做页面预热，可以使用:
 
 ```bash
-pnpm dev -- -p 4000
+pnpm dev
 ```
 
 当前 P0 路由验证:
@@ -49,7 +51,8 @@ pnpm dev -- -p 4000
 ## 常用命令
 
 ```bash
-pnpm dev          # 启动本地开发服务器
+pnpm dev:warm     # 启动并预热本地质检常用页面
+pnpm dev          # 只启动本地开发服务器，不预热页面
 pnpm build        # 生产构建
 pnpm start        # 启动生产构建后的服务
 pnpm lint         # ESLint 检查

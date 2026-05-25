@@ -56,6 +56,7 @@ function dashboardApiResponse(path: string) {
     return {
       docs: [
         { createdAt: new Date().toISOString(), eventType: 'search', hits: 3, query: 'HYF-5506' },
+        { createdAt: new Date().toISOString(), eventType: 'search', hits: 0, query: '????????????' },
         {
           createdAt: new Date().toISOString(),
           eventType: 'search',
@@ -238,8 +239,11 @@ describe('AdminOperationsDashboard loading behavior', () => {
     });
 
     const metrics = screen.getByLabelText('网站运营关键指标');
-    expect(metrics.querySelectorAll('.yourfield-ops-metric')).toHaveLength(4);
-    expect(screen.getByText(/50\.0%/)).toBeTruthy();
+    expect(metrics.querySelectorAll('.yourfield-ops-metric')).toHaveLength(5);
+    expect(screen.getByText('今天优先处理 1 条新咨询')).toBeTruthy();
+    expect(screen.getByText(/33\.3%/)).toBeTruthy();
+    expect(screen.getByText('零结果搜索')).toBeTruthy();
+    expect(screen.getByText('需补内容：消防员灭火防护服')).toBeTruthy();
     expect(screen.getByText('展示中产品组')).toBeTruthy();
     expect(screen.getByText('1 项已发布产品缺主图')).toBeTruthy();
     expect(screen.getByText('最近用户在站内搜索过的关键词。')).toBeTruthy();
