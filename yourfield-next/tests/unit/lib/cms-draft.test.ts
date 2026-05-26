@@ -212,9 +212,7 @@ describe('CMS draft query construction', () => {
     const payload = createPayloadStub({
       products: [
         {
-          applications: [
-            { value: 'legacy application' },
-          ],
+          applications: [{ value: 'legacy application' }],
           categoryId: 'chemical-medical',
           categoryName: '化学与医用防护',
           description: 'CMS 化学防护服详情',
@@ -242,7 +240,9 @@ describe('CMS draft query construction', () => {
     const cmsProduct = await products.getCmsProductBySlug('zh', 'cms-scenario-product', false);
 
     expect(cmsProduct?.scenarios?.map((scenario) => scenario.title.zh)).toEqual(['CMS 场景卡片']);
-    expect(cmsProduct?.applications.map((application) => application.zh)).toEqual(['legacy application']);
+    expect(cmsProduct?.applications.map((application) => application.zh)).toEqual([
+      'legacy application',
+    ]);
     expect(cmsProduct?.scenarios?.[0]?.text.zh).toContain('危化处置');
   });
 
@@ -307,6 +307,44 @@ describe('CMS draft query construction', () => {
       'third',
     ]);
     expect(news.getNewsListItemsAfterFeatured(items).map((item) => item.slug)).toEqual(['fourth']);
+  });
+});
+
+describe('CMS news fallback data', () => {
+  it('uses static public news when the CMS collection is empty', async () => {
+    const payload = createPayloadStub({ news: [] });
+    const { news } = await loadCmsModules(payload);
+
+    const items = await news.getCmsNews('zh', false);
+
+    expect(items.length).toBeGreaterThan(0);
+    expect(items[0]).toMatchObject({
+      content: [
+        {
+          text: '围绕节前安全生产检查要求，相关领导深入企业一线，督导安全责任落实和生产运行保障工作。',
+          type: 'paragraph',
+        },
+      ],
+      excerpt:
+        '围绕节前安全生产检查要求，相关领导深入企业一线，督导安全责任落实和生产运行保障工作。',
+      image: '/images/news-placeholder.svg',
+      slug: 'may-day-safety-inspection',
+      title: '市委书记胡贺波带队督导检查“五一”节前安全生产工作',
+    });
+  });
+
+  it('uses static public news detail when a published CMS slug is missing', async () => {
+    const payload = createPayloadStub({ news: [] });
+    const { news } = await loadCmsModules(payload);
+
+    const item = await news.getCmsNewsBySlug('zh', 'may-day-safety-inspection', false);
+
+    expect(item).toMatchObject({
+      excerpt:
+        '围绕节前安全生产检查要求，相关领导深入企业一线，督导安全责任落实和生产运行保障工作。',
+      slug: 'may-day-safety-inspection',
+      title: '市委书记胡贺波带队督导检查“五一”节前安全生产工作',
+    });
   });
 });
 

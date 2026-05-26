@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import type { Field } from 'payload/types';
+import { describe, expect, it } from 'vitest';
 
 import { ProductGroups } from '@/collections/ProductGroups';
 import SolutionPositionCell from '@/components/admin/cells/SolutionPositionCell';
@@ -29,7 +29,7 @@ describe('ProductGroups admin list', () => {
     const showOnFrontendField = getField('showOnFrontend');
     const orderField = getField('order');
 
-    expect((field as { label?: unknown } | undefined)?.label).toBe('大类英文标识');
+    expect((field as { label?: unknown } | undefined)?.label).toBe('大类英文标识（系统）');
     expect(field?.admin).toMatchObject({ disableListColumn: true });
     expect(showOnFrontendField?.admin).toMatchObject({ disableListColumn: true });
     expect((orderField as { label?: unknown } | undefined)?.label).toBe('前台展示位置');
@@ -46,9 +46,7 @@ describe('ProductGroups admin list', () => {
     expect(tabsField).toMatchObject({ type: 'tabs' });
     expect(tabsField && 'tabs' in tabsField ? tabsField.tabs.map((tab) => tab.label) : []).toEqual([
       '基本信息',
-      '展示与排序',
-      '媒体',
-      'SEO / 系统',
+      '前台展示',
     ]);
     expect(
       tabsField && 'tabs' in tabsField

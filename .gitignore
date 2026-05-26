@@ -20,9 +20,7 @@ yourfield-next/.env.local
 yourfield-next/.env.*.local
 yourfield-next/*.tsbuildinfo
 yourfield-next/tmp-*.png
-yourfield-next/public/images/
-yourfield-next/src/uploads/
-yourfield-next/public/video/**/*.mp4
+# Public/CMS media is versioned via Git LFS so GitHub deployments receive complete assets.
 tmp/
 outputs/
 output/

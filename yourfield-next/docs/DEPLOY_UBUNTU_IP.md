@@ -32,9 +32,10 @@
 
 ```bash
 sudo apt update
-sudo apt install -y git curl nginx docker.io docker-compose-plugin
+sudo apt install -y git git-lfs curl nginx docker.io docker-compose-plugin
 sudo systemctl enable --now docker
 sudo usermod -aG docker $USER
+git lfs install
 ```
 
 安装 Node.js 20 和 pnpm：
@@ -64,15 +65,18 @@ sudo mkdir -p /var/www
 sudo chown -R $USER:$USER /var/www
 
 git clone https://github.com/wwb3201369791-cell/yourfield-next.git
-cd yourfield-next/yourfield-next
+cd yourfield-next
+git lfs pull
+cd yourfield-next
 ```
 
 说明：
 
 - 克隆后仓库根目录会是 `/var/www/yourfield-next`
 - 应用目录是 `/var/www/yourfield-next/yourfield-next`
+- 图片、视频、CMS 上传目录通过 Git LFS 管理；如果没有执行 `git lfs pull`，页面可能只拿到 LFS 指针文件，表现为图片/视频无法正常显示
 
-如果你已经把仓库放到了别的目录，只要进入 `package.json` 所在的 `yourfield-next/` 子目录即可。
+如果你已经把仓库放到了别的目录，只要先在仓库根目录执行 `git lfs pull`，再进入 `package.json` 所在的 `yourfield-next/` 子目录即可。
 
 ---
 
@@ -212,6 +216,20 @@ cd /var/www/yourfield-next/yourfield-next
 ```bash
 pnpm install --frozen-lockfile
 ```
+
+首次部署或数据库为空时，先执行迁移和初始化数据：
+
+```bash
+pnpm payload:migrate
+pnpm seed -- --skip-existing
+```
+
+说明：
+
+- `pnpm seed` 会导入页面、产品、新闻、媒体和后台账号
+- seed 使用仓库根目录的 `assets/` 和应用目录的 `public/` 资源；这些文件走 Git LFS，所以必须先完成 `git lfs pull`
+- `--skip-existing` 会跳过已有记录，避免重复初始化；如果你明确要用仓库种子覆盖测试库数据，再去掉这个参数
+- 新闻前台已有静态兜底，即使临时未 seed，新闻列表和详情也不会空白；但后台内容管理仍建议 seed 一次
 
 先做基础校验：
 
@@ -452,7 +470,8 @@ docker compose logs --tail=100 umami
 ```bash
 # 1) 安装依赖
 sudo apt update
-sudo apt install -y git curl nginx docker.io docker-compose-plugin
+sudo apt install -y git git-lfs curl nginx docker.io docker-compose-plugin
+git lfs install
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
 corepack enable
@@ -462,7 +481,9 @@ sudo npm i -g pm2
 # 2) 拉代码
 cd /var/www
 git clone https://github.com/wwb3201369791-cell/yourfield-next.git
-cd yourfield-next/yourfield-next
+cd yourfield-next
+git lfs pull
+cd yourfield-next
 
 # 3) 配置环境
 cp .env.example .env.local
@@ -482,6 +503,8 @@ docker compose up -d postgres meilisearch umami
 # 5) 安装、检查、构建、启动
 cd /var/www/yourfield-next/yourfield-next
 pnpm install --frozen-lockfile
+pnpm payload:migrate
+pnpm seed -- --skip-existing
 pnpm lint
 pnpm typecheck
 NEXT_BUILD_WORKERS=1 pnpm build
