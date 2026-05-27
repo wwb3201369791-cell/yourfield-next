@@ -65,7 +65,7 @@ export function ProductDetailVisualCarousel({
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
     containScroll: 'trimSnaps',
-    dragFree: false,
+    dragFree: true,
     duration: 28,
     loop: false,
     watchDrag: true,
@@ -74,7 +74,10 @@ export function ProductDetailVisualCarousel({
   const [canScrollPrevious, setCanScrollPrevious] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const galleryImages = useMemo(() => images.map((image) => image.trim()).filter(Boolean), [images]);
+  const galleryImages = useMemo(
+    () => images.map((image) => image.trim()).filter(Boolean),
+    [images],
+  );
 
   const updateCarouselState = useCallback(() => {
     if (!emblaApi) {
@@ -113,10 +116,12 @@ export function ProductDetailVisualCarousel({
 
     emblaApi.on('pointerDown', startDrag);
     emblaApi.on('pointerUp', stopDrag);
+    emblaApi.on('settle', stopDrag);
 
     return () => {
       emblaApi.off('pointerDown', startDrag);
       emblaApi.off('pointerUp', stopDrag);
+      emblaApi.off('settle', stopDrag);
     };
   }, [emblaApi]);
 
@@ -128,8 +133,7 @@ export function ProductDetailVisualCarousel({
     return null;
   }
 
-  const rangeStart = Math.min(selectedIndex + 1, galleryImages.length);
-  const rangeEnd = Math.min(selectedIndex + visibleSlides, galleryImages.length);
+  const currentSlide = Math.min(selectedIndex + 1, galleryImages.length);
   const showControls = galleryImages.length > visibleSlides;
 
   return (
@@ -145,8 +149,8 @@ export function ProductDetailVisualCarousel({
         role="region"
       >
         <div className="detail-visual-toolbar">
-          <span aria-live="polite">
-            {rangeStart}-{rangeEnd} / {galleryImages.length}
+          <span aria-atomic="true" aria-live="polite">
+            {currentSlide}/{galleryImages.length}
           </span>
           {showControls ? (
             <div className="detail-visual-controls">
@@ -179,16 +183,20 @@ export function ProductDetailVisualCarousel({
                 key={`${image}-${index}`}
                 href={image}
                 className="detail-visual-image"
+                draggable={false}
                 aria-label={`${title} ${index + 1} / ${galleryImages.length}`}
               >
-                <Image
-                  src={image}
-                  alt=""
-                  fill
-                  sizes="(min-width: 1180px) 22vw, (min-width: 768px) 42vw, 88vw"
-                  style={{ objectFit: 'contain', padding: '10px' }}
-                  unoptimized={shouldUseUnoptimizedImage(image)}
-                />
+                <span className="detail-visual-image-frame">
+                  <Image
+                    src={image}
+                    alt=""
+                    draggable={false}
+                    fill
+                    sizes="(min-width: 1180px) 22vw, (min-width: 768px) 42vw, 88vw"
+                    style={{ objectFit: 'contain', padding: '10px' }}
+                    unoptimized={shouldUseUnoptimizedImage(image)}
+                  />
+                </span>
               </a>
             ))}
           </div>

@@ -23,7 +23,7 @@ import type {
 import type { SiteNavigationItem } from '@/lib/navigation';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag, cmsGlobalCacheTag } from './cache';
-import { normalizeCmsMediaUrl } from './media';
+import { normalizeCmsMediaUrl, selectCmsMediaUrl } from './media';
 import { getCmsNavigation } from './navigation';
 import { getPayloadClient } from './payload';
 
@@ -118,6 +118,11 @@ type CmsFaq = {
   question?: string;
 };
 
+type CmsProductFaq = {
+  answer?: string;
+  question?: string;
+};
+
 type CmsProduct = {
   applications?: TextRow[];
   careInstructions?: TextRow[];
@@ -125,6 +130,7 @@ type CmsProduct = {
   description?: unknown;
   displayOrder?: number;
   features?: CmsProductFeature[];
+  id?: number | string;
   images?: CmsProductImage[];
   isFeatured?: boolean;
   materials?: TextRow[];
@@ -140,6 +146,7 @@ type CmsProduct = {
   sku?: string;
   slug?: string;
   faqs?: Array<CmsFaq | number | string>;
+  productFaqs?: CmsProductFaq[];
   specifications?: CmsProductSpecification[];
   standards?: TextRow[];
   visualGroups?: CmsProductVisualGroup[];
@@ -234,7 +241,7 @@ function mediaUrl(file: CmsProductImage['file']) {
     return fallbackProductImage;
   }
 
-  return normalizeCmsMediaUrl(file.sizes?.card?.url ?? file.url, fallbackProductImage);
+  return normalizeCmsMediaUrl(selectCmsMediaUrl(file), fallbackProductImage);
 }
 
 function categoryFromProduct(product: CmsProduct) {
@@ -278,6 +285,15 @@ function mapFaqs(faqs: CmsProduct['faqs']): ProductFaq[] {
     .map((faq) => ({
       question: localizedText(asString(faq.question)),
       answer: localizedText(richTextToPlainText(faq.answer)),
+    }))
+    .filter((faq) => faq.question.zh && faq.answer.zh);
+}
+
+function mapProductFaqs(faqs: CmsProduct['productFaqs']): ProductFaq[] {
+  return (faqs ?? [])
+    .map((faq) => ({
+      question: localizedText(asString(faq.question)),
+      answer: localizedText(asString(faq.answer)),
     }))
     .filter((faq) => faq.question.zh && faq.answer.zh);
 }
@@ -333,7 +349,7 @@ function mapSizeGuide(sizeGuide: CmsProduct['sizeGuide']): ProductSizeGuide | un
       label: asString(row.label),
       values: (row.values ?? []).map((value) => asString(value.value)),
     }))
-    .filter((row) => row.label && row.values.length > 0);
+    .filter((row) => row.label && row.values.some(Boolean));
 
   if (!columns.length || !rows.length) {
     return undefined;
@@ -361,8 +377,13 @@ function mapCmsProduct(product: CmsProduct): Product {
   const extractedProduct = getExtractedProductById(id);
   const fallbackImages = extractedProduct?.images.filter(Boolean) ?? [];
   const safeImages =
-    images.length > 0 ? images : fallbackImages.length > 0 ? fallbackImages : [fallbackProductImage];
+    images.length > 0
+      ? images
+      : fallbackImages.length > 0
+        ? fallbackImages
+        : [fallbackProductImage];
   const sizeGuide = mapSizeGuide(product.sizeGuide);
+  const directFaqs = mapProductFaqs(product.productFaqs);
 
   const mappedProduct: MappedCmsProduct = {
     id,
@@ -395,7 +416,7 @@ function mapCmsProduct(product: CmsProduct): Product {
         label: localizedText(specification.label ?? ''),
         value: localizedText(specification.value ?? ''),
       })),
-    faqs: mapFaqs(product.faqs),
+    faqs: directFaqs.length ? directFaqs : mapFaqs(product.faqs),
     careInstructions: mapRows(product.careInstructions).map(localizedText),
     qualityEvidence: mapQualityEvidence(product.qualityEvidence),
     scenarios: mapScenarios(product.scenarios),
@@ -405,6 +426,37 @@ function mapCmsProduct(product: CmsProduct): Product {
   };
 
   return applyLegacyProductDetailFallback(mappedProduct);
+}
+
+function displayOrderSortValue(value: CmsProduct['displayOrder']) {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0
+    ? value
+    : Number.MAX_SAFE_INTEGER;
+}
+
+function compareCmsProductDisplayOrder(left: CmsProduct, right: CmsProduct) {
+  return displayOrderSortValue(left.displayOrder) - displayOrderSortValue(right.displayOrder);
+}
+
+async function findCmsProductById(
+  payload: PayloadClient,
+  product: CmsProduct,
+  locale: Locale,
+  draft: boolean,
+) {
+  if (!product.id || typeof payload.findByID !== 'function') {
+    return product;
+  }
+
+  return (await payload.findByID({
+    collection: 'products',
+    depth: 2,
+    draft,
+    fallbackLocale: 'none',
+    id: product.id,
+    locale,
+    overrideAccess: true,
+  })) as CmsProduct;
 }
 
 async function hasCmsProductDocuments(locale: Locale, payloadClient?: PayloadClient) {
@@ -433,14 +485,16 @@ async function getCmsProductsUncached(locale: Locale, draft = false) {
     locale,
     overrideAccess: true,
     pagination: false,
-    sort: '-displayOrder',
+    sort: 'displayOrder',
     ...(!draft
       ? {
           where: publicProductWhere(),
         }
       : {}),
   });
-  const cmsProducts = (result.docs as CmsProduct[]).map(mapCmsProduct);
+  const cmsProducts = (result.docs as CmsProduct[])
+    .sort(compareCmsProductDisplayOrder)
+    .map(mapCmsProduct);
 
   if (cmsProducts.length > 0) {
     return cmsProducts;
@@ -507,7 +561,7 @@ function fallbackGroups(locale: Locale): Promise<CmsProductGroup[]> {
     productGroupIdList.map((id, index) => ({
       categoryIds: [],
       id,
-      order: index * 10,
+      order: index + 1,
       title: t(productGroupTitleKeys[id] ?? id),
     })),
   );
@@ -610,7 +664,7 @@ async function getCmsProductGroupsUncached(locale: Locale): Promise<readonly Cms
           .filter((category) => category.groupId === id)
           .map((category) => category.id),
         id,
-        order: group.order ?? index * 10,
+        order: group.order ?? index + 1,
         title: asString(group.name, id),
         ...(description ? { description } : {}),
       });
@@ -705,7 +759,7 @@ async function getCmsProductBySlugUncached(locale: Locale, slug: string, draft =
       : (getExtractedProductById(slug) ?? null);
   }
 
-  const mappedProduct = mapCmsProduct(product);
+  const mappedProduct = mapCmsProduct(await findCmsProductById(payload, product, locale, draft));
 
   return mappedProduct;
 }

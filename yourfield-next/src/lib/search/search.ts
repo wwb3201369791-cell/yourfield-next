@@ -1,494 +1,32 @@
+// ADR: 当前站内搜索使用 Payload 数据源 + 本地候选构建/评分/摘要生成。
+// 不再保留 Meilisearch 运行时依赖，避免本地服务、环境变量和真实查询路径不一致。
+
 import type {
   SearchHit,
-  SearchHitCategory,
   SearchHitType,
   SearchQuery,
   SearchResponse,
+  SearchSourceProvider,
   SearchSuggestion,
   SearchSuggestQuery,
   SearchSuggestResponse,
-  SearchSourceDocument,
-  SearchSourceProvider,
 } from '@/lib/search/types';
 
-type WeightedField = Readonly<{
-  text: string;
-  weight: number;
-}>;
+import {
+  recommendedProductHitsFromSources,
+  toCandidates,
+  type ScoredCandidate,
+  type SearchCandidate,
+  type SearchRecommendationsProvider,
+} from './search-candidates';
+import { scoreCandidate, searchTypeOrder } from './search-scoring';
+import { snippetFor } from './search-snippets';
+import { compact, normalizeKey, normalizeSearchText } from './search-text';
 
-type SearchCandidate = Readonly<{
-  category?: SearchHitCategory;
-  categoryKeys: readonly string[];
-  excerpt: string;
-  fields: readonly WeightedField[];
-  id: string;
-  image?: string;
-  model?: string;
-  productId?: string;
-  publishedAt?: string;
-  sku?: string;
-  slug?: string;
-  title: string;
-  type: SearchHitType;
-  url: string;
-}>;
-
-type ScoredCandidate = Readonly<{
-  candidate: SearchCandidate;
-  score: number;
-}>;
-
-type SearchRecommendationsProvider = (
-  input: SearchQuery,
-) => Promise<readonly SearchHit[]> | readonly SearchHit[];
+export { recommendedProductHitsFromSources };
 
 const emptyQueryMessage = 'Enter a search term.';
 const noResultsMessage = 'No matching content was found.';
-const maxSnippetLength = 180;
-
-const searchTypeOrder: Record<SearchHitType, number> = {
-  product: 0,
-  news: 1,
-  page: 2,
-  faq: 3,
-};
-
-const pageKeyPaths: Record<string, string> = {
-  about: '/about',
-  contact: '/contact',
-  cookies: '/cookies',
-  franchise: '/franchise',
-  home: '',
-  'news-index': '/news',
-  privacy: '/privacy',
-  'products-index': '/products',
-  solutions: '/solutions',
-  terms: '/terms',
-};
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
-}
-
-function asString(value: unknown, fallback = '') {
-  return typeof value === 'string' && value.trim() ? value.trim() : fallback;
-}
-
-function asStringArray(value: unknown): string[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value
-    .map((item) => {
-      if (typeof item === 'string') {
-        return item;
-      }
-
-      if (isRecord(item)) {
-        return asString(item.value) || asString(item.text) || asString(item.label);
-      }
-
-      return '';
-    })
-    .filter((item) => item.length > 0);
-}
-
-function readRecord(value: unknown): Record<string, unknown> | undefined {
-  return isRecord(value) ? value : undefined;
-}
-
-function richTextToPlainText(value: unknown) {
-  const parts: string[] = [];
-
-  function walk(node: unknown, depth: number) {
-    if (depth > 24 || !node) {
-      return;
-    }
-
-    if (typeof node === 'string') {
-      parts.push(node);
-      return;
-    }
-
-    if (Array.isArray(node)) {
-      for (const child of node) {
-        walk(child, depth + 1);
-      }
-      return;
-    }
-
-    if (!isRecord(node)) {
-      return;
-    }
-
-    const text = node.text;
-    if (typeof text === 'string') {
-      parts.push(text);
-    }
-
-    walk(node.root, depth + 1);
-    walk(node.children, depth + 1);
-  }
-
-  walk(value, 0);
-
-  return parts.join(' ').replace(/\s+/g, ' ').trim();
-}
-
-function collectPublicText(value: unknown) {
-  const parts: string[] = [];
-  const skippedKeys = new Set([
-    'backgroundImage',
-    'backgroundVideo',
-    'cover',
-    'createdAt',
-    'file',
-    'filename',
-    'id',
-    'image',
-    'images',
-    'mimeType',
-    'ogImage',
-    'updatedAt',
-    'url',
-    'video',
-  ]);
-
-  function walk(node: unknown, depth: number, keyHint?: string) {
-    if (depth > 10 || !node) {
-      return;
-    }
-
-    if (typeof node === 'string') {
-      if (
-        keyHint !== 'href' &&
-        keyHint !== 'ctaHref' &&
-        keyHint !== 'primaryHref' &&
-        keyHint !== 'secondaryHref'
-      ) {
-        parts.push(node);
-      }
-      return;
-    }
-
-    if (Array.isArray(node)) {
-      for (const child of node) {
-        walk(child, depth + 1, keyHint);
-      }
-      return;
-    }
-
-    if (!isRecord(node)) {
-      return;
-    }
-
-    if ('root' in node || 'children' in node) {
-      const richText = richTextToPlainText(node);
-      if (richText) {
-        parts.push(richText);
-      }
-    }
-
-    for (const [key, child] of Object.entries(node)) {
-      if (skippedKeys.has(key)) {
-        continue;
-      }
-
-      walk(child, depth + 1, key);
-    }
-  }
-
-  walk(value, 0);
-
-  return parts.join(' ').replace(/\s+/g, ' ').trim();
-}
-
-function compact(values: readonly (string | undefined)[]) {
-  return values.filter((value): value is string => Boolean(value && value.trim()));
-}
-
-function normalizeSearchText(value: string) {
-  return value.normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
-}
-
-function normalizeKey(value: string) {
-  return normalizeSearchText(value).replace(/\s+/g, '-');
-}
-
-function tokenizeQuery(query: string) {
-  const normalized = normalizeSearchText(query);
-  const words = normalized.match(/[\p{L}\p{N}]+/gu) ?? [];
-  const tokens = new Set<string>();
-
-  if (normalized) {
-    tokens.add(normalized);
-  }
-
-  for (const word of words) {
-    if (word) {
-      tokens.add(word);
-    }
-  }
-
-  return Array.from(tokens);
-}
-
-function scoreField(field: WeightedField, normalizedQuery: string, tokens: readonly string[]) {
-  const text = normalizeSearchText(field.text);
-
-  if (!text) {
-    return 0;
-  }
-
-  let score = 0;
-
-  if (text === normalizedQuery) {
-    score += field.weight * 50;
-  } else if (text.startsWith(normalizedQuery)) {
-    score += field.weight * 24;
-  } else if (text.includes(normalizedQuery)) {
-    score += field.weight * 16;
-  }
-
-  for (const token of tokens) {
-    if (!token || token === normalizedQuery) {
-      continue;
-    }
-
-    if (text === token) {
-      score += field.weight * 12;
-    } else if (text.startsWith(token)) {
-      score += field.weight * 6;
-    } else if (text.includes(token)) {
-      score += field.weight * 4;
-    }
-  }
-
-  return score;
-}
-
-function scoreCandidate(candidate: SearchCandidate, query: string) {
-  const normalizedQuery = normalizeSearchText(query);
-  const tokens = tokenizeQuery(query);
-
-  return candidate.fields.reduce(
-    (score, field) => score + scoreField(field, normalizedQuery, tokens),
-    0,
-  );
-}
-
-function truncate(value: string, maxLength = maxSnippetLength) {
-  const normalized = value.replace(/\s+/g, ' ').trim();
-
-  if (normalized.length <= maxLength) {
-    return normalized;
-  }
-
-  return `${normalized.slice(0, maxLength - 1).trimEnd()}…`;
-}
-
-function snippetFor(candidate: SearchCandidate, query: string) {
-  const normalizedQuery = normalizeSearchText(query);
-  const tokens = tokenizeQuery(query);
-  const match = candidate.fields.find((field) => {
-    const text = normalizeSearchText(field.text);
-
-    return text.includes(normalizedQuery) || tokens.some((token) => token && text.includes(token));
-  });
-
-  return truncate(match?.text || candidate.excerpt || candidate.title);
-}
-
-function pagePath(locale: string, page: SearchSourceDocument) {
-  const pageKey = asString(page.pageKey);
-  const slug = asString(page.slug);
-  const path = pageKeyPaths[pageKey] ?? (slug ? `/${slug}` : '');
-
-  return `/${locale}${path}`;
-}
-
-function mediaUrl(value: unknown) {
-  if (!isRecord(value)) {
-    return undefined;
-  }
-
-  const sizes = readRecord(value.sizes);
-  const card = readRecord(sizes?.card);
-
-  return asString(card?.url) || asString(value.url) || undefined;
-}
-
-function productImage(product: SearchSourceDocument) {
-  const images: unknown[] = Array.isArray(product.images) ? product.images : [];
-  const firstImage: unknown = images[0];
-  const imageRecord = readRecord(firstImage);
-
-  return mediaUrl(imageRecord?.file) || mediaUrl(firstImage);
-}
-
-function productCandidate(product: SearchSourceDocument, locale: string): SearchCandidate {
-  const category = readRecord(product.category);
-  const productId = asString(product.productId);
-  const slug = asString(product.slug, productId);
-  const model = asString(product.model);
-  const sku = asString(product.sku);
-  const title = asString(product.name, model || sku || productId || slug);
-  const description = richTextToPlainText(product.description);
-  const categoryId = asString(category?.categoryId);
-  const categorySlug = asString(category?.slug);
-  const categoryGroup = asString(category?.group);
-  const categoryName = asString(category?.name);
-  const categoryKeys = compact([categoryId, categorySlug, categoryGroup, categoryName]).map(
-    normalizeKey,
-  );
-  const tags = asStringArray(product.tags).join(' ');
-  const standards = asStringArray(product.standards).join(' ');
-  const materials = asStringArray(product.materials).join(' ');
-  const applications = asStringArray(product.applications).join(' ');
-  const features = collectPublicText(product.features);
-  const specifications = collectPublicText(product.specifications);
-  const image = productImage(product);
-  const hitCategory = categoryId
-    ? {
-        id: categoryId,
-        ...(categoryName ? { name: categoryName } : {}),
-      }
-    : undefined;
-
-  return {
-    ...(hitCategory ? { category: hitCategory } : {}),
-    categoryKeys,
-    excerpt: truncate(description || compact([model, sku, categoryName]).join(' ') || title),
-    fields: [
-      { text: title, weight: 3 },
-      { text: model, weight: 3 },
-      { text: sku, weight: 3 },
-      { text: productId, weight: 3 },
-      { text: description, weight: 1 },
-      { text: tags, weight: 1.5 },
-      { text: standards, weight: 1 },
-      { text: categoryName, weight: 1.5 },
-      { text: materials, weight: 1 },
-      { text: applications, weight: 1 },
-      { text: features, weight: 1 },
-      { text: specifications, weight: 1 },
-    ],
-    id: `product:${asString(product.id, slug)}`,
-    ...(image ? { image } : {}),
-    ...(model ? { model } : {}),
-    ...(productId ? { productId } : {}),
-    ...(sku ? { sku } : {}),
-    slug,
-    title,
-    type: 'product',
-    url: `/${locale}/products/${slug}`,
-  };
-}
-
-function newsCandidate(item: SearchSourceDocument, locale: string): SearchCandidate {
-  const slug = asString(item.slug);
-  const title = asString(item.title, slug);
-  const content = richTextToPlainText(item.content);
-  const excerpt = asString(item.excerpt, content || title);
-  const categoryId = asString(item.category, 'news');
-  const tags = asStringArray(item.tags).join(' ');
-  const image = mediaUrl(item.cover);
-  const publishedAt = asString(item.publishedAt);
-
-  return {
-    category: { id: categoryId },
-    categoryKeys: [normalizeKey(categoryId)],
-    excerpt: truncate(excerpt),
-    fields: [
-      { text: title, weight: 3 },
-      { text: excerpt, weight: 1.5 },
-      { text: content, weight: 1 },
-      { text: tags, weight: 1.2 },
-      { text: categoryId, weight: 0.5 },
-    ],
-    id: `news:${asString(item.id, slug)}`,
-    ...(image ? { image } : {}),
-    ...(publishedAt ? { publishedAt } : {}),
-    slug,
-    title,
-    type: 'news',
-    url: `/${locale}/news/${slug}`,
-  };
-}
-
-function pageCandidate(page: SearchSourceDocument, locale: string): SearchCandidate {
-  const slug = asString(page.slug);
-  const pageKey = asString(page.pageKey);
-  const title = asString(page.title, pageKey || slug);
-  const hero = readRecord(page.hero);
-  const seo = readRecord(page.seo);
-  const blocksText = collectPublicText(page.blocks);
-  const heroText = compact([asString(hero?.title), asString(hero?.subtitle)]).join(' ');
-  const seoText = compact([asString(seo?.title), asString(seo?.description)]).join(' ');
-  const content = compact([heroText, blocksText, seoText]).join(' ');
-
-  return {
-    categoryKeys: [],
-    excerpt: truncate(content || title),
-    fields: [
-      { text: title, weight: 3 },
-      { text: heroText, weight: 1.5 },
-      { text: blocksText, weight: 1 },
-      { text: seoText, weight: 0.5 },
-      { text: pageKey, weight: 0.5 },
-    ],
-    id: `page:${asString(page.id, pageKey || slug || 'home')}`,
-    ...(slug ? { slug } : {}),
-    title,
-    type: 'page',
-    url: pagePath(locale, page),
-  };
-}
-
-function referenceUrl(locale: string, prefix: string, value: unknown) {
-  const ref = readRecord(value);
-  const slug = asString(ref?.slug);
-
-  return slug ? `/${locale}/${prefix}/${slug}` : undefined;
-}
-
-function faqCandidate(faq: SearchSourceDocument, locale: string): SearchCandidate {
-  const question = asString(faq.question);
-  const answer = richTextToPlainText(faq.answer);
-  const scope = asString(faq.scope, 'global');
-  const tags = asStringArray(faq.tags).join(' ');
-  const url =
-    referenceUrl(locale, 'products', faq.productRef) ||
-    referenceUrl(locale, 'news', faq.newsRef) ||
-    pagePath(locale, readRecord(faq.pageRef) ?? {}) ||
-    `/${locale}`;
-
-  return {
-    category: { id: scope },
-    categoryKeys: [normalizeKey(scope)],
-    excerpt: truncate(answer || question),
-    fields: [
-      { text: question, weight: 3 },
-      { text: answer, weight: 1 },
-      { text: tags, weight: 0.8 },
-      { text: scope, weight: 0.5 },
-    ],
-    id: `faq:${asString(faq.id, question)}`,
-    title: question || truncate(answer, 80) || 'FAQ',
-    type: 'faq',
-    url,
-  };
-}
-
-function toCandidates(sources: Awaited<ReturnType<SearchSourceProvider>>, locale: string) {
-  return [
-    ...sources.products.map((product) => productCandidate(product, locale)),
-    ...sources.news.map((item) => newsCandidate(item, locale)),
-    ...sources.pages.map((page) => pageCandidate(page, locale)),
-    ...sources.faqs.map((faq) => faqCandidate(faq, locale)),
-  ];
-}
 
 function matchesType(candidate: SearchCandidate, type: SearchQuery['type']) {
   return type === 'all' || candidate.type === type;
@@ -522,60 +60,65 @@ function toSearchHit({ candidate, score }: ScoredCandidate, query: string): Sear
   };
 }
 
-function toRecommendedProductHit(candidate: SearchCandidate): SearchHit {
-  return {
-    ...(candidate.category ? { category: candidate.category } : {}),
-    excerpt: candidate.excerpt,
-    id: candidate.id,
-    ...(candidate.image ? { image: candidate.image } : {}),
-    ...(candidate.model ? { model: candidate.model } : {}),
-    ...(candidate.productId ? { productId: candidate.productId } : {}),
-    ...(candidate.publishedAt ? { publishedAt: candidate.publishedAt } : {}),
-    score: 0,
-    ...(candidate.sku ? { sku: candidate.sku } : {}),
-    ...(candidate.slug ? { slug: candidate.slug } : {}),
-    title: candidate.title,
-    type: 'product',
-    url: candidate.url,
+const initialTypeCounts = {
+  faq: 0,
+  'industry-case': 0,
+  news: 0,
+  page: 0,
+  product: 0,
+  solution: 0,
+} satisfies Record<SearchHitType, number>;
+
+function emptyTypeCounts() {
+  return { ...initialTypeCounts };
+}
+
+function defaultCategoryLabel(categoryId: string, locale: SearchQuery['locale']) {
+  const labels: Record<string, Record<SearchQuery['locale'], string>> = {
+    faq: { en: 'FAQ', ru: 'FAQ', zh: '常见问题' },
+    'industry-case': { en: 'Industry cases', ru: 'Отраслевые кейсы', zh: '行业案例' },
+    news: { en: 'News', ru: 'Новости', zh: '新闻' },
+    solution: { en: 'Solutions', ru: 'Решения', zh: '解决方案' },
   };
+
+  return labels[categoryId]?.[locale];
 }
 
-export function recommendedProductHitsFromSources(
-  sources: Pick<Awaited<ReturnType<SearchSourceProvider>>, 'products'>,
-  locale: string,
-  limit: number,
-) {
-  return sources.products
-    .map((product) => productCandidate(product, locale))
-    .sort((left, right) => left.title.localeCompare(right.title, locale))
-    .slice(0, Math.max(0, limit))
-    .map(toRecommendedProductHit);
-}
-
-function facetCounts(scoredCandidates: readonly ScoredCandidate[]) {
-  const types = {
-    faq: 0,
-    news: 0,
-    page: 0,
-    product: 0,
-  } satisfies Record<SearchHitType, number>;
+function facetCounts(scoredCandidates: readonly ScoredCandidate[], locale: SearchQuery['locale']) {
+  const types = emptyTypeCounts();
   const categories: Record<string, number> = {};
+  const categoryLabels: Record<string, string> = {};
 
   for (const { candidate } of scoredCandidates) {
     types[candidate.type] += 1;
 
+    if (candidate.type !== 'product') {
+      continue;
+    }
+
     if (candidate.category?.id) {
-      categories[candidate.category.id] = (categories[candidate.category.id] ?? 0) + 1;
+      const categoryId = candidate.category.id;
+
+      categories[categoryId] = (categories[categoryId] ?? 0) + 1;
+
+      const label = candidate.category.name ?? defaultCategoryLabel(categoryId, locale);
+      if (label && !categoryLabels[categoryId]) {
+        categoryLabels[categoryId] = label;
+      }
     }
   }
 
-  return { categories, types };
+  return {
+    categories,
+    ...(Object.keys(categoryLabels).length > 0 ? { categoryLabels } : {}),
+    types,
+  };
 }
 
 function emptyResponse(input: SearchQuery, tookMs: number): SearchResponse {
   return {
     empty: { message: emptyQueryMessage, reason: 'EMPTY_QUERY' },
-    facets: { categories: {}, types: { faq: 0, news: 0, page: 0, product: 0 } },
+    facets: { categories: {}, types: emptyTypeCounts() },
     hits: [],
     locale: input.locale,
     ok: true,
@@ -606,9 +149,7 @@ export async function searchContent(
   }
 
   const sources = await sourceProvider(input);
-  const scoredCandidates = toCandidates(sources, input.locale)
-    .filter((candidate) => matchesType(candidate, input.type))
-    .filter((candidate) => matchesCategory(candidate, input.category))
+  const allScoredCandidates = toCandidates(sources, input.locale)
     .map((candidate) => ({ candidate, score: scoreCandidate(candidate, input.q) }))
     .filter(({ score }) => score > 0)
     .sort((left, right) => {
@@ -624,6 +165,9 @@ export async function searchContent(
 
       return left.candidate.title.localeCompare(right.candidate.title, input.locale);
     });
+  const scoredCandidates = allScoredCandidates
+    .filter((candidate) => matchesType(candidate.candidate, input.type))
+    .filter((candidate) => matchesCategory(candidate.candidate, input.category));
 
   const totalHits = scoredCandidates.length;
   const totalPages = totalHits === 0 ? 0 : Math.ceil(totalHits / input.hitsPerPage);
@@ -640,7 +184,7 @@ export async function searchContent(
   return {
     ...(input.category ? { category: input.category } : {}),
     ...(totalHits === 0 ? { empty: { message: noResultsMessage, reason: 'NO_RESULTS' } } : {}),
-    facets: facetCounts(scoredCandidates),
+    facets: facetCounts(allScoredCandidates, input.locale),
     hits: pagedHits,
     locale: input.locale,
     ok: true,

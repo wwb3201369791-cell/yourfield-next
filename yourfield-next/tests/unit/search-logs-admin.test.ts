@@ -21,7 +21,11 @@ describe('SearchLogs admin stats display', () => {
     expect(markup).toContain('热门关键词 Top 100');
     expect(markup).toContain('零结果关键词');
     expect(markup).toContain('点击率');
+    expect(markup).toContain('时间范围');
+    expect(markup).toContain('近 7 天');
+    expect(markup).toContain('应用 / 刷新数据');
     expect(markup).toContain('打开 JSON 原始数据');
+    expect(markup).toContain('target="search-logs-stats-frame"');
     expect(markup).not.toContain('Search analytics');
   });
 

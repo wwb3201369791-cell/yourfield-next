@@ -20,6 +20,7 @@ import {
 } from '@/lib/navigation';
 
 type HeaderProps = Readonly<{
+  hotTerms?: readonly string[];
   locale: Locale;
   navigation?: readonly SiteNavigationItem[];
   siteSettings?: Pick<CmsSiteSettings, 'logoDark' | 'logoLight'>;
@@ -222,7 +223,7 @@ function resolveHeaderNavigation(
   return navigation && navigation.length > 0 ? navigation : getFallbackNavigation(t).mainNav;
 }
 
-export function Header({ locale, navigation, siteSettings }: HeaderProps) {
+export function Header({ hotTerms = [], locale, navigation, siteSettings }: HeaderProps) {
   const t = useTranslations();
   const pathname = usePathname() ?? `/${locale}`;
   const resolvedNavigation = resolveHeaderNavigation(navigation, t);
@@ -474,7 +475,7 @@ export function Header({ locale, navigation, siteSettings }: HeaderProps) {
         </nav>
 
         <div className="header-actions">
-          <SearchTrigger locale={locale} />
+          <SearchTrigger hotTerms={hotTerms} locale={locale} />
           <LanguageSwitcher locale={locale} />
         </div>
 

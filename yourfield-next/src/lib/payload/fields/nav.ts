@@ -1,6 +1,7 @@
 import type { Field } from 'payload/types';
 
 import { navTargetOptions } from './options';
+import { imageUploadField } from './simpleMediaUpload';
 
 export const childNavItemFields: Field[] = [
   {
@@ -14,11 +15,10 @@ export const childNavItemFields: Field[] = [
     type: 'text',
     required: true,
   },
-  {
+  imageUploadField({
     name: 'icon',
-    type: 'upload',
-    relationTo: 'media',
-  },
+    label: '图标',
+  }),
   {
     name: 'target',
     type: 'select',

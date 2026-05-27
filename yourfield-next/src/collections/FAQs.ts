@@ -3,8 +3,19 @@ import type { CollectionConfig } from 'payload/types';
 import { canCreate, canDelete, canUpdate, isAdminOrFaqPublished } from '../lib/payload/access';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField } from '../lib/payload/fields/arrays';
+import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { faqScopeOptions } from '../lib/payload/fields/options';
 import { revalidateCollectionAfterChange } from '../lib/payload/hooks/revalidateContent';
+import { requireAllLocalesOnPublish } from '../lib/payload/hooks/validateI18nComplete';
+
+const contentLocales = ['zh', 'en', 'ru'] as const;
+
+const requiredI18nPaths = [
+  { path: 'question', label: '问题' },
+  { path: 'answer', label: '答案' },
+] as const;
+
+const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前。';
 
 export const FAQs: CollectionConfig = {
   slug: 'faqs',
@@ -25,10 +36,17 @@ export const FAQs: CollectionConfig = {
     delete: canDelete('faqs'),
   },
   hooks: {
+    beforeChange: [
+      requireAllLocalesOnPublish(contentLocales, {
+        paths: requiredI18nPaths,
+        status: { mode: 'booleanStatus', field: 'isPublished' },
+      }),
+    ],
     afterChange: [auditAfterChange('faqs'), revalidateCollectionAfterChange('faqs')],
     afterDelete: [auditAfterDelete('faqs')],
   },
   fields: [
+    i18nEditGuideField({ collectionSlug: 'faqs', requiredPaths: requiredI18nPaths }),
     {
       name: 'question',
       type: 'textarea',
@@ -77,8 +95,12 @@ export const FAQs: CollectionConfig = {
     {
       name: 'order',
       type: 'number',
+      label: '展示位置',
       defaultValue: 0,
       index: true,
+      admin: {
+        description: frontendOrderDescription,
+      },
     },
     {
       name: 'isPublished',

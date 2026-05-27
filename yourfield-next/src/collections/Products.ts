@@ -12,11 +12,10 @@ import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField, textareaArrayField, uploadArrayField } from '../lib/payload/fields/arrays';
 import {
   certificationStatusOptions,
-  industryOptions,
   qualityEvidenceTypeOptions,
   visualVariantOptions,
 } from '../lib/payload/fields/options';
-import { seoGroup } from '../lib/payload/fields/seo';
+import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { slugField } from '../lib/payload/fields/slug';
 import {
   revalidateCollectionAfterChange,
@@ -35,7 +34,6 @@ const featuresField: Field = {
     {
       name: 'title',
       type: 'text',
-      required: true,
     },
     {
       name: 'description',
@@ -79,6 +77,8 @@ const specificationsField: Field = {
   ],
 };
 
+const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前；0 表示不优先。';
+
 const certificationsField: Field = {
   name: 'certifications',
   type: 'array',
@@ -89,7 +89,6 @@ const certificationsField: Field = {
     {
       name: 'name',
       type: 'text',
-      required: true,
     },
     {
       name: 'issuer',
@@ -120,8 +119,9 @@ const certificationsField: Field = {
 const sizeGuideField: Field = {
   name: 'sizeGuide',
   type: 'group',
+  label: '尺码对应表（可选）',
   admin: {
-    description: 'P3+ 扩展字段：规格尺码表。',
+    description: '有尺码对应表时再填写；没有可留空，前台不会展示该区块。',
   },
   fields: [
     {
@@ -142,7 +142,6 @@ const sizeGuideField: Field = {
           name: 'label',
           type: 'text',
           localized: true,
-          required: true,
         },
       ],
     },
@@ -154,7 +153,6 @@ const sizeGuideField: Field = {
           name: 'label',
           type: 'text',
           localized: true,
-          required: true,
         },
         {
           name: 'values',
@@ -163,7 +161,6 @@ const sizeGuideField: Field = {
             {
               name: 'value',
               type: 'text',
-              required: true,
             },
           ],
         },
@@ -183,7 +180,6 @@ const qualityEvidenceField: Field = {
     {
       name: 'type',
       type: 'select',
-      required: true,
       options: qualityEvidenceTypeOptions,
     },
     {
@@ -193,7 +189,6 @@ const qualityEvidenceField: Field = {
     {
       name: 'title',
       type: 'text',
-      required: true,
     },
     {
       name: 'description',
@@ -251,7 +246,6 @@ const scenariosField: Field = {
     {
       name: 'title',
       type: 'text',
-      required: true,
       label: '场景标题',
     },
     {
@@ -273,18 +267,49 @@ const sellingPointsField: Field = {
     {
       name: 'title',
       type: 'text',
-      required: true,
     },
     {
       name: 'text',
       type: 'textarea',
     },
-    {
+    imageUploadField({
       name: 'icon',
-      type: 'upload',
-      relationTo: 'media',
+      label: '图标',
+    }),
+  ],
+};
+
+const productFaqsField: Field = {
+  name: 'productFaqs',
+  type: 'array',
+  localized: true,
+  label: '常见问题（可选）',
+  admin: {
+    description: '直接填写该产品详情页展示的问题和答案；不需要先去关联 FAQ。',
+  },
+  fields: [
+    {
+      name: 'question',
+      type: 'text',
+      label: '问题',
+    },
+    {
+      name: 'answer',
+      type: 'textarea',
+      label: '答案',
     },
   ],
+};
+
+const legacyFaqRelationsField: Field = {
+  name: 'faqs',
+  type: 'relationship',
+  relationTo: 'faqs',
+  hasMany: true,
+  label: '旧 FAQ 关联',
+  admin: {
+    hidden: true,
+  },
 };
 
 const draftStatusListCellField: Field = {
@@ -328,7 +353,10 @@ export const Products: CollectionConfig = {
         },
       },
     },
-    preview: (doc: Record<string, unknown>, { locale, token }: { locale: string; token?: string }) => {
+    preview: (
+      doc: Record<string, unknown>,
+      { locale, token }: { locale: string; token?: string },
+    ) => {
       const rawSlug = typeof doc.slug === 'string' && doc.slug ? doc.slug : doc.productId;
       const slug = typeof rawSlug === 'string' && rawSlug ? rawSlug : 'draft-product';
       const params = new URLSearchParams({ preview: '1' });
@@ -414,27 +442,6 @@ export const Products: CollectionConfig = {
                   '必填。创建产品时先选择产品大类，前台产品中心会直接把该产品放到这个大类下面。',
               },
             },
-            {
-              name: 'category',
-              type: 'relationship',
-              relationTo: 'product-categories',
-              index: true,
-              label: '旧产品分类（内部兼容）',
-              admin: {
-                hidden: true,
-                disableListColumn: true,
-                disableListFilter: true,
-                description:
-                  '旧站遗留字段，仅用于兼容历史数据。新产品不需要填写，产品结构以“产品大类 → 产品”为准。',
-              },
-            },
-            {
-              name: 'industries',
-              type: 'select',
-              options: industryOptions,
-              hasMany: true,
-            },
-            textArrayField({ name: 'tags', localized: true }),
           ],
         },
         {
@@ -442,7 +449,8 @@ export const Products: CollectionConfig = {
           fields: [
             uploadArrayField({
               name: 'images',
-              label: '产品图片（可选）',
+              label: '产品主图（可选）',
+              maxRows: 1,
             }),
             {
               name: 'description',
@@ -496,14 +504,7 @@ export const Products: CollectionConfig = {
         },
         {
           label: '常见问题',
-          fields: [
-            {
-              name: 'faqs',
-              type: 'relationship',
-              relationTo: 'faqs',
-              hasMany: true,
-            },
-          ],
+          fields: [productFaqsField, legacyFaqRelationsField],
         },
         {
           label: '媒体',
@@ -514,27 +515,13 @@ export const Products: CollectionConfig = {
               relationTo: 'media',
             },
             {
-              name: 'relatedProducts',
-              type: 'relationship',
-              relationTo: 'products',
-              hasMany: true,
-              maxRows: 6,
-            },
-            {
-              name: 'isFeatured',
-              type: 'checkbox',
-              defaultValue: false,
-              index: true,
-              admin: {
-                position: 'sidebar',
-              },
-            },
-            {
               name: 'displayOrder',
               type: 'number',
+              label: '前台展示位置',
               defaultValue: 0,
               index: true,
               admin: {
+                description: frontendOrderDescription,
                 position: 'sidebar',
               },
             },
@@ -549,10 +536,6 @@ export const Products: CollectionConfig = {
               },
             },
           ],
-        },
-        {
-          label: '发布与 SEO',
-          fields: [seoGroup],
         },
       ],
     },

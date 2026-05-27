@@ -16,6 +16,7 @@ import { useCountUp } from '../useCountUp';
 
 type KpiCardsProps = Readonly<{
   adminBase: string;
+  apiBase: string;
   data: DashboardState;
   rangeDays: DashboardRangeDays;
   rangeLabel: string;
@@ -74,7 +75,19 @@ function KpiCard({ metric, resetKey }: Readonly<{ metric: DashboardMetric; reset
   );
 }
 
-export function KpiCards({ adminBase, data, rangeDays, rangeLabel }: KpiCardsProps) {
+function buildSearchStatsViewHref(
+  apiBase: string,
+  params: Readonly<Record<string, string>>,
+  hash?: string,
+) {
+  const search = new URLSearchParams(params);
+  const query = search.toString();
+  const base = apiBase.replace(/\/$/, '');
+
+  return `${base}/search-logs/stats-view${query ? `?${query}` : ''}${hash ? `#${hash}` : ''}`;
+}
+
+export function KpiCards({ adminBase, apiBase, data, rangeDays, rangeLabel }: KpiCardsProps) {
   const rangeStartIso = rangeStartDate(rangeDays).toISOString();
   const totalSearches = safeNumber(data.searchStats.totalSearches);
   const zeroResultSearches = safeNumber(data.searchStats.zeroResultSearches);
@@ -108,9 +121,9 @@ export function KpiCards({ adminBase, data, rangeDays, rangeLabel }: KpiCardsPro
       visual: 'leads',
     },
     {
-      href: buildAdminCollectionHref(adminBase, 'search-logs', {
-        'where[createdAt][greater_than_equal]': rangeStartIso,
-        'where[eventType][equals]': 'search',
+      href: buildSearchStatsViewHref(apiBase, {
+        createdAfter: rangeStartIso,
+        limit: '100',
       }),
       label: '站内搜索',
       meta: `${rangeLabel}点击率 ${percentFormat(data.searchStats.ctr)}`,
@@ -121,11 +134,14 @@ export function KpiCards({ adminBase, data, rangeDays, rangeLabel }: KpiCardsPro
       visual: 'search',
     },
     {
-      href: buildAdminCollectionHref(adminBase, 'search-logs', {
-        'where[createdAt][greater_than_equal]': rangeStartIso,
-        'where[eventType][equals]': 'search',
-        'where[hits][less_than_equal]': '0',
-      }),
+      href: buildSearchStatsViewHref(
+        apiBase,
+        {
+          createdAfter: rangeStartIso,
+          limit: '100',
+        },
+        'zero-result-keywords',
+      ),
       label: '零结果搜索',
       meta:
         zeroResultSearches > 0 && zeroResultKeywords.length > 0

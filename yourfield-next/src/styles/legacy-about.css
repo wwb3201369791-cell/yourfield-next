@@ -278,11 +278,18 @@
   user-select: none;
 }
 
+.about-gallery-viewport.is-draggable {
+  cursor: grab;
+}
+
+.about-gallery-viewport.is-dragging {
+  cursor: grabbing;
+}
+
 .about-gallery-track {
   backface-visibility: hidden;
   display: flex;
   height: 100%;
-  transition: transform 0.42s ease;
   will-change: transform;
 }
 
@@ -1051,8 +1058,7 @@ body.honors-lightbox-open {
 
 .strategic-partners-section {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(238, 244, 249, 0.94)),
-    #f4f7fb;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(238, 244, 249, 0.94)), #f4f7fb;
   isolation: isolate;
   overflow: hidden;
   padding: 88px 0 96px;

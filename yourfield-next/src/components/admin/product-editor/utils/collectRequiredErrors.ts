@@ -16,11 +16,11 @@ const sectionByPath: Array<readonly [RegExp, string]> = [
   [/^visualGroups/, 'visual-groups'],
   [/^(qualityEvidence|certifications)/, 'evidence'],
   [/^careInstructions/, 'care'],
-  [/^faqs/, 'faq'],
+  [/^(productFaqs|faqs)/, 'faq'],
 ];
 
 export function sectionForFieldPath(path: string) {
-  return sectionByPath.find(([pattern]) => pattern.test(path))?.[1] ?? 'operations';
+  return sectionByPath.find(([pattern]) => pattern.test(path))?.[1] ?? 'identity';
 }
 
 export function collectRequiredErrors(fields: Fields): RequiredError[] {

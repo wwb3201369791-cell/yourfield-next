@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createElement } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -11,7 +11,9 @@ import {
   displayableOperationalTopKeywords,
   isDisplayableOperationalSearchTerm,
 } from '@/components/admin/AdminOperationsDashboard';
+import { TrendChart } from '@/components/admin/dashboard/sections/TrendChart';
 import { buildDashboardHealthResponse } from '@/components/admin/dashboard/health';
+import type { DashboardChartPoint } from '@/components/admin/dashboard/types';
 
 function requestUrl(path: RequestInfo | URL) {
   if (typeof path === 'string') {
@@ -97,6 +99,27 @@ function jsonResponse(body: unknown) {
     headers: { 'Content-Type': 'application/json' },
     status: 200,
   });
+}
+
+const trendChartPoints: DashboardChartPoint[] = [
+  { clicks: 2, dateKey: '2026-05-21', forms: 0, label: '5/21', searches: 9, total: 11 },
+  { clicks: 3, dateKey: '2026-05-22', forms: 1, label: '5/22', searches: 12, total: 16 },
+  { clicks: 4, dateKey: '2026-05-23', forms: 2, label: '5/23', searches: 14, total: 20 },
+];
+
+function renderTrendChart() {
+  const onSelectDate = vi.fn();
+
+  render(
+    createElement(TrendChart, {
+      chartPoints: trendChartPoints,
+      onSelectDate,
+      rangeLabel: '近7天',
+      selectedPoint: trendChartPoints[trendChartPoints.length - 1],
+    }),
+  );
+
+  return { onSelectDate };
 }
 
 afterEach(() => {
@@ -186,7 +209,6 @@ describe('AdminOperationsDashboard helpers', () => {
           images: [],
           name: { en: '', ru: '俄文产品', zh: '中文产品' },
           productGroup: 'group-1',
-          seo: { description: { en: '', ru: '', zh: '中文描述' } },
         },
         {
           _status: 'published',
@@ -194,7 +216,6 @@ describe('AdminOperationsDashboard helpers', () => {
           images: [{ file: 10 }],
           name: { en: 'Product', ru: 'Продукт', zh: '产品' },
           productGroup: 'group-1',
-          seo: { description: { en: 'SEO', ru: 'SEO', zh: 'SEO' } },
         },
         {
           _status: 'draft',
@@ -206,13 +227,13 @@ describe('AdminOperationsDashboard helpers', () => {
       ],
     });
 
-    expect(health.score).toBe(71);
+    expect(health.score).toBe(73);
     expect(health.level).toBe('warning');
+    expect(health.items.some((item) => item.label.includes('SEO'))).toBe(false);
     expect(Object.fromEntries(health.items.map((item) => [item.ruleId, item.count]))).toEqual({
       R1: 1,
       R2: 1,
       R3: 1,
-      R4: 1,
       R5: 1,
       R6: 2,
     });
@@ -220,6 +241,51 @@ describe('AdminOperationsDashboard helpers', () => {
 });
 
 describe('AdminOperationsDashboard loading behavior', () => {
+  it('keeps trend chart controls and tooltip layout bounded', () => {
+    renderTrendChart();
+
+    const clicksChip = screen.getByRole('button', { name: '点击' });
+    fireEvent.click(clicksChip);
+
+    expect(clicksChip.classList.contains('is-hidden')).toBe(true);
+
+    const tooltip = screen.getByRole('status');
+    expect(tooltip.getAttribute('style')).toContain('clamp(');
+  });
+
+  it('maps the trend chart viewBox to the rendered SVG size', () => {
+    const resizeCallbacks: ResizeObserverCallback[] = [];
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+
+    vi.stubGlobal(
+      'ResizeObserver',
+      vi.fn((callback: ResizeObserverCallback) => {
+        resizeCallbacks.push(callback);
+        return { disconnect, observe, unobserve: vi.fn() };
+      }),
+    );
+
+    renderTrendChart();
+
+    const chart = screen.getByRole('img', { name: '近7天互动趋势折线图' });
+
+    act(() => {
+      resizeCallbacks[0]?.(
+        [
+          {
+            contentRect: { height: 252, width: 640 },
+          } as ResizeObserverEntry,
+        ],
+        {} as ResizeObserver,
+      );
+    });
+
+    expect(observe).toHaveBeenCalledTimes(1);
+    expect(observe.mock.calls[0]?.[0]).toBe(chart);
+    expect(chart.getAttribute('viewBox')).toBe('0 0 640 252');
+  });
+
   it('renders four KPI cards and the interactive SVG trend chart', async () => {
     const fetchMock = vi.fn((path: RequestInfo | URL) =>
       jsonResponse(dashboardApiResponse(requestUrl(path))),
@@ -244,6 +310,16 @@ describe('AdminOperationsDashboard loading behavior', () => {
     expect(screen.getByText(/33\.3%/)).toBeTruthy();
     expect(screen.getByText('零结果搜索')).toBeTruthy();
     expect(screen.getByText('需补内容：消防员灭火防护服')).toBeTruthy();
+    const searchMetricHref = screen.getByText('站内搜索').closest('a')?.getAttribute('href') ?? '';
+    const zeroResultMetricHref =
+      screen.getByText('零结果搜索').closest('a')?.getAttribute('href') ?? '';
+    expect(searchMetricHref).toContain('/api-kpi/search-logs/stats-view?');
+    expect(searchMetricHref).toContain('createdAfter=');
+    expect(searchMetricHref).not.toContain('/collections/search-logs');
+    expect(zeroResultMetricHref).toContain('/api-kpi/search-logs/stats-view?');
+    expect(zeroResultMetricHref).toContain('createdAfter=');
+    expect(zeroResultMetricHref).toContain('#zero-result-keywords');
+    expect(zeroResultMetricHref).not.toContain('/collections/search-logs');
     expect(screen.getByText('展示中产品组')).toBeTruthy();
     expect(screen.getByText('1 项已发布产品缺主图')).toBeTruthy();
     expect(screen.getByText('最近用户在站内搜索过的关键词。')).toBeTruthy();

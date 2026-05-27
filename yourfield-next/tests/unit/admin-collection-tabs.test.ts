@@ -15,6 +15,10 @@ vi.mock('@/components/admin/SiteSettingsEditGate', () => ({
   SiteSettingsEditGate: () => null,
 }));
 
+vi.mock('@/components/admin/media-upload/SimpleMediaUploadField', () => ({
+  default: () => null,
+}));
+
 vi.mock('react-router-dom', () => ({
   Link: function MockLink() {
     return null;
@@ -91,10 +95,9 @@ describe('admin collection tabs', () => {
         '洗护与维护',
         '常见问题',
         '媒体',
-        '发布与 SEO',
       ],
     ],
-    [News, ['新闻信息', '正文内容', '发布设置']],
+    [News, ['新闻信息', '正文内容']],
     [Solutions, ['前台展示', '内容要点', '发布设置']],
   ] as const)('uses label-only tabs for %s', (collection, expectedLabels) => {
     const tabs = tabsOf(collection);
@@ -196,7 +199,6 @@ describe('admin collection tabs', () => {
       ['author', '作者 / 来源'],
       ['cover', '封面图'],
       ['content', '新闻正文'],
-      ['category', '新闻分类'],
       ['tags', '标签'],
       ['publishedAt', '发布时间'],
       ['isFeatured', '首页推荐'],
@@ -213,8 +215,17 @@ describe('admin collection tabs', () => {
 
     const category = namedField(News.fields, 'category');
     const tags = namedField(News.fields, 'tags');
+    const relatedNews = namedField(News.fields, 'relatedNews');
+    const relatedProducts = namedField(News.fields, 'relatedProducts');
 
     expect(category).toMatchObject({
+      admin: {
+        disableListColumn: true,
+        disableListFilter: true,
+        hidden: true,
+      },
+      defaultValue: 'news',
+      label: '新闻分类（系统）',
       options: [
         { label: '公司新闻', value: 'news' },
         { label: '活动动态', value: 'event' },
@@ -222,15 +233,36 @@ describe('admin collection tabs', () => {
         { label: '展会信息', value: 'exhibition' },
       ],
     });
+    expect(tags).toMatchObject({
+      admin: {
+        disableListColumn: true,
+        disableListFilter: true,
+        hidden: true,
+      },
+    });
     expect(tags && 'fields' in tags ? namedField(tags.fields, 'value') : undefined).toMatchObject({
       label: '标签内容',
+    });
+    expect(relatedNews).toMatchObject({
+      admin: {
+        disableListColumn: true,
+        disableListFilter: true,
+        hidden: true,
+      },
+    });
+    expect(relatedProducts).toMatchObject({
+      admin: {
+        disableListColumn: true,
+        disableListFilter: true,
+        hidden: true,
+      },
     });
   });
 
   it('keeps the news list focused without the homepage recommendation column', () => {
     const isFeatured = namedField(News.fields, 'isFeatured');
 
-    expect(News.admin?.defaultColumns).toEqual(['title', 'category', 'statusBadge', 'publishedAt']);
+    expect(News.admin?.defaultColumns).toEqual(['title', 'statusBadge', 'publishedAt']);
     expect(isFeatured).toMatchObject({
       admin: {
         disableListColumn: true,
@@ -249,6 +281,7 @@ describe('admin collection tabs', () => {
     const relatedProducts = namedField(Solutions.fields, 'relatedProducts');
 
     expect(Solutions.admin?.listSearchableFields).toEqual(['title']);
+    expect(Solutions.defaultSort).toBe('order');
     expect(Solutions.admin?.defaultColumns).toEqual([
       'title',
       'statusBadge',
@@ -269,11 +302,13 @@ describe('admin collection tabs', () => {
     });
     expect(order).toMatchObject({
       admin: {
+        description: '直接填 1、2、3；数字越小越靠前。',
         disableListFilter: true,
         components: {
           Cell: SolutionPositionCell,
         },
       },
+      defaultValue: 1,
       label: '前台位置',
       name: 'order',
       type: 'number',
@@ -316,9 +351,16 @@ describe('admin collection tabs', () => {
     });
   });
 
+  it.each([Products, News, Solutions] as const)(
+    'does not expose manual SEO fields for %s',
+    (collection) => {
+      expect(namedField(collection.fields, 'seo')).toBeUndefined();
+    },
+  );
+
   it.each([
-    [Solutions, ['solutionId', 'slug', 'seo']],
-    [News, ['slug', 'seo']],
+    [Solutions, ['solutionId', 'slug']],
+    [News, ['slug']],
     [ProductGroups, ['groupId', 'slug', 'seo']],
   ] as const)('hides the API and redundant document tab for %s', (collection, preservedFields) => {
     expect(collection.admin?.hideAPIURL).toBe(true);
@@ -344,6 +386,8 @@ describe('admin collection tabs', () => {
     expect(isHidden(namedField(SiteSettings.fields, 'contact'))).toBeUndefined();
     expect(isHidden(namedField(SiteSettings.fields, 'siteName'))).toBe(true);
     expect(isHidden(namedField(SiteSettings.fields, 'logo'))).toBe(true);
+    expect(namedField(SiteSettings.fields, 'favicon')).toBeUndefined();
+    expect(namedField(SiteSettings.fields, 'appleTouchIcon')).toBeUndefined();
     expect(isHidden(defaultSeo)).toBe(true);
     expect(isHidden(namedField(SiteSettings.fields, 'icp'))).toBe(true);
   });

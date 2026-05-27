@@ -13,19 +13,11 @@ function numericOrder(value: unknown) {
 }
 
 function positionLabel(order: number | null) {
-  if (order === null) {
+  if (order === null || order <= 0) {
     return '未设置';
   }
 
-  if (order > 0 && order % 10 === 0) {
-    return `第 ${order / 10} 位`;
-  }
-
-  if (order <= 0) {
-    return '最靠前';
-  }
-
-  return `顺序 ${order}`;
+  return `第 ${order} 位`;
 }
 
 export default function SolutionPositionCell({ cellData, data, rowData }: CellProps) {

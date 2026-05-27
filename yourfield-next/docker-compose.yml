@@ -19,28 +19,6 @@ services:
       timeout: 5s
       retries: 5
 
-  meilisearch:
-    image: getmeili/meilisearch:v1.13
-    container_name: yourfield-meilisearch
-    restart: unless-stopped
-    environment:
-      MEILI_ENV: development
-      MEILI_MASTER_KEY: dev-only-meili-master-key-change-before-production
-      MEILI_NO_ANALYTICS: 'true'
-    ports:
-      - '7700:7700'
-    volumes:
-      - yourfield_meili_data:/meili_data
-    healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'wget --no-verbose --spider http://127.0.0.1:7700/health || exit 1',
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   umami:
     image: ghcr.io/umami-software/umami:postgresql-v2.18.1
     container_name: yourfield-umami
@@ -57,4 +35,3 @@ services:
 
 volumes:
   yourfield_postgres_data:
-  yourfield_meili_data:

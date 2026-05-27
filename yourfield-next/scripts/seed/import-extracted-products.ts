@@ -1,6 +1,7 @@
 import type { Payload } from 'payload';
 
 import extractedProductPayload from '../../src/lib/content/extracted-products.generated.json';
+
 import {
   localized,
   localizedRichTextFromPlainText,
@@ -135,14 +136,8 @@ export const importExtractedProducts = async (
       description: localizedRichTextFromPlainText(localizedSame(description)),
       relatedProducts: [],
       faqs: [],
-      seo: {
-        title: localizedSame(product.name),
-        description: localizedSame(description),
-        keywords: localizedSame(tags.join(',')),
-        noindex: false,
-      },
       isFeatured: product.id === 'firefighter-suit-combat',
-      displayOrder: product.id === 'firefighter-suit-combat' ? 100 : 0,
+      displayOrder: product.id === 'firefighter-suit-combat' ? 1 : 0,
       publishedAt: new Date().toISOString(),
       _status: 'published',
     };

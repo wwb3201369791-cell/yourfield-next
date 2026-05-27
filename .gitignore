@@ -18,8 +18,11 @@ yourfield-next/findings.md
 yourfield-next/task_plan.md
 yourfield-next/.env.local
 yourfield-next/.env.*.local
+yourfield-next/*.pem
 yourfield-next/*.tsbuildinfo
 yourfield-next/tmp-*.png
+yourfield-next/scripts/tmp-*
+yourfield-next/scripts/__pycache__/
 # Public/CMS media is versioned via Git LFS so GitHub deployments receive complete assets.
 tmp/
 outputs/

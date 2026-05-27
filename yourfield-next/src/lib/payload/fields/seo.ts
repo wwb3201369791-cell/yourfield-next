@@ -1,5 +1,7 @@
 import type { Field } from 'payload/types';
 
+import { imageUploadField } from './simpleMediaUpload';
+
 type SeoGroupArgs = {
   label?: string;
   name?: string;
@@ -39,15 +41,13 @@ export const createSeoGroup = ({ label, name = 'seo' }: SeoGroupArgs = {}): Fiel
         description: '用逗号分隔，建议 3-7 个。现在搜索引擎不强依赖它，填核心词即可。',
       },
     },
-    {
+    imageUploadField({
       name: 'ogImage',
-      type: 'upload',
       label: '分享封面图（可选）',
-      relationTo: 'media',
       admin: {
         description: '页面被分享到微信、社媒或聊天软件时，可能会作为预览图。',
       },
-    },
+    }),
     {
       name: 'noindex',
       type: 'checkbox',

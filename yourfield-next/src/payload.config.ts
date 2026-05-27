@@ -35,7 +35,6 @@ import {
   YourfieldAdminLogo,
 } from './components/admin/AdminBrand';
 import { AdminDashboardHealthView } from './components/admin/AdminDashboardHealthView';
-import { AdminLocaleGuard } from './components/admin/AdminLocaleGuard';
 import { AdminOperationsDashboard } from './components/admin/AdminOperationsDashboard';
 import { Navigation } from './globals/Navigation';
 import { SiteSettings } from './globals/SiteSettings';
@@ -154,7 +153,6 @@ export default buildConfig({
       logout: {
         Button: AdminLogoutButton,
       },
-      providers: [AdminLocaleGuard],
       views: {
         Health: {
           Component: AdminDashboardHealthView,

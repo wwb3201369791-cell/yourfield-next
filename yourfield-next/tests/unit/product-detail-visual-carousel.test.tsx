@@ -91,8 +91,13 @@ describe('ProductDetailVisualCarousel', () => {
 
     expect(screen.getByRole('region', { name: '建模图' })).toBeTruthy();
     expect(screen.getAllByRole('link')).toHaveLength(images.length);
-    await waitFor(() => expect(screen.getByText('1-4 / 5')).toBeTruthy());
-    await waitFor(() => expect(emblaMocks.options[0]).toMatchObject({ containScroll: 'trimSnaps' }));
+    await waitFor(() => expect(screen.getByText('1/5')).toBeTruthy());
+    await waitFor(() =>
+      expect(emblaMocks.options[0]).toMatchObject({
+        containScroll: 'trimSnaps',
+        dragFree: true,
+      }),
+    );
 
     fireEvent.click(screen.getByRole('button', { name: '下一张图片' }));
 

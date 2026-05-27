@@ -24,6 +24,7 @@ type CmsNews = {
   content?: unknown;
   cover?: CmsUpload | number | string;
   excerpt?: string;
+  isFeatured?: boolean;
   publishedAt?: string;
   slug?: string;
   title?: string;
@@ -38,6 +39,7 @@ export type NewsItem = Readonly<{
   datePublished: string;
   excerpt: string;
   image: string;
+  isFeatured?: boolean;
   slug: string;
   title: string;
 }>;
@@ -497,6 +499,7 @@ function mapCmsNews(item: CmsNews, locale: Locale): NewsItem {
     datePublished,
     excerpt,
     image: mediaUrl(item.cover),
+    ...(item.isFeatured ? { isFeatured: true } : {}),
     slug,
     title,
   };
@@ -580,12 +583,24 @@ export const getCmsNews = cache(async (locale: Locale, draft = false) => {
   return draft ? getCmsNewsUncached(locale, true) : getCachedCmsNews(locale);
 });
 
+function selectedFeaturedNewsItems(items: readonly NewsItem[]) {
+  const featuredItems = items.filter((item) => item.isFeatured).slice(0, FEATURED_NEWS_COUNT);
+  const featuredSlugs = new Set(featuredItems.map((item) => item.slug));
+  const fillItems = items
+    .filter((item) => !featuredSlugs.has(item.slug))
+    .slice(0, Math.max(0, FEATURED_NEWS_COUNT - featuredItems.length));
+
+  return [...featuredItems, ...fillItems];
+}
+
 export function getFeaturedNewsItems(items: readonly NewsItem[]) {
-  return items.slice(0, FEATURED_NEWS_COUNT);
+  return selectedFeaturedNewsItems(items);
 }
 
 export function getNewsListItemsAfterFeatured(items: readonly NewsItem[]) {
-  return items.slice(FEATURED_NEWS_COUNT);
+  const featuredSlugs = new Set(selectedFeaturedNewsItems(items).map((item) => item.slug));
+
+  return items.filter((item) => !featuredSlugs.has(item.slug));
 }
 
 async function getCmsNewsBySlugUncached(locale: Locale, slug: string, draft = false) {

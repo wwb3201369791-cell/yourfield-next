@@ -9,6 +9,7 @@ import {
   parseSearchStatsParams,
   type SearchKeywordStats,
   type SearchStats,
+  type SearchStatsWindow,
 } from '../lib/search/stats';
 import { searchHitTypes, type SearchLocale } from '../lib/search/types';
 
@@ -39,6 +40,7 @@ type SearchStatsEndpointResponse = Readonly<{
 }>;
 
 type SearchStatsLocaleFilter = SearchLocale | 'all';
+type SearchStatsTimeFilter = SearchStatsWindow | 'all';
 
 const searchStatsEndpointPath = '/payload-api/search-logs/stats';
 const searchStatsViewPath = '/payload-api/search-logs/stats-view';
@@ -48,11 +50,22 @@ const searchStatsLocaleFilters: Array<{ label: string; value: SearchStatsLocaleF
   { label: '英文', value: 'en' },
   { label: '俄文', value: 'ru' },
 ];
+const searchStatsTimeFilters: Array<{ label: string; value: SearchStatsTimeFilter }> = [
+  { label: '全部时间', value: 'all' },
+  { label: '近 7 天', value: '7d' },
+  { label: '近 30 天', value: '30d' },
+  { label: '近 90 天', value: '90d' },
+];
 
 const localeDisplayLabels: Record<string, string> = {
   en: '英文',
   ru: '俄文',
   zh: '中文',
+};
+const timeDisplayLabels: Record<SearchStatsWindow, string> = {
+  '7d': '近 7 天',
+  '30d': '近 30 天',
+  '90d': '近 90 天',
 };
 
 const panelStyles = {
@@ -87,6 +100,27 @@ const panelStyles = {
     gap: 8,
     margin: '14px 0',
   },
+  filterButton: {
+    background: '#176da6',
+    border: '1px solid rgba(23, 109, 166, 0.26)',
+    borderRadius: 8,
+    color: '#ffffff',
+    cursor: 'pointer',
+    fontSize: 12,
+    fontWeight: 900,
+    minHeight: 38,
+    padding: '8px 14px',
+  },
+  filterField: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: 8,
+  },
+  filterLabel: {
+    color: '#64748b',
+    fontSize: 12,
+    fontWeight: 900,
+  },
   filterLink: {
     background: '#f7fbff',
     border: '1px solid rgba(23, 109, 166, 0.22)',
@@ -97,6 +131,16 @@ const panelStyles = {
     padding: '7px 14px',
     textDecoration: 'none',
     transition: 'background 160ms ease, border-color 160ms ease, color 160ms ease',
+  },
+  filterSelect: {
+    background: '#f7fbff',
+    border: '1px solid rgba(23, 109, 166, 0.22)',
+    borderRadius: 8,
+    color: '#17314f',
+    fontSize: 12,
+    fontWeight: 800,
+    minHeight: 38,
+    padding: '8px 10px',
   },
   frame: {
     background: '#ffffff',
@@ -110,11 +154,19 @@ const panelStyles = {
 
 const reactElementSymbol = Symbol.for('react.element');
 
-function searchStatsPath(path: string, locale: SearchStatsLocaleFilter) {
+function searchStatsPath(
+  path: string,
+  locale: SearchStatsLocaleFilter,
+  window: SearchStatsTimeFilter = 'all',
+) {
   const params = new URLSearchParams({ limit: '100' });
 
   if (locale !== 'all') {
     params.set('locale', locale);
+  }
+
+  if (window !== 'all') {
+    params.set('window', window);
   }
 
   return `${path}?${params.toString()}`;
@@ -140,8 +192,8 @@ function h(
   } as ReactElement;
 }
 
-function formatPercent(value: number) {
-  return `${(value * 100).toFixed(1)}%`;
+function formatPercent(value: number, canCalculate = true) {
+  return canCalculate ? `${(value * 100).toFixed(1)}%` : '暂无';
 }
 
 function escapeHtml(value: unknown) {
@@ -167,14 +219,18 @@ function renderHtmlKeywordRows(keywords: readonly SearchKeywordStats[]) {
         <td class="cell-number">${item.searches}</td>
         <td class="cell-number ${item.zeroResultSearches > 0 ? 'cell-number--warn' : ''}">${item.zeroResultSearches}</td>
         <td class="cell-number">${item.clicks}</td>
-        <td class="cell-number">${formatPercent(item.ctr)}</td>
+        <td class="cell-number">${formatPercent(item.ctr, item.searches > 0)}</td>
       </tr>`,
     )
     .join('');
 }
 
-function renderHtmlKeywordsTable(title: string, keywords: readonly SearchKeywordStats[]) {
-  return `<section class="table-card">
+function renderHtmlKeywordsTable(
+  title: string,
+  keywords: readonly SearchKeywordStats[],
+  sectionId?: string,
+) {
+  return `<section${sectionId ? ` id="${escapeHtml(sectionId)}"` : ''} class="table-card">
     <h2>${escapeHtml(title)}</h2>
     <div class="table-scroll">
       <table>
@@ -196,6 +252,10 @@ function renderHtmlKeywordsTable(title: string, keywords: readonly SearchKeyword
 
 export function renderSearchStatsHtml(stats: SearchStats) {
   const localeLabel = stats.locale ? (localeDisplayLabels[stats.locale] ?? stats.locale) : '';
+  const timeLabel = stats.window ? timeDisplayLabels[stats.window] : '';
+  const createdAfterLabel = stats.createdAfter
+    ? ` · 起始时间 <strong>${escapeHtml(stats.createdAfter)}</strong>`
+    : '';
   return `<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -370,20 +430,20 @@ export function renderSearchStatsHtml(stats: SearchStats) {
   <main>
     <header class="page-head">
       <h1>站内搜索统计</h1>
-      <p>按语言汇总站内搜索、零结果关键词与点击率。</p>
+      <p>按语言与时间范围即时生成站内搜索、零结果关键词与点击率。</p>
     </header>
     <section class="summary" aria-label="搜索统计概览">
       <div class="card"><p class="label">搜索总次数</p><p class="value">${stats.totalSearches}</p></div>
       <div class="card card--warn"><p class="label">零结果次数</p><p class="value">${stats.zeroResultSearches}</p></div>
       <div class="card card--success"><p class="label">点击总次数</p><p class="value">${stats.totalClicks}</p></div>
-      <div class="card card--accent"><p class="label">点击率</p><p class="value">${formatPercent(stats.ctr)}</p></div>
+      <div class="card card--accent"><p class="label">点击率</p><p class="value">${formatPercent(stats.ctr, stats.totalSearches > 0)}</p></div>
     </section>
     <p class="generated">数据生成时间 <strong>${escapeHtml(stats.generatedAt)}</strong>${
       localeLabel ? ` · 语言 <strong>${escapeHtml(localeLabel)}</strong>` : ''
-    }</p>
+    }${timeLabel ? ` · 时间范围 <strong>${escapeHtml(timeLabel)}</strong>` : ''}${createdAfterLabel}</p>
     <section class="tables">
-      ${renderHtmlKeywordsTable('热门关键词 Top 100', stats.topKeywords)}
-      ${renderHtmlKeywordsTable('零结果关键词', stats.zeroResultKeywords)}
+      ${renderHtmlKeywordsTable('热门关键词 Top 100', stats.topKeywords, 'top-keywords')}
+      ${renderHtmlKeywordsTable('零结果关键词', stats.zeroResultKeywords, 'zero-result-keywords')}
     </section>
   </main>
 </body>
@@ -404,25 +464,58 @@ export function SearchLogsStatsPanel(_props: ListProps) {
         h(
           'p',
           { style: panelStyles.description },
-          '基于本地 Payload 搜索日志,展示热门关键词 Top 100、零结果关键词与点击率,无需外部分析服务。',
+          '基于本地 Payload 搜索日志即时生成热门关键词 Top 100、零结果关键词与点击率,可按语言和时间范围筛选,无需外部分析服务。',
         ),
       ),
     ),
     h(
-      'div',
-      { style: panelStyles.filters },
-      searchStatsLocaleFilters.map((option) =>
+      'form',
+      {
+        action: searchStatsViewPath,
+        method: 'get',
+        style: panelStyles.filters,
+        target: 'search-logs-stats-frame',
+      },
+      h('input', { name: 'limit', type: 'hidden', value: '100' }),
+      h(
+        'label',
+        { style: panelStyles.filterField },
+        h('span', { style: panelStyles.filterLabel }, '语言'),
         h(
-          'a',
-          {
-            href: searchStatsPath(searchStatsViewPath, option.value),
-            key: option.value,
-            style: panelStyles.filterLink,
-            target: 'search-logs-stats-frame',
-          },
-          option.label,
+          'select',
+          { name: 'locale', style: panelStyles.filterSelect },
+          searchStatsLocaleFilters.map((option) =>
+            h(
+              'option',
+              {
+                key: option.value,
+                value: option.value === 'all' ? '' : option.value,
+              },
+              option.label,
+            ),
+          ),
         ),
       ),
+      h(
+        'label',
+        { style: panelStyles.filterField },
+        h('span', { style: panelStyles.filterLabel }, '时间范围'),
+        h(
+          'select',
+          { name: 'window', style: panelStyles.filterSelect },
+          searchStatsTimeFilters.map((option) =>
+            h(
+              'option',
+              {
+                key: option.value,
+                value: option.value === 'all' ? '' : option.value,
+              },
+              option.label,
+            ),
+          ),
+        ),
+      ),
+      h('button', { style: panelStyles.filterButton, type: 'submit' }, '应用 / 刷新数据'),
     ),
     h('iframe', {
       name: 'search-logs-stats-frame',

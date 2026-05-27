@@ -48,7 +48,7 @@ const defaultDocs: DocsByCollection = {
   ],
 };
 
-function newsItem(slug: string, datePublished: string): NewsItem {
+function newsItem(slug: string, datePublished: string, isFeatured = false): NewsItem {
   return {
     author: 'YourField',
     category: 'news',
@@ -56,6 +56,7 @@ function newsItem(slug: string, datePublished: string): NewsItem {
     datePublished,
     excerpt: slug,
     image: '/images/news-placeholder.svg',
+    ...(isFeatured ? { isFeatured: true } : {}),
     slug,
     title: slug,
   };
@@ -246,6 +247,55 @@ describe('CMS draft query construction', () => {
     expect(cmsProduct?.scenarios?.[0]?.text.zh).toContain('危化处置');
   });
 
+  it('hydrates product detail by id so localized visual gallery images are available', async () => {
+    const listProduct = {
+      id: 18,
+      images: [{ file: { url: '/media/main.png' } }],
+      name: '4级防电弧服（夹克款）41cal',
+      productId: '4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l',
+      slug: '4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l',
+      visualGroups: [],
+    };
+    const detailProduct = {
+      ...listProduct,
+      visualGroups: [
+        {
+          images: [
+            { file: { url: '/media/gallery-1.png' } },
+            { file: { url: '/media/gallery-2.png' } },
+          ],
+          title: '产品图册',
+          variant: 'gallery',
+        },
+      ],
+    };
+    const payload = {
+      ...createPayloadStub({ products: [listProduct] }),
+      findByID: vi.fn(() => Promise.resolve(detailProduct)),
+    };
+    const { products } = await loadCmsModules(payload);
+
+    const cmsProduct = await products.getCmsProductBySlug(
+      'zh',
+      '4-ji-fang-dian-hu-fu-jia-ke-kuan-4-1-c-a-l',
+      false,
+    );
+
+    expect(payload.findByID).toHaveBeenCalledWith(
+      expect.objectContaining({
+        collection: 'products',
+        depth: 2,
+        fallbackLocale: 'none',
+        id: 18,
+        locale: 'zh',
+      }),
+    );
+    expect(cmsProduct?.visualGroups?.[0]?.images).toEqual([
+      '/media/gallery-1.png',
+      '/media/gallery-2.png',
+    ]);
+  });
+
   it('keeps news queries published-only by default and removes the status filter for Draft Mode', async () => {
     const { news, payload } = await loadCmsModules();
 
@@ -304,6 +354,46 @@ describe('CMS draft query construction', () => {
     expect(news.getFeaturedNewsItems(items).map((item) => item.slug)).toEqual([
       'newest',
       'second',
+      'third',
+    ]);
+    expect(news.getNewsListItemsAfterFeatured(items).map((item) => item.slug)).toEqual(['fourth']);
+  });
+
+  it('maps CMS homepage recommendation flags onto public news items', async () => {
+    const payload = createPayloadStub({
+      news: [
+        {
+          excerpt: 'Recommended excerpt',
+          id: 'news-recommended',
+          isFeatured: true,
+          publishedAt: '2026-05-09T00:00:00.000Z',
+          slug: 'recommended-news',
+          title: 'Recommended news',
+        },
+      ],
+    });
+    const { news } = await loadCmsModules(payload);
+
+    await expect(news.getCmsNews('zh', false)).resolves.toMatchObject([
+      {
+        isFeatured: true,
+        slug: 'recommended-news',
+      },
+    ]);
+  });
+
+  it('prioritizes homepage-recommended news before filling with newest items', async () => {
+    const { news } = await loadCmsModules();
+    const items = [
+      newsItem('newest', '2026-05-20T00:00:00.000Z'),
+      newsItem('recommended-older', '2026-05-09T00:00:00.000Z', true),
+      newsItem('third', '2026-05-01T00:00:00.000Z'),
+      newsItem('fourth', '2026-04-30T00:00:00.000Z'),
+    ];
+
+    expect(news.getFeaturedNewsItems(items).map((item) => item.slug)).toEqual([
+      'recommended-older',
+      'newest',
       'third',
     ]);
     expect(news.getNewsListItemsAfterFeatured(items).map((item) => item.slug)).toEqual(['fourth']);
@@ -399,6 +489,44 @@ describe('CMS news copy normalization', () => {
 });
 
 describe('CMS product optional content normalization', () => {
+  it('uses direct 1-based product display order with zero-priority items last', async () => {
+    const payload = createPayloadStub({
+      products: [
+        {
+          displayOrder: 0,
+          id: 'product-zero',
+          name: 'Zero priority product',
+          productId: 'zero-priority-product',
+          slug: 'zero-priority-product',
+        },
+        {
+          displayOrder: 3,
+          id: 'product-three',
+          name: 'Third product',
+          productId: 'third-product',
+          slug: 'third-product',
+        },
+        {
+          displayOrder: 1,
+          id: 'product-one',
+          name: 'First product',
+          productId: 'first-product',
+          slug: 'first-product',
+        },
+      ],
+    });
+    const { products } = await loadCmsModules(payload);
+
+    const items = await products.getCmsProducts('zh', false);
+
+    expect(findCall(payload, 0).sort).toBe('displayOrder');
+    expect(items.map((item) => item.id)).toEqual([
+      'first-product',
+      'third-product',
+      'zero-priority-product',
+    ]);
+  });
+
   it('keeps backend products visible even when optional images and description are blank', async () => {
     const { products } = await loadCmsModules();
 

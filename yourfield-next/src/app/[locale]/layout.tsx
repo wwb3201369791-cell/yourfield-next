@@ -17,6 +17,7 @@ import { getMessagesForLocale } from '@/lib/i18n/getMessages';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { isLocale, locales } from '@/lib/i18n/locale';
 import { normalizeMessageKey, type MessageTree } from '@/lib/i18n/messages';
+import { getPayloadHotSearchTerms } from '@/lib/search/payload';
 
 type LocaleLayoutProps = Readonly<{
   children: ReactNode;
@@ -41,6 +42,7 @@ const clientMessageKeys = Array.from(
     'search.clear',
     'search.submit',
     'search.suggestions',
+    'search.popular',
     'error.runtime.eyebrow',
     'error.runtime.title',
     'error.runtime.text',
@@ -68,6 +70,13 @@ function getClientMessages(locale: (typeof locales)[number]) {
   return clientMessages;
 }
 
+function getHeaderFallbackHotTerms(t: Awaited<ReturnType<typeof getTranslations>>) {
+  return t('search.hotTerms')
+    .split(/[|,，]/)
+    .map((value) => value.trim())
+    .filter(Boolean);
+}
+
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   if (!isLocale(params.locale)) {
     notFound();
@@ -79,9 +88,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     Promise.resolve(getClientMessages(params.locale)),
     getTranslations(params.locale),
   ]);
-  const [navigation, siteSettings] = await Promise.all([
+  const [navigation, siteSettings, hotTerms] = await Promise.all([
     getCmsNavigation(params.locale),
     getCmsSiteSettings(params.locale),
+    getPayloadHotSearchTerms(params.locale, getHeaderFallbackHotTerms(t), 6),
   ]);
 
   const cookieBannerCopy: CookieBannerCopy = {
@@ -100,6 +110,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           {t('common.skipToMain')}
         </a>
         <Header
+          hotTerms={hotTerms}
           locale={params.locale}
           navigation={navigation.mainNav}
           siteSettings={siteSettings}

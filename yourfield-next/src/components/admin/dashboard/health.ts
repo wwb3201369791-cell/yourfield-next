@@ -48,13 +48,6 @@ const ruleDefinitions: readonly RuleDefinition[] = [
     severity: 'warning',
   },
   {
-    actionLabel: '去补写',
-    label: '已发布产品 SEO 描述缺失',
-    ruleId: 'R4',
-    scorePenalty: (count) => groupedPenalty(count, 5, 2, 10),
-    severity: 'warning',
-  },
-  {
     actionLabel: '去更新',
     label: '最近 30 天无新闻更新',
     ruleId: 'R5',
@@ -168,16 +161,6 @@ function productMissingExternalName(value: unknown) {
   return hasExternalLocaleGap(getPathValue(value, ['name']));
 }
 
-function productMissingSeoDescription(value: unknown) {
-  const description = getPathValue(value, ['seo', 'description']);
-
-  if (stringValue(description).length > 0) {
-    return false;
-  }
-
-  return hasExternalLocaleGap(description);
-}
-
 function groupVisibleOnFrontend(value: unknown) {
   return isRecord(value) && value.showOnFrontend !== false;
 }
@@ -229,7 +212,6 @@ function actionHrefForRule(ruleId: DashboardHealthRuleId, adminBase: string, now
   switch (ruleId) {
     case 'R1':
     case 'R3':
-    case 'R4':
       return buildAdminCollectionHref(adminBase, 'products', {
         'where[_status][equals]': 'published',
       });
@@ -270,7 +252,6 @@ export function buildDashboardHealthResponse({
     R1: publishedProducts.filter((product) => !productHasImage(product)).length,
     R2: countEmptyProductGroups(productGroups, publishedProducts),
     R3: publishedProducts.filter(productMissingExternalName).length,
-    R4: publishedProducts.filter(productMissingSeoDescription).length,
     R5: news.length === 0 ? 1 : 0,
     R6: overdueSubmissions.length,
   };

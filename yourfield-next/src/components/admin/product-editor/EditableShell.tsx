@@ -1,6 +1,6 @@
- 'use client';
+'use client';
 
-import React, { type KeyboardEvent, type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 import { useEditorContext, type EditorSection } from './hooks/useEditorContext';
 
@@ -21,37 +21,27 @@ export function EditableShell({
   label,
   section,
 }: Props) {
-  const { openDrawer, openSection, previewMode } = useEditorContext();
+  const { openSection, previewMode } = useEditorContext();
   const editing = openSection === section;
 
   if (previewMode) {
     return isEmpty ? null : <>{children}</>;
   }
 
-  if (isEmpty) {
+  if (isEmpty && !children) {
     return (
-      <button className="ype-empty-add" type="button" onClick={() => openDrawer(section)}>
+      <div className="ype-empty-add">
         <span className="ype-empty-add-icon">＋</span>
         <span className="ype-empty-add-title">{emptyTitle ?? `添加${label}`}</span>
         {emptyHint ? <span className="ype-empty-add-hint">{emptyHint}</span> : null}
-      </button>
+      </div>
     );
   }
 
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      openDrawer(section);
-    }
-  };
-
   return (
     <div
-      className={`ype-editable ${editing ? 'is-editing' : ''}`}
-      role="button"
-      tabIndex={0}
-      onClick={() => openDrawer(section)}
-      onKeyDown={onKeyDown}
+      className={`ype-editable ${editing ? 'is-editing' : ''} ${isEmpty ? 'is-empty' : ''}`}
+      data-ype-section={section}
     >
       <span className="ype-editable-label">编辑：{label}</span>
       {children}

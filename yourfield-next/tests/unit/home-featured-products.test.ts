@@ -33,50 +33,70 @@ describe('home featured products', () => {
     vi.resetModules();
   });
 
-  it('uses cleaned representative copy and display images on the homepage', async () => {
+  it('uses the first product from the first five CMS product groups without homepage overrides', async () => {
     const products = [
       product({
-        categoryName: text('消防员灭火防护服'),
-        groupId: 'fire-rescue',
-        id: 'firefighter-suit-combat',
-      }),
-      product({
-        categoryName: text('防电弧服'),
-        description: text('原始防电弧描述'),
-        features: [text('原始防电弧特性')],
-        groupId: 'electrical-protection',
-        id: 'arc-flash-suit',
-        image: '/images/products/extracted/arc-flash-suit/image-001.png',
-        images: ['/images/products/extracted/arc-flash-suit/image-001.png'],
-        name: text('1级防电弧服（夹克款）'),
-        standards: ['原始标准'],
-      }),
-      product({
-        categoryName: text('焊接服'),
-        features: [text('阻燃'), text('配件还在完善中，会加入焊接眼镜')],
-        groupId: 'thermal-welding',
-        id: 'welding-protective-clothing',
-      }),
-      product({
-        categoryName: text('防化服'),
-        description: text('一次性化学防护服'),
-        features: [text('原防化特性'), text('配套产品l 配套产品')],
-        groupId: 'chemical-medical',
-        id: 'chemical-protective-suit',
+        categoryName: text('水域救援服'),
+        groupId: 'water-rescue',
+        id: 'water-rescue-first',
+        name: text('后台水域救援第一款'),
       }),
       product({
         categoryName: text('水域救援服'),
         groupId: 'water-rescue',
-        id: 'gan-shi-shui-yu-jiu-yuan-fu',
-        standards: ['/ 暂无标准'],
+        id: 'water-rescue-second',
+        name: text('后台水域救援第二款'),
+      }),
+      product({
+        categoryName: text('定制防护'),
+        groupId: 'custom-protection',
+        id: 'custom-protection-first',
+        name: text('后台定制防护第一款'),
+      }),
+      product({
+        categoryName: text('消防员灭火防护服'),
+        groupId: 'fire-rescue',
+        id: 'firefighter-suit-combat',
+        name: text('后台消防第一款'),
+      }),
+      product({
+        categoryName: text('防电弧服'),
+        description: text('后台防电弧描述'),
+        features: [text('后台防电弧特性')],
+        groupId: 'electrical-protection',
+        id: 'arc-flash-suit',
+        image: '/images/cms/arc-flash-suit.png',
+        images: ['/images/cms/arc-flash-suit.png'],
+        name: text('后台防电弧第一款'),
+        standards: ['后台标准'],
+      }),
+      product({
+        categoryName: text('焊接服'),
+        groupId: 'thermal-welding',
+        id: 'welding-protective-clothing',
+        name: text('后台焊接第一款'),
+      }),
+      product({
+        categoryName: text('防化服'),
+        groupId: 'chemical-medical',
+        id: 'chemical-protective-suit',
+        name: text('后台防化第一款'),
       }),
     ];
 
     vi.doMock('@/lib/cms/products', () => ({
       getCmsProductCategories: vi.fn(() => Promise.resolve([])),
-      getCmsProductGroups: vi.fn(() => Promise.resolve([])),
-      getCmsProducts: vi.fn(() => Promise.resolve([])),
-      getFeaturedCmsProducts: vi.fn(() => Promise.resolve(products)),
+      getCmsProductGroups: vi.fn(() =>
+        Promise.resolve([
+          { categoryIds: [], id: 'water-rescue', order: 1, title: '水域救援' },
+          { categoryIds: [], id: 'custom-protection', order: 2, title: '定制防护' },
+          { categoryIds: [], id: 'fire-rescue', order: 3, title: '消防救援' },
+          { categoryIds: [], id: 'electrical-protection', order: 4, title: '电力防护' },
+          { categoryIds: [], id: 'thermal-welding', order: 5, title: '热工焊接' },
+          { categoryIds: [], id: 'chemical-medical', order: 6, title: '化学医疗' },
+        ]),
+      ),
+      getCmsProducts: vi.fn(() => Promise.resolve(products)),
     }));
 
     const { getHomeFeaturedProducts } = await import('@/lib/cms/home');
@@ -85,44 +105,25 @@ describe('home featured products', () => {
     const arcFlash = result.find((item) => item.id === 'arc-flash-suit');
     const welding = result.find((item) => item.id === 'welding-protective-clothing');
     const chemical = result.find((item) => item.id === 'chemical-protective-suit');
-    const waterRescue = result.find((item) => item.id === 'gan-shi-shui-yu-jiu-yuan-fu');
+    const waterRescue = result.find((item) => item.id === 'water-rescue-first');
 
     expect(result.map((item) => item.id)).toEqual([
+      'water-rescue-first',
+      'custom-protection-first',
       'firefighter-suit-combat',
       'arc-flash-suit',
       'welding-protective-clothing',
-      'chemical-protective-suit',
-      'gan-shi-shui-yu-jiu-yuan-fu',
     ]);
-    expect(firefighter?.image).toBe(
-      '/images/products/official/firefighter-suit-combat-combat-01.png',
-    );
-    expect(firefighter?.images[0]).toBe(
-      '/images/products/official/firefighter-suit-combat-combat-01.png',
-    );
-    expect(arcFlash?.name.zh).toBe('防电弧服（夹克款）');
-    expect(arcFlash?.image).toBe(
-      '/images/products/official/arc-flash-suit-level-2-jacket-a-01.png',
-    );
-    expect(arcFlash?.images[0]).toBe(
-      '/images/products/official/arc-flash-suit-level-2-jacket-a-01.png',
-    );
-    expect(welding?.image).toBe(
-      '/images/products/official/welding-protective-clothing-class-b-split-01.png',
-    );
-    expect(welding?.images[0]).toBe(
-      '/images/products/official/welding-protective-clothing-class-b-split-01.png',
-    );
-    expect(welding?.features.map((feature) => feature.zh).join(' ')).not.toContain('配件');
-    expect(chemical?.image).toBe(
-      '/images/products/official/chemical-protective-suit-disposable-chemical-a-01.png',
-    );
-    expect(chemical?.images[0]).toBe(
-      '/images/products/official/chemical-protective-suit-disposable-chemical-a-01.png',
-    );
-    expect(chemical?.description.zh).toContain('粉尘');
-    expect(chemical?.features.map((feature) => feature.zh).join(' ')).not.toContain('配套产品');
-    expect(waterRescue?.standards).toEqual([]);
+    expect(result.some((item) => item.id === 'water-rescue-second')).toBe(false);
+    expect(result.some((item) => item.id === 'chemical-protective-suit')).toBe(false);
+    expect(firefighter?.name.zh).toBe('后台消防第一款');
+    expect(arcFlash?.name.zh).toBe('后台防电弧第一款');
+    expect(arcFlash?.description.zh).toBe('后台防电弧描述');
+    expect(arcFlash?.image).toBe('/images/cms/arc-flash-suit.png');
+    expect(arcFlash?.standards).toEqual(['后台标准']);
+    expect(welding?.name.zh).toBe('后台焊接第一款');
+    expect(chemical).toBeUndefined();
+    expect(waterRescue?.id).toBe('water-rescue-first');
   });
 
   it('falls back to extracted homepage products when the CMS product query fails', async () => {
@@ -132,26 +133,24 @@ describe('home featured products', () => {
       getCmsProductCategories: vi.fn(() => Promise.reject(new Error('schema drift'))),
       getCmsProductGroups: vi.fn(() => Promise.reject(new Error('schema drift'))),
       getCmsProducts: vi.fn(() => Promise.reject(new Error('schema drift'))),
-      getFeaturedCmsProducts: vi.fn(() => Promise.reject(new Error('schema drift'))),
     }));
 
     const { getHomeFeaturedProducts, getHomeProductSearchStats } = await import('@/lib/cms/home');
     const result = await getHomeFeaturedProducts('zh');
     const stats = await getHomeProductSearchStats('zh');
 
-    expect(result.map((item) => item.id)).toEqual([
-      'firefighter-suit-combat',
-      'arc-flash-suit',
-      'welding-protective-clothing',
-      'chemical-protective-suit',
-      'gan-shi-shui-yu-jiu-yuan-fu',
+    expect(result).toHaveLength(5);
+    expect(result.map((item) => item.groupId)).toEqual([
+      'fire-rescue',
+      'electrical-protection',
+      'thermal-welding',
+      'chemical-medical',
+      'water-rescue',
     ]);
-    expect(result.find((item) => item.id === 'arc-flash-suit')?.image).toBe(
-      '/images/products/official/arc-flash-suit-level-2-jacket-a-01.png',
-    );
+    expect(new Set(result.map((item) => item.groupId)).size).toBe(5);
     expect(stats).toEqual({ catalogCount: 38, groupCount: 5 });
     expect(warn).toHaveBeenCalledWith(
-      '[home] failed to load CMS featured products; using extracted products',
+      '[home] failed to load CMS homepage products; using extracted products',
       expect.any(Object),
     );
     expect(warn).toHaveBeenCalledWith(

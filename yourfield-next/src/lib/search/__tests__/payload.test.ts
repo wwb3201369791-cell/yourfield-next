@@ -28,7 +28,7 @@ afterEach(() => {
 });
 
 describe('getPayloadSearchSources', () => {
-  it('wraps public search source reads in collection-tagged caches', async () => {
+  it('loads all public search sources so filtered searches can keep complete facets', async () => {
     const payload = createPayloadStub();
     const unstableCache = vi.fn((fn: unknown) => fn);
 
@@ -50,7 +50,7 @@ describe('getPayloadSearchSources', () => {
         tags: ['cms:collection:products'],
       }),
     );
-    expect(payload.find).toHaveBeenCalledTimes(1);
+    expect(payload.find).toHaveBeenCalledTimes(5);
     expect(payload.find).toHaveBeenCalledWith(
       expect.objectContaining({
         collection: 'products',
@@ -64,5 +64,12 @@ describe('getPayloadSearchSources', () => {
         },
       }),
     );
+    expect(payload.find.mock.calls.map(([args]) => args.collection).sort()).toEqual([
+      'faqs',
+      'news',
+      'pages',
+      'products',
+      'solutions',
+    ]);
   });
 });

@@ -17,6 +17,11 @@ type CompanyMapProps = Readonly<{
 }>;
 
 type MapService = Readonly<{
+  attribution?: {
+    href: string;
+    label: string;
+    title: string;
+  };
   badge: string;
   externalUrl: string;
   iframeUrl: string | null;
@@ -112,6 +117,11 @@ function buildMapService(
     url.searchParams.set('callnative', '0');
 
     return {
+      attribution: {
+        href: 'https://www.openstreetmap.org/copyright',
+        label: '© OpenStreetMap contributors',
+        title: 'OpenStreetMap 版权与许可',
+      },
       badge: '地图预览',
       externalUrl: url.toString(),
       iframeUrl: buildOpenStreetMapFrameUrl(coordinates, true),
@@ -148,9 +158,12 @@ export function CompanyMap({
   openMapLabel,
 }: CompanyMapProps) {
   const mapService = buildMapService(locale, mapServiceName, coordinates);
+  const shellClassName = mapService.attribution
+    ? 'map-shell map-shell--with-attribution'
+    : 'map-shell';
 
   return (
-    <div className="map-shell" aria-label={frameTitle}>
+    <div className={shellClassName} aria-label={frameTitle}>
       <div className="map-container">
         <div className="map-fallback">
           <p>{placeholder}</p>
@@ -164,6 +177,20 @@ export function CompanyMap({
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
+        ) : null}
+
+        {mapService.attribution ? (
+          <div className="map-attribution-mask">
+            <a
+              className="map-attribution"
+              href={mapService.attribution.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={mapService.attribution.title}
+            >
+              {mapService.attribution.label}
+            </a>
+          </div>
         ) : null}
       </div>
 

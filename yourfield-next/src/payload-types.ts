@@ -77,7 +77,16 @@ export interface Product {
   productGroup: number | ProductGroup;
   category?: (number | null) | ProductCategory;
   industries?:
-    | ('firefighting' | 'power' | 'petrochemical' | 'steel' | 'medical' | 'welding' | 'defense' | 'emergency-rescue')[]
+    | (
+        | 'firefighting'
+        | 'power'
+        | 'petrochemical'
+        | 'steel'
+        | 'medical'
+        | 'welding'
+        | 'defense'
+        | 'emergency-rescue'
+      )[]
     | null;
   tags?:
     | {
@@ -148,6 +157,13 @@ export interface Product {
     | null;
   video?: number | Media | null;
   relatedProducts?: (number | Product)[] | null;
+  productFaqs?:
+    | {
+        question?: string | null;
+        answer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   faqs?: (number | Faq)[] | null;
   isFeatured?: boolean | null;
   displayOrder?: number | null;
@@ -205,7 +221,9 @@ export interface Product {
     | null;
   visualGroups?:
     | {
-        variant?: ('gallery' | 'scene' | 'modeling' | 'model' | 'detail' | 'certificate' | 'comparison') | null;
+        variant?:
+          | ('gallery' | 'scene' | 'modeling' | 'model' | 'detail' | 'certificate' | 'comparison')
+          | null;
         title?: string | null;
         description?: string | null;
         images?:
@@ -349,7 +367,15 @@ export interface ProductCategory {
   name: string;
   description?: string | null;
   productGroup?: (number | null) | ProductGroup;
-  group?: ('fire-rescue' | 'electrical-protection' | 'thermal-welding' | 'chemical-medical' | 'water-rescue') | null;
+  group?:
+    | (
+        | 'fire-rescue'
+        | 'electrical-protection'
+        | 'thermal-welding'
+        | 'chemical-medical'
+        | 'water-rescue'
+      )
+    | null;
   parent?: (number | null) | ProductCategory;
   cover?: number | Media | null;
   icon?: number | Media | null;
@@ -906,8 +932,6 @@ export interface SiteSetting {
     light: number | Media;
     dark: number | Media;
   };
-  favicon: number | Media;
-  appleTouchIcon?: number | Media | null;
   themeColor: string;
   defaultSeo?: {
     title?: string | null;

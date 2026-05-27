@@ -45,15 +45,7 @@ type ProductGroupDefinition = Readonly<{
 
 export const revalidate = 300;
 
-const productGroupDisplayOrder = [
-  'fire-rescue',
-  'electrical-protection',
-  'thermal-welding',
-  'chemical-medical',
-  'water-rescue',
-] as const;
-
-const representativeProductDisplayOrder = [
+const fallbackRepresentativeProductDisplayOrder = [
   'firefighter-suit-combat',
   'arc-flash-suit',
   'welding-protective-clothing',
@@ -64,31 +56,28 @@ const representativeProductDisplayOrder = [
 const categoryDisplayOrder = new Map(
   catalogCategories.map((category, index) => [category.id, index]),
 );
-const representativeProductOrder = new Map<string, number>(
-  representativeProductDisplayOrder.map((productId, index) => [productId, index]),
+const fallbackRepresentativeProductOrder = new Map<string, number>(
+  fallbackRepresentativeProductDisplayOrder.map((productId, index) => [productId, index]),
 );
-
-function productGroupOrder(groupId: string) {
-  const index = productGroupDisplayOrder.indexOf(
-    groupId as (typeof productGroupDisplayOrder)[number],
-  );
-
-  return index === -1 ? Number.MAX_SAFE_INTEGER : index;
-}
 
 function productCategoryOrder(categoryId: string) {
   return categoryDisplayOrder.get(categoryId) ?? Number.MAX_SAFE_INTEGER;
 }
 
-function representativeProductPriority(slotId: string) {
-  const index = representativeProductOrder.get(slotId);
+function fallbackRepresentativeProductPriority(slotId: string) {
+  const index = fallbackRepresentativeProductOrder.get(slotId);
 
   return index === undefined ? Number.MAX_SAFE_INTEGER : index;
 }
 
-function sortCatalogSlots(left: CatalogSlot, right: CatalogSlot) {
+function sortCatalogSlots(left: CatalogSlot, right: CatalogSlot, useCmsOrder: boolean) {
+  if (useCmsOrder) {
+    return left.sequence - right.sequence;
+  }
+
   return (
-    representativeProductPriority(left.slotId) - representativeProductPriority(right.slotId) ||
+    fallbackRepresentativeProductPriority(left.slotId) -
+      fallbackRepresentativeProductPriority(right.slotId) ||
     productCategoryOrder(left.categoryId) - productCategoryOrder(right.categoryId) ||
     left.sequence - right.sequence
   );
@@ -191,7 +180,7 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
           id: group.id,
           title: t(group.titleKey),
         }))
-  ).sort((left, right) => productGroupOrder(left.id) - productGroupOrder(right.id));
+  );
   const categoryDefinitions = useCmsCatalog
     ? []
     : catalogCategories.map((category) => ({
@@ -239,7 +228,7 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
     .map<ProductCatalogGroupView | null>((group) => {
       const groupSlots = filteredCatalogSlots
         .filter((slot) => slot.groupId === group.id)
-        .sort(sortCatalogSlots);
+        .sort((left, right) => sortCatalogSlots(left, right, useCmsCatalog));
 
       if (groupSlots.length === 0) {
         return null;

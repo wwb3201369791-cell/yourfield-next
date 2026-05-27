@@ -7,11 +7,11 @@ import { SectionFieldDrawer } from './SectionFieldDrawer';
 export function ScenariosDrawer() {
   return (
     <SectionFieldDrawer
-      title="应用场景"
+      title="适用场景"
       description="维护场景卡片或适用场景文本。"
       fields={[
-    { path: 'scenarios', label: '场景卡片', kind: 'readonly' },
-    { path: 'applications', label: '适用场景文本', kind: 'array' },
+        { path: 'scenarios', label: '场景卡片', kind: 'readonly' },
+        { path: 'applications', label: '适用场景文本', kind: 'array' },
       ]}
     />
   );

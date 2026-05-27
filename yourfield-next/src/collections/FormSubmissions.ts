@@ -1,5 +1,5 @@
 import type { AfterChangeHook } from 'payload/dist/collections/config/types';
-import type { CollectionConfig, FieldHook } from 'payload/types';
+import type { CollectionConfig } from 'payload/types';
 
 import SubmissionStatusCell from '../components/admin/cells/SubmissionStatusCell';
 import { FormSubmissionsListGuide } from '../components/admin/list/FormSubmissionsListGuide';
@@ -14,20 +14,6 @@ import {
 } from '../lib/payload/fields/options';
 
 type FormSubmissionDocument = Record<string, unknown> & { id: string | number };
-
-const requirePhoneOrEmail: FieldHook = ({ data, siblingData, value }) => {
-  const email = typeof value === 'string' ? value.trim() : '';
-  const source = siblingData ?? data;
-  const phoneValue =
-    source && typeof source === 'object' ? (source as Record<string, unknown>).phone : undefined;
-  const phone = typeof phoneValue === 'string' ? phoneValue.trim() : '';
-
-  if (!email && !phone) {
-    throw new Error('电话或邮箱至少填写一项。');
-  }
-
-  return typeof value === 'string' ? value : undefined;
-};
 
 const notifyAfterCreate: AfterChangeHook<FormSubmissionDocument> = async ({
   doc,
@@ -119,14 +105,13 @@ export const FormSubmissions: CollectionConfig = {
               name: 'phone',
               label: '电话',
               type: 'text',
+              required: true,
             },
             {
               name: 'email',
               label: '邮箱',
               type: 'email',
-              hooks: {
-                beforeValidate: [requirePhoneOrEmail],
-              },
+              required: true,
             },
           ],
         },

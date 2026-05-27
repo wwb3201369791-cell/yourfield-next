@@ -1,5 +1,6 @@
 'use client';
 
+import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -31,48 +32,151 @@ function normalizeIndex(index: number, length: number) {
   return ((index % length) + length) % length;
 }
 
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
+
+type AboutShowcaseSlide = Readonly<{
+  image: AboutShowcaseImage;
+  imageIndex: number;
+  slideIndex: number;
+  themeIndex: number;
+}>;
+
 export function AboutShowcase({ nextLabel, previousLabel, themes }: AboutShowcaseProps) {
-  const [activeThemeIndex, setActiveThemeIndex] = useState(0);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const slides = useMemo<readonly AboutShowcaseSlide[]>(() => {
+    let slideIndex = 0;
+
+    return themes.flatMap((theme, themeIndex) =>
+      theme.images.map((image, imageIndex) => ({
+        image,
+        imageIndex,
+        slideIndex: slideIndex++,
+        themeIndex,
+      })),
+    );
+  }, [themes]);
+  const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: 'start',
+    containScroll: false,
+    dragFree: false,
+    duration: 20,
+    loop: slides.length > 1,
+    skipSnaps: false,
+    watchDrag: slides.length > 1,
+  });
+
+  const selectedSlide = slides[normalizeIndex(selectedSlideIndex, slides.length || 1)];
+  const activeThemeIndex = selectedSlide?.themeIndex ?? 0;
   const activeTheme = themes[activeThemeIndex] ?? themes[0];
+  const activeImageIndex = selectedSlide?.imageIndex ?? 0;
   const activeImages = useMemo(() => activeTheme?.images ?? [], [activeTheme]);
+
+  const syncCarouselState = useCallback(() => {
+    if (!emblaApi) {
+      return;
+    }
+
+    setSelectedSlideIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) {
+      return undefined;
+    }
+
+    syncCarouselState();
+    emblaApi.on('select', syncCarouselState);
+    emblaApi.on('reInit', syncCarouselState);
+    emblaApi.on('settle', syncCarouselState);
+
+    return () => {
+      emblaApi.off('select', syncCarouselState);
+      emblaApi.off('reInit', syncCarouselState);
+      emblaApi.off('settle', syncCarouselState);
+    };
+  }, [emblaApi, syncCarouselState]);
+
+  useEffect(() => {
+    if (!emblaApi) {
+      return undefined;
+    }
+
+    const startDrag = () => {
+      setIsPaused(true);
+      setIsDragging(true);
+    };
+    const stopDrag = () => setIsDragging(false);
+
+    emblaApi.on('pointerDown', startDrag);
+    emblaApi.on('pointerUp', stopDrag);
+
+    return () => {
+      emblaApi.off('pointerDown', startDrag);
+      emblaApi.off('pointerUp', stopDrag);
+    };
+  }, [emblaApi]);
+
+  const scrollToSlide = useCallback(
+    (index: number) => {
+      if (slides.length === 0) {
+        return;
+      }
+
+      const nextIndex = normalizeIndex(index, slides.length);
+      setIsPaused(true);
+      setSelectedSlideIndex(nextIndex);
+      emblaApi?.scrollTo(nextIndex);
+    },
+    [emblaApi, slides.length],
+  );
 
   const selectTheme = useCallback(
     (index: number) => {
-      setIsPaused(true);
-      setActiveThemeIndex(normalizeIndex(index, themes.length || 1));
-      setActiveImageIndex(0);
+      const themeIndex = normalizeIndex(index, themes.length || 1);
+      const firstThemeSlide = slides.find((slide) => slide.themeIndex === themeIndex);
+
+      if (!firstThemeSlide) {
+        setIsPaused(true);
+        return;
+      }
+
+      scrollToSlide(firstThemeSlide.slideIndex);
     },
-    [themes.length],
+    [scrollToSlide, slides, themes.length],
   );
 
   const goNext = useCallback(() => {
-    const imageCount = activeImages.length || 1;
-
-    if (activeImageIndex < imageCount - 1) {
-      setActiveImageIndex(activeImageIndex + 1);
+    if (slides.length <= 1) {
       return;
     }
 
-    setActiveThemeIndex(normalizeIndex(activeThemeIndex + 1, themes.length || 1));
-    setActiveImageIndex(0);
-  }, [activeImageIndex, activeImages.length, activeThemeIndex, themes.length]);
+    if (!emblaApi) {
+      setSelectedSlideIndex((index) => normalizeIndex(index + 1, slides.length));
+      return;
+    }
+
+    emblaApi.scrollNext();
+  }, [emblaApi, slides.length]);
 
   const goPrevious = useCallback(() => {
-    if (activeImageIndex > 0) {
-      setActiveImageIndex(activeImageIndex - 1);
+    if (slides.length <= 1) {
       return;
     }
 
-    const previousThemeIndex = normalizeIndex(activeThemeIndex - 1, themes.length || 1);
-    const previousTheme = themes[previousThemeIndex];
-    setActiveThemeIndex(previousThemeIndex);
-    setActiveImageIndex(Math.max(0, (previousTheme?.images.length ?? 1) - 1));
-  }, [activeImageIndex, activeThemeIndex, themes]);
+    if (!emblaApi) {
+      setSelectedSlideIndex((index) => normalizeIndex(index - 1, slides.length));
+      return;
+    }
+
+    emblaApi.scrollPrev();
+  }, [emblaApi, slides.length]);
 
   useEffect(() => {
-    if (isPaused || themes.length < 2) {
+    if (isPaused || slides.length < 2) {
       return undefined;
     }
 
@@ -84,7 +188,14 @@ export function AboutShowcase({ nextLabel, previousLabel, themes }: AboutShowcas
     const timer = window.setInterval(goNext, 4600);
 
     return () => window.clearInterval(timer);
-  }, [goNext, isPaused, themes.length]);
+  }, [goNext, isPaused, slides.length]);
+
+  useEffect(() => {
+    if (slides.length > 0 && selectedSlideIndex >= slides.length) {
+      setSelectedSlideIndex(0);
+      emblaApi?.scrollTo(0);
+    }
+  }, [emblaApi, selectedSlideIndex, slides.length]);
 
   if (!activeTheme || themes.length === 0) {
     return null;
@@ -125,33 +236,53 @@ export function AboutShowcase({ nextLabel, previousLabel, themes }: AboutShowcas
         <div
           className="about-theme-gallery is-active"
           data-theme={activeTheme.theme}
-          key={activeTheme.theme}
+          aria-label={activeTheme.caption}
+          aria-roledescription="carousel"
+          role="region"
         >
-          <div className="about-gallery-viewport">
-            <div
-              className="about-gallery-track"
-              style={{ transform: `translate3d(${-activeImageIndex * 100}%, 0, 0)` }}
-            >
-              {activeImages.map((image) => (
-                <figure key={image.src} className="about-gallery-slide">
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill={false}
-                    width={720}
-                    height={460}
-                    sizes="(min-width: 1024px) 44vw, 100vw"
-                  />
-                </figure>
-              ))}
+          <div
+            className={cx(
+              'about-gallery-viewport',
+              slides.length > 1 && 'is-draggable',
+              isDragging && 'is-dragging',
+            )}
+            ref={emblaRef}
+          >
+            <div className="about-gallery-track">
+              {slides.map((slide) => {
+                const theme = themes[slide.themeIndex];
+
+                return (
+                  <figure
+                    key={`${theme?.theme ?? slide.themeIndex}-${slide.image.src}`}
+                    className="about-gallery-slide"
+                    aria-label={`${theme?.theme ?? activeTheme.theme} ${slide.imageIndex + 1}`}
+                    aria-roledescription="slide"
+                    role="group"
+                  >
+                    <Image
+                      src={slide.image.src}
+                      alt={slide.image.alt}
+                      fill={false}
+                      width={720}
+                      height={460}
+                      draggable={false}
+                      sizes="(min-width: 1024px) 44vw, 100vw"
+                    />
+                  </figure>
+                );
+              })}
             </div>
-            {activeImages.length > 1 ? (
+            {slides.length > 1 ? (
               <>
                 <button
                   className="about-gallery-arrow about-gallery-arrow--prev"
                   type="button"
                   aria-label={previousLabel}
-                  onClick={goPrevious}
+                  onClick={() => {
+                    setIsPaused(true);
+                    goPrevious();
+                  }}
                 >
                   <span aria-hidden="true">‹</span>
                 </button>
@@ -159,22 +290,36 @@ export function AboutShowcase({ nextLabel, previousLabel, themes }: AboutShowcas
                   className="about-gallery-arrow about-gallery-arrow--next"
                   type="button"
                   aria-label={nextLabel}
-                  onClick={goNext}
+                  onClick={() => {
+                    setIsPaused(true);
+                    goNext();
+                  }}
                 >
                   <span aria-hidden="true">›</span>
                 </button>
-                <div className="about-gallery-dots" aria-label={activeTheme.caption}>
-                  {activeImages.map((image, index) => (
-                    <button
-                      key={image.src}
-                      type="button"
-                      className={index === activeImageIndex ? 'is-active' : undefined}
-                      aria-current={index === activeImageIndex ? 'true' : undefined}
-                      aria-label={`${activeTheme.theme} ${index + 1}`}
-                      onClick={() => setActiveImageIndex(index)}
-                    />
-                  ))}
-                </div>
+                {activeImages.length > 1 ? (
+                  <div className="about-gallery-dots" aria-label={activeTheme.caption}>
+                    {activeImages.map((image, index) => (
+                      <button
+                        key={image.src}
+                        type="button"
+                        className={index === activeImageIndex ? 'is-active' : undefined}
+                        aria-current={index === activeImageIndex ? 'true' : undefined}
+                        aria-label={`${activeTheme.theme} ${index + 1}`}
+                        onClick={() => {
+                          const targetSlide = slides.find(
+                            (slide) =>
+                              slide.themeIndex === activeThemeIndex && slide.imageIndex === index,
+                          );
+
+                          if (targetSlide) {
+                            scrollToSlide(targetSlide.slideIndex);
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                ) : null}
               </>
             ) : null}
           </div>

@@ -13,7 +13,6 @@ export function ProductHeroCard({
   locale,
   mainImage,
   productCategory,
-  productCategoryFallbackLabel,
   productDescription,
   productId,
   productTitle,
@@ -41,7 +40,6 @@ export function ProductHeroCard({
       </div>
 
       <div className="detail-summary">
-        <span className="section-tag">{productCategory || productCategoryFallbackLabel}</span>
         {productTitle ? <h1>{productTitle}</h1> : null}
         {productDescription ? <p className="detail-description">{productDescription}</p> : null}
         {facts.length > 0 ? (
@@ -55,7 +53,10 @@ export function ProductHeroCard({
           </dl>
         ) : null}
         <div className="detail-actions">
-          <Link className="btn btn-primary btn-large" href={`/${locale}/contact?product=${productId}`}>
+          <Link
+            className="btn btn-primary btn-large"
+            href={`/${locale}/contact?product=${productId}`}
+          >
             {ctaQuoteLabel}
           </Link>
           <Link className="btn btn-secondary btn-large" href={`/${locale}/products`}>

@@ -191,6 +191,7 @@ export default async function ContactPage({ params, searchParams }: ContactPageP
                       label: t('page.contact.emailFieldLabel'),
                       name: 'email',
                       placeholder: t('page.contact.emailPlaceholder'),
+                      required: true,
                       type: 'email',
                     },
                     {
@@ -198,6 +199,7 @@ export default async function ContactPage({ params, searchParams }: ContactPageP
                       label: t('page.contact.mobileLabel'),
                       name: 'mobile',
                       placeholder: t('page.contact.mobilePlaceholder'),
+                      required: true,
                       type: 'tel',
                     },
                     {

@@ -39,6 +39,9 @@ jobs:
       PAYLOAD_DB_PUSH: 'true'
       PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
       PAYLOAD_SECRET: ci-only-payload-secret-change-before-production
+      CRON_SECRET: ci-only-cron-secret
+      REVALIDATE_SECRET: ci-only-revalidate-secret
+      PAYLOAD_PREVIEW_SECRET: ci-only-preview-secret
       TURNSTILE_SECRET: ci-only-turnstile-secret
 
     steps:
@@ -69,6 +72,9 @@ jobs:
 
       - name: Prepare CMS test database
         run: pnpm seed
+
+      - name: Check production environment
+        run: pnpm check:env
 
       - name: Build
         run: pnpm build

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "products_scenarios" (
   "_order" integer NOT NULL,
   "_parent_id" integer NOT NULL,
   "_locale" "_locales" NOT NULL,
-  "id" serial PRIMARY KEY NOT NULL,
+  "id" varchar PRIMARY KEY NOT NULL,
   "title" varchar NOT NULL,
   "description" varchar
 );
@@ -27,6 +27,32 @@ CREATE TABLE IF NOT EXISTS "_products_v_version_scenarios" (
   "description" varchar,
   "_uuid" varchar
 );
+
+DO $$ BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'products_scenarios'
+      AND column_name = 'id'
+      AND data_type <> 'character varying'
+  ) THEN
+    ALTER TABLE "products_scenarios" ALTER COLUMN "id" DROP DEFAULT;
+    ALTER TABLE "products_scenarios" ALTER COLUMN "id" TYPE varchar USING "id"::varchar;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = '_products_v_version_scenarios'
+      AND column_name = 'id'
+      AND data_type <> 'character varying'
+  ) THEN
+    ALTER TABLE "_products_v_version_scenarios" ALTER COLUMN "id" DROP DEFAULT;
+    ALTER TABLE "_products_v_version_scenarios" ALTER COLUMN "id" TYPE varchar USING "id"::varchar;
+  END IF;
+END $$;
 
 DO $$ BEGIN
   IF EXISTS (

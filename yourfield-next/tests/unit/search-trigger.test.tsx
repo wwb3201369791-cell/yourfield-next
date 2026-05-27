@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type { ComponentProps } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SearchTrigger } from '@/components/header/SearchTrigger';
@@ -42,8 +43,8 @@ function searchResponse(hits: unknown[]) {
   );
 }
 
-function renderSearchTrigger() {
-  render(<SearchTrigger locale="zh" />);
+function renderSearchTrigger(props: Partial<ComponentProps<typeof SearchTrigger>> = {}) {
+  render(<SearchTrigger locale="zh" {...props} />);
 
   return {
     form: document.querySelector('[data-search-form]') as HTMLFormElement,
@@ -59,6 +60,24 @@ describe('SearchTrigger direct navigation', () => {
   afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
+  });
+
+  it('shows hot terms in the header search popup before the visitor starts typing', () => {
+    const { input } = renderSearchTrigger({ hotTerms: ['防电弧服', '消防员灭火防护服'] });
+
+    fireEvent.focus(input);
+
+    expect(screen.getByText('防电弧服')).toBeTruthy();
+    expect(screen.getByText('消防员灭火防护服')).toBeTruthy();
+  });
+
+  it('opens a hot term from the header popup on the search results page', () => {
+    const { input } = renderSearchTrigger({ hotTerms: ['防电弧服'] });
+
+    fireEvent.focus(input);
+    fireEvent.click(screen.getByRole('option', { name: '防电弧服' }));
+
+    expect(routerMocks.push).toHaveBeenCalledWith('/zh/search?q=%E9%98%B2%E7%94%B5%E5%BC%A7%E6%9C%8D');
   });
 
   it('opens an exact product match directly from the header search', async () => {

@@ -7,12 +7,10 @@ export function ProductVisualGroups({
   carouselPreviousLabel,
   groups,
   heading,
-  tagLabel,
 }: VisualGroupsProps) {
   return (
     <>
       <div className="detail-section-heading">
-        <span className="section-tag">{tagLabel}</span>
         <h2>{heading}</h2>
       </div>
       <div className="detail-visual-groups">

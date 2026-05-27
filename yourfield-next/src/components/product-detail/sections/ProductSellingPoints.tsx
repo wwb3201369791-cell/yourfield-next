@@ -1,10 +1,9 @@
 import type { SellingPointsProps } from './types';
 
-export function ProductSellingPoints({ heading, points, tagLabel }: SellingPointsProps) {
+export function ProductSellingPoints({ heading, points }: SellingPointsProps) {
   return (
     <>
       <div className="detail-section-heading">
-        <span className="section-tag">{tagLabel}</span>
         <h2>{heading}</h2>
       </div>
       <div className="detail-point-grid">

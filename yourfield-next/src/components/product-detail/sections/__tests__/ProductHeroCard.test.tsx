@@ -46,7 +46,7 @@ describe('<ProductHeroCard />', () => {
     );
 
     expect(screen.getByRole('heading', { level: 1, name: '示例产品' })).toBeTruthy();
-    expect(screen.getAllByText('示例分类')).toHaveLength(2);
+    expect(screen.getAllByText('示例分类')).toHaveLength(1);
     expect(screen.getByText('示例描述')).toBeTruthy();
     expect(screen.getByText('型号')).toBeTruthy();
     expect(screen.getByText('X-001')).toBeTruthy();

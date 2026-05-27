@@ -4,6 +4,7 @@ import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { productGroupOptions } from '../lib/payload/fields/options';
 import { seoGroup } from '../lib/payload/fields/seo';
+import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { slugField } from '../lib/payload/fields/slug';
 import { revalidateCollectionAfterChange } from '../lib/payload/hooks/revalidateContent';
 
@@ -12,6 +13,8 @@ const localizedTextareaField = (name: string): TextareaField => ({
   type: 'textarea',
   localized: true,
 });
+
+const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前。';
 
 export const ProductCategories: CollectionConfig = {
   slug: 'product-categories',
@@ -84,21 +87,23 @@ export const ProductCategories: CollectionConfig = {
       type: 'relationship',
       relationTo: 'product-categories',
     },
-    {
+    imageUploadField({
       name: 'cover',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
+      label: '封面图',
+    }),
+    imageUploadField({
       name: 'icon',
-      type: 'upload',
-      relationTo: 'media',
-    },
+      label: '图标',
+    }),
     {
       name: 'order',
       type: 'number',
+      label: '前台展示位置',
       defaultValue: 0,
       index: true,
+      admin: {
+        description: frontendOrderDescription,
+      },
     },
     seoGroup,
   ],

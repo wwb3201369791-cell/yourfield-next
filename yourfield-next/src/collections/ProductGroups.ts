@@ -3,15 +3,26 @@ import type { CollectionConfig, Field, TextareaField } from 'payload/types';
 import DisplayPositionCell from '../components/admin/cells/SolutionPositionCell';
 import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
+import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { createSeoGroup } from '../lib/payload/fields/seo';
 import { generateSlug } from '../lib/payload/hooks/generateSlug';
 import { revalidateCollectionAfterChange } from '../lib/payload/hooks/revalidateContent';
+import { requireAllLocalesOnPublish } from '../lib/payload/hooks/validateI18nComplete';
+
+const contentLocales = ['zh', 'en', 'ru'] as const;
+
+const requiredI18nPaths = [
+  { path: 'name', label: '前台显示名称' },
+  { path: 'description', label: '大类说明' },
+] as const;
 
 const localizedTextareaField = (name: string): TextareaField => ({
   name,
   type: 'textarea',
   localized: true,
 });
+
+const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前。';
 
 const productGroupSeoGroup = {
   ...createSeoGroup({ label: 'SEO 设置（系统）' }),
@@ -56,6 +67,12 @@ export const ProductGroups: CollectionConfig = {
     delete: canDelete('product-groups'),
   },
   hooks: {
+    beforeChange: [
+      requireAllLocalesOnPublish(contentLocales, {
+        paths: requiredI18nPaths,
+        status: { mode: 'booleanStatus', field: 'showOnFrontend' },
+      }),
+    ],
     afterChange: [
       auditAfterChange('product-groups'),
       revalidateCollectionAfterChange('product-groups'),
@@ -63,6 +80,7 @@ export const ProductGroups: CollectionConfig = {
     afterDelete: [auditAfterDelete('product-groups')],
   },
   fields: [
+    i18nEditGuideField({ collectionSlug: 'product-groups', requiredPaths: requiredI18nPaths }),
     {
       type: 'tabs',
       tabs: [
@@ -102,8 +120,6 @@ export const ProductGroups: CollectionConfig = {
               defaultValue: true,
               index: true,
               admin: {
-                description:
-                  '开启后，并且这个大类下面有已发布产品，前台产品中心会出现对应的一整条栏目。关闭后只保留后台数据。',
                 disableListFilter: true,
                 disableListColumn: true,
               },
@@ -112,38 +128,14 @@ export const ProductGroups: CollectionConfig = {
               name: 'order',
               type: 'number',
               label: '前台展示位置',
-              defaultValue: 0,
+              defaultValue: 1,
               index: true,
               admin: {
-                description:
-                  '数字越小越靠前。当前 10 / 20 / 30 / 40 / 50 分别对应第 1 / 2 / 3 / 4 / 5 位。',
+                description: frontendOrderDescription,
                 disableListFilter: true,
                 components: {
                   Cell: DisplayPositionCell,
                 },
-              },
-            },
-            {
-              name: 'cover',
-              type: 'upload',
-              label: '大类封面图（可选）',
-              relationTo: 'media',
-              admin: {
-                description:
-                  '预留给大类封面或后续独立大类页使用。目前产品中心主要展示具体产品图片，不上传也可以。',
-                disableListColumn: true,
-                disableListFilter: true,
-              },
-            },
-            {
-              name: 'icon',
-              type: 'upload',
-              label: '大类图标（可选）',
-              relationTo: 'media',
-              admin: {
-                description: '预留给导航、入口卡片或图标化展示使用。目前前台不强制依赖。',
-                disableListColumn: true,
-                disableListFilter: true,
               },
             },
           ],

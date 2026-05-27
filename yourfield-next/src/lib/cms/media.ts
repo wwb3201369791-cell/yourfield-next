@@ -56,6 +56,15 @@ export function normalizeCmsMediaUrl(url: string | undefined, fallback: string) 
   }
 }
 
+type CmsMediaLike = Readonly<{
+  sizes?: Record<string, { url?: string } | undefined> | undefined;
+  url?: string | undefined;
+}>;
+
+export function selectCmsMediaUrl(media: CmsMediaLike | undefined) {
+  return media?.url ?? media?.sizes?.card?.url;
+}
+
 export function shouldUseUnoptimizedImage(src: string) {
   return src.startsWith(localMediaPrefix) || /^https?:\/\//i.test(src);
 }

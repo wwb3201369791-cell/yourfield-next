@@ -136,7 +136,7 @@ function mapCmsSolution(solution: CmsSolutionDoc, index: number): CmsSolution | 
     href: '/products',
     id,
     image: mediaUrl(solution.cover),
-    order: solution.order ?? index * 10,
+    order: solution.order ?? index + 1,
     productTags: productTags.length > 0 ? productTags : fallbackTags,
     summary,
     title,

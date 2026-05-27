@@ -3,10 +3,15 @@ import type { CollectionConfig } from 'payload/types';
 import { pageBlocks } from '../blocks';
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
+import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { heroVariantOptions, pageKeyOptions } from '../lib/payload/fields/options';
 import { seoGroup } from '../lib/payload/fields/seo';
+import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { slugField } from '../lib/payload/fields/slug';
 import { revalidateCollectionAfterChange } from '../lib/payload/hooks/revalidateContent';
+import { requireAllLocalesOnPublish } from '../lib/payload/hooks/validateI18nComplete';
+
+const contentLocales = ['zh', 'en', 'ru'] as const;
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -27,6 +32,7 @@ export const Pages: CollectionConfig = {
     delete: canDelete('pages'),
   },
   hooks: {
+    beforeChange: [requireAllLocalesOnPublish(contentLocales)],
     afterChange: [auditAfterChange('pages'), revalidateCollectionAfterChange('pages')],
     afterDelete: [auditAfterDelete('pages')],
   },
@@ -39,6 +45,7 @@ export const Pages: CollectionConfig = {
     maxPerDoc: 10,
   },
   fields: [
+    i18nEditGuideField({ collectionSlug: 'pages' }),
     {
       name: 'pageKey',
       type: 'select',
@@ -83,11 +90,10 @@ export const Pages: CollectionConfig = {
           type: 'textarea',
           localized: true,
         },
-        {
+        imageUploadField({
           name: 'backgroundImage',
-          type: 'upload',
-          relationTo: 'media',
-        },
+          label: '背景图片',
+        }),
         {
           name: 'backgroundVideo',
           type: 'upload',

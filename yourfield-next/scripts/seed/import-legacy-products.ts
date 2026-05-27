@@ -186,14 +186,8 @@ export const importLegacyProducts = async (
       images: [{ file: image }],
       relatedProducts: [],
       faqs: [],
-      seo: {
-        title: product.name,
-        description: product.description,
-        keywords: product.tags,
-        noindex: false,
-      },
       isFeatured: Boolean(product.isFeatured),
-      displayOrder: product.isFeatured ? 100 : 0,
+      displayOrder: product.isFeatured ? 1 : 0,
       publishedAt: new Date().toISOString(),
       _status: 'published',
     };

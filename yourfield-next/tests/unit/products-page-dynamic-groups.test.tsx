@@ -23,7 +23,7 @@ function findElementByType(
   type: unknown,
 ): ReactElement<Record<string, unknown>> | null {
   if (Array.isArray(node)) {
-    for (const child of node) {
+    for (const child of node as readonly ReactNode[]) {
       const match = findElementByType(child, type);
 
       if (match) {
@@ -53,7 +53,7 @@ afterEach(() => {
 });
 
 describe('products page dynamic catalog groups', () => {
-  it('renders product groups even when no product categories exist', async () => {
+  it('renders CMS product groups in backend order even when no product categories exist', async () => {
     const ProductCatalog = () => null;
 
     vi.doMock('@/components/product/ProductCatalog', () => ({
@@ -114,14 +114,37 @@ describe('products page dynamic catalog groups', () => {
         Promise.resolve([
           {
             categoryIds: [],
-            id: 'chemical-medical',
+            id: 'custom-protection',
             order: 0,
+            title: '定制防护',
+          },
+          {
+            categoryIds: [],
+            id: 'chemical-medical',
+            order: 10,
             title: '化学与医用防护',
           },
         ]),
       ),
       getCmsProducts: vi.fn(() =>
         Promise.resolve([
+          {
+            applications: [],
+            categoryId: 'custom-protection',
+            categoryName: localizedText('定制防护'),
+            description: localizedText('用于定制行业防护。'),
+            faqs: [],
+            features: [localizedText('按需定制')],
+            groupId: 'custom-protection',
+            id: 'custom-protection-first',
+            image: '/images/products/custom-first.png',
+            images: ['/images/products/custom-first.png'],
+            materials: [],
+            model: 'YF-CUSTOM-01',
+            name: localizedText('定制防护第一款'),
+            specifications: [],
+            standards: ['GB CUSTOM'],
+          },
           {
             applications: [],
             categoryId: 'chemical-medical',
@@ -139,6 +162,23 @@ describe('products page dynamic catalog groups', () => {
             specifications: [],
             standards: ['GB 24539'],
           },
+          {
+            applications: [],
+            categoryId: 'custom-protection',
+            categoryName: localizedText('定制防护'),
+            description: localizedText('第二款定制行业防护。'),
+            faqs: [],
+            features: [localizedText('备用展示')],
+            groupId: 'custom-protection',
+            id: 'custom-protection-second',
+            image: '/images/products/custom-second.png',
+            images: ['/images/products/custom-second.png'],
+            materials: [],
+            model: 'YF-CUSTOM-02',
+            name: localizedText('定制防护第二款'),
+            specifications: [],
+            standards: ['GB CUSTOM'],
+          },
         ]),
       ),
     }));
@@ -148,13 +188,22 @@ describe('products page dynamic catalog groups', () => {
     const catalogElement = findElementByType(element, ProductCatalog);
     const props = catalogElement?.props as ProductCatalogProps | undefined;
 
-    expect(props?.groups).toHaveLength(1);
+    expect(props?.groups).toHaveLength(2);
     expect(props?.groups[0]).toMatchObject({
+      categorySummary: '定制防护第一款 / 定制防护第二款',
+      id: 'custom-protection',
+      title: '定制防护',
+    });
+    expect(props?.groups[0]?.slots[0]).toMatchObject({
+      href: '/zh/products/custom-protection-first',
+      title: '定制防护第一款',
+    });
+    expect(props?.groups[1]).toMatchObject({
       categorySummary: '防化服',
       id: 'chemical-medical',
       title: '化学与医用防护',
     });
-    expect(props?.groups[0]?.slots[0]).toMatchObject({
+    expect(props?.groups[1]?.slots[0]).toMatchObject({
       href: '/zh/products/chemical-protective-suit',
       title: '防化服',
     });

@@ -2,13 +2,34 @@ import type { Field, GlobalConfig } from 'payload/types';
 
 import { canUpdate, isPublic } from '../lib/payload/access';
 import { auditGlobalAfterChange } from '../lib/payload/audit';
+import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import {
   localeOptions,
   mapServiceOptions,
   socialPlatformOptions,
 } from '../lib/payload/fields/options';
 import { createSeoGroup } from '../lib/payload/fields/seo';
+import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { revalidateGlobalAfterChange } from '../lib/payload/hooks/revalidateContent';
+import { requireAllLocalesOnGlobalSave } from '../lib/payload/hooks/validateI18nComplete';
+
+const contentLocales = ['zh', 'en', 'ru'] as const;
+
+const contactRequiredI18nPaths = [{ path: 'contact.address', label: '地址' }] as const;
+
+const requiredI18nPaths = [
+  ...contactRequiredI18nPaths,
+  { path: 'siteName', label: '站点名称' },
+  { path: 'tagline', label: '站点标语' },
+  { path: 'defaultSeo.title', label: '默认 SEO 标题' },
+  { path: 'defaultSeo.description', label: '默认 SEO 描述' },
+  { path: 'defaultSeo.keywords', label: '默认 SEO 关键词' },
+  { path: 'cookieConsent.title', label: 'Cookie 标题' },
+  { path: 'cookieConsent.description', label: 'Cookie 说明' },
+  { path: 'cookieConsent.acceptLabel', label: 'Cookie 接受按钮' },
+  { path: 'cookieConsent.rejectLabel', label: 'Cookie 拒绝按钮' },
+  { path: 'cookieConsent.essentialOnlyLabel', label: 'Cookie 仅必要按钮' },
+] as const;
 
 const hiddenAdminField = {
   admin: {
@@ -46,12 +67,21 @@ export const SiteSettings: GlobalConfig = {
     update: canUpdate('site-settings'),
   },
   hooks: {
+    beforeChange: [
+      requireAllLocalesOnGlobalSave(contentLocales, {
+        paths: requiredI18nPaths,
+      }),
+    ],
     afterChange: [
       auditGlobalAfterChange('site-settings'),
       revalidateGlobalAfterChange('site-settings'),
     ],
   },
   fields: [
+    i18nEditGuideField({
+      globalSlug: 'site-settings',
+      requiredPaths: contactRequiredI18nPaths,
+    }),
     {
       type: 'tabs',
       tabs: [
@@ -127,11 +157,10 @@ export const SiteSettings: GlobalConfig = {
           type: 'text',
           required: true,
         },
-        {
+        imageUploadField({
           name: 'icon',
-          type: 'upload',
-          relationTo: 'media',
-        },
+          label: '图标',
+        }),
       ],
     },
     {
@@ -152,32 +181,17 @@ export const SiteSettings: GlobalConfig = {
       ...hiddenAdminField,
       type: 'group',
       fields: [
-        {
+        imageUploadField({
           name: 'light',
-          type: 'upload',
-          relationTo: 'media',
+          label: '浅色 Logo',
           required: true,
-        },
-        {
+        }),
+        imageUploadField({
           name: 'dark',
-          type: 'upload',
-          relationTo: 'media',
+          label: '深色 Logo',
           required: true,
-        },
+        }),
       ],
-    },
-    {
-      name: 'favicon',
-      ...hiddenAdminField,
-      type: 'upload',
-      relationTo: 'media',
-      required: true,
-    },
-    {
-      name: 'appleTouchIcon',
-      ...hiddenAdminField,
-      type: 'upload',
-      relationTo: 'media',
     },
     {
       name: 'themeColor',

@@ -75,6 +75,7 @@ const validSubmission = (overrides: Record<string, unknown> = {}) => ({
   consentAcceptedAt: '2026-05-16T00:00:00.000Z',
   email: 'LEAD@EXAMPLE.COM',
   message: 'Please contact me about protective gear.',
+  mobile: '+86 13800000000',
   name: 'Test Lead',
   ...overrides,
 });
@@ -122,6 +123,44 @@ describe('POST /api/forms/submit', () => {
     expect(payload.create).not.toHaveBeenCalled();
   });
 
+  it('requires an email address even when a phone number is provided', async () => {
+    const { payload, route } = await loadRoute();
+
+    const response = await route.POST(
+      formRequest(
+        validSubmission({
+          email: undefined,
+        }),
+      ),
+    );
+
+    expect(response.status).toBe(422);
+    expect(await responseJson(response)).toMatchObject({
+      error: { code: 'VALIDATION_ERROR' },
+      ok: false,
+    });
+    expect(payload.create).not.toHaveBeenCalled();
+  });
+
+  it('requires a phone number even when an email address is provided', async () => {
+    const { payload, route } = await loadRoute();
+
+    const response = await route.POST(
+      formRequest(
+        validSubmission({
+          mobile: undefined,
+        }),
+      ),
+    );
+
+    expect(response.status).toBe(422);
+    expect(await responseJson(response)).toMatchObject({
+      error: { code: 'VALIDATION_ERROR' },
+      ok: false,
+    });
+    expect(payload.create).not.toHaveBeenCalled();
+  });
+
   it('creates a valid submission through Payload Local API with access override', async () => {
     const payload = createPayloadStub([{ id: 'product-1' }]);
     const { route } = await loadRoute({ payload });
@@ -154,6 +193,7 @@ describe('POST /api/forms/submit', () => {
       email: 'lead@example.com',
       message: 'Please contact me about protective gear.',
       name: 'Test Lead',
+      phone: '+86 13800000000',
       productRef: 'product-1',
       sourceLocale: 'zh',
       sourceUrl: 'http://localhost:3000/zh/contact?product=firefighter-suit-combat',

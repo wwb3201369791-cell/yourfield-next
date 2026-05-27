@@ -742,7 +742,9 @@
   cursor: grab;
   min-width: 0;
   overflow: hidden;
+  overscroll-behavior-x: contain;
   touch-action: pan-y;
+  user-select: none;
 }
 
 .detail-visual-viewport.is-dragging {
@@ -751,6 +753,7 @@
 
 .detail-visual-viewport.is-dragging .detail-visual-image {
   pointer-events: none;
+  transition: none;
 }
 
 .detail-visual-track {
@@ -771,8 +774,16 @@
   justify-content: center;
   min-width: 0;
   overflow: hidden;
-  position: relative;
   transition: var(--transition);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.detail-visual-image-frame {
+  display: block;
+  height: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .detail-visual-group--scene .detail-visual-image {
@@ -799,6 +810,9 @@
 .detail-visual-image img {
   object-fit: contain;
   padding: 10px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .detail-faq-list {

@@ -80,7 +80,13 @@ export function DashboardReady({
 
       <DashboardTodoStrip adminBase={adminBase} data={data} />
 
-      <KpiCards adminBase={adminBase} data={data} rangeDays={rangeDays} rangeLabel={rangeLabel} />
+      <KpiCards
+        adminBase={adminBase}
+        apiBase={apiBase}
+        data={data}
+        rangeDays={rangeDays}
+        rangeLabel={rangeLabel}
+      />
 
       <div className="yourfield-ops-layout">
         <DashboardHealthPanel adminBase={adminBase} health={data.health} />

@@ -1,10 +1,9 @@
 import type { FaqProps } from './types';
 
-export function ProductFaqList({ entries, heading, tagLabel }: FaqProps) {
+export function ProductFaqList({ entries, heading }: FaqProps) {
   return (
     <>
       <div className="detail-section-heading">
-        <span className="section-tag">{tagLabel}</span>
         <h2>{heading}</h2>
       </div>
       <div className="detail-faq-list">

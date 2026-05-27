@@ -23,6 +23,7 @@ const s3StorageRequiredEnvKeys = [
 ] as const;
 
 const productionRequiredSecretKeys = [
+  'PAYLOAD_SECRET',
   'CRON_SECRET',
   'REVALIDATE_SECRET',
   'PAYLOAD_PREVIEW_SECRET',
@@ -87,13 +88,14 @@ const envSchema = z
       .startsWith('/')
       .default('/payload-graphql-playground'),
     PAYLOAD_DB_PUSH: booleanFlag.default(false),
+    STRICT_I18N_PUBLISH: booleanFlag.default(true),
     PORT: z.coerce.number().int().positive().default(3000),
     COOKIE_DOMAIN: optionalString,
 
-    DATABASE_URI: z
-      .string()
-      .startsWith('postgresql://')
-      .default('postgresql://postgres:password@localhost:5432/yourfield_dev'),
+    DATABASE_URI: z.preprocess(
+      emptyStringToUndefined,
+      z.string().startsWith('postgresql://').optional().default('postgresql://postgres:password@localhost:5432/yourfield_dev'),
+    ),
     DATABASE_POOL_MIN: z.coerce.number().int().nonnegative().default(0),
     DATABASE_POOL_MAX: z.coerce.number().int().positive().default(10),
     DATABASE_SLOW_QUERY_MS: z.coerce.number().int().positive().default(500),
@@ -108,11 +110,6 @@ const envSchema = z
     MEDIA_UPLOAD_IMAGE_MAX_BYTES: positiveIntegerWithDefault(10 * 1024 * 1024),
     MEDIA_UPLOAD_PDF_MAX_BYTES: positiveIntegerWithDefault(20 * 1024 * 1024),
     MEDIA_UPLOAD_VIDEO_MAX_BYTES: positiveIntegerWithDefault(100 * 1024 * 1024),
-
-    MEILI_HOST: z.string().url().default('http://localhost:7700'),
-    MEILI_MASTER_KEY: optionalString,
-    MEILI_SEARCH_KEY: optionalString,
-    MEILI_INDEX_PREFIX: z.string().min(1).default('yourfield_dev_'),
 
     UMAMI_WEBSITE_ID: optionalString,
     UMAMI_SCRIPT_URL: optionalUrl,
@@ -183,6 +180,14 @@ const envSchema = z
         code: 'custom',
         path: ['NEXT_PUBLIC_TURNSTILE_SITE_KEY'],
         message: 'NEXT_PUBLIC_TURNSTILE_SITE_KEY is required in production',
+      });
+    }
+
+    if (data.NODE_ENV === 'production' && !process.env.DATABASE_URI?.trim()) {
+      context.addIssue({
+        code: 'custom',
+        path: ['DATABASE_URI'],
+        message: 'DATABASE_URI is required in production',
       });
     }
 

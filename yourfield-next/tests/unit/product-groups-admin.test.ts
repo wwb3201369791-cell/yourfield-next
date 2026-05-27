@@ -1,8 +1,13 @@
 import type { Field } from 'payload/types';
-import { describe, expect, it } from 'vitest';
+import type { ReactElement } from 'react';
+import { describe, expect, it, vi } from 'vitest';
 
 import { ProductGroups } from '@/collections/ProductGroups';
 import SolutionPositionCell from '@/components/admin/cells/SolutionPositionCell';
+
+vi.mock('@/components/admin/media-upload/SimpleMediaUploadField', () => ({
+  default: () => null,
+}));
 
 function flattenFields(fields: readonly Field[]): Field[] {
   return fields.flatMap((field) => {
@@ -33,15 +38,36 @@ describe('ProductGroups admin list', () => {
     expect(field?.admin).toMatchObject({ disableListColumn: true });
     expect(showOnFrontendField?.admin).toMatchObject({ disableListColumn: true });
     expect((orderField as { label?: unknown } | undefined)?.label).toBe('前台展示位置');
+    expect(orderField).toMatchObject({ defaultValue: 1 });
     expect(orderField?.admin).toMatchObject({
       components: {
         Cell: SolutionPositionCell,
       },
     });
+    expect(
+      (showOnFrontendField?.admin as { description?: unknown } | undefined)?.description,
+    ).toBeUndefined();
+    expect((orderField?.admin as { description?: unknown } | undefined)?.description).toBe(
+      '直接填 1、2、3；数字越小越靠前。',
+    );
+  });
+
+  it('uses exact operator-facing labels for frontend positions', () => {
+    const first = SolutionPositionCell({ cellData: 1 }) as ReactElement<{ children: string }>;
+    const second = SolutionPositionCell({ cellData: 2 }) as ReactElement<{ children: string }>;
+    const tenth = SolutionPositionCell({
+      cellData: 10,
+    }) as ReactElement<{ children: string }>;
+    const unset = SolutionPositionCell({ cellData: 0 }) as ReactElement<{ children: string }>;
+
+    expect(first.props.children).toBe('第 1 位');
+    expect(second.props.children).toBe('第 2 位');
+    expect(tenth.props.children).toBe('第 10 位');
+    expect(unset.props.children).toBe('未设置');
   });
 
   it('groups daily editing fields into label-only tabs without changing field paths', () => {
-    const [tabsField] = ProductGroups.fields;
+    const tabsField = ProductGroups.fields.find((field) => field.type === 'tabs');
 
     expect(tabsField).toMatchObject({ type: 'tabs' });
     expect(tabsField && 'tabs' in tabsField ? tabsField.tabs.map((tab) => tab.label) : []).toEqual([
@@ -56,7 +82,7 @@ describe('ProductGroups admin list', () => {
   });
 
   it('hides low-frequency fields from list columns and filters', () => {
-    for (const fieldName of ['slug', 'description', 'cover', 'icon', 'seo']) {
+    for (const fieldName of ['slug', 'description', 'seo']) {
       const field = getField(fieldName);
       const admin = field?.admin as
         | { disableListColumn?: boolean; disableListFilter?: boolean }
@@ -66,5 +92,10 @@ describe('ProductGroups admin list', () => {
       expect(admin?.disableListColumn).toBe(true);
       expect(admin?.disableListFilter).toBe(true);
     }
+  });
+
+  it('does not expose unused image upload fields in daily editing', () => {
+    expect(getField('cover')).toBeUndefined();
+    expect(getField('icon')).toBeUndefined();
   });
 });

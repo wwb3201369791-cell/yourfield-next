@@ -1,5 +1,7 @@
 import type { Block } from 'payload/types';
 
+import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
+
 export const MediaTextBlock: Block = {
   slug: 'mediaText',
   labels: {
@@ -13,11 +15,10 @@ export const MediaTextBlock: Block = {
       options: ['media-left', 'media-right'],
       defaultValue: 'media-left',
     },
-    {
+    imageUploadField({
       name: 'media',
-      type: 'upload',
-      relationTo: 'media',
-    },
+      label: '图片',
+    }),
     {
       name: 'title',
       type: 'text',

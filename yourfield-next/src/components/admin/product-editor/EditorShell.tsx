@@ -1,10 +1,11 @@
- 'use client';
+'use client';
 
 import React, { type ReactNode } from 'react';
 
 import { EditorToolbar } from './EditorToolbar';
 import { SectionDrawer } from './SectionDrawer';
 import { EditorProvider } from './hooks/useEditorContext';
+import '@/styles/legacy-product-detail.css';
 import '@/styles/admin-product-editor.css';
 
 type Props = Readonly<{

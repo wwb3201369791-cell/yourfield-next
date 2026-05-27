@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useId, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { numberFormat } from '../format';
 import type { DashboardChartPoint } from '../types';
@@ -26,13 +26,23 @@ const SERIES: ReadonlyArray<SeriesConfig> = [
   { color: '#ef3b49', key: 'forms', label: '询盘' },
 ];
 
-const VIEW_WIDTH = 1000;
-const VIEW_HEIGHT = 240;
+const FALLBACK_VIEW_WIDTH = 1000;
+const FALLBACK_VIEW_HEIGHT = 282;
 const PADDING_LEFT = 44;
 const PADDING_RIGHT = 18;
 const PADDING_TOP = 18;
 const PADDING_BOTTOM = 34;
 const GRID_LINES = 4;
+
+type ChartSize = Readonly<{
+  height: number;
+  width: number;
+}>;
+
+const FALLBACK_CHART_SIZE: ChartSize = {
+  height: FALLBACK_VIEW_HEIGHT,
+  width: FALLBACK_VIEW_WIDTH,
+};
 
 function niceCeiling(value: number) {
   if (value <= 4) return 4;
@@ -72,8 +82,47 @@ export function TrendChart({
   selectedPoint,
 }: TrendChartProps) {
   const gradientPrefix = useId().replace(/:/g, '');
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [chartSize, setChartSize] = useState<ChartSize>(FALLBACK_CHART_SIZE);
   const [hiddenSeries, setHiddenSeries] = useState<ReadonlyArray<SeriesKey>>([]);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return undefined;
+
+    const updateSize = (width: number, height: number) => {
+      const nextWidth = Math.round(width);
+      const nextHeight = Math.round(height);
+
+      if (nextWidth <= 0 || nextHeight <= 0) return;
+
+      setChartSize((previous) => {
+        if (previous.width === nextWidth && previous.height === nextHeight) {
+          return previous;
+        }
+
+        return { height: nextHeight, width: nextWidth };
+      });
+    };
+
+    const rect = svg.getBoundingClientRect();
+    updateSize(rect.width, rect.height);
+
+    if (typeof ResizeObserver === 'undefined') {
+      return undefined;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      updateSize(entry.contentRect.width, entry.contentRect.height);
+    });
+
+    observer.observe(svg);
+
+    return () => observer.disconnect();
+  }, []);
 
   const visibleSeries = useMemo(
     () => SERIES.filter((series) => !hiddenSeries.includes(series.key)),
@@ -96,8 +145,10 @@ export function TrendChart({
     return niceCeiling(Math.max(peak, 1));
   }, [chartPoints, visibleSeries]);
 
-  const innerWidth = VIEW_WIDTH - PADDING_LEFT - PADDING_RIGHT;
-  const innerHeight = VIEW_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
+  const viewWidth = chartSize.width;
+  const viewHeight = chartSize.height;
+  const innerWidth = Math.max(1, viewWidth - PADDING_LEFT - PADDING_RIGHT);
+  const innerHeight = Math.max(1, viewHeight - PADDING_TOP - PADDING_BOTTOM);
   const stepX = chartPoints.length > 1 ? innerWidth / (chartPoints.length - 1) : 0;
 
   const xFor = useCallback((index: number) => PADDING_LEFT + stepX * index, [stepX]);
@@ -143,8 +194,8 @@ export function TrendChart({
       const svg = event.currentTarget;
       const rect = svg.getBoundingClientRect();
       const ratio = rect.width === 0 ? 0 : (event.clientX - rect.left) / rect.width;
-      const viewX = ratio * VIEW_WIDTH;
-      if (viewX < PADDING_LEFT || viewX > VIEW_WIDTH - PADDING_RIGHT) {
+      const viewX = ratio * viewWidth;
+      if (viewX < PADDING_LEFT || viewX > viewWidth - PADDING_RIGHT) {
         setHoverIndex(null);
         return;
       }
@@ -155,7 +206,7 @@ export function TrendChart({
       );
       setHoverIndex(index);
     },
-    [chartPoints.length, innerWidth],
+    [chartPoints.length, innerWidth, viewWidth],
   );
 
   const onPointerLeave = useCallback(() => setHoverIndex(null), []);
@@ -166,7 +217,7 @@ export function TrendChart({
       const svg = event.currentTarget;
       const rect = svg.getBoundingClientRect();
       const ratio = rect.width === 0 ? 0 : (event.clientX - rect.left) / rect.width;
-      const viewX = ratio * VIEW_WIDTH;
+      const viewX = ratio * viewWidth;
       const relative = (viewX - PADDING_LEFT) / Math.max(1, innerWidth);
       const index = Math.min(
         chartPoints.length - 1,
@@ -177,7 +228,7 @@ export function TrendChart({
         onSelectDate(point.dateKey);
       }
     },
-    [chartPoints, innerWidth, onSelectDate],
+    [chartPoints, innerWidth, onSelectDate, viewWidth],
   );
 
   const toggleSeries = useCallback((key: SeriesKey) => {
@@ -200,6 +251,7 @@ export function TrendChart({
         : -1;
   const activePoint = activeIndex >= 0 ? chartPoints[activeIndex] : undefined;
   const activeX = activeIndex >= 0 ? xFor(activeIndex) : 0;
+  const activePercent = ((activeX / viewWidth) * 100).toFixed(2);
 
   return (
     <article className="yourfield-ops-panel yourfield-ops-panel--chart">
@@ -215,7 +267,7 @@ export function TrendChart({
               <button
                 key={series.key}
                 type="button"
-                className={`yourfield-ops-trend__chip${isHidden ? 'is-hidden' : ''}`}
+                className={`yourfield-ops-trend__chip${isHidden ? ' is-hidden' : ''}`}
                 onClick={() => toggleSeries(series.key)}
                 aria-pressed={!isHidden}
                 style={{ '--series-color': series.color } as React.CSSProperties}
@@ -231,10 +283,10 @@ export function TrendChart({
       <div className="yourfield-ops-trend">
         <svg
           className="yourfield-ops-trend__svg"
+          ref={svgRef}
           role="img"
           aria-label={`${rangeLabel}互动趋势折线图`}
-          viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`}
-          preserveAspectRatio="none"
+          viewBox={`0 0 ${viewWidth} ${viewHeight}`}
           onPointerMove={onPointerMove}
           onPointerLeave={onPointerLeave}
           onClick={onPointerClick}
@@ -261,7 +313,7 @@ export function TrendChart({
               <g key={`grid-${index}`}>
                 <line
                   x1={PADDING_LEFT}
-                  x2={VIEW_WIDTH - PADDING_RIGHT}
+                  x2={viewWidth - PADDING_RIGHT}
                   y1={y}
                   y2={y}
                   stroke="rgba(24,56,92,0.12)"
@@ -307,7 +359,7 @@ export function TrendChart({
               <text
                 key={`xaxis-${index}`}
                 x={xFor(index)}
-                y={VIEW_HEIGHT - 16}
+                y={viewHeight - 16}
                 textAnchor={
                   index === 0 ? 'start' : index === chartPoints.length - 1 ? 'end' : 'middle'
                 }
@@ -353,7 +405,7 @@ export function TrendChart({
           <div
             className="yourfield-ops-trend__tooltip"
             style={{
-              left: `${((activeX / VIEW_WIDTH) * 100).toFixed(2)}%`,
+              left: `clamp(var(--trend-tooltip-center-edge), ${activePercent}%, calc(100% - var(--trend-tooltip-center-edge)))`,
             }}
             role="status"
           >

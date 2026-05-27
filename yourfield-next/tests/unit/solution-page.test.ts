@@ -7,7 +7,7 @@ const solution = (overrides: Partial<SolutionPageSource> = {}): SolutionPageSour
   href: '/products',
   id: 'power-energy',
   image: '/images/solutions/solution-power-grid.jpg',
-  order: 10,
+  order: 1,
   productTags: ['防电弧服', '绝缘手套'],
   summary: '围绕电力作业风险配置防护方案。',
   title: '电力电网作业',
@@ -24,14 +24,14 @@ describe('solution page sections', () => {
 
   it('uses the CMS solutions as the four main solution cards sorted by order', () => {
     const sections = buildSolutionsPageSections([
-      solution({ id: 'power-energy', order: 20, title: '电力与能源' }),
+      solution({ id: 'power-energy', order: 2, title: '电力与能源' }),
       solution({
         id: 'petrochemical',
-        order: 30,
+        order: 3,
         productTags: ['防化服'],
         title: '石油石化',
       }),
-      solution({ id: 'emergency-response', order: 10, title: '应急救援' }),
+      solution({ id: 'emergency-response', order: 1, title: '应急救援' }),
     ]);
 
     expect(sections.isEmpty).toBe(false);

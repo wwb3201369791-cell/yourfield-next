@@ -359,6 +359,7 @@ export default async function FranchisePage({ params }: FranchisePageProps) {
                   label: t('page.franchise.formMobileLabel'),
                   name: 'mobile',
                   placeholder: t('page.franchise.formMobilePlaceholder'),
+                  required: true,
                   type: 'tel',
                 },
                 {
@@ -366,6 +367,7 @@ export default async function FranchisePage({ params }: FranchisePageProps) {
                   label: t('page.franchise.formEmailLabel'),
                   name: 'email',
                   placeholder: t('page.franchise.formEmailPlaceholder'),
+                  required: true,
                   type: 'email',
                 },
                 {

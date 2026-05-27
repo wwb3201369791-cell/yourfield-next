@@ -5,10 +5,19 @@ const protectedProductionSecrets = [
   'REVALIDATE_SECRET',
   'PAYLOAD_PREVIEW_SECRET',
 ] as const;
+const requiredProductionEnvKeys = [
+  'PAYLOAD_SECRET',
+  'DATABASE_URI',
+  'TURNSTILE_SECRET',
+  'NEXT_PUBLIC_TURNSTILE_SITE_KEY',
+  ...protectedProductionSecrets,
+] as const;
 
 const productionBaseEnv = {
+  DATABASE_URI: 'postgresql://postgres:password@localhost:5432/yourfield_dev',
   NODE_ENV: 'production',
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: 'test-turnstile-site-key',
+  PAYLOAD_SECRET: 'test-payload-secret-32-characters-long',
   TURNSTILE_SECRET: 'test-turnstile-secret',
 };
 
@@ -31,8 +40,12 @@ describe('environment validation', () => {
     vi.resetModules();
   });
 
-  it('requires internal webhook secrets in production', async () => {
+  it('requires explicit database and secret configuration in production', async () => {
     const error = await importEnvWith({
+      DATABASE_URI: '',
+      PAYLOAD_SECRET: '',
+      TURNSTILE_SECRET: '',
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: '',
       CRON_SECRET: '',
       REVALIDATE_SECRET: '',
       PAYLOAD_PREVIEW_SECRET: '',
@@ -44,9 +57,8 @@ describe('environment validation', () => {
     expect(error).toBeInstanceOf(Error);
 
     const message = error instanceof Error ? error.message : '';
-
-    protectedProductionSecrets.forEach((secretName) => {
-      expect(message).toContain(`${secretName} is required in production`);
+    requiredProductionEnvKeys.forEach((envName) => {
+      expect(message).toContain(`${envName} is required in production`);
     });
   });
 

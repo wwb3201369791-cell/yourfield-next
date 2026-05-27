@@ -1,7 +1,7 @@
 export const searchLocales = ['zh', 'en', 'ru'] as const;
 export type SearchLocale = (typeof searchLocales)[number];
 
-export const searchHitTypes = ['product', 'news', 'page', 'faq'] as const;
+export const searchHitTypes = ['product', 'solution', 'industry-case', 'news', 'page', 'faq'] as const;
 export const searchRequestTypes = ['all', ...searchHitTypes] as const;
 export type SearchRequestType = (typeof searchRequestTypes)[number];
 export type SearchHitType = (typeof searchHitTypes)[number];
@@ -52,6 +52,7 @@ export type SearchResponse = Readonly<{
   empty?: SearchEmptyState;
   facets: {
     categories: Record<string, number>;
+    categoryLabels?: Record<string, string>;
     types: Record<SearchHitType, number>;
   };
   hits: SearchHit[];
@@ -119,9 +120,11 @@ export type SearchSourceDocument = Record<string, unknown>;
 
 export type SearchSources = Readonly<{
   faqs: readonly SearchSourceDocument[];
+  industryCases: readonly SearchSourceDocument[];
   news: readonly SearchSourceDocument[];
   pages: readonly SearchSourceDocument[];
   products: readonly SearchSourceDocument[];
+  solutions: readonly SearchSourceDocument[];
 }>;
 
 export type SearchSourceProvider = (input: SearchQuery) => Promise<SearchSources>;

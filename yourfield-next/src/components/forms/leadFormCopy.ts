@@ -3,9 +3,9 @@ export type LeadFormLocale = 'zh' | 'en' | 'ru';
 type LeadFormCopy = Readonly<{
   captchaError: string;
   consent: string;
-  contactRequired: string;
   genericError: string;
   rateLimited: string;
+  requiredLabel: string;
   serverError: string;
   submitting: string;
   success: string;
@@ -18,9 +18,9 @@ const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
   zh: {
     captchaError: '表单验证未通过，请稍后再试。',
     consent: '我同意永霏为回复本次咨询使用以上信息。',
-    contactRequired: '请至少填写手机或邮箱，方便我们联系您。',
     genericError: '提交失败，请稍后再试，或直接通过邮箱联系我们。',
     rateLimited: '提交过于频繁，请稍后再试。',
+    requiredLabel: '必填',
     serverError: '暂时无法提交，请稍后再试，或直接通过邮箱联系我们。',
     submitting: '正在提交...',
     success: '已收到您的咨询，我们会尽快与您联系。',
@@ -31,9 +31,9 @@ const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
   en: {
     captchaError: 'Form verification failed. Please try again later.',
     consent: 'I agree that YourField may use the information above to respond to this inquiry.',
-    contactRequired: 'Please provide at least a mobile number or an email so we can contact you.',
     genericError: 'Submission failed. Please try again later or contact us by email.',
     rateLimited: 'Too many submissions. Please try again later.',
+    requiredLabel: 'required',
     serverError:
       'We cannot submit the form right now. Please try again later or contact us by email.',
     submitting: 'Submitting...',
@@ -47,9 +47,9 @@ const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
   ru: {
     captchaError: 'Проверка формы не пройдена. Повторите попытку позже.',
     consent: 'Я согласен(на), что YourField может использовать эти данные для ответа на запрос.',
-    contactRequired: 'Укажите телефон или email, чтобы мы могли связаться с вами.',
     genericError: 'Не удалось отправить форму. Повторите попытку позже или напишите нам по email.',
     rateLimited: 'Слишком много отправок. Повторите попытку позже.',
+    requiredLabel: 'обязательно',
     serverError:
       'Сейчас форму нельзя отправить. Повторите попытку позже или свяжитесь с нами по email.',
     submitting: 'Отправка...',

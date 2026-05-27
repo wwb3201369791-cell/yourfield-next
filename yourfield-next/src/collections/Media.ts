@@ -34,14 +34,15 @@ export const Media: CollectionConfig = {
       { name: 'mobile', width: 480, height: 640 },
       { name: 'og', width: 1200, height: 630 },
     ],
-    formatOptions: {
-      format: 'webp',
-      options: {
-        quality: 82,
-      },
-    },
     adminThumbnail: 'thumbnail',
-    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'application/pdf'],
+    mimeTypes: [
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/gif',
+      'video/mp4',
+      'application/pdf',
+    ],
   },
   hooks: {
     beforeOperation: [enforceMediaUploadLimit],
@@ -56,21 +57,31 @@ export const Media: CollectionConfig = {
       required: true,
       localized: true,
       admin: {
-        description: '无障碍替代文本，zh / en / ru 必须全部填写。',
+        hidden: true,
+        description: '系统会根据上传场景或文件名自动生成。',
       },
     },
     {
       name: 'caption',
       type: 'textarea',
       localized: true,
+      admin: {
+        hidden: true,
+      },
     },
     {
       name: 'credit',
       type: 'text',
+      admin: {
+        hidden: true,
+      },
     },
     {
       name: 'tags',
       type: 'array',
+      admin: {
+        hidden: true,
+      },
       fields: [
         {
           name: 'value',
@@ -85,6 +96,9 @@ export const Media: CollectionConfig = {
       options: mediaFolderOptions,
       defaultValue: 'misc',
       index: true,
+      admin: {
+        hidden: true,
+      },
     },
     {
       name: 'usageCount',
@@ -92,6 +106,7 @@ export const Media: CollectionConfig = {
       defaultValue: 0,
       min: 0,
       admin: {
+        hidden: true,
         readOnly: true,
         description: 'P2.S4 媒体引用统计 hook 自动维护。',
       },

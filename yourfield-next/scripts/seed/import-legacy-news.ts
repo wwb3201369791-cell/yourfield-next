@@ -339,23 +339,6 @@ const message = (locale: Locale, key: string) => messages[locale][key] ?? messag
 const localizedMessage = (key: string): LocalizedString =>
   localized(message('zh', key), message('en', key), message('ru', key));
 
-const truncate = (value: string, maxLength: number) => {
-  const chars = Array.from(value);
-
-  if (chars.length <= maxLength) {
-    return value;
-  }
-
-  return `${chars.slice(0, Math.max(0, maxLength - 3)).join('')}...`;
-};
-
-const truncateLocalized = (value: LocalizedString, maxLength: number): LocalizedString =>
-  localized(
-    truncate(value.zh, maxLength),
-    truncate(value.en, maxLength),
-    truncate(value.ru, maxLength),
-  );
-
 const fallbackBody = (title: LocalizedString, excerpt: LocalizedString): LocalizedString => ({
   zh: `${excerpt.zh}\n\n${title.zh}`,
   en: `${excerpt.en}\n\n${title.en}`,
@@ -501,12 +484,6 @@ export const importLegacyNews = async (
       },
       relatedNews: [],
       relatedProducts: [],
-      seo: {
-        title: truncateLocalized(title, 70),
-        description: truncateLocalized(excerpt, 200),
-        keywords: categoryLabel,
-        noindex: false,
-      },
       isFeatured: legacyNewsSeeds.indexOf(item) < 3,
       _status: 'published',
     };

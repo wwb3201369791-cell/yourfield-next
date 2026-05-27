@@ -55,7 +55,7 @@ const solutionSeeds: readonly SolutionSeed[] = [
     titleKey: 'page.solutions.powerTitle',
     summaryKey: 'page.solutions.powerText',
     imagePath: solutionImage('solution-power-grid.jpg'),
-    order: 10,
+    order: 1,
     productGroupIds: ['electrical-protection'],
     productIds: ['arc-flash-suit', 'live-line-shielding-suit', 'insulating-gloves'],
     featureKeys: [
@@ -76,7 +76,7 @@ const solutionSeeds: readonly SolutionSeed[] = [
     titleKey: 'page.solutions.petroTitle',
     summaryKey: 'page.solutions.petroText',
     imagePath: solutionImage('solution-petrochemical.jpg'),
-    order: 20,
+    order: 2,
     productGroupIds: ['chemical-medical', 'thermal-welding'],
     productIds: ['chemical-protective-suit', 'medical-protective-clothing'],
     featureKeys: [
@@ -97,7 +97,7 @@ const solutionSeeds: readonly SolutionSeed[] = [
     titleKey: 'page.solutions.manufacturingTitle',
     summaryKey: 'page.solutions.manufacturingText',
     imagePath: solutionImage('solution-equipment-manufacturing.jpg'),
-    order: 30,
+    order: 3,
     productGroupIds: ['thermal-welding', 'electrical-protection'],
     productIds: ['welding-protective-clothing', 'arc-flash-suit'],
     featureKeys: [
@@ -118,7 +118,7 @@ const solutionSeeds: readonly SolutionSeed[] = [
     titleKey: 'page.solutions.emergencyTitle',
     summaryKey: 'page.solutions.emergencyText',
     imagePath: solutionImage('solution-emergency-rescue.jpg'),
-    order: 40,
+    order: 4,
     productGroupIds: ['fire-rescue', 'chemical-medical'],
     productIds: [
       'firefighter-suit-combat',
@@ -204,11 +204,6 @@ export const importLegacySolutions = async (
       relatedProductGroups,
       relatedProducts,
       order: solution.order,
-      seo: {
-        title,
-        description: summary,
-        noindex: false,
-      },
       publishedAt: new Date().toISOString(),
       _status: 'published',
     };

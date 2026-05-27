@@ -1,0 +1,2135 @@
+{
+  "document": "产品册---消防应急系列4.15",
+  "note": "Images are extracted from DOCX word/media original files, not screenshots.",
+  "images": [
+    {
+      "source": "word/media/image1.png",
+      "output": "images/001_image1.png",
+      "size": 149428,
+      "sha1": "976e1b4cf9a234b05d1b22a49a72bf5f41023da8"
+    },
+    {
+      "source": "word/media/image2.png",
+      "output": "images/002_image2.png",
+      "size": 37876,
+      "sha1": "54a79e5a558a35c5bd8c23574667ee20bc7131ce"
+    },
+    {
+      "source": "word/media/image3.png",
+      "output": "images/003_image3.png",
+      "size": 140555,
+      "sha1": "187853a97801af406c2341eeb9e0c19d7e54ab3d"
+    },
+    {
+      "source": "word/media/image4.png",
+      "output": "images/004_image4.png",
+      "size": 36785,
+      "sha1": "3c599b90c30f371376d2049c8a8d31ea312060b5"
+    },
+    {
+      "source": "word/media/image5.png",
+      "output": "images/005_image5.png",
+      "size": 38520,
+      "sha1": "dc9b216756d66bd0b7018a40e1f2ebe45c50260a"
+    },
+    {
+      "source": "word/media/image6.png",
+      "output": "images/006_image6.png",
+      "size": 40546,
+      "sha1": "13ff911492fc61780767550a48a57984ea510301"
+    },
+    {
+      "source": "word/media/image7.png",
+      "output": "images/007_image7.png",
+      "size": 36138,
+      "sha1": "8730e70d4622ea52be31256446ba3042ad730be4"
+    },
+    {
+      "source": "word/media/image8.png",
+      "output": "images/008_image8.png",
+      "size": 7884790,
+      "sha1": "74ced29cdbc5aec69913fc106cda35944206587b"
+    },
+    {
+      "source": "word/media/image9.png",
+      "output": "images/009_image9.png",
+      "size": 7402718,
+      "sha1": "fd56811a00e71c8f62124a267fa71245cfa9b5f6"
+    },
+    {
+      "source": "word/media/image10.png",
+      "output": "images/010_image10.png",
+      "size": 7992265,
+      "sha1": "2df78be2fd75b4e8935b4089f01e864d3b3db83e"
+    },
+    {
+      "source": "word/media/image11.png",
+      "output": "images/011_image11.png",
+      "size": 6883818,
+      "sha1": "39ce21e09ce73d68854d29ed7844f583b399e49b"
+    },
+    {
+      "source": "word/media/image12.png",
+      "output": "images/012_image12.png",
+      "size": 3628858,
+      "sha1": "7664d41d555e721985748279218f5018d8f4e0bf"
+    },
+    {
+      "source": "word/media/image13.png",
+      "output": "images/013_image13.png",
+      "size": 158152,
+      "sha1": "f92aa632191d11f96f6fe3bd215a555c71f362bb"
+    },
+    {
+      "source": "word/media/image14.png",
+      "output": "images/014_image14.png",
+      "size": 4661718,
+      "sha1": "e15903533a00da74e01b53fc9a35dffbd2fb0816"
+    },
+    {
+      "source": "word/media/image15.png",
+      "output": "images/015_image15.png",
+      "size": 189585,
+      "sha1": "cfbf06c1f621f42ec5ff7c48a3de88fc72c7a0f0"
+    },
+    {
+      "source": "word/media/image16.png",
+      "output": "images/016_image16.png",
+      "size": 602218,
+      "sha1": "3110aa82c218866fd6f7482ce73d3045f7faf92b"
+    },
+    {
+      "source": "word/media/image17.png",
+      "output": "images/017_image17.png",
+      "size": 373309,
+      "sha1": "bf4a575a6e15c0113280b5ed4dbd2e8ba20a58d6"
+    },
+    {
+      "source": "word/media/image18.png",
+      "output": "images/018_image18.png",
+      "size": 346920,
+      "sha1": "6f7c570683b264f86ef3ddbcbc44bd87772842bb"
+    },
+    {
+      "source": "word/media/image19.png",
+      "output": "images/019_image19.png",
+      "size": 7300446,
+      "sha1": "1a327239eb305dc27bb760a8ea1ce9a4019f22d7"
+    },
+    {
+      "source": "word/media/image20.png",
+      "output": "images/020_image20.png",
+      "size": 367560,
+      "sha1": "4f448cfc27c0f8b57b8c25f1fa880578294386e2"
+    },
+    {
+      "source": "word/media/image21.png",
+      "output": "images/021_image21.png",
+      "size": 135219,
+      "sha1": "0fe8c81d3daa163abeb4368bd7314153469ffa50"
+    },
+    {
+      "source": "word/media/image22.png",
+      "output": "images/022_image22.png",
+      "size": 258475,
+      "sha1": "7306dba593afa3a83ae2f7b5d3068d3c1cb998fb"
+    },
+    {
+      "source": "word/media/image23.png",
+      "output": "images/023_image23.png",
+      "size": 444790,
+      "sha1": "1f9e79c66f7eae4116ec69b76270a1fd74951db5"
+    },
+    {
+      "source": "word/media/image24.png",
+      "output": "images/024_image24.png",
+      "size": 385172,
+      "sha1": "09374ee63ff5e1f844adf1094ca0ffc11699db58"
+    },
+    {
+      "source": "word/media/image25.png",
+      "output": "images/025_image25.png",
+      "size": 418423,
+      "sha1": "9b7b300aec67227e0cf235272f67ba512aee4faa"
+    },
+    {
+      "source": "word/media/image26.png",
+      "output": "images/026_image26.png",
+      "size": 5520435,
+      "sha1": "711e98f9ce6e8e790c9d9ee2ccd903dc844a7668"
+    },
+    {
+      "source": "word/media/image27.png",
+      "output": "images/027_image27.png",
+      "size": 243002,
+      "sha1": "9f535aa3c012a72ab00ab4222b7dd1c3535138d2"
+    },
+    {
+      "source": "word/media/image28.png",
+      "output": "images/028_image28.png",
+      "size": 416903,
+      "sha1": "959a63c0f06c0600d77a3d9b9b3c5d0cbbfeaa6c"
+    },
+    {
+      "source": "word/media/image29.png",
+      "output": "images/029_image29.png",
+      "size": 345312,
+      "sha1": "9de9b4b9892e160bd48597fd09bd2ba8476452de"
+    },
+    {
+      "source": "word/media/image30.png",
+      "output": "images/030_image30.png",
+      "size": 5894695,
+      "sha1": "a5db0721f1dd2a19630830bda88f73fb949e7b7b"
+    },
+    {
+      "source": "word/media/image31.png",
+      "output": "images/031_image31.png",
+      "size": 331937,
+      "sha1": "bf77954cfc3163242298de2dd9c6ed63b1801958"
+    },
+    {
+      "source": "word/media/image32.png",
+      "output": "images/032_image32.png",
+      "size": 455203,
+      "sha1": "b13be735322e29a59da03aee55ef7f8d69d5a162"
+    },
+    {
+      "source": "word/media/image33.png",
+      "output": "images/033_image33.png",
+      "size": 378274,
+      "sha1": "9a1cb1ad6c7573a0b178abb7a392095c75c40507"
+    },
+    {
+      "source": "word/media/image34.png",
+      "output": "images/034_image34.png",
+      "size": 1001976,
+      "sha1": "c0ed074a1fc19972a4401f5572b59d1cb9f3e4a2"
+    },
+    {
+      "source": "word/media/image35.png",
+      "output": "images/035_image35.png",
+      "size": 1035359,
+      "sha1": "0db74a07c8799b1b9575afefafe8f28ca0954e48"
+    },
+    {
+      "source": "word/media/image36.png",
+      "output": "images/036_image36.png",
+      "size": 469362,
+      "sha1": "1ef74a865d81218ccb2d6b49305094b90687abe3"
+    },
+    {
+      "source": "word/media/image37.png",
+      "output": "images/037_image37.png",
+      "size": 1289917,
+      "sha1": "f775913b146e5116a9ecb67eb28b88482cf2379d"
+    },
+    {
+      "source": "word/media/image38.png",
+      "output": "images/038_image38.png",
+      "size": 126198,
+      "sha1": "b60808e915a3421f32b9f51f271d6514d9a9aff2"
+    },
+    {
+      "source": "word/media/image39.png",
+      "output": "images/039_image39.png",
+      "size": 416864,
+      "sha1": "7325d7dc1722502c339d4a96f37665c9c60ff866"
+    },
+    {
+      "source": "word/media/image40.png",
+      "output": "images/040_image40.png",
+      "size": 372022,
+      "sha1": "30865ac9ba6c507eb1cdd429ba0f22272dc67066"
+    },
+    {
+      "source": "word/media/image41.png",
+      "output": "images/041_image41.png",
+      "size": 474104,
+      "sha1": "f84e7e14aa85e966462967cf55ae4a0efc797684"
+    },
+    {
+      "source": "word/media/image42.png",
+      "output": "images/042_image42.png",
+      "size": 179949,
+      "sha1": "87b5a99589a2f42af51b3c9763100f9e47eb3f6d"
+    },
+    {
+      "source": "word/media/image43.png",
+      "output": "images/043_image43.png",
+      "size": 130721,
+      "sha1": "fd4c9125e6ba363bd5ae3be3ffbbe32987c1b6bf"
+    },
+    {
+      "source": "word/media/image44.jpeg",
+      "output": "images/044_image44.jpeg",
+      "size": 273706,
+      "sha1": "97abb29dd5451419d0f7d9afade9439caa3e0200"
+    },
+    {
+      "source": "word/media/image45.png",
+      "output": "images/045_image45.png",
+      "size": 113050,
+      "sha1": "daffaa5326af937111475e7c49c9bf955c9fa2f4"
+    },
+    {
+      "source": "word/media/image46.png",
+      "output": "images/046_image46.png",
+      "size": 59556,
+      "sha1": "0c9004ba5511e8c55a4ab9a22d9949772a701811"
+    },
+    {
+      "source": "word/media/image47.png",
+      "output": "images/047_image47.png",
+      "size": 113700,
+      "sha1": "11d77182281e751c9c1439bd4669ababbe4a1776"
+    },
+    {
+      "source": "word/media/image48.png",
+      "output": "images/048_image48.png",
+      "size": 375951,
+      "sha1": "7528b22b4b2bfaa0f59b2a75bc25daaaa3d0b5f5"
+    },
+    {
+      "source": "word/media/image49.png",
+      "output": "images/049_image49.png",
+      "size": 315223,
+      "sha1": "c9ba903cecf81175a5b5e4193f987f45cd576d5f"
+    },
+    {
+      "source": "word/media/image50.png",
+      "output": "images/050_image50.png",
+      "size": 7332,
+      "sha1": "2ef4438058e22c9d602a6bc3760bd6b395f84858"
+    },
+    {
+      "source": "word/media/image51.png",
+      "output": "images/051_image51.png",
+      "size": 5319,
+      "sha1": "599f27012f12accf4544098a25399d1f56eb62cd"
+    },
+    {
+      "source": "word/media/image52.png",
+      "output": "images/052_image52.png",
+      "size": 6480,
+      "sha1": "38214f2031e3f2001f6fc0dc9f007cf8fa4206b7"
+    },
+    {
+      "source": "word/media/image53.png",
+      "output": "images/053_image53.png",
+      "size": 7216,
+      "sha1": "4229b2e839e1a6e7d31adc8425f2bbf6dc627a59"
+    },
+    {
+      "source": "word/media/image54.png",
+      "output": "images/054_image54.png",
+      "size": 5655,
+      "sha1": "257ba7d55ac6c7b4af18f1095cb64ffeed5ccc8b"
+    },
+    {
+      "source": "word/media/image55.png",
+      "output": "images/055_image55.png",
+      "size": 5769,
+      "sha1": "c293dfac624b1eab1c5518c71104ffe5f3526b6b"
+    },
+    {
+      "source": "word/media/image56.png",
+      "output": "images/056_image56.png",
+      "size": 2441,
+      "sha1": "201554938e17849806be8c4ed422d7e26fe5f20c"
+    },
+    {
+      "source": "word/media/image57.png",
+      "output": "images/057_image57.png",
+      "size": 3338,
+      "sha1": "fefdebeda889864dda0f6168854b5925306dba8a"
+    },
+    {
+      "source": "word/media/image58.png",
+      "output": "images/058_image58.png",
+      "size": 8891,
+      "sha1": "af9a63db6d1d010d9a87adff13a4cccc009228e7"
+    },
+    {
+      "source": "word/media/image59.png",
+      "output": "images/059_image59.png",
+      "size": 7310,
+      "sha1": "9a05026f72f24e3699993e4518b36809ad7175b9"
+    },
+    {
+      "source": "word/media/image60.png",
+      "output": "images/060_image60.png",
+      "size": 9779,
+      "sha1": "b3dca261646cc781872297745b328c8d515c3f95"
+    },
+    {
+      "source": "word/media/image61.png",
+      "output": "images/061_image61.png",
+      "size": 5423,
+      "sha1": "e5e5add44a72ac61dbec307ae90006ba8ee56b6d"
+    },
+    {
+      "source": "word/media/image62.png",
+      "output": "images/062_image62.png",
+      "size": 4860,
+      "sha1": "ac5edd3a1fb8bc1449b62c53bab30856204517b2"
+    },
+    {
+      "source": "word/media/image63.png",
+      "output": "images/063_image63.png",
+      "size": 10664,
+      "sha1": "2c31e063c9b1929e91defa7c64167b96011bbc95"
+    },
+    {
+      "source": "word/media/image64.png",
+      "output": "images/064_image64.png",
+      "size": 9864,
+      "sha1": "41e15278bb46264f5ff90e872d9f76dcfaef93b7"
+    },
+    {
+      "source": "word/media/image65.png",
+      "output": "images/065_image65.png",
+      "size": 9966,
+      "sha1": "8da86d0a1b68688ad903db52405c5d837c3c4934"
+    },
+    {
+      "source": "word/media/image66.png",
+      "output": "images/066_image66.png",
+      "size": 8398,
+      "sha1": "512815c447809a39faa854a63fa926e85ee94836"
+    },
+    {
+      "source": "word/media/image67.png",
+      "output": "images/067_image67.png",
+      "size": 106424,
+      "sha1": "34c842d71804aa2e4a7886398f7e2129966c390a"
+    },
+    {
+      "source": "word/media/image68.png",
+      "output": "images/068_image68.png",
+      "size": 204899,
+      "sha1": "bd6481c1873000d7ea4a682160a5719a6398475d"
+    },
+    {
+      "source": "word/media/image69.png",
+      "output": "images/069_image69.png",
+      "size": 159105,
+      "sha1": "92ea9697f401e4acdf7cadb32fdb1031b750c744"
+    },
+    {
+      "source": "word/media/image70.png",
+      "output": "images/070_image70.png",
+      "size": 162939,
+      "sha1": "38adbcd7d82e43c7f6c0b99d043c621fc6923361"
+    },
+    {
+      "source": "word/media/image71.png",
+      "output": "images/071_image71.png",
+      "size": 39515,
+      "sha1": "931d2132dd2dc4415d7885b42d22c846e4fa03c2"
+    },
+    {
+      "source": "word/media/image72.png",
+      "output": "images/072_image72.png",
+      "size": 90132,
+      "sha1": "48704638e69e6561a50c09c94d6700debf586804"
+    },
+    {
+      "source": "word/media/image73.png",
+      "output": "images/073_image73.png",
+      "size": 58117,
+      "sha1": "8fa8bf05d597314b24a74dd8f554de4b3b2abf6a"
+    }
+  ],
+  "content": [
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员灭火防护服（作战款）\n货号 | HYF-5513\n执行标准 | XF10-2014《消防员灭火防护服》\n颜色 | 藏蓝色\n尺码 | 165A-190B\n适用领域 | 适用于消防员灭火救援作业，同时可满足应急抢险、灾害处置等场景下，作业人员对高温、火焰、热辐射及机械损伤的综合防护需求。\n产品如何选用 | 根据热防护值及性能参数可选择不同的产品\n检测报告说明 | 有报告、有认证",
+      "rows": [
+        [
+          "产品名称",
+          "消防员灭火防护服（作战款）"
+        ],
+        [
+          "货号",
+          "HYF-5513"
+        ],
+        [
+          "执行标准",
+          "XF10-2014《消防员灭火防护服》"
+        ],
+        [
+          "颜色",
+          "藏蓝色"
+        ],
+        [
+          "尺码",
+          "165A-190B"
+        ],
+        [
+          "适用领域",
+          "适用于消防员灭火救援作业，同时可满足应急抢险、灾害处置等场景下，作业人员对高温、火焰、热辐射及机械损伤的综合防护需求。"
+        ],
+        [
+          "产品如何选用",
+          "根据热防护值及性能参数可选择不同的产品"
+        ],
+        [
+          "检测报告说明",
+          "有报告、有认证"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/001_image1.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/002_image2.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/003_image3.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/004_image4.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/005_image5.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/006_image6.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/007_image7.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/008_image8.png",
+        "images/009_image9.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员灭火防护服（指挥款）\n货号 | HYF-5531\n执行标准 | XF10-2014《消防员灭火防护服》\n颜色 | 藏蓝色\n尺码 | 165A-190B\n适用领域 | 适用于消防员灭火救援作业，同时可满足应急抢险、灾害处置等场景下，作业人员对高温、火焰、热辐射及机械损伤的综合防护需求。\n产品如何选用 | 根据热防护值及性能参数可选择不同的产品\n检测报告说明 | 有报告、有认证",
+      "rows": [
+        [
+          "产品名称",
+          "消防员灭火防护服（指挥款）"
+        ],
+        [
+          "货号",
+          "HYF-5531"
+        ],
+        [
+          "执行标准",
+          "XF10-2014《消防员灭火防护服》"
+        ],
+        [
+          "颜色",
+          "藏蓝色"
+        ],
+        [
+          "尺码",
+          "165A-190B"
+        ],
+        [
+          "适用领域",
+          "适用于消防员灭火救援作业，同时可满足应急抢险、灾害处置等场景下，作业人员对高温、火焰、热辐射及机械损伤的综合防护需求。"
+        ],
+        [
+          "产品如何选用",
+          "根据热防护值及性能参数可选择不同的产品"
+        ],
+        [
+          "检测报告说明",
+          "有报告、有认证"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员抢险救援服（夏款）\n货号 | HYF-5221\n执行标准 | XF 633-2006《消防员抢险救援防护服装》\n颜色 | 橘红色撞火焰蓝\n尺码 | 165A-190B\n适用领域 | 消防员夏季抢险救援作业，适用于应急抢险、防汛抗灾、城市内涝等场景下，作业人员对高温、高湿环境下执行非火灾类应急救援任务综合防护需求。\n产品如何选用 | /\n检测报告说明 | 有报告",
+      "rows": [
+        [
+          "产品名称",
+          "消防员抢险救援服（夏款）"
+        ],
+        [
+          "货号",
+          "HYF-5221"
+        ],
+        [
+          "执行标准",
+          "XF 633-2006《消防员抢险救援防护服装》"
+        ],
+        [
+          "颜色",
+          "橘红色撞火焰蓝"
+        ],
+        [
+          "尺码",
+          "165A-190B"
+        ],
+        [
+          "适用领域",
+          "消防员夏季抢险救援作业，适用于应急抢险、防汛抗灾、城市内涝等场景下，作业人员对高温、高湿环境下执行非火灾类应急救援任务综合防护需求。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "有报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/010_image10.png",
+        "images/011_image11.png",
+        "images/012_image12.png",
+        "images/013_image13.png",
+        "images/014_image14.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/015_image15.png",
+        "images/016_image16.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/017_image17.png",
+        "images/018_image18.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员抢险救援服（冬款）\n货号 | HYF-5219\n执行标准 | XF 633-2006《消防员抢险救援防护服装》\n颜色 | 橘红色撞火焰蓝\n尺码 | 165A-190B\n适用领域 | 消防员冬季抢险救援作业，适用于应急抢险、建筑倒塌、自然灾害应急响应、城市内涝等场景下，作业人员对高温、高湿等复杂环境下执行非火灾类应急救援任务综合防护需求。\n产品如何选用 | /\n检测报告说明 | 有报告",
+      "rows": [
+        [
+          "产品名称",
+          "消防员抢险救援服（冬款）"
+        ],
+        [
+          "货号",
+          "HYF-5219"
+        ],
+        [
+          "执行标准",
+          "XF 633-2006《消防员抢险救援防护服装》"
+        ],
+        [
+          "颜色",
+          "橘红色撞火焰蓝"
+        ],
+        [
+          "尺码",
+          "165A-190B"
+        ],
+        [
+          "适用领域",
+          "消防员冬季抢险救援作业，适用于应急抢险、建筑倒塌、自然灾害应急响应、城市内涝等场景下，作业人员对高温、高湿等复杂环境下执行非火灾类应急救援任务综合防护需求。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "有报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 17式森林防火服\n货号 | HYF-5317\n执行标准 | GB/T 33536-2017 《森林防火服》\n颜色 | 橘红色\n尺码 | 160-195\n适用领域 | 适用于森林、草原火灾、山地救援等场景，具备复杂地形环境中作业人员对高温、高热辐射环境下执行初步救援任务的防护需求。\n产品如何选用 | /\n检测报告说明 | 有报告",
+      "rows": [
+        [
+          "产品名称",
+          "17式森林防火服",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-5317"
+        ],
+        [
+          "执行标准",
+          "GB/T 33536-2017 《森林防火服》"
+        ],
+        [
+          "颜色",
+          "橘红色"
+        ],
+        [
+          "尺码",
+          "160-195"
+        ],
+        [
+          "适用领域",
+          "适用于森林、草原火灾、山地救援等场景，具备复杂地形环境中作业人员对高温、高热辐射环境下执行初步救援任务的防护需求。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "有报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/019_image19.png",
+        "images/020_image20.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/021_image21.png",
+        "images/022_image22.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/023_image23.png",
+        "images/024_image24.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/012_image12.png",
+        "images/025_image25.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/026_image26.png",
+        "images/027_image27.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 阻燃扑火服\n货号 | HYF-5322\n执行标准 | GB 8965.1-2020 防护服装 阻燃服 GB 12014-2019 防护服装 防静电服\n颜色 | 橘红色\n尺码 | 160-195\n适用领域 | 适用于森林、草原火灾、山地救援、野外火情巡查与监控等场景，具备复杂地形环境中作业人员对高温、高热辐射环境下执行初步救援任务的防护需求。\n产品如何选用 | /\n检测报告说明 | 有报告",
+      "rows": [
+        [
+          "产品名称",
+          "阻燃扑火服"
+        ],
+        [
+          "货号",
+          "HYF-5322"
+        ],
+        [
+          "执行标准",
+          "GB 8965.1-2020 防护服装 阻燃服 GB 12014-2019 防护服装 防静电服"
+        ],
+        [
+          "颜色",
+          "橘红色"
+        ],
+        [
+          "尺码",
+          "160-195"
+        ],
+        [
+          "适用领域",
+          "适用于森林、草原火灾、山地救援、野外火情巡查与监控等场景，具备复杂地形环境中作业人员对高温、高热辐射环境下执行初步救援任务的防护需求。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "有报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/028_image28.png",
+        "images/029_image29.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 国家卫生应急服（马甲+裤子）\n货号 | HYF-5127\n执行标准 | 《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》GB 12014-2019 防护服装 防静电服\n颜色 | 哈佛红+深藏蓝\n尺码 | 160-195\n适用领域 | 适用于突发公共卫生事件及各类灾害救援等场景，具备复杂环境下救援人员基础防护。\n产品如何选用 | /\n检测报告说明 | 无报告",
+      "rows": [
+        [
+          "产品名称",
+          "国家卫生应急服（马甲+裤子）"
+        ],
+        [
+          "货号",
+          "HYF-5127"
+        ],
+        [
+          "执行标准",
+          "《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》GB 12014-2019 防护服装 防静电服"
+        ],
+        [
+          "颜色",
+          "哈佛红+深藏蓝"
+        ],
+        [
+          "尺码",
+          "160-195"
+        ],
+        [
+          "适用领域",
+          "适用于突发公共卫生事件及各类灾害救援等场景，具备复杂环境下救援人员基础防护。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "无报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/030_image30.png",
+        "images/031_image31.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 国家卫生应急服春秋款\n货号 | HYF-5128\n执行标准 | 《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》GB 12014-2019 防护服装 防静电服\n颜色 | 哈佛红+深藏蓝\n尺码 | 160-195\n适用领域 | 适用于突发公共卫生事件及各类灾害救援等场景，具备复杂环境下救援人员基础防护。\n产品如何选用 | /\n检测报告说明 | 无报告",
+      "rows": [
+        [
+          "产品名称",
+          "国家卫生应急服春秋款"
+        ],
+        [
+          "货号",
+          "HYF-5128"
+        ],
+        [
+          "执行标准",
+          "《中国卫生应急服装技术规范（试行） 》 《国家卫生应急队伍标识（试行） 》GB 12014-2019 防护服装 防静电服"
+        ],
+        [
+          "颜色",
+          "哈佛红+深藏蓝"
+        ],
+        [
+          "尺码",
+          "160-195"
+        ],
+        [
+          "适用领域",
+          "适用于突发公共卫生事件及各类灾害救援等场景，具备复杂环境下救援人员基础防护。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "无报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/032_image32.png",
+        "images/033_image33.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员隔热防护服\n货号 | HYF-9901\n执行标准 | XF634-2015《消防员隔热防护服》\n颜色 | 银色\n尺码 | 165-190\n适用领域 | 适用于在火灾现场及高温作业场所等场景下，作业人员对高温、火焰、热辐射损伤的综合防护需求。适用于焊接、冶金、玻璃、陶瓷、石油化工等行业高温场景下全身防护。\n产品如何选用 | /\n检测报告说明 | 生产厂家有（国家消防装备质量监督检验中心型式检测报告）",
+      "rows": [
+        [
+          "产品名称",
+          "消防员隔热防护服"
+        ],
+        [
+          "货号",
+          "HYF-9901"
+        ],
+        [
+          "执行标准",
+          "XF634-2015《消防员隔热防护服》"
+        ],
+        [
+          "颜色",
+          "银色"
+        ],
+        [
+          "尺码",
+          "165-190"
+        ],
+        [
+          "适用领域",
+          "适用于在火灾现场及高温作业场所等场景下，作业人员对高温、火焰、热辐射损伤的综合防护需求。适用于焊接、冶金、玻璃、陶瓷、石油化工等行业高温场景下全身防护。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "生产厂家有（国家消防装备质量监督检验中心型式检测报告）"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/034_image34.png",
+        "images/035_image35.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员防蜂服\n货号 | HYF-9902\n执行标准 | XF3008-2020《消防员防蜂服》\n颜色 | 白色\n尺码 | 165-190\n适用领域 | 消防员防蜂服是专为摘除马蜂窝并应对与蜂群相关的危险情况而设计的防护装备。\n产品如何选用 | /\n检测报告说明 | 生产厂家有（上消所委托检测报告）",
+      "rows": [
+        [
+          "产品名称",
+          "消防员防蜂服"
+        ],
+        [
+          "货号",
+          "HYF-9902"
+        ],
+        [
+          "执行标准",
+          "XF3008-2020《消防员防蜂服》"
+        ],
+        [
+          "颜色",
+          "白色"
+        ],
+        [
+          "尺码",
+          "165-190"
+        ],
+        [
+          "适用领域",
+          "消防员防蜂服是专为摘除马蜂窝并应对与蜂群相关的危险情况而设计的防护装备。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "生产厂家有（上消所委托检测报告）"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/036_image36.png",
+        "images/037_image37.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 一级化学品防护服\n货号 | HYF-9903\n执行标准 | XF770-2008《消防员化学防护服装》\n颜色 | 橙色\n尺码 | 165-190\n适用领域 | 一级化学品防护服适用于在危险化学品、腐蚀性物品环境中进行现场操作；在危化品泄露、化学灾害现场、生化恐怖袭击中进行救援；处置危化品、毒气、微生物时提供单体全封闭式的专业防护装备。\n产品如何选用 | /\n检测报告说明 | 生产厂家有（上消所委托检测报告）",
+      "rows": [
+        [
+          "产品名称",
+          "一级化学品防护服"
+        ],
+        [
+          "货号",
+          "HYF-9903"
+        ],
+        [
+          "执行标准",
+          "XF770-2008《消防员化学防护服装》"
+        ],
+        [
+          "颜色",
+          "橙色"
+        ],
+        [
+          "尺码",
+          "165-190"
+        ],
+        [
+          "适用领域",
+          "一级化学品防护服适用于在危险化学品、腐蚀性物品环境中进行现场操作；在危化品泄露、化学灾害现场、生化恐怖袭击中进行救援；处置危化品、毒气、微生物时提供单体全封闭式的专业防护装备。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "生产厂家有（上消所委托检测报告）"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/038_image38.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 干式水域救援服\n货号 | HYF-9905\n执行标准 | / 暂无标准\n颜色 | 红色\n尺码 | S-XXL\n适用领域 | 干式水域救援服适用于寒冷季节或低温水域救援，抗洪抢险与洪涝灾害处置，激流、滩涂、沼泽等复杂水域救援的专业防护装备，核心功能是隔绝冷水、污水，防止失温，并保障救援人员在长时间浸泡中保持行动能力。\n产品如何选用 | /\n检测报告说明 | 厂家有对应检测报告",
+      "rows": [
+        [
+          "产品名称",
+          "干式水域救援服"
+        ],
+        [
+          "货号",
+          "HYF-9905"
+        ],
+        [
+          "执行标准",
+          "/ 暂无标准"
+        ],
+        [
+          "颜色",
+          "红色"
+        ],
+        [
+          "尺码",
+          "S-XXL"
+        ],
+        [
+          "适用领域",
+          "干式水域救援服适用于寒冷季节或低温水域救援，抗洪抢险与洪涝灾害处置，激流、滩涂、沼泽等复杂水域救援的专业防护装备，核心功能是隔绝冷水、污水，防止失温，并保障救援人员在长时间浸泡中保持行动能力。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "厂家有对应检测报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/039_image39.png",
+        "images/040_image40.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/041_image41.png",
+        "images/042_image42.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/043_image43.png",
+        "images/044_image44.jpeg"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/045_image45.png",
+        "images/046_image46.png",
+        "images/047_image47.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/048_image48.png",
+        "images/049_image49.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 湿式水域救援服\n货号 | HYF-9906\n执行标准 | /暂无标准\n颜色 | 红色\n尺码 | S-XXL\n适用领域 | 湿式水域救援服适用于水温较高、短期、低风险‌的水域救援场景：如夏季河流救援，城市内涝抗洪抢险与排水管网应急，湖泊、浅滩救援等，其核心设计是通过允许少量水流入形成保温水膜，而非完全防水。\n产品如何选用 | /\n检测报告说明 | 厂家有对应检测报告",
+      "rows": [
+        [
+          "产品名称",
+          "湿式水域救援服"
+        ],
+        [
+          "货号",
+          "HYF-9906"
+        ],
+        [
+          "执行标准",
+          "/暂无标准"
+        ],
+        [
+          "颜色",
+          "红色"
+        ],
+        [
+          "尺码",
+          "S-XXL"
+        ],
+        [
+          "适用领域",
+          "湿式水域救援服适用于水温较高、短期、低风险‌的水域救援场景：如夏季河流救援，城市内涝抗洪抢险与排水管网应急，湖泊、浅滩救援等，其核心设计是通过允许少量水流入形成保温水膜，而非完全防水。"
+        ],
+        [
+          "产品如何选用",
+          "/"
+        ],
+        [
+          "检测报告说明",
+          "厂家有对应检测报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "以下是参考资料",
+      "rows": [],
+      "images": []
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员灭火防护头盔（作战款）\n货号 | HYF-9102\n执行标准 | XF44-2015《消防头盔》\n颜色 | 黄色\n尺码 | 不分码\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "消防员灭火防护头盔（作战款）",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9102",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF44-2015《消防头盔》",
+          ""
+        ],
+        [
+          "颜色",
+          "黄色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/050_image50.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员灭火防护头盔（指挥款）\n货号 | HYF-9101\n执行标准 | XF44-2015《消防头盔》\n颜色 | 红色\n尺码 | 不分码\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "消防员灭火防护头盔（指挥款）",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9101",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF44-2015《消防头盔》",
+          ""
+        ],
+        [
+          "颜色",
+          "红色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/051_image51.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防手套\n货号 | HYF-7501\n执行标准 | XF7-2004《消防手套》\n颜色 | 藏蓝色\n尺码 | S-XL\n报告情况 | 有",
+      "rows": [
+        [
+          "产品名称",
+          "消防手套",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-7501",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF7-2004《消防手套》",
+          ""
+        ],
+        [
+          "颜色",
+          "藏蓝色",
+          ""
+        ],
+        [
+          "尺码",
+          "S-XL",
+          ""
+        ],
+        [
+          "报告情况",
+          "有",
+          ""
+        ]
+      ],
+      "images": [
+        "images/052_image52.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防腰带\n货号 | HYF-9A01\n执行标准 | XF494-2023《消防用防坠落装备》\n颜色 | 橘红+黑色\n尺码 | 不分码\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "消防腰带",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9A01",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF494-2023《消防用防坠落装备》",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红+黑色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/053_image53.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 消防员灭火防护靴\n货号 | HYF-9601\n执行标准 | XF6-2004《消防员灭火防护靴》\n颜色 | 黄色+黑色\n尺码 | 38-49\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "消防员灭火防护靴",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9601",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF6-2004《消防员灭火防护靴》",
+          ""
+        ],
+        [
+          "颜色",
+          "黄色+黑色",
+          ""
+        ],
+        [
+          "尺码",
+          "38-49",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/054_image54.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 抢险救援头盔（带护目镜选配）\n货号 | HYF-9103\n执行标准 | XF633-2006《消防员抢险救援防护服装》\n颜色 | 橘红\n尺码 | 不分码\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "抢险救援头盔（带护目镜选配）",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9103",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF633-2006《消防员抢险救援防护服装》",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/055_image55.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 抢险救援行军帽\n货号 | HYF-9105\n执行标准 | /\n颜色 | 橘红色\n尺码 | 不分码\n报告情况 | 无",
+      "rows": [
+        [
+          "产品名称",
+          "抢险救援行军帽",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9105",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "无",
+          ""
+        ]
+      ],
+      "images": [
+        "images/056_image56.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 抢险救援防护腰带\n货号 | HYF-9A02\n执行标准 | /\n颜色 | 橘红色\n尺码 | 不分码\n报告情况 | 无",
+      "rows": [
+        [
+          "产品名称",
+          "抢险救援防护腰带",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9A02",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "无",
+          ""
+        ]
+      ],
+      "images": [
+        "images/057_image57.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 抢险救援防护手套\n货号 | HYF-7502\n执行标准 | XF633-2006《消防员抢险救援防护服装》\n颜色 | 橘红色+灰色+黑色\n尺码 | S-XL\n报告情况 | 有",
+      "rows": [
+        [
+          "产品名称",
+          "抢险救援防护手套",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-7502",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF633-2006《消防员抢险救援防护服装》",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红色+灰色+黑色",
+          ""
+        ],
+        [
+          "尺码",
+          "S-XL",
+          ""
+        ],
+        [
+          "报告情况",
+          "有",
+          ""
+        ]
+      ],
+      "images": [
+        "images/058_image58.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 抢险救援防护靴\n货号 | HYF-9602\n执行标准 | XF633-2006《消防员抢险救援防护服装》\n颜色 | 黑色\n尺码 | 38-46\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "抢险救援防护靴",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9602",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF633-2006《消防员抢险救援防护服装》",
+          ""
+        ],
+        [
+          "颜色",
+          "黑色",
+          ""
+        ],
+        [
+          "尺码",
+          "38-46",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/059_image59.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 森林防火头盔\n货号 | HYF-7101\n执行标准 | XF 44-2015《消防头盔》/XF 633-2006/GB2811-2019\n颜色 | 橘红色\n尺码 | 不分码\n报告情况 | 有",
+      "rows": [
+        [
+          "产品名称",
+          "森林防火头盔",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-7101",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF 44-2015《消防头盔》/XF 633-2006/GB2811-2019",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有",
+          ""
+        ]
+      ],
+      "images": [
+        "images/060_image60.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 森林防火头罩\n货号 | HYF-5319\n执行标准 | XF 869-2010《消防员灭火防护头套》\n颜色 | 卡其色\n尺码 | 不分码\n报告情况 | 有",
+      "rows": [
+        [
+          "产品名称",
+          "森林防火头罩",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-5319",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF 869-2010《消防员灭火防护头套》",
+          ""
+        ],
+        [
+          "颜色",
+          "卡其色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有",
+          ""
+        ]
+      ],
+      "images": [
+        "images/061_image61.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 森林防火手套\n货号 | HYF-7503\n执行标准 | 符合XF 7-2004《消防手套》/XF 633-2006《消防员抢险救援防护服装》\n颜色 | 橘红色\n尺码 | 不分码\n报告情况 | 有",
+      "rows": [
+        [
+          "产品名称",
+          "森林防火手套",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-7503",
+          ""
+        ],
+        [
+          "执行标准",
+          "符合XF 7-2004《消防手套》/XF 633-2006《消防员抢险救援防护服装》",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有",
+          ""
+        ]
+      ],
+      "images": [
+        "images/062_image62.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 护目镜\n货号 | HYF-7201\n执行标准 | XF 1273-2015《消防员防护辅助装备 消防护目镜》\n颜色 | 橘红色\n尺码 | 不分码\n报告情况 | 有",
+      "rows": [
+        [
+          "产品名称",
+          "护目镜",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-7201",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF 1273-2015《消防员防护辅助装备 消防护目镜》",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有",
+          ""
+        ]
+      ],
+      "images": [
+        "images/063_image63.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 应急背囊\n货号 | HYF-9A03\n执行标准 | /\n颜色 | 橘红色\n尺码 | 不分码\n报告情况 | 无",
+      "rows": [
+        [
+          "产品名称",
+          "应急背囊",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9A03",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "橘红色",
+          ""
+        ],
+        [
+          "尺码",
+          "不分码",
+          ""
+        ],
+        [
+          "报告情况",
+          "无",
+          ""
+        ]
+      ],
+      "images": [
+        "images/064_image64.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 防火靴\n货号 | HYF-9603\n执行标准 | XF633-2006《消防员抢险救援防护服装》\n颜色 | 黑色\n尺码 | 35-46\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "防火靴",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9603",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF633-2006《消防员抢险救援防护服装》",
+          ""
+        ],
+        [
+          "颜色",
+          "黑色",
+          ""
+        ],
+        [
+          "尺码",
+          "35-46",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/065_image65.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 扑火鞋\n货号 | HYF-9605\n执行标准 | XF633-2006《消防员抢险救援防护服装》\n颜色 | 棕色\n尺码 | 35-46\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "扑火鞋",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9605",
+          ""
+        ],
+        [
+          "执行标准",
+          "XF633-2006《消防员抢险救援防护服装》",
+          ""
+        ],
+        [
+          "颜色",
+          "棕色",
+          ""
+        ],
+        [
+          "尺码",
+          "35-46",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/066_image66.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 水域救援头盔\n货号 | HYF-9106\n执行标准 | /\n颜色 | 红色\n尺码 | 均码\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "水域救援头盔",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9106",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "红色",
+          ""
+        ],
+        [
+          "尺码",
+          "均码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/067_image67.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 水域救援手套\n货号 | HYF-9503\n执行标准 | /\n颜色 | 红色\n尺码 | S-XL\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "水域救援手套",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9503",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "红色",
+          ""
+        ],
+        [
+          "尺码",
+          "S-XL",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/068_image68.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 激流救生衣\n货号 | HYF-9907\n执行标准 | /\n颜色 | 红色\n尺码 | S-2XL\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "激流救生衣",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9907",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "红色",
+          ""
+        ],
+        [
+          "尺码",
+          "S-2XL",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/069_image69.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 水域救援靴\n货号 | HYF-9609\n执行标准 | /\n颜色 | 银色\n尺码 | 36-45码\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "水域救援靴",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9609",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "银色",
+          ""
+        ],
+        [
+          "尺码",
+          "36-45码",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/070_image70.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 大音量救生口哨\n货号 | HYF-9A06\n执行标准 | /\n颜色 | 荧光橙\n尺码 | /\n报告情况 | 无报告",
+      "rows": [
+        [
+          "产品名称",
+          "大音量救生口哨",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9A06",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "荧光橙",
+          ""
+        ],
+        [
+          "尺码",
+          "/",
+          ""
+        ],
+        [
+          "报告情况",
+          "无报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/071_image71.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 水域救援割绳刀\n货号 | HYF-9A07\n执行标准 | /\n颜色 | 黑色、钛色\n尺码 | /\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "水域救援割绳刀",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9A07",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "黑色、钛色",
+          ""
+        ],
+        [
+          "尺码",
+          "/",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/072_image72.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 牛尾绳\n货号 | HYF-9A08\n执行标准 | /\n颜色 | 黑色\n尺码 | /\n报告情况 | 有供应商报告",
+      "rows": [
+        [
+          "产品名称",
+          "牛尾绳",
+          ""
+        ],
+        [
+          "货号",
+          "HYF-9A08",
+          ""
+        ],
+        [
+          "执行标准",
+          "/",
+          ""
+        ],
+        [
+          "颜色",
+          "黑色",
+          ""
+        ],
+        [
+          "尺码",
+          "/",
+          ""
+        ],
+        [
+          "报告情况",
+          "有供应商报告",
+          ""
+        ]
+      ],
+      "images": [
+        "images/073_image73.png"
+      ]
+    }
+  ]
+}

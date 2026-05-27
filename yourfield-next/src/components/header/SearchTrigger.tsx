@@ -17,6 +17,7 @@ import { resolveSearchNavigationHref } from '@/lib/search/directNavigation';
 import type { SearchSuggestion, SearchSuggestResponse } from '@/lib/search/types';
 
 type SearchTriggerProps = Readonly<{
+  hotTerms?: readonly string[];
   locale: Locale;
 }>;
 
@@ -38,7 +39,7 @@ function suggestionHref(locale: Locale, suggestion: SearchSuggestion) {
   return suggestion.url?.startsWith('/') ? suggestion.url : searchHref(locale, suggestion.term);
 }
 
-export function SearchTrigger({ locale }: SearchTriggerProps) {
+export function SearchTrigger({ hotTerms = [], locale }: SearchTriggerProps) {
   const t = useTranslations();
   const router = useRouter();
   const suggestionsId = useId();
@@ -120,6 +121,13 @@ export function SearchTrigger({ locale }: SearchTriggerProps) {
     router.push(suggestionHref(locale, suggestion));
   }
 
+  function navigateToHotTerm(term: string) {
+    setIsSuggestionsOpen(false);
+    setSuggestions([]);
+    setQuery(term);
+    router.push(searchHref(locale, term));
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -184,6 +192,8 @@ export function SearchTrigger({ locale }: SearchTriggerProps) {
 
   const hasQuery = Boolean(compactSearchTerm(query));
   const showSuggestions = isSuggestionsOpen && hasQuery && suggestions.length > 0;
+  const visibleHotTerms = hotTerms.slice(0, suggestionLimit);
+  const showHotTerms = isSuggestionsOpen && !hasQuery && visibleHotTerms.length > 0;
 
   return (
     <form
@@ -215,9 +225,9 @@ export function SearchTrigger({ locale }: SearchTriggerProps) {
         role="combobox"
         aria-label={t('search.label')}
         aria-autocomplete="list"
-        aria-controls={showSuggestions ? suggestionsId : undefined}
+        aria-controls={showSuggestions || showHotTerms ? suggestionsId : undefined}
         aria-haspopup="listbox"
-        aria-expanded={showSuggestions}
+        aria-expanded={showSuggestions || showHotTerms}
         maxLength={100}
         onChange={(event) => {
           setQuery(event.target.value);
@@ -270,6 +280,29 @@ export function SearchTrigger({ locale }: SearchTriggerProps) {
                   {typeof suggestion.count === 'number' ? (
                     <span className="text-xs text-text-lighter">{suggestion.count}</span>
                   ) : null}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {showHotTerms ? (
+        <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-[1400] overflow-hidden rounded border border-white/70 bg-white/95 p-3 shadow-xl backdrop-blur-xl">
+          <p className="px-1 pb-2 text-xs font-semibold uppercase tracking-[0.18em] text-text-lighter">
+            {t('search.popular')}
+          </p>
+          <ul id={suggestionsId} role="listbox" aria-label={t('search.popular')} className="flex flex-wrap gap-2">
+            {visibleHotTerms.map((term) => (
+              <li key={term} role="presentation">
+                <button
+                  className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-semibold text-primary transition hover:border-accent hover:text-accent focus:border-accent focus:text-accent focus:outline-none"
+                  type="button"
+                  role="option"
+                  aria-selected={false}
+                  onClick={() => navigateToHotTerm(term)}
+                  onMouseDown={(event) => event.preventDefault()}
+                >
+                  {term}
                 </button>
               </li>
             ))}

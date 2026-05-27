@@ -173,6 +173,28 @@ function openMailClient(href: string) {
   link.click();
 }
 
+function RequiredFieldLabel({
+  children,
+  required,
+  requiredLabel,
+}: Readonly<{
+  children: string;
+  required?: boolean;
+  requiredLabel: string;
+}>) {
+  return (
+    <span>
+      {children}
+      {required ? (
+        <>
+          <span aria-hidden="true"> *</span>
+          <span className="sr-only"> ({requiredLabel})</span>
+        </>
+      ) : null}
+    </span>
+  );
+}
+
 export function LeadSubmitForm({
   className,
   controlClassName = 'min-h-12 rounded border border-border bg-white px-4 text-base font-normal text-text disabled:cursor-not-allowed disabled:opacity-70',
@@ -211,16 +233,6 @@ export function LeadSubmitForm({
     }
 
     const formData = new FormData(form);
-    const mobile = formValue(formData, 'mobile');
-    const email = formValue(formData, 'email');
-
-    if (!mobile && !email) {
-      setStatus({ kind: 'error', message: copy.contactRequired });
-      form.querySelector<HTMLInputElement>('input[name="mobile"], input[name="email"]')?.focus();
-
-      return;
-    }
-
     const inquiryTypeValue = formValue(formData, 'inquiryType');
     const inquiryType: InquiryType =
       inquiryTypeValue === 'franchise' || inquiryTypeValue === 'message'
@@ -373,7 +385,12 @@ export function LeadSubmitForm({
       <div className={fieldGridClassName}>
         {fields.map((field) => (
           <label key={field.name} className="grid gap-2 text-sm font-bold text-primary">
-            {field.label}
+            <RequiredFieldLabel
+              required={field.required === true}
+              requiredLabel={copy.requiredLabel}
+            >
+              {field.label}
+            </RequiredFieldLabel>
             <input
               className={controlClassName}
               name={field.name}
@@ -388,7 +405,9 @@ export function LeadSubmitForm({
       </div>
 
       <label className="grid gap-2 text-sm font-bold text-primary">
-        {messageLabel}
+        <RequiredFieldLabel required requiredLabel={copy.requiredLabel}>
+          {messageLabel}
+        </RequiredFieldLabel>
         <textarea
           className={textareaClassName}
           name="message"

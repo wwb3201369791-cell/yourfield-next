@@ -3,6 +3,8 @@ import type { Where } from 'payload/types';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from '@/lib/cms/cache';
 import { getPayloadClient } from '@/lib/cms/payload';
+import { industryCases } from '@/lib/content/solutions';
+import { getFlatMessages } from '@/lib/i18n/getMessages';
 import { recommendedProductHitsFromSources } from '@/lib/search/search';
 import {
   defaultSearchStatsLimit,
@@ -19,12 +21,37 @@ import type {
   SearchSources,
 } from '@/lib/search/types';
 
-function emptyResult() {
-  return Promise.resolve({ docs: [] as SearchSourceDocument[] });
+const HOT_SEARCH_REVALIDATE_SECONDS = 86_400;
+
+const industryCaseAnchors: Record<string, string> = {
+  'case-electronics': 'industry-electronics',
+  'case-emergency': 'industry-emergency',
+  'case-food': 'industry-food',
+  'case-manufacturing': 'industry-manufacturing',
+  'case-medical': 'industry-medical',
+  'case-metal': 'industry-metal',
+  'case-petro': 'industry-petrochemical',
+  'case-power': 'industry-power',
+};
+
+function translatedMessage(locale: SearchLocale, key: string) {
+  return getFlatMessages(locale)[key] ?? '';
 }
 
-function includesType(input: SearchQuery, type: Exclude<SearchQuery['type'], 'all'>) {
-  return input.type === 'all' || input.type === type;
+function getStaticIndustryCaseSearchDocs(locale: SearchLocale): SearchSourceDocument[] {
+  return industryCases.map((item) => {
+    const anchor = industryCaseAnchors[item.id] ?? item.id;
+
+    return {
+      anchor,
+      href: `/${locale}/products#${anchor}`,
+      id: item.id,
+      image: item.image,
+      meta: translatedMessage(locale, item.metaKey),
+      text: translatedMessage(locale, item.textKey),
+      title: translatedMessage(locale, item.titleKey),
+    };
+  });
 }
 
 function logSearchLogWriteError(error: unknown) {
@@ -128,19 +155,47 @@ const getCachedSearchFaqs = unstable_cache(findPublishedSearchFaqs, ['payload-se
   tags: [cmsCollectionCacheTag('faqs')],
 });
 
+async function findPublishedSearchSolutions(locale: SearchLocale) {
+  const payload = await getPayloadClient();
+
+  return payload.find({
+    collection: 'solutions',
+    depth: 2,
+    draft: false,
+    fallbackLocale: 'none',
+    locale,
+    overrideAccess: true,
+    pagination: false,
+    sort: 'order',
+    where: { _status: { equals: 'published' } },
+  });
+}
+
+const getCachedSearchSolutions = unstable_cache(
+  findPublishedSearchSolutions,
+  ['payload-search-solutions'],
+  {
+    revalidate: CMS_CACHE_REVALIDATE_SECONDS,
+    tags: [cmsCollectionCacheTag('solutions')],
+  },
+);
+
 export async function getPayloadSearchSources(input: SearchQuery): Promise<SearchSources> {
-  const [products, news, pages, faqs] = await Promise.all([
-    includesType(input, 'product') ? getCachedSearchProducts(input.locale) : emptyResult(),
-    includesType(input, 'news') ? getCachedSearchNews(input.locale) : emptyResult(),
-    includesType(input, 'page') ? getCachedSearchPages(input.locale) : emptyResult(),
-    includesType(input, 'faq') ? getCachedSearchFaqs(input.locale) : emptyResult(),
+  const [products, news, pages, faqs, solutions] = await Promise.all([
+    getCachedSearchProducts(input.locale),
+    getCachedSearchNews(input.locale),
+    getCachedSearchPages(input.locale),
+    getCachedSearchFaqs(input.locale),
+    getCachedSearchSolutions(input.locale),
   ]);
 
   return {
     faqs: faqs.docs,
+    industryCases: getStaticIndustryCaseSearchDocs(input.locale),
     news: news.docs,
     pages: pages.docs,
     products: products.docs,
+    solutions: solutions.docs,
   };
 }
 
@@ -247,16 +302,70 @@ export async function getPayloadRecommendedProductHits(
   return recommendedProductHitsFromSources({ products: products.docs }, input.locale, 3);
 }
 
-export async function getPayloadHotSearchTerms(
+type PayloadClient = Awaited<ReturnType<typeof getPayloadClient>>;
+
+function productHotTerm(product: SearchSourceDocument) {
+  return typeof product.name === 'string' && product.name.trim() ? product.name.trim() : '';
+}
+
+function dedupeTerms(terms: readonly string[]) {
+  const seen = new Set<string>();
+  const deduped: string[] = [];
+
+  for (const term of terms) {
+    const normalized = term.trim().replace(/\s+/g, ' ');
+    const key = normalized.toLocaleLowerCase();
+
+    if (!normalized || seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    deduped.push(normalized);
+  }
+
+  return deduped;
+}
+
+async function getRecentPublishedProductHotTerms(
+  payload: PayloadClient,
+  locale: SearchLocale,
+  limit: number,
+) {
+  try {
+    const products = await payload.find({
+      collection: 'products',
+      depth: 0,
+      draft: false,
+      fallbackLocale: 'none',
+      limit,
+      locale,
+      overrideAccess: true,
+      sort: '-publishedAt',
+      where: publicProductSearchWhere(),
+    });
+
+    return dedupeTerms((products.docs as SearchSourceDocument[]).map(productHotTerm));
+  } catch (error) {
+    console.warn('[search] recent product hot terms query failed', {
+      error: error instanceof Error ? error.message : 'Unknown product hot terms error',
+    });
+
+    return [];
+  }
+}
+
+async function getPayloadHotSearchTermsUncached(
   locale: SearchLocale,
   fallbackTerms: readonly string[],
   limit: number,
 ) {
   try {
     const payload = await getPayloadClient();
+    const recentProductTerms = await getRecentPublishedProductHotTerms(payload, locale, limit);
 
     return await getHotSearchTermsFromPayload(payload, {
-      fallbackTerms,
+      fallbackTerms: dedupeTerms([...recentProductTerms, ...fallbackTerms]),
       limit,
       locale,
     });
@@ -269,4 +378,20 @@ export async function getPayloadHotSearchTerms(
 
     return fallbackTerms.slice(0, limit);
   }
+}
+
+const getCachedPayloadHotSearchTerms = unstable_cache(
+  getPayloadHotSearchTermsUncached,
+  ['payload-hot-search-terms'],
+  {
+    revalidate: HOT_SEARCH_REVALIDATE_SECONDS,
+  },
+);
+
+export async function getPayloadHotSearchTerms(
+  locale: SearchLocale,
+  fallbackTerms: readonly string[],
+  limit: number,
+) {
+  return getCachedPayloadHotSearchTerms(locale, fallbackTerms, limit);
 }

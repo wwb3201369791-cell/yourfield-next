@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest';
 import type { Field } from 'payload/types';
+import { describe, expect, it, vi } from 'vitest';
 
 import { Products } from '@/collections/Products';
+
+vi.mock('@/components/admin/media-upload/SimpleMediaUploadField', () => ({
+  default: () => null,
+}));
 
 function flattenFields(fields: readonly Field[]): Field[] {
   return fields.flatMap((field) => {
@@ -19,6 +23,22 @@ function flattenFields(fields: readonly Field[]): Field[] {
 
 const getNamedField = (name: string) =>
   flattenFields(Products.fields).find((field) => 'name' in field && field.name === name);
+
+function getFieldByPath(path: readonly string[]) {
+  let fields = flattenFields(Products.fields);
+  let found: Field | undefined;
+
+  for (const segment of path) {
+    found = fields.find((field) => 'name' in field && field.name === segment);
+    if (!found) {
+      return undefined;
+    }
+
+    fields = 'fields' in found ? found.fields : [];
+  }
+
+  return found;
+}
 
 describe('Products admin structure', () => {
   it('keeps the daily list focused on editable product information', () => {
@@ -51,7 +71,6 @@ describe('Products admin structure', () => {
       '洗护与维护',
       '常见问题',
       '媒体',
-      '发布与 SEO',
     ]);
     expect(
       tabsField && 'tabs' in tabsField
@@ -71,19 +90,25 @@ describe('Products admin structure', () => {
     });
   });
 
-  it('keeps legacy product categories hidden from daily product creation', () => {
+  it('explains product frontend order as direct operator-facing positions', () => {
+    const displayOrder = getNamedField('displayOrder');
+
+    expect(displayOrder).toMatchObject({
+      defaultValue: 0,
+      label: '前台展示位置',
+      name: 'displayOrder',
+      type: 'number',
+    });
+    expect(displayOrder?.admin).toMatchObject({
+      description: '直接填 1、2、3；数字越小越靠前；0 表示不优先。',
+      position: 'sidebar',
+    });
+  });
+
+  it('does not expose legacy product categories in daily product creation', () => {
     const category = getNamedField('category');
 
-    expect(category).toMatchObject({
-      label: '旧产品分类（内部兼容）',
-      relationTo: 'product-categories',
-      type: 'relationship',
-    });
-    expect(category?.admin).toMatchObject({
-      disableListColumn: true,
-      disableListFilter: true,
-      hidden: true,
-    });
+    expect(category).toBeUndefined();
   });
 
   it('allows blank specification rows so publishing controls are not blocked by old imports', () => {
@@ -96,6 +121,29 @@ describe('Products admin structure', () => {
     expect(value).toMatchObject({ label: '参数值', type: 'text' });
     expect(label && 'required' in label ? label.required : undefined).toBeUndefined();
     expect(value && 'required' in value ? value.required : undefined).toBeUndefined();
+  });
+
+  it('keeps detail-section fields optional so products can publish before every module is filled', () => {
+    const optionalPaths = [
+      ['features', 'title'],
+      ['sellingPoints', 'title'],
+      ['scenarios', 'title'],
+      ['qualityEvidence', 'type'],
+      ['qualityEvidence', 'title'],
+      ['sizeGuide', 'columns', 'label'],
+      ['sizeGuide', 'rows', 'label'],
+      ['sizeGuide', 'rows', 'values', 'value'],
+    ];
+
+    for (const path of optionalPaths) {
+      const field = getFieldByPath(path);
+      expect(field).toBeTruthy();
+      expect(field && 'required' in field ? field.required : undefined).toBeUndefined();
+    }
+  });
+
+  it('does not force every localized product detail field to be complete before publishing', () => {
+    expect(Products.hooks?.beforeChange ?? []).toEqual([]);
   });
 
   it('revalidates the frontend when a product is deleted', () => {

@@ -6,15 +6,31 @@ import SolutionTitleCell from '../components/admin/cells/SolutionTitleCell';
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField } from '../lib/payload/fields/arrays';
-import { createSeoGroup } from '../lib/payload/fields/seo';
+import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
+import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { generateSlug } from '../lib/payload/hooks/generateSlug';
 import { revalidateCollectionAfterChange } from '../lib/payload/hooks/revalidateContent';
+import { requireAllLocalesOnPublish } from '../lib/payload/hooks/validateI18nComplete';
+
+const contentLocales = ['zh', 'en', 'ru'] as const;
+
+const requiredI18nPaths = [
+  { path: 'title', label: '方案标题' },
+  { path: 'summary', label: '卡片说明' },
+  { path: 'features', label: '方案要点' },
+  { path: 'features.value', label: '方案要点' },
+  { path: 'productTags', label: '核心产品标签' },
+  { path: 'productTags.value', label: '核心产品标签' },
+  { path: 'content', label: '详细说明' },
+] as const;
 
 const localizedTextareaField = (name: string): TextareaField => ({
   name,
   type: 'textarea',
   localized: true,
 });
+
+const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前。';
 
 const draftStatusListCellField: Field = {
   name: 'statusBadge',
@@ -36,21 +52,13 @@ const draftStatusDataField = {
   },
 } as Field;
 
-const hiddenSeoGroup = {
-  ...createSeoGroup({ label: 'SEO / 系统（隐藏）' }),
-  admin: {
-    hidden: true,
-    disableListColumn: true,
-    disableListFilter: true,
-  },
-} as Field;
-
 export const Solutions: CollectionConfig = {
   slug: 'solutions',
   labels: {
     singular: '解决方案',
     plural: '解决方案',
   },
+  defaultSort: 'order',
   admin: {
     hideAPIURL: true,
     useAsTitle: 'title',
@@ -76,6 +84,7 @@ export const Solutions: CollectionConfig = {
     delete: canDelete('solutions'),
   },
   hooks: {
+    beforeChange: [requireAllLocalesOnPublish(contentLocales, { paths: requiredI18nPaths })],
     afterChange: [auditAfterChange('solutions'), revalidateCollectionAfterChange('solutions')],
     afterDelete: [auditAfterDelete('solutions')],
   },
@@ -88,6 +97,7 @@ export const Solutions: CollectionConfig = {
     maxPerDoc: 10,
   },
   fields: [
+    i18nEditGuideField({ collectionSlug: 'solutions', requiredPaths: requiredI18nPaths }),
     draftStatusListCellField,
     draftStatusDataField,
     {
@@ -113,23 +123,21 @@ export const Solutions: CollectionConfig = {
                 description: '前台卡片展示的一段说明，建议 40-90 个中文字符。',
               },
             },
-            {
+            imageUploadField({
               name: 'cover',
-              type: 'upload',
               label: '方案主图',
-              relationTo: 'media',
               admin: {
                 description: '前台解决方案卡片使用的主图。',
               },
-            },
+            }),
             {
               name: 'order',
               type: 'number',
-              defaultValue: 0,
+              defaultValue: 1,
               index: true,
               label: '前台位置',
               admin: {
-                description: '数字越小越靠前。当前 10 / 20 / 30 / 40 分别对应第 1 / 2 / 3 / 4 位。',
+                description: frontendOrderDescription,
                 disableListFilter: true,
                 components: {
                   Cell: SolutionPositionCell,
@@ -219,7 +227,6 @@ export const Solutions: CollectionConfig = {
         beforeValidate: [generateSlug],
       },
     },
-    hiddenSeoGroup,
     {
       name: 'relatedProductGroups',
       type: 'relationship',

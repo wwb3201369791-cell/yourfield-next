@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { normalizeCmsMediaUrl } from '@/lib/cms/media';
+import { normalizeCmsMediaUrl, selectCmsMediaUrl } from '@/lib/cms/media';
 
 describe('normalizeCmsMediaUrl', () => {
   it('uses the stable brand logo asset for seeded official logo media URLs', () => {
@@ -26,5 +26,16 @@ describe('normalizeCmsMediaUrl', () => {
         '/images/products/firefighter-protective-suit/modeling-jacket-front.png',
       ),
     ).toBe('/media/modeling-jacket-front-5.webp');
+  });
+
+  it('prefers original CMS media URLs over generated sizes for product material images', () => {
+    expect(
+      selectCmsMediaUrl({
+        url: '/media/new-product-1.png',
+        sizes: {
+          card: { url: '/media/new-product-1-600x400.webp' },
+        },
+      }),
+    ).toBe('/media/new-product-1.png');
   });
 });

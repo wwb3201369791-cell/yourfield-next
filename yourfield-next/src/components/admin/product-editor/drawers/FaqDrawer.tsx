@@ -10,7 +10,7 @@ export function FaqDrawer() {
       title="常见问题"
       description="维护 FAQ 关系。"
       fields={[
-    { path: 'faqs', label: 'FAQ 关系', kind: 'readonly' },
+    { path: 'faqs', label: 'FAQ 关系', kind: 'readonly', localized: false },
       ]}
     />
   );

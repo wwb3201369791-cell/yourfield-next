@@ -1,10 +1,9 @@
 import type { QualityEvidenceProps } from './types';
 
-export function ProductQualityEvidence({ heading, items, tagLabel }: QualityEvidenceProps) {
+export function ProductQualityEvidence({ heading, items }: QualityEvidenceProps) {
   return (
     <>
       <div className="detail-section-heading">
-        <span className="section-tag">{tagLabel}</span>
         <h2>{heading}</h2>
       </div>
       <div className="detail-evidence-grid">

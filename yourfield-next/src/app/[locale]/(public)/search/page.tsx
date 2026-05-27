@@ -96,9 +96,11 @@ export default async function SearchPage({ params }: SearchPageProps) {
     typeLabels: {
       all: t('search.type.all'),
       faq: t('search.type.faq'),
+      'industry-case': t('search.type.industry-case'),
       news: t('search.type.news'),
       page: t('search.type.page'),
       product: t('search.type.product'),
+      solution: t('search.type.solution'),
     },
     validationErrorText: t('search.validationErrorText'),
     validationErrorTitle: t('search.validationErrorTitle'),

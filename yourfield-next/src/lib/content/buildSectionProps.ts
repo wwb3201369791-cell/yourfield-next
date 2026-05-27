@@ -119,8 +119,34 @@ function rowValues(value: unknown): readonly string[] {
     .filter(Boolean);
 }
 
+function sizeGuideCellValues(value: unknown): readonly string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.map((row) => {
+    if (typeof row === 'string') {
+      return row.trim();
+    }
+    if (row && typeof row === 'object') {
+      const record = row as Record<string, unknown>;
+      return textFromUnknown(record.value ?? record.label ?? record.title);
+    }
+    return '';
+  });
+}
+
 function localizedRows(value: unknown): readonly LocalizedText[] {
   return rowValues(value).map(sameText);
+}
+
+const imageUrlPattern =
+  /^(https?:|\/|data:image\/|blob:)|\.(avif|gif|jpe?g|png|svg|webp)([?#].*)?$/i;
+
+function imageUrlFromText(value: string) {
+  const text = value.trim();
+
+  return imageUrlPattern.test(text) ? text : '';
 }
 
 function imageRows(value: unknown): readonly string[] {
@@ -131,7 +157,7 @@ function imageRows(value: unknown): readonly string[] {
   return value
     .map((row) => {
       if (typeof row === 'string') {
-        return row;
+        return imageUrlFromText(row);
       }
       if (!row || typeof row !== 'object') {
         return '';
@@ -139,10 +165,13 @@ function imageRows(value: unknown): readonly string[] {
       const record = row as Record<string, unknown>;
       const file = record.file;
       if (typeof file === 'string') {
-        return file;
+        return imageUrlFromText(file);
       }
       if (file && typeof file === 'object') {
-        const media = file as { sizes?: Record<string, { url?: string } | undefined>; url?: string };
+        const media = file as {
+          sizes?: Record<string, { url?: string } | undefined>;
+          url?: string;
+        };
         return media.sizes?.card?.url ?? media.url ?? '';
       }
       return '';
@@ -200,6 +229,22 @@ function specRows(value: unknown): readonly ProductSpec[] {
     .filter((row) => row.label.zh && localized(row.value, 'zh'));
 }
 
+function faqRows(value: unknown): Product['faqs'] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((row) => {
+      const record = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
+      return {
+        answer: sameText(record.answer ?? record.text ?? record.description),
+        question: sameText(record.question ?? record.title),
+      };
+    })
+    .filter((row) => row.question.zh && row.answer.zh);
+}
+
 function sizeGuideFromValues(value: unknown): ProductSizeGuide | undefined {
   if (!value || typeof value !== 'object') {
     return undefined;
@@ -211,12 +256,14 @@ function sizeGuideFromValues(value: unknown): ProductSizeGuide | undefined {
     ? record.rows
         .map((row) => {
           const rowRecord = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
+          const values = sizeGuideCellValues(rowRecord.values);
+
           return {
             label: textFromUnknown(rowRecord.label),
-            values: rowValues(rowRecord.values),
+            values,
           };
         })
-        .filter((row) => row.label && row.values.length > 0)
+        .filter((row) => row.label && row.values.some(Boolean))
     : [];
 
   if (!columns.length || !rows.length) {
@@ -259,7 +306,9 @@ export function buildSectionPropsFromCms(
   const productDescription = localized(product.description, locale);
   const mainProductImage = productPrimaryImage(product);
   const visualGroups = productVisualGroups(product);
-  const materials = product.materials.map((material) => localized(material, locale)).filter(Boolean);
+  const materials = product.materials
+    .map((material) => localized(material, locale))
+    .filter(Boolean);
   const applications = product.applications
     .map((application) => localized(application, locale))
     .filter(Boolean);
@@ -507,8 +556,11 @@ export function buildSectionPropsFromCms(
 }
 
 export function buildProductFromFormValues(values: Record<string, unknown>): Product {
-  const productId = textFromUnknown(values.productId) || textFromUnknown(values.slug) || 'draft-product';
-  const categoryName = sameText(textFromUnknown(values.productGroup) || textFromUnknown(values.category));
+  const productId =
+    textFromUnknown(values.productId) || textFromUnknown(values.slug) || 'draft-product';
+  const categoryName = sameText(
+    textFromUnknown(values.productGroup) || textFromUnknown(values.category),
+  );
   const images = imageRows(values.images);
   const sizeGuide = sizeGuideFromValues(values.sizeGuide);
 
@@ -518,11 +570,12 @@ export function buildProductFromFormValues(values: Record<string, unknown>): Pro
     categoryId: textFromUnknown(values.category) || 'draft',
     categoryName: categoryName.zh ? categoryName : emptyLocalizedText,
     description: sameText(textFromUnknown(values.description)),
-    faqs: [],
+    faqs: faqRows(values.productFaqs),
     features: Array.isArray(values.features)
       ? values.features
           .map((feature) => {
-            const record = feature && typeof feature === 'object' ? (feature as Record<string, unknown>) : {};
+            const record =
+              feature && typeof feature === 'object' ? (feature as Record<string, unknown>) : {};
             return sameText(record.title ?? record.description);
           })
           .filter((feature) => feature.zh)

@@ -1,6 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { Products } from '../Products';
+
+vi.mock('@/components/admin/media-upload/SimpleMediaUploadField', () => ({
+  default: () => null,
+}));
 
 type FieldLike = {
   fields?: FieldLike[];
@@ -48,12 +52,12 @@ function hasField(label: string, name: string) {
 }
 
 describe('Products schema for visual product editing', () => {
-  it('does not cap product images or visual group images at 20 rows', () => {
+  it('keeps hero images to one main image while leaving visual group images uncapped', () => {
     const productImages = findFieldByName(rootFields, 'images');
     const visualGroups = findFieldByName(rootFields, 'visualGroups');
     const visualGroupImages = visualGroups?.fields?.find((field) => field.name === 'images');
 
-    expect(productImages?.maxRows).toBeUndefined();
+    expect(productImages?.maxRows).toBe(1);
     expect(visualGroupImages?.maxRows).toBeUndefined();
   });
 
@@ -70,8 +74,16 @@ describe('Products schema for visual product editing', () => {
       '洗护与维护',
       '常见问题',
       '媒体',
-      '发布与 SEO',
     ]);
+  });
+
+  it('removes dead product fields from the editor schema', () => {
+    expect(findFieldByName(rootFields, 'category')).toBeUndefined();
+    expect(findFieldByName(rootFields, 'industries')).toBeUndefined();
+    expect(findFieldByName(rootFields, 'tags')).toBeUndefined();
+    expect(findFieldByName(rootFields, 'relatedProducts')).toBeUndefined();
+    expect(findFieldByName(rootFields, 'isFeatured')).toBeUndefined();
+    expect(findFieldByName(rootFields, 'seo')).toBeUndefined();
   });
 
   it('lifts frontend detail fields out of the old P3+ collapsible into first-class tabs', () => {
@@ -83,9 +95,8 @@ describe('Products schema for visual product editing', () => {
     expect(hasField('详情页图组', 'visualGroups')).toBe(true);
     expect(hasField('资料与认证状态', 'qualityEvidence')).toBe(true);
     expect(hasField('洗护与维护', 'careInstructions')).toBe(true);
-    expect(hasField('常见问题', 'faqs')).toBe(true);
+    expect(hasField('常见问题', 'productFaqs')).toBe(true);
 
-    const seoTab = tab('发布与 SEO');
-    expect(seoTab?.fields.some((field) => field.type === 'collapsible')).toBe(false);
+    expect(tab('发布与 SEO')).toBeUndefined();
   });
 });

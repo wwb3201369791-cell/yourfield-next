@@ -1,0 +1,324 @@
+{
+  "document": "产品册---屏蔽服 系列4.15",
+  "note": "Images are extracted from DOCX word/media original files, not screenshots.",
+  "images": [
+    {
+      "source": "word/media/image1.png",
+      "output": "images/001_image1.png",
+      "size": 370843,
+      "sha1": "e184aba33647450adb825a348a7b512ae5421909"
+    },
+    {
+      "source": "word/media/image2.png",
+      "output": "images/002_image2.png",
+      "size": 365647,
+      "sha1": "5e1a7ba47f8903bacecab1bfd5a5eeb82eb3a35b"
+    },
+    {
+      "source": "word/media/image3.png",
+      "output": "images/003_image3.png",
+      "size": 692110,
+      "sha1": "4b62491e1421a8a6d760d1729aed8306713653cf"
+    },
+    {
+      "source": "word/media/image4.png",
+      "output": "images/004_image4.png",
+      "size": 85470,
+      "sha1": "61215b35092d49e774a673ff9a17b67b67395f9f"
+    },
+    {
+      "source": "word/media/image5.png",
+      "output": "images/005_image5.png",
+      "size": 146008,
+      "sha1": "a564a99fbef756144bafdb124e4a385160fcb838"
+    },
+    {
+      "source": "word/media/image6.png",
+      "output": "images/006_image6.png",
+      "size": 753526,
+      "sha1": "5da507ef48d5b1bd6291ea7fad1a656ad2a3e200"
+    },
+    {
+      "source": "word/media/image7.png",
+      "output": "images/007_image7.png",
+      "size": 1632995,
+      "sha1": "48c3c3ad8ec666410ed859d6bdd55c9bd029df34"
+    },
+    {
+      "source": "word/media/image8.png",
+      "output": "images/008_image8.png",
+      "size": 30771,
+      "sha1": "87eb08607f07bbb1e330f5f356121cf32a2d5a27"
+    },
+    {
+      "source": "word/media/image9.png",
+      "output": "images/009_image9.png",
+      "size": 336618,
+      "sha1": "bf5a5024e48ead9dfdc5c4d7d301a8c4910b2de3"
+    },
+    {
+      "source": "word/media/image10.png",
+      "output": "images/010_image10.png",
+      "size": 377752,
+      "sha1": "6c1138848607e94a2367a98e0579ec495a41a0a9"
+    },
+    {
+      "source": "word/media/image11.png",
+      "output": "images/011_image11.png",
+      "size": 273898,
+      "sha1": "7634915335549510f1e7fc89a4fb973ca8e1054e"
+    },
+    {
+      "source": "word/media/image12.jpeg",
+      "output": "images/012_image12.jpeg",
+      "size": 26253,
+      "sha1": "ce529f3b475e707305008f64d0c3a3da3e9866da"
+    }
+  ],
+  "content": [
+    {
+      "kind": "table",
+      "text": "产品名称 | 500kV带电作业用屏蔽服\n货号 | HYF-3701\n执行标准 | GB/T 6568-2024 《带电作业用屏蔽服装》\n颜色 | 浅石灰色\n尺码 | 160-190\n适用领域 | 电力电网、架空输电线路（500kV及以下电压等级的电器设备）在不停电的线路上进行检修、测试、维修时穿着。\n产品如何选用 | 根据电压等级选择，此款推荐电压范围：在500kV及以下电压等级\n检测报告说明 | 有检测报告",
+      "rows": [
+        [
+          "产品名称",
+          "500kV带电作业用屏蔽服"
+        ],
+        [
+          "货号",
+          "HYF-3701"
+        ],
+        [
+          "执行标准",
+          "GB/T 6568-2024 《带电作业用屏蔽服装》"
+        ],
+        [
+          "颜色",
+          "浅石灰色"
+        ],
+        [
+          "尺码",
+          "160-190"
+        ],
+        [
+          "适用领域",
+          "电力电网、架空输电线路（500kV及以下电压等级的电器设备）在不停电的线路上进行检修、测试、维修时穿着。"
+        ],
+        [
+          "产品如何选用",
+          "根据电压等级选择，此款推荐电压范围：在500kV及以下电压等级"
+        ],
+        [
+          "检测报告说明",
+          "有检测报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/001_image1.png",
+        "images/002_image2.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/003_image3.png",
+        "images/004_image4.png",
+        "images/005_image5.png",
+        "images/006_image6.png",
+        "images/007_image7.png",
+        "images/008_image8.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 750kV带电作业用屏蔽服\n货号 | HYF-3702\n执行标准 | GB/T 6568-2024《带电作业用屏蔽服装》\n颜色 | 浅石灰色\n尺码 | 160-190\n适用领域 | 电力电网、架空输电线路（750kV及以下电压等级的电器设备）在不停电的线路上进行检修、测试、维修时穿着。\n产品如何选用 | 根据电压等级选择，此款推荐电压范围：750kV及以下电压等级\n检测报告说明 | 有检测报告",
+      "rows": [
+        [
+          "产品名称",
+          "750kV带电作业用屏蔽服"
+        ],
+        [
+          "货号",
+          "HYF-3702"
+        ],
+        [
+          "执行标准",
+          "GB/T 6568-2024《带电作业用屏蔽服装》"
+        ],
+        [
+          "颜色",
+          "浅石灰色"
+        ],
+        [
+          "尺码",
+          "160-190"
+        ],
+        [
+          "适用领域",
+          "电力电网、架空输电线路（750kV及以下电压等级的电器设备）在不停电的线路上进行检修、测试、维修时穿着。"
+        ],
+        [
+          "产品如何选用",
+          "根据电压等级选择，此款推荐电压范围：750kV及以下电压等级"
+        ],
+        [
+          "检测报告说明",
+          "有检测报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/009_image9.png",
+        "images/010_image10.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/003_image3.png",
+        "images/004_image4.png",
+        "images/005_image5.png",
+        "images/006_image6.png",
+        "images/007_image7.png",
+        "images/008_image8.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 1000kV带电作业用屏蔽服\n货号 | HYF-3703\n执行标准 | GB/T 6568-2024 《带电作业用屏蔽服装》\n颜色 | 浅石灰色\n尺码 | 160-190\n适用领域 | 电力电网、架空输电线路（1000kV及以下电压等级的电器设备）在不停电的线路上进行检修、测试、维修时穿着的。\n产品如何选用 | 根据电压等级选择，此款推荐电压范围：1000kV及以下电压等级\n检测报告说明 | 有检测报告",
+      "rows": [
+        [
+          "产品名称",
+          "1000kV带电作业用屏蔽服"
+        ],
+        [
+          "货号",
+          "HYF-3703"
+        ],
+        [
+          "执行标准",
+          "GB/T 6568-2024 《带电作业用屏蔽服装》"
+        ],
+        [
+          "颜色",
+          "浅石灰色"
+        ],
+        [
+          "尺码",
+          "160-190"
+        ],
+        [
+          "适用领域",
+          "电力电网、架空输电线路（1000kV及以下电压等级的电器设备）在不停电的线路上进行检修、测试、维修时穿着的。"
+        ],
+        [
+          "产品如何选用",
+          "根据电压等级选择，此款推荐电压范围：1000kV及以下电压等级"
+        ],
+        [
+          "检测报告说明",
+          "有检测报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/009_image9.png",
+        "images/010_image10.png"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/003_image3.png",
+        "images/004_image4.png",
+        "images/005_image5.png",
+        "images/006_image6.png",
+        "images/007_image7.png",
+        "images/008_image8.png"
+      ]
+    },
+    {
+      "kind": "table",
+      "text": "产品名称 | 500kV交流高压静电服\n货号 | HYF-3901\n执行标准 | GB/T 18136-2008《交流高压静电防护服装及试验方法》\n颜色 | 蓝色\n尺码 | 160-190\n适用领域 | 电力电网、输电线路、输电线路及地电位作业中心，交流输电线路和变电站巡视及地电位作业人员\n产品如何选用 | 根据电压等级选择，此款推荐电压范围：110（66）kV-500kV。\n检测报告说明 | 有检测报告",
+      "rows": [
+        [
+          "产品名称",
+          "500kV交流高压静电服"
+        ],
+        [
+          "货号",
+          "HYF-3901"
+        ],
+        [
+          "执行标准",
+          "GB/T 18136-2008《交流高压静电防护服装及试验方法》"
+        ],
+        [
+          "颜色",
+          "蓝色"
+        ],
+        [
+          "尺码",
+          "160-190"
+        ],
+        [
+          "适用领域",
+          "电力电网、输电线路、输电线路及地电位作业中心，交流输电线路和变电站巡视及地电位作业人员"
+        ],
+        [
+          "产品如何选用",
+          "根据电压等级选择，此款推荐电压范围：110（66）kV-500kV。"
+        ],
+        [
+          "检测报告说明",
+          "有检测报告"
+        ]
+      ],
+      "images": []
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/011_image11.png",
+        "images/012_image12.jpeg"
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "",
+      "rows": [],
+      "images": [
+        "images/003_image3.png",
+        "images/004_image4.png",
+        "images/005_image5.png",
+        "images/006_image6.png",
+        "images/007_image7.png",
+        "images/008_image8.png"
+      ]
+    }
+  ]
+}

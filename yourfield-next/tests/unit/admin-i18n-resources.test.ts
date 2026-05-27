@@ -18,4 +18,12 @@ describe('Payload admin zh i18n resources', () => {
       of: '共',
     });
   });
+
+  it('labels the Payload locale picker as content language', () => {
+    expect(adminI18nResources.zh.general).toMatchObject({
+      fallbackToDefaultLocale: '使用默认内容语言回填',
+      locale: '内容语言',
+      locales: '内容语言',
+    });
+  });
 });

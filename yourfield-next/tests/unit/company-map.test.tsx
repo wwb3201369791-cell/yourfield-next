@@ -25,6 +25,7 @@ describe('CompanyMap', () => {
     expect(screen.getByRole('heading', { name: '永霏集团总部' })).not.toBeNull();
     expect(screen.getByText('在地图中预览总部位置。')).not.toBeNull();
     expect(screen.getByRole('link', { name: /在高德地图中查看/ })).not.toBeNull();
+    expect(screen.getByRole('link', { name: /OpenStreetMap contributors/ })).not.toBeNull();
     expect(screen.queryByText(/创业东路/)).toBeNull();
     expect(screen.queryByText('城市')).toBeNull();
     expect(screen.queryByText('区位')).toBeNull();

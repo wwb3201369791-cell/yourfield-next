@@ -5,12 +5,10 @@ export function ProductSizeGuideTable({
   cornerLabel,
   heading,
   rows,
-  tagLabel,
 }: SizeGuideTableProps) {
   return (
     <>
       <div className="detail-section-heading">
-        <span className="section-tag">{tagLabel}</span>
         <h2>{heading}</h2>
       </div>
       <div className="detail-table-wrap">

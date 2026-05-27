@@ -3,10 +3,20 @@ import type { CollectionConfig, Field } from 'payload/types';
 import DraftStatusCell from '../components/admin/cells/DraftStatusCell';
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
+import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { newsCategoryOptions } from '../lib/payload/fields/options';
-import { createSeoGroup } from '../lib/payload/fields/seo';
+import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { generateSlug } from '../lib/payload/hooks/generateSlug';
 import { revalidateCollectionAfterChange } from '../lib/payload/hooks/revalidateContent';
+import { requireAllLocalesOnPublish } from '../lib/payload/hooks/validateI18nComplete';
+
+const contentLocales = ['zh', 'en', 'ru'] as const;
+
+const requiredI18nPaths = [
+  { path: 'title', label: '新闻标题' },
+  { path: 'excerpt', label: '列表摘要' },
+  { path: 'content', label: '新闻正文' },
+] as const;
 
 const draftStatusListCellField: Field = {
   name: 'statusBadge',
@@ -46,15 +56,6 @@ const hiddenSlugField: Field = {
   },
 };
 
-const hiddenSeoGroup = {
-  ...createSeoGroup({ label: 'SEO / 系统（隐藏）' }),
-  admin: {
-    hidden: true,
-    disableListColumn: true,
-    disableListFilter: true,
-  },
-} as Field;
-
 export const News: CollectionConfig = {
   slug: 'news',
   labels: {
@@ -64,7 +65,7 @@ export const News: CollectionConfig = {
   admin: {
     hideAPIURL: true,
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'statusBadge', 'publishedAt'],
+    defaultColumns: ['title', 'statusBadge', 'publishedAt'],
     components: {
       views: {
         Edit: {
@@ -84,6 +85,7 @@ export const News: CollectionConfig = {
     delete: canDelete('news'),
   },
   hooks: {
+    beforeChange: [requireAllLocalesOnPublish(contentLocales, { paths: requiredI18nPaths })],
     afterChange: [auditAfterChange('news'), revalidateCollectionAfterChange('news')],
     afterDelete: [auditAfterDelete('news')],
   },
@@ -96,6 +98,7 @@ export const News: CollectionConfig = {
     maxPerDoc: 5,
   },
   fields: [
+    i18nEditGuideField({ collectionSlug: 'news', requiredPaths: requiredI18nPaths }),
     draftStatusListCellField,
     draftStatusDataField,
     {
@@ -126,12 +129,50 @@ export const News: CollectionConfig = {
               type: 'text',
               defaultValue: '永霏集团',
             },
-            {
+            imageUploadField({
               name: 'cover',
               label: '封面图',
-              type: 'upload',
-              relationTo: 'media',
               required: true,
+            }),
+            {
+              name: 'category',
+              label: '新闻分类（系统）',
+              type: 'select',
+              required: true,
+              defaultValue: 'news',
+              options: newsCategoryOptions,
+              index: true,
+              admin: {
+                hidden: true,
+                disableListColumn: true,
+                disableListFilter: true,
+              },
+            },
+            {
+              name: 'publishedAt',
+              label: '发布时间',
+              type: 'date',
+              required: true,
+              index: true,
+              admin: {
+                position: 'sidebar',
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                },
+                description: '用于前台显示日期和新闻排序。',
+              },
+            },
+            {
+              name: 'isFeatured',
+              label: '首页推荐',
+              type: 'checkbox',
+              defaultValue: false,
+              index: true,
+              admin: {
+                position: 'sidebar',
+                disableListColumn: true,
+                description: '勾选后优先进入首页和新闻中心顶部推荐位。',
+              },
             },
           ],
         },
@@ -151,78 +192,53 @@ export const News: CollectionConfig = {
             },
           ],
         },
+      ],
+    },
+    {
+      name: 'tags',
+      label: '标签',
+      type: 'array',
+      localized: true,
+      admin: {
+        hidden: true,
+        disableListColumn: true,
+        disableListFilter: true,
+      },
+      fields: [
         {
-          label: '发布设置',
-          fields: [
-            {
-              name: 'category',
-              label: '新闻分类',
-              type: 'select',
-              required: true,
-              options: newsCategoryOptions,
-              index: true,
-            },
-            {
-              name: 'tags',
-              label: '标签',
-              type: 'array',
-              localized: true,
-              fields: [
-                {
-                  name: 'value',
-                  label: '标签内容',
-                  type: 'text',
-                  required: true,
-                },
-              ],
-            },
-            {
-              name: 'publishedAt',
-              label: '发布时间',
-              type: 'date',
-              required: true,
-              index: true,
-              admin: {
-                position: 'sidebar',
-                date: {
-                  pickerAppearance: 'dayAndTime',
-                },
-                description: '允许未来时间；真实定时发布任务在 P3 实现。',
-              },
-            },
-            {
-              name: 'isFeatured',
-              label: '首页推荐',
-              type: 'checkbox',
-              defaultValue: false,
-              index: true,
-              admin: {
-                position: 'sidebar',
-                disableListColumn: true,
-                description: '用于标记重点新闻；当前前台默认优先展示最新发布内容。',
-              },
-            },
-            {
-              name: 'relatedNews',
-              label: '相关新闻',
-              type: 'relationship',
-              relationTo: 'news',
-              hasMany: true,
-              maxRows: 4,
-            },
-            {
-              name: 'relatedProducts',
-              label: '关联产品',
-              type: 'relationship',
-              relationTo: 'products',
-              hasMany: true,
-              maxRows: 4,
-            },
-          ],
+          name: 'value',
+          label: '标签内容',
+          type: 'text',
+          required: true,
         },
       ],
     },
+    {
+      name: 'relatedNews',
+      label: '相关新闻',
+      type: 'relationship',
+      relationTo: 'news',
+      hasMany: true,
+      maxRows: 4,
+      admin: {
+        hidden: true,
+        disableListColumn: true,
+        disableListFilter: true,
+      },
+    },
+    {
+      name: 'relatedProducts',
+      label: '关联产品',
+      type: 'relationship',
+      relationTo: 'products',
+      hasMany: true,
+      maxRows: 4,
+      admin: {
+        hidden: true,
+        disableListColumn: true,
+        disableListFilter: true,
+      },
+    },
     hiddenSlugField,
-    hiddenSeoGroup,
   ],
 };

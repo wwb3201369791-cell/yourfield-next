@@ -1,5 +1,7 @@
 import type { Field } from 'payload/types';
 
+import { imageUploadField } from './simpleMediaUpload';
+
 type TextArrayArgs = {
   name: string;
   label?: string;
@@ -76,12 +78,5 @@ export const uploadArrayField = ({
   ...optionalArrayProps({ label, minRows, maxRows }),
   type: 'array',
   required,
-  fields: [
-    {
-      name: 'file',
-      type: 'upload',
-      relationTo: 'media',
-      required: true,
-    },
-  ],
+  fields: [imageUploadField({ name: 'file', label: '图片', required: true })],
 });

@@ -1,10 +1,9 @@
 import type { SpecTableProps } from './types';
 
-export function ProductSpecTable({ heading, rows, tagLabel }: SpecTableProps) {
+export function ProductSpecTable({ heading, rows }: SpecTableProps) {
   return (
     <>
       <div className="detail-section-heading">
-        <span className="section-tag">{tagLabel}</span>
         <h2>{heading}</h2>
       </div>
       <div className="detail-table-wrap">

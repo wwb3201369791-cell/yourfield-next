@@ -10,14 +10,23 @@ import {
 } from './types';
 
 export const searchLogEventTypes = ['search', 'result-click'] as const;
+export const searchStatsWindowValues = ['7d', '30d', '90d'] as const;
+
 export type SearchLogEventType = (typeof searchLogEventTypes)[number];
+export type SearchStatsWindow = (typeof searchStatsWindowValues)[number];
 
 export const defaultSearchStatsLimit = 100;
 export const defaultSearchStatsSourceLimit = 5000;
 export const defaultHotSearchSourceLimit = 500;
+export const defaultHotSearchWindowDays = 7;
 
 const maxSearchStatsLimit = 100;
 const maxSearchStatsSourceLimit = 10000;
+const searchStatsWindowDays: Record<SearchStatsWindow, number> = {
+  '7d': 7,
+  '30d': 30,
+  '90d': 90,
+};
 
 export type SearchKeywordStats = Readonly<{
   averageHits: number;
@@ -30,19 +39,23 @@ export type SearchKeywordStats = Readonly<{
 }>;
 
 export type SearchStats = Readonly<{
+  createdAfter?: string;
   ctr: number;
   generatedAt: string;
   locale?: SearchLocale;
   topKeywords: SearchKeywordStats[];
   totalClicks: number;
   totalSearches: number;
+  window?: SearchStatsWindow;
   zeroResultKeywords: SearchKeywordStats[];
   zeroResultSearches: number;
 }>;
 
 export type SearchStatsParams = Readonly<{
+  createdAfter?: string;
   limit: number;
   locale?: SearchLocale;
+  window?: SearchStatsWindow;
 }>;
 
 export type SearchStatsParseResult =
@@ -58,7 +71,11 @@ type SearchLogFindArgs = Readonly<{
   overrideAccess: true;
   sort: string;
   where?: {
-    locale: {
+    createdAt?: {
+      greater_than_equal?: string;
+      less_than?: string;
+    };
+    locale?: {
       equals: SearchLocale;
     };
   };
@@ -78,15 +95,31 @@ type KeywordAccumulator = {
 };
 
 const searchStatsParamsSchema = z.object({
+  createdAfter: z.preprocess(
+    optionalQueryString,
+    z
+      .string()
+      .refine((value) => Number.isFinite(Date.parse(value)), {
+        message: 'Invalid ISO date',
+      })
+      .optional(),
+  ),
   limit: z.preprocess(
     firstQueryValue,
     z.coerce.number().int().min(1).max(maxSearchStatsLimit).default(defaultSearchStatsLimit),
   ),
-  locale: z.preprocess(firstQueryValue, z.enum(searchLocales).optional()),
+  locale: z.preprocess(optionalQueryString, z.enum(searchLocales).optional()),
+  window: z.preprocess(optionalQueryString, z.enum(searchStatsWindowValues).optional()),
 });
 
 function firstQueryValue(value: unknown) {
   return Array.isArray(value) ? (value as unknown[])[0] : value;
+}
+
+function optionalQueryString(value: unknown) {
+  const first = firstQueryValue(value);
+
+  return typeof first === 'string' && first.trim() ? first.trim() : undefined;
 }
 
 function fieldErrors(error: z.ZodError): SearchFieldErrors {
@@ -133,6 +166,22 @@ function ratio(numerator: number, denominator: number) {
 
 function keywordKey(locale: SearchLocale, query: string) {
   return `${locale}\u0000${query.toLocaleLowerCase()}`;
+}
+
+function searchWindowStartIso(windowDays: number) {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() - (windowDays - 1));
+
+  return date.toISOString();
+}
+
+function hotSearchWindowStartIso(windowDays: number) {
+  return searchWindowStartIso(windowDays);
+}
+
+function searchStatsWindowStartIso(window: SearchStatsWindow) {
+  return searchWindowStartIso(searchStatsWindowDays[window]);
 }
 
 function keywordStatsFromAccumulator(accumulator: KeywordAccumulator): SearchKeywordStats {
@@ -182,13 +231,16 @@ export function parseSearchStatsParams(query: unknown): SearchStatsParseResult {
     };
   }
 
-  const { limit, locale } = result.data;
+  const { createdAfter, limit, locale, window } = result.data;
+  const effectiveCreatedAfter = createdAfter ?? (window ? searchStatsWindowStartIso(window) : undefined);
 
   return {
     ok: true,
     value: {
+      ...(effectiveCreatedAfter ? { createdAfter: effectiveCreatedAfter } : {}),
       ...(locale ? { locale } : {}),
       limit,
+      ...(window ? { window } : {}),
     },
   };
 }
@@ -204,11 +256,23 @@ export function summarizeSearchLogs(
   params: SearchStatsParams,
 ): SearchStats {
   const accumulators = new Map<string, KeywordAccumulator>();
+  const createdAfterTime = params.createdAfter ? Date.parse(params.createdAfter) : Number.NaN;
   let totalClicks = 0;
   let totalSearches = 0;
   let zeroResultSearches = 0;
 
   for (const log of logs) {
+    if (Number.isFinite(createdAfterTime)) {
+      const rawCreatedAt = log.createdAt;
+      const createdAtTime =
+        typeof rawCreatedAt === 'string' || typeof rawCreatedAt === 'number'
+          ? Date.parse(String(rawCreatedAt))
+          : Number.NaN;
+      if (!Number.isFinite(createdAtTime) || createdAtTime < createdAfterTime) {
+        continue;
+      }
+    }
+
     const locale = log.locale;
     if (!isSearchLocale(locale) || (params.locale && locale !== params.locale)) {
       continue;
@@ -219,7 +283,7 @@ export function summarizeSearchLogs(
       continue;
     }
 
-    if (log.resultType !== undefined && !isSearchHitType(log.resultType)) {
+    if (log.resultType != null && !isSearchHitType(log.resultType)) {
       continue;
     }
 
@@ -261,6 +325,7 @@ export function summarizeSearchLogs(
   const keywordStats = [...accumulators.values()].map(keywordStatsFromAccumulator);
 
   return {
+    ...(params.createdAfter ? { createdAfter: params.createdAfter } : {}),
     ...(params.locale ? { locale: params.locale } : {}),
     ctr: ratio(totalClicks, totalSearches),
     generatedAt: new Date().toISOString(),
@@ -270,6 +335,7 @@ export function summarizeSearchLogs(
       .slice(0, params.limit),
     totalClicks,
     totalSearches,
+    ...(params.window ? { window: params.window } : {}),
     zeroResultKeywords: keywordStats
       .filter((item) => item.zeroResultSearches > 0)
       .sort(sortZeroResultKeywords)
@@ -317,6 +383,7 @@ export function hotTermsFromSearchLogs(
 export async function findSearchLogDocuments(
   payload: SearchLogsPayload,
   options: Readonly<{
+    createdAfter?: string;
     limit?: number;
     locale?: SearchLocale;
   }>,
@@ -325,26 +392,30 @@ export async function findSearchLogDocuments(
     Math.max(options.limit ?? defaultSearchStatsSourceLimit, 1),
     maxSearchStatsSourceLimit,
   );
-  const findArgs: SearchLogFindArgs = options.locale
-    ? {
-        collection: 'search-logs',
-        depth: 0,
-        limit,
-        overrideAccess: true,
-        sort: '-createdAt',
-        where: {
+  const where = {
+    ...(options.createdAfter
+      ? {
+          createdAt: {
+            greater_than_equal: options.createdAfter,
+          },
+        }
+      : {}),
+    ...(options.locale
+      ? {
           locale: {
             equals: options.locale,
           },
-        },
-      }
-    : {
-        collection: 'search-logs',
-        depth: 0,
-        limit,
-        overrideAccess: true,
-        sort: '-createdAt',
-      };
+        }
+      : {}),
+  } satisfies NonNullable<SearchLogFindArgs['where']>;
+  const findArgs: SearchLogFindArgs = {
+    collection: 'search-logs',
+    depth: 0,
+    limit,
+    overrideAccess: true,
+    sort: '-createdAt',
+    ...(Object.keys(where).length > 0 ? { where } : {}),
+  };
 
   try {
     const result = await payload.find(findArgs);
@@ -364,6 +435,7 @@ export async function getSearchStatsFromPayload(
   params: SearchStatsParams,
 ) {
   const logs = await findSearchLogDocuments(payload, {
+    ...(params.createdAfter ? { createdAfter: params.createdAfter } : {}),
     ...(params.locale ? { locale: params.locale } : {}),
     limit: defaultSearchStatsSourceLimit,
   });
@@ -380,6 +452,7 @@ export async function getHotSearchTermsFromPayload(
   }>,
 ) {
   const logs = await findSearchLogDocuments(payload, {
+    createdAfter: hotSearchWindowStartIso(defaultHotSearchWindowDays),
     limit: defaultHotSearchSourceLimit,
     locale: params.locale,
   });

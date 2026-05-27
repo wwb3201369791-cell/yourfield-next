@@ -20,6 +20,8 @@ type LoginOperationArgs = {
   };
 };
 
+const useSecureAuthCookies = env.PAYLOAD_PUBLIC_SERVER_URL.startsWith('https://');
+
 const normalizeLocalSuperadminLogin: BeforeOperationHook = (hookArgs) => {
   const loginArgs = hookArgs.args as LoginOperationArgs | undefined;
 
@@ -88,7 +90,7 @@ export const Users: CollectionConfig = {
     lockTime: 15 * 60 * 1000,
     useAPIKey: false,
     cookies: {
-      secure: env.NODE_ENV === 'production',
+      secure: useSecureAuthCookies,
       sameSite: 'lax',
       ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
     },

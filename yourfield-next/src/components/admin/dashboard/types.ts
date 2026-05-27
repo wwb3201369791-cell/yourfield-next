@@ -21,7 +21,7 @@ export type DashboardHealthLevel = 'good' | 'warning' | 'severe';
 
 export type DashboardHealthSeverity = 'info' | 'warning' | 'severe';
 
-export type DashboardHealthRuleId = 'R1' | 'R2' | 'R3' | 'R4' | 'R5' | 'R6';
+export type DashboardHealthRuleId = 'R1' | 'R2' | 'R3' | 'R5' | 'R6';
 
 export type DashboardHealthItem = Readonly<{
   actionHref: string;

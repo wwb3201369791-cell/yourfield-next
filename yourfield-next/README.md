@@ -1,113 +1,193 @@
-# YourField Next
+# 永霏集团企业官网
 
-永霏集团官网 v2 的 Next.js 工程骨架。当前阶段是 P0: 脚手架与配置基线，只交付可运行的空架子，不写业务页面、CMS 逻辑或真实运营内容。
-
-## 项目目标
-
-把当前静态演示包逐步升级为多语言、可由后台运营、自托管、可交接给公司 IT 的企业级官网。实施顺序以仓库根目录的 `AGENT.md`、`STATE.md`、`HANDOFF.md`、`DECISIONS.md` 和 `升级实施书_v2/` 为准。
-
-## 当前状态
-
-- P0.S1-S8 已完成: Next.js / TypeScript / pnpm / i18n / lint / Tailwind / env / CI baseline / 文档骨架。
-- 业务页面迁移从 P1 开始，Payload CMS 从 P2 开始。
-- GitHub Actions workflow 位于仓库根目录 `.github/workflows/ci.yml`，因为当前 Git 仓库根目录在 `yourfield-next/` 上一层。
+永霏集团企业官网工程，面向正式上线和后续独立仓库维护。项目基于 Next.js App Router 与 Payload CMS，支持多语言公开站、后台内容管理、产品/新闻/解决方案管理、站内搜索、表单提交、统计接入与生产构建部署。
 
 ## 技术栈
 
-| 类别            | 选择                                             |
-| --------------- | ------------------------------------------------ |
-| Runtime         | Node.js >= 20 LTS                                |
-| Package manager | pnpm 10.28.2                                     |
-| Framework       | Next.js 14 App Router                            |
-| UI runtime      | React 18                                         |
-| Language        | TypeScript 5 strict mode                         |
-| i18n            | next-intl 3                                      |
-| Styling         | Tailwind CSS 3.4 + legacy CSS variables          |
-| Quality         | ESLint, Prettier, Husky, lint-staged, commitlint |
+- Node.js 20+
+- pnpm 10.28.2
+- Next.js 14 App Router
+- React 18
+- TypeScript strict mode
+- Payload CMS 2
+- PostgreSQL
+- Umami
+- next-intl
+- Tailwind CSS 3.4
+- Vitest
 
-## 本地运行
+## 本地准备
 
 ```bash
-cd yourfield-next
 pnpm install
 cp .env.example .env.local
-pnpm dev:warm
 ```
 
-默认开发地址是 `http://localhost:3000`。`pnpm dev:warm` 会先启动开发服务器，再预热首页、关于、产品、方案、新闻、招商、联系等质检常用页面，避免首次点击顶部导航时才触发 Next.js 冷编译。
+根据本机情况修改 `.env.local`。本地环境变量文件不应提交到仓库。
 
-如果只需要启动底层开发服务、不做页面预热，可以使用:
+如需完整后台和统计联调，启动本地服务：
+
+```bash
+docker compose up -d postgres umami
+```
+
+默认服务端口：
+
+- App: http://localhost:3000
+- PostgreSQL: localhost:5432
+- Umami: http://localhost:3002
+
+## 开发启动
+
+推荐使用集成服务启动 Next + Payload：
 
 ```bash
 pnpm dev
 ```
 
-当前 P0 路由验证:
+也可以启动并预热常用公开页：
 
-- `/` 会跳转到默认语言。
-- `/zh`、`/en`、`/ru` 应返回 200。
-- 页面只显示 locale 和少量翻译 key，用于验证 i18n 链路。
+```bash
+pnpm dev:warm
+```
+
+只启动 Next.js 开发服务：
+
+```bash
+pnpm dev:next
+```
 
 ## 常用命令
 
 ```bash
-pnpm dev:warm     # 启动并预热本地质检常用页面
-pnpm dev          # 只启动本地开发服务器，不预热页面
-pnpm build        # 生产构建
-pnpm start        # 启动生产构建后的服务
-pnpm lint         # ESLint 检查
-pnpm lint:fix     # 自动修复可修复的 lint 问题
-pnpm typecheck    # TypeScript 类型检查
-pnpm format       # Prettier 格式化
+pnpm lint          # ESLint 检查
+pnpm lint:fix      # 自动修复可修复 lint 问题
+pnpm typecheck     # TypeScript 类型检查
+pnpm test          # Vitest 测试
+pnpm test:e2e      # 关键路径 e2e 脚本，默认跑当前已启动的本地服务
+pnpm test:e2e:dev  # 同上，显式用于 dev server
+pnpm test:e2e:production # 对 http://localhost:3100 的生产服务跑关键路径 e2e
+pnpm build         # 生产构建
+pnpm payload:build # 生成 Payload 后台生产资源
+pnpm start         # 启动生产服务
+pnpm payload       # Payload CLI
+pnpm seed          # 初始化/补充种子数据
 ```
 
-P0 交付前建议执行:
+上线前建议至少执行：
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm check:env
+pnpm build
+pnpm payload:build
+```
+
+## 生产运行
+
+生产环境应通过服务器环境变量或 CI/CD secrets 注入配置，不要提交 `.env.local`、真实密码、token、cookie 或密钥。
+
+上线前必须先确认这些必填变量已通过环境注入：
+
+- DATABASE_URI
+- PAYLOAD_SECRET
+- TURNSTILE_SECRET
+- NEXT_PUBLIC_TURNSTILE_SITE_KEY
+- CRON_SECRET
+- REVALIDATE_SECRET
+- PAYLOAD_PREVIEW_SECRET
+
+如启用对象存储，还需完整配置 S3 相关环境变量。
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm lint
-pnpm typecheck
+pnpm check:env
 pnpm build
+pnpm payload:build
+pnpm start
+```
+
+如需用生产服务跑关键路径 e2e，可在另一个端口启动生产服务，避免影响正在开发的 3000 端口：
+
+```bash
+PORT=3100 pnpm start
+pnpm test:e2e:production
 ```
 
 ## 目录结构
 
 ```text
 yourfield-next/
+├── docker/                 # 本地依赖服务初始化配置
+├── messages/               # zh/en/ru 多语言文案
+├── public/                 # 静态资源、图片、字体、视频
+├── scripts/                # 数据导入、备份、质检和工具脚本
 ├── src/
-│   ├── app/                 # Next.js App Router
-│   ├── blocks/              # Payload blocks, P2 后填充
-│   ├── collections/         # Payload collections, P2 后填充
-│   ├── components/          # Header/Footer/UI/Product/News/Search/Form/SEO
-│   ├── globals/             # Payload globals, P2 后填充
-│   ├── lib/                 # i18n/env/payload/search/seo/analytics/utils
-│   ├── styles/              # 全局样式、CSS variables、Tailwind layers
-│   ├── types/               # 项目共享类型
-│   ├── i18n.ts              # next-intl 配置入口
-│   ├── middleware.ts        # locale middleware
-│   └── payload.config.ts    # P0 stub, P2 正式接入
-├── public/
-│   ├── fonts/
-│   ├── images/
-│   └── video/
-├── messages/                # 旧站 zh/en/ru 翻译 JSON，key 暂不改名
-├── scripts/seed/            # P2 内容迁移脚本
-├── tests/                   # P1+ 单元和 e2e 测试
-├── docs/                    # ADR、运维、交接等内部文档
-└── package.json
+│   ├── app/                # Next.js App Router 页面和 API
+│   ├── blocks/             # Payload blocks
+│   ├── collections/        # Payload collections
+│   ├── components/         # React 组件，含公开页、产品、搜索和后台 UI
+│   ├── globals/            # Payload globals
+│   ├── lib/                # CMS 查询、搜索核心、SEO、i18n、业务工具
+│   ├── migrations/         # 数据库/Payload 迁移
+│   ├── styles/             # 全局样式和后台样式
+│   ├── types/              # 共享类型
+│   ├── uploads/            # 本地/CMS 上传资源
+│   ├── i18n.ts             # next-intl 配置入口
+│   ├── middleware.ts       # 多语言中间件和旧链接重定向
+│   ├── payload.config.ts   # Payload CMS 配置
+│   ├── payload-types.ts    # Payload 自动生成类型
+│   └── server.ts           # Express + Next + Payload 集成入口
+├── tests/                  # API、unit、e2e 和截图基线测试
+├── docker-compose.yml
+├── next.config.js
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+└── vitest.config.ts
 ```
 
-## 环境变量
+## 命名规范
 
-复制 `.env.example` 为 `.env.local` 后再启动开发服务。`.env.local` 不入仓。
+- App Router 文件使用 Next.js 约定：`page.tsx`、`layout.tsx`、`route.ts`、`loading.tsx`、`error.tsx`、`not-found.tsx`。
+- 路由目录、脚本、CSS、测试和资源文件优先使用小写 kebab-case。
+- React 组件文件使用 PascalCase，例如 `ProductCard.tsx`。
+- Payload collections/globals/blocks 使用 PascalCase，例如 `Products.ts`、`SiteSettings.ts`、`ContactBlock.ts`。
+- 业务工具函数文件可使用 camelCase，例如 `buildMetadata.ts`、`productDetail.ts`。
+- 静态图片和视频使用小写 kebab-case，避免中文、空格和特殊符号。
 
-P0 阶段只强校验当前能确定的基础变量；Payload、数据库、对象存储、搜索、统计、邮件、地图、CAPTCHA、监控等变量会在对应 Phase 接入时升级校验。
+## 重要约定
 
-代码内不要直接读取 `process.env.XXX`，统一通过 `src/lib/env.ts` 暴露的 `env` 对象。
+- 代码中不要直接读取 `process.env.X`，统一通过 `src/lib/env.ts` 暴露的 `env` 对象读取环境变量。
+- `src/payload-types.ts` 是 Payload 自动生成文件，不要手动修改。
+- `.env.local`、构建产物、缓存目录和依赖目录不应提交。
+- 新增环境变量时同步更新 `.env.example` 和 `src/lib/env.ts`。
+- 修改 Payload schema 后需要同步生成类型并验证后台功能。
 
-## 开发边界
+## 后台入口
 
-- P0 只维护工程骨架、配置、文档，不写公开页面业务逻辑。
-- 不修改 `升级实施书_v2/` 原文；若发现文档和实现有差异，记录到根目录 `DECISIONS.md`。
-- 不重命名旧站 i18n key，P1/P2 前保持 `messages/*.json` 与旧站一致。
-- 新增依赖必须符合实施书锁定技术栈；超出范围先请示用户。
+默认后台地址：
+
+```text
+/admin/
+```
+
+本地或生产预览后台时，请使用集成服务启动方式（`pnpm dev` 或 `pnpm start`），不要只用 `pnpm dev:next` 验证后台。
+
+Payload API 默认地址：
+
+```text
+/payload-api
+```
+
+GraphQL 默认地址：
+
+```text
+/payload-graphql
+```
+
+## 独立仓库说明
+
+本目录可作为独立项目仓库管理。独立成仓库时，应以当前目录作为 Git 根目录，并保留 `package.json`、`pnpm-lock.yaml`、`.env.example`、`public/`、`src/`、`scripts/`、`tests/` 和部署所需配置文件。

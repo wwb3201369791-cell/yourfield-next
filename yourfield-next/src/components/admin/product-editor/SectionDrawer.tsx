@@ -1,4 +1,4 @@
- 'use client';
+'use client';
 
 import React, { useEffect, type ComponentType } from 'react';
 
@@ -7,6 +7,20 @@ import { useEditorContext, type EditorSection } from './hooks/useEditorContext';
 type DrawerComponent = ComponentType;
 
 const drawerRegistry = new Map<EditorSection, DrawerComponent>();
+
+const drawerLabels: Record<EditorSection, string> = {
+  care: '洗护与维护',
+  evidence: '资料与认证状态',
+  faq: '常见问题',
+  hero: '主图与简介',
+  identity: '产品标识',
+  intro: '商品介绍',
+  scenarios: '适用场景',
+  'selling-points': '核心卖点',
+  'size-guide': '尺码对应表',
+  specifications: '参数规格',
+  'visual-groups': '场景图、建模图与模特上身图',
+};
 
 export function registerDrawer(section: EditorSection, Component: DrawerComponent) {
   drawerRegistry.set(section, Component);
@@ -44,7 +58,7 @@ export function SectionDrawer() {
   return (
     <aside className="ype-drawer open" aria-label="产品编辑抽屉">
       <header className="ype-drawer-header">
-        <span>{openSection}</span>
+        <span>{drawerLabels[openSection]}</span>
         <button type="button" aria-label="关闭" onClick={closeDrawer}>
           ×
         </button>

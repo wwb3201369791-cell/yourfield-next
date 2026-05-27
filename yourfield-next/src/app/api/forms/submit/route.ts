@@ -65,7 +65,7 @@ const contactSubmissionSchema = z
     position: optionalText(120),
     phone: optionalText(40),
     mobile: optionalText(40),
-    email: z.preprocess(emptyStringToUndefined, z.string().email().max(160).optional()),
+    email: z.preprocess(emptyStringToUndefined, z.string().email().max(160)),
     country: optionalText(120),
     message: requiredText(2, 3000),
     product: optionalText(160),
@@ -85,11 +85,11 @@ const contactSubmissionSchema = z
   })
   .strip()
   .superRefine((value, context) => {
-    if (!value.phone && !value.mobile && !value.email) {
+    if (!value.phone && !value.mobile) {
       context.addIssue({
         code: 'custom',
-        path: ['email'],
-        message: 'phone or email is required',
+        path: ['mobile'],
+        message: 'phone is required',
       });
     }
 
