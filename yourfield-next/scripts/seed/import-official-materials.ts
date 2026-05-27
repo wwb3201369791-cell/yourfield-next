@@ -5,7 +5,6 @@ import type { Payload } from 'payload';
 
 import { richTextFromPlainText, splitLocalizedData, splitLocalizedMediaData } from './lib/shared';
 
-type Locale = 'zh' | 'en' | 'ru';
 type PayloadData = Record<string, unknown>;
 type ArrayRowIdMode = 'preserve' | 'numeric';
 
@@ -21,7 +20,7 @@ const prepareArrayRowsForPostgres = (value: unknown, idMode: ArrayRowIdMode): un
   }
 
   if (Array.isArray(value)) {
-    return value.map((item, index) => {
+    return value.map((item) => {
       const prepared = prepareArrayRowsForPostgres(item, idMode);
       if (prepared && typeof prepared === 'object' && !Array.isArray(prepared)) {
         const row = prepared as Record<string, unknown>;
@@ -107,7 +106,6 @@ export type ImportOfficialMaterialsOptions = {
 const imageExtensionPattern = /\.(png|jpe?g|webp|gif)$/i;
 const skippedNames = new Set(['消防员灭火防护服(作战款)', '消防员灭火防护服（作战款）']);
 const skippedModels = new Set(['HYF-5506']);
-const locales: Locale[] = ['zh', 'en', 'ru'];
 
 const sectionLabels = [
   '货号',
@@ -166,6 +164,9 @@ const sectionValues = (lines: string[], labels: string[]) => {
   const values: string[] = [];
   for (let index = 0; index < lines.length; index += 1) {
     const current = lines[index];
+    if (!current) {
+      continue;
+    }
     const label = labels.find(
       (candidate) =>
         current === candidate ||
@@ -183,6 +184,9 @@ const sectionValues = (lines: string[], labels: string[]) => {
 
     for (let child = index + 1; child < lines.length; child += 1) {
       const next = lines[child];
+      if (!next) {
+        continue;
+      }
       if (lineLabel(next) || inlineValueFor([next], ['货号', '型号'])) {
         break;
       }
@@ -237,7 +241,7 @@ export const parseOfficialMaterialFolder = (dirPath: string): OfficialMaterial =
 
   const lines = readInstructionLines(instructionPath);
   const dirName = path.basename(dirPath);
-  const name = dirName || lines[0];
+  const name = dirName || lines[0] || '';
   const model = inlineValueFor(lines, ['货号', '型号']);
   const color = inlineValueFor(lines, ['颜色']);
   const materials = sectionValues(lines, ['面料材质', '材料材质', '面料', '材质']);
@@ -301,21 +305,23 @@ const firstNonEmpty = (...values: Array<string | undefined>) =>
   values.find((value) => value?.trim())?.trim() || '';
 
 const buildSpecifications = (material: OfficialMaterial) => {
-  const entries = [
+  const entries: Array<[string, string]> = [
     ['货号', material.model],
     ['颜色', material.color],
     ['执行标准', material.standards.join('；')],
     ['所属分类', material.category],
     ['面料材质', material.materials.join('；')],
     ['尺码/规格', material.sizeRange],
-  ].filter(([, value]) => value);
+  ];
 
-  return entries.map(([label, value], index) => ({
-    label: threeLocaleText(label),
-    value: threeLocaleText(value),
-    group: '产品资料',
-    order: index + 1,
-  }));
+  return entries
+    .filter(([, value]) => value)
+    .map(([label, value], index) => ({
+      label: threeLocaleText(label),
+      value: threeLocaleText(value),
+      group: '产品资料',
+      order: index + 1,
+    }));
 };
 
 const buildFeatures = (material: OfficialMaterial) => {
@@ -749,7 +755,7 @@ const createProduct = async (
     throw new Error(`Missing product group ${groupId} for ${material.name}`);
   }
 
-  const { zhData, localizedData } = splitLocalizedData({
+  const { zhData } = splitLocalizedData({
     productId: materialProductId(material),
     productGroup: productGroupId,
     displayOrder: 0,
@@ -874,11 +880,11 @@ export const importOfficialMaterials = async (
     }
 
     const mediaResults = [];
-    for (let index = 0; index < material.imagePaths.length; index += 1) {
+    for (const [index, imagePath] of material.imagePaths.entries()) {
       const mediaResult = await uploadOrUpdateMaterialMedia(
         payload,
         material,
-        material.imagePaths[index],
+        imagePath,
         index,
         options,
       );

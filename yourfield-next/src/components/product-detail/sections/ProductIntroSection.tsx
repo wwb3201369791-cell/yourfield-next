@@ -1,4 +1,5 @@
 import type { IntroSectionProps } from './types';
+import { ProductSectionHeading } from './ProductSectionHeading';
 
 export function ProductIntroSection({
   applications,
@@ -14,10 +15,7 @@ export function ProductIntroSection({
 }: IntroSectionProps) {
   return (
     <>
-      <div className="detail-section-heading">
-        <span className="section-tag">{tagLabel}</span>
-        <h2>{heading}</h2>
-      </div>
+      <ProductSectionHeading heading={heading} tagLabel={tagLabel} />
       <div className="detail-intro-grid">
         {description ? (
           <article className="detail-intro-copy">

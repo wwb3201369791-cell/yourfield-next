@@ -36,6 +36,7 @@ describe('product detail extracted sections', () => {
     );
 
     expect(screen.getByRole('heading', { level: 2, name: '核心卖点' })).toBeTruthy();
+    expect(screen.getByText('产品亮点')).toBeTruthy();
     expect(screen.getByRole('heading', { level: 3, name: '阻燃' })).toBeTruthy();
     expect(screen.getByText('阻燃说明')).toBeTruthy();
   });
@@ -47,7 +48,7 @@ describe('product detail extracted sections', () => {
           heading="规格参数"
           locale="zh"
           rows={[{ label: '型号', value: 'X-001' }]}
-          tagLabel="参数"
+          tagLabel="参数标签"
         />
         <ProductSizeGuideTable
           columns={['M', 'L']}
@@ -55,11 +56,13 @@ describe('product detail extracted sections', () => {
           heading="尺码对应表"
           locale="zh"
           rows={[{ label: '身高', values: ['170', '180'] }]}
-          tagLabel="尺码"
+          tagLabel="尺码标签"
         />
       </>,
     );
 
+    expect(screen.getByText('参数标签')).toBeTruthy();
+    expect(screen.getByText('尺码标签')).toBeTruthy();
     expect(screen.getByText('X-001')).toBeTruthy();
     expect(screen.getByText('170')).toBeTruthy();
     expect(screen.getByText('180')).toBeTruthy();
@@ -72,25 +75,25 @@ describe('product detail extracted sections', () => {
           heading="应用场景"
           locale="zh"
           scenarios={[{ title: '灭火救援', text: '适用说明' }]}
-          tagLabel="场景"
+          tagLabel="场景标签"
         />
         <ProductQualityEvidence
           heading="资料与认证"
           items={[{ description: '证书说明', status: '有效', title: '检测报告' }]}
           locale="zh"
-          tagLabel="认证"
+          tagLabel="认证标签"
         />
         <ProductCareInstructions
           heading="洗护"
           instructions={['低温洗涤']}
           locale="zh"
-          tagLabel="维护"
+          tagLabel="维护标签"
         />
         <ProductFaqList
           entries={[{ question: '如何清洗？', answer: '按说明清洗。' }]}
           heading="常见问题"
           locale="zh"
-          tagLabel="FAQ"
+          tagLabel="FAQ标签"
         />
         <ProductSidebarNav
           items={[{ id: 'product-intro', label: '商品介绍' }]}
@@ -99,6 +102,10 @@ describe('product detail extracted sections', () => {
       </>,
     );
 
+    expect(screen.getByText('场景标签')).toBeTruthy();
+    expect(screen.getByText('认证标签')).toBeTruthy();
+    expect(screen.getByText('维护标签')).toBeTruthy();
+    expect(screen.getByText('FAQ标签')).toBeTruthy();
     expect(screen.getByText('灭火救援')).toBeTruthy();
     expect(screen.getByText('检测报告')).toBeTruthy();
     expect(screen.getByText('低温洗涤')).toBeTruthy();
@@ -114,10 +121,11 @@ describe('product detail extracted sections', () => {
         groups={[{ description: '场景说明', images: ['/image-a.png'], title: '场景图', variant: 'scene' }]}
         heading="详情图组"
         locale="zh"
-        tagLabel="图像"
+        tagLabel="图像标签"
       />,
     );
 
+    expect(screen.getByText('图像标签')).toBeTruthy();
     expect(screen.getByRole('heading', { level: 2, name: '详情图组' })).toBeTruthy();
     expect(screen.getByRole('heading', { level: 3, name: '场景图' })).toBeTruthy();
   });

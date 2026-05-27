@@ -1,16 +1,16 @@
 import type { SizeGuideTableProps } from './types';
+import { ProductSectionHeading } from './ProductSectionHeading';
 
 export function ProductSizeGuideTable({
   columns,
   cornerLabel,
   heading,
   rows,
+  tagLabel,
 }: SizeGuideTableProps) {
   return (
     <>
-      <div className="detail-section-heading">
-        <h2>{heading}</h2>
-      </div>
+      <ProductSectionHeading heading={heading} tagLabel={tagLabel} />
       <div className="detail-table-wrap">
         <table className="detail-size-table">
           <thead>

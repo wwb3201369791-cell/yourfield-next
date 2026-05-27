@@ -1,11 +1,10 @@
 import type { SellingPointsProps } from './types';
+import { ProductSectionHeading } from './ProductSectionHeading';
 
-export function ProductSellingPoints({ heading, points }: SellingPointsProps) {
+export function ProductSellingPoints({ heading, points, tagLabel }: SellingPointsProps) {
   return (
     <>
-      <div className="detail-section-heading">
-        <h2>{heading}</h2>
-      </div>
+      <ProductSectionHeading heading={heading} tagLabel={tagLabel} />
       <div className="detail-point-grid">
         {points.map((point) => (
           <article key={point.title} className="detail-point">
