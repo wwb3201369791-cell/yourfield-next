@@ -1,11 +1,10 @@
+import { ProductSectionHeading } from './ProductSectionHeading';
 import type { QualityEvidenceProps } from './types';
 
-export function ProductQualityEvidence({ heading, items }: QualityEvidenceProps) {
+export function ProductQualityEvidence({ heading, items, tagLabel }: QualityEvidenceProps) {
   return (
     <>
-      <div className="detail-section-heading">
-        <h2>{heading}</h2>
-      </div>
+      <ProductSectionHeading heading={heading} tagLabel={tagLabel} />
       <div className="detail-evidence-grid">
         {items.map((item) => (
           <article key={item.title} className="detail-evidence-card">

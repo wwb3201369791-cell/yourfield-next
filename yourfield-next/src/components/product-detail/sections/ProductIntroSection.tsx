@@ -1,5 +1,5 @@
-import type { IntroSectionProps } from './types';
 import { ProductSectionHeading } from './ProductSectionHeading';
+import type { IntroSectionProps } from './types';
 
 export function ProductIntroSection({
   applications,

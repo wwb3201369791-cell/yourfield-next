@@ -1,11 +1,10 @@
+import { ProductSectionHeading } from './ProductSectionHeading';
 import type { ScenariosProps } from './types';
 
-export function ProductScenarios({ heading, scenarios }: ScenariosProps) {
+export function ProductScenarios({ heading, scenarios, tagLabel }: ScenariosProps) {
   return (
     <>
-      <div className="detail-section-heading">
-        <h2>{heading}</h2>
-      </div>
+      <ProductSectionHeading heading={heading} tagLabel={tagLabel} />
       <div className="detail-scenario-grid">
         {scenarios.map((scenario) => (
           <article key={scenario.title} className="detail-scenario">

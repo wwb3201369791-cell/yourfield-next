@@ -1,5 +1,5 @@
-import type { SizeGuideTableProps } from './types';
 import { ProductSectionHeading } from './ProductSectionHeading';
+import type { SizeGuideTableProps } from './types';
 
 export function ProductSizeGuideTable({
   columns,

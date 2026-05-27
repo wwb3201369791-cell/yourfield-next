@@ -1,5 +1,5 @@
-import type { SellingPointsProps } from './types';
 import { ProductSectionHeading } from './ProductSectionHeading';
+import type { SellingPointsProps } from './types';
 
 export function ProductSellingPoints({ heading, points, tagLabel }: SellingPointsProps) {
   return (

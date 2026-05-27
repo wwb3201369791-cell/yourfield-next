@@ -12,6 +12,15 @@ export const formSubmissionAssigneeTextSql = `
 ALTER TABLE "form_submissions" ADD COLUMN IF NOT EXISTS "assigned_to" varchar;
 ALTER TABLE "form_submissions_notes" ADD COLUMN IF NOT EXISTS "user" varchar;
 
+DO $$
+BEGIN
+IF EXISTS (
+  SELECT 1
+  FROM information_schema.columns
+  WHERE table_schema = 'public'
+    AND table_name = 'form_submissions_rels'
+    AND column_name = 'users_id'
+) THEN
 WITH user_labels AS (
   SELECT
     "id",
@@ -51,6 +60,8 @@ WHERE
     OR TRIM("note"."user") = ''
     OR TRIM("note"."user") ~ '^[0-9]+$'
   );
+END IF;
+END $$;
 `;
 
 export async function up({ payload }: MigrateUpArgs): Promise<void> {

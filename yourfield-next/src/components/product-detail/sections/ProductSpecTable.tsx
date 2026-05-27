@@ -1,5 +1,5 @@
-import type { SpecTableProps } from './types';
 import { ProductSectionHeading } from './ProductSectionHeading';
+import type { SpecTableProps } from './types';
 
 export function ProductSpecTable({ heading, rows, tagLabel }: SpecTableProps) {
   return (

@@ -1,11 +1,10 @@
+import { ProductSectionHeading } from './ProductSectionHeading';
 import type { FaqProps } from './types';
 
-export function ProductFaqList({ entries, heading }: FaqProps) {
+export function ProductFaqList({ entries, heading, tagLabel }: FaqProps) {
   return (
     <>
-      <div className="detail-section-heading">
-        <h2>{heading}</h2>
-      </div>
+      <ProductSectionHeading heading={heading} tagLabel={tagLabel} />
       <div className="detail-faq-list">
         {entries.map((entry) => (
           <details key={entry.question}>

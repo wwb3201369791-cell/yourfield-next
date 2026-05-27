@@ -1,5 +1,6 @@
 import { ProductDetailVisualCarousel } from '@/components/product/ProductDetailVisualCarousel';
 
+import { ProductSectionHeading } from './ProductSectionHeading';
 import type { VisualGroupsProps } from './types';
 
 export function ProductVisualGroups({
@@ -7,12 +8,11 @@ export function ProductVisualGroups({
   carouselPreviousLabel,
   groups,
   heading,
+  tagLabel,
 }: VisualGroupsProps) {
   return (
     <>
-      <div className="detail-section-heading">
-        <h2>{heading}</h2>
-      </div>
+      <ProductSectionHeading heading={heading} tagLabel={tagLabel} />
       <div className="detail-visual-groups">
         {groups.map((group) => (
           <ProductDetailVisualCarousel
