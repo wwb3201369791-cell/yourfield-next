@@ -65,11 +65,6 @@ async function start() {
   const nextApp = next({ dev: env.NODE_ENV !== 'production' });
   const nextHandler = nextApp.getRequestHandler();
 
-  await payload.init({
-    secret: getPayloadSecret(env),
-    express: app,
-  });
-
   // eslint-disable-next-line import/no-named-as-default-member -- Express exposes static middleware on the default export.
   const uploadedMediaStatic = express.static(path.resolve(process.cwd(), 'src/uploads'), {
     immutable: env.NODE_ENV === 'production',
@@ -77,6 +72,11 @@ async function start() {
   });
 
   app.use('/media', uploadedMediaStatic);
+
+  await payload.init({
+    secret: getPayloadSecret(env),
+    express: app,
+  });
 
   if (env.NODE_ENV !== 'production') {
     if (env.SUPERADMIN_EMAIL && env.SUPERADMIN_PASSWORD) {
