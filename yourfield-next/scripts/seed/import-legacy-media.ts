@@ -141,9 +141,10 @@ export const importLegacyMedia = async (
           id,
           data: zhData as PayloadData,
           depth: 0,
+          filePath: absolutePath,
           locale: 'zh',
           overrideAccess: true,
-        });
+        } as never);
         for (const locale of ['en', 'ru'] as const) {
           await payload.update({
             collection: 'media',
@@ -162,7 +163,7 @@ export const importLegacyMedia = async (
 
     const created = (await payload.create({
       collection: 'media',
-      data: zhData as PayloadData,
+      data: zhData,
       depth: 0,
       filePath: absolutePath,
       locale: 'zh',
