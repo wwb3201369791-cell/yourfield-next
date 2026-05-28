@@ -70,6 +70,14 @@ async function start() {
     express: app,
   });
 
+  // eslint-disable-next-line import/no-named-as-default-member -- Express exposes static middleware on the default export.
+  const uploadedMediaStatic = express.static(path.resolve(process.cwd(), 'src/uploads'), {
+    immutable: env.NODE_ENV === 'production',
+    maxAge: env.NODE_ENV === 'production' ? '30d' : 0,
+  });
+
+  app.use('/media', uploadedMediaStatic);
+
   if (env.NODE_ENV !== 'production') {
     if (env.SUPERADMIN_EMAIL && env.SUPERADMIN_PASSWORD) {
       const result = await seedSuperadmin(payload, { skipExisting: true });
