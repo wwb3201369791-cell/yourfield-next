@@ -1,0 +1,2 @@
+commit_msg_file="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+pnpm commitlint --edit "$commit_msg_file"

@@ -1,2 +1,0 @@
-pnpm --dir=yourfield-next exec lint-staged --relative
-pnpm --dir=yourfield-next typecheck

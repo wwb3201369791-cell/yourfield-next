@@ -2,54 +2,61 @@ name: CI
 
 on:
   pull_request:
-    branches:
-      - main
-      - master
-    paths:
-      - 'yourfield-next/**'
-      - '.github/workflows/ci.yml'
   push:
     branches:
       - main
-      - master
-    paths:
-      - 'yourfield-next/**'
-      - '.github/workflows/ci.yml'
 
-concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-defaults:
-  run:
-    working-directory: yourfield-next
-
-env:
-  CI: true
-  NEXT_TELEMETRY_DISABLED: '1'
+permissions:
+  contents: read
 
 jobs:
   quality:
-    name: Lint, typecheck, and build
+    name: Lint, typecheck, test, build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: yourfield_ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d yourfield_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URI: postgresql://postgres:postgres@localhost:5432/yourfield_ci
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+      NEXT_TELEMETRY_DISABLED: '1'
+      NODE_OPTIONS: --max-old-space-size=4096
+      PAYLOAD_DB_PUSH: 'true'
+      PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
+      PAYLOAD_SECRET: ci-only-payload-secret-change-before-production
+      CRON_SECRET: ci-only-cron-secret
+      REVALIDATE_SECRET: ci-only-revalidate-secret
+      PAYLOAD_PREVIEW_SECRET: ci-only-preview-secret
+      TURNSTILE_SECRET: ci-only-turnstile-secret
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
         with:
-          version: 10.28.2
-          run_install: false
+          node-version: 20
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: pnpm
-          cache-dependency-path: yourfield-next/pnpm-lock.yaml
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.28.2 --activate
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -57,8 +64,17 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Typecheck
+      - name: Type check
         run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Prepare CMS test database
+        run: pnpm seed
+
+      - name: Check production environment
+        run: pnpm check:env
 
       - name: Build
         run: pnpm build

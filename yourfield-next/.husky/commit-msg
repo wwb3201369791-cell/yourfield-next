@@ -1,2 +1,0 @@
-commit_msg_file="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
-pnpm --dir=yourfield-next commitlint --edit "$commit_msg_file"
