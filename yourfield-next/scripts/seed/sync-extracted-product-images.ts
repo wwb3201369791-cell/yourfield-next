@@ -4,6 +4,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 import type { Payload } from 'payload';
+import sharp from 'sharp';
 
 import extractedProductPayload from '../../src/lib/content/extracted-products.generated.json';
 
@@ -38,6 +39,9 @@ type DbQuery = (sql: string, params?: unknown[]) => Promise<{ rows?: unknown[] }
 
 const payload = extractedProductPayload as ExtractedProductPayload;
 const productLocales = ['zh', 'en', 'ru'] as const;
+const bytesPerMiB = 1024 * 1024;
+const defaultImageUploadLimitBytes = 10 * bytesPerMiB;
+const uploadLimitHeadroomBytes = 512 * 1024;
 
 function localized(value: string) {
   return { zh: value, en: value, ru: value };
@@ -71,16 +75,66 @@ function publicImageToFilePath(publicImagePath: string) {
   return path.resolve(process.cwd(), 'public', normalized);
 }
 
-function stagedUploadPath(product: ExtractedProduct, sourcePath: string, index: number) {
+function configuredImageUploadLimitBytes() {
+  const value = Number(process.env.MEDIA_UPLOAD_IMAGE_MAX_BYTES);
+
+  return Number.isFinite(value) && value > 0 ? value : defaultImageUploadLimitBytes;
+}
+
+async function writeCompressedImage(sourcePath: string, targetPath: string, maxBytes: number) {
+  let width = 2400;
+  let quality = 82;
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    await sharp(sourcePath)
+      .rotate()
+      .resize({ fit: 'inside', height: width, width, withoutEnlargement: true })
+      .jpeg({ mozjpeg: true, quality })
+      .toFile(targetPath);
+
+    if (fs.statSync(targetPath).size <= maxBytes) {
+      return;
+    }
+
+    if (quality > 58) {
+      quality -= 8;
+    } else {
+      width = Math.max(1400, width - 300);
+    }
+  }
+
+  const finalSize = fs.statSync(targetPath).size;
+  if (finalSize > maxBytes) {
+    throw new Error(
+      `Compressed image still exceeds upload limit: ${path.basename(
+        sourcePath,
+      )} ${finalSize} > ${maxBytes}`,
+    );
+  }
+}
+
+async function stagedUploadPath(product: ExtractedProduct, sourcePath: string, index: number) {
+  const uploadLimitBytes = configuredImageUploadLimitBytes();
+  const targetMaxBytes = Math.max(bytesPerMiB, uploadLimitBytes - uploadLimitHeadroomBytes);
+  const needsCompression = fs.statSync(sourcePath).size > targetMaxBytes;
   const extension = path.extname(sourcePath).toLowerCase() || '.png';
   const safeProductId = product.id.replace(/[^a-z0-9_-]+/gi, '-').slice(0, 120);
   const targetDir = path.resolve(process.cwd(), '.tmp', 'extracted-product-media');
+  const targetExtension = needsCompression ? '.jpg' : extension;
   const targetPath = path.join(
     targetDir,
-    `${safeProductId}-${String(index + 1).padStart(3, '0')}${extension}`,
+    `${safeProductId}-${String(index + 1).padStart(3, '0')}${targetExtension}`,
   );
 
   fs.mkdirSync(targetDir, { recursive: true });
+
+  if (needsCompression) {
+    if (!fs.existsSync(targetPath) || fs.statSync(targetPath).size > targetMaxBytes) {
+      await writeCompressedImage(sourcePath, targetPath, targetMaxBytes);
+    }
+
+    return targetPath;
+  }
 
   if (!fs.existsSync(targetPath) || fs.statSync(targetPath).size !== fs.statSync(sourcePath).size) {
     fs.copyFileSync(sourcePath, targetPath);
@@ -150,7 +204,9 @@ async function uploadOrReuseMedia(
       collection: 'media',
       data: zhData as never,
       depth: 0,
-      ...(options.replaceMedia ? { filePath: stagedUploadPath(product, sourcePath, index) } : {}),
+      ...(options.replaceMedia
+        ? { filePath: await stagedUploadPath(product, sourcePath, index) }
+        : {}),
       id: existingDoc.id,
       locale: 'zh',
       overrideAccess: true,
@@ -174,7 +230,7 @@ async function uploadOrReuseMedia(
     collection: 'media',
     data: zhData,
     depth: 0,
-    filePath: stagedUploadPath(product, sourcePath, index),
+    filePath: await stagedUploadPath(product, sourcePath, index),
     locale: 'zh',
     overrideAccess: true,
   })) as { id?: string | number };
