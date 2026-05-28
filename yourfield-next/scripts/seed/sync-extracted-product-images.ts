@@ -338,7 +338,7 @@ const setupEnv = () => {
   process.env.PAYLOAD_SEED_MODE = 'true';
   process.env.PAYLOAD_CONFIG_PATH = process.env.PAYLOAD_CONFIG_PATH || 'src/payload.config.ts';
   process.env.STRICT_I18N_PUBLISH = 'false';
-  process.env.REVALIDATE_SECRET = '';
+  process.env.REVALIDATE_SECRET = process.env.REVALIDATE_SECRET || 'seed-revalidate-secret';
   loadEnvFile(path.resolve(process.cwd(), '.env.local'));
   loadEnvFile(path.resolve(process.cwd(), '.env'));
 };
