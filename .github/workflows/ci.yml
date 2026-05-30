@@ -1,0 +1,163 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: yourfield_ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d yourfield_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URI: postgresql://postgres:postgres@localhost:5432/yourfield_ci
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+      NEXT_TELEMETRY_DISABLED: '1'
+      NODE_OPTIONS: --max-old-space-size=4096
+      PAYLOAD_DB_PUSH: 'true'
+      PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
+      PAYLOAD_SECRET: ci-only-payload-secret-change-before-production
+      CRON_SECRET: ci-only-cron-secret
+      REVALIDATE_SECRET: ci-only-revalidate-secret
+      PAYLOAD_PREVIEW_SECRET: ci-only-preview-secret
+      TURNSTILE_SECRET: ci-only-turnstile-secret
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.28.2 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Prepare CMS test database
+        run: pnpm seed
+
+      - name: Check production environment
+        run: pnpm check:env
+
+      - name: Build
+        run: pnpm build
+
+      # ---------------------------------------------------------------------
+      # E2E (non-blocking, added 2026-05-28)
+      #
+      # tests/e2e/critical-paths.ts drives a real Playwright Chromium against
+      # the Next dev server. README still marks this as a manual / smoke
+      # script, so we run it with `continue-on-error: true` for now so red
+      # e2e does not block PRs while we observe stability. Flip to false
+      # once the suite has been green for a couple of weeks.
+      # ---------------------------------------------------------------------
+      - name: Install Playwright Chromium for E2E
+        continue-on-error: true
+        timeout-minutes: 5
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Start Next dev server for E2E
+        continue-on-error: true
+        timeout-minutes: 3
+        run: |
+          nohup pnpm dev:next > "$RUNNER_TEMP/dev-server.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/dev-server.pid"
+          echo "Started dev server (pid=$(cat $RUNNER_TEMP/dev-server.pid))"
+
+      - name: Wait for dev server on :3000
+        continue-on-error: true
+        timeout-minutes: 3
+        run: |
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail --max-time 2 http://localhost:3000/ > /dev/null 2>&1; then
+              echo "Dev server ready after $attempt attempt(s)."
+              exit 0
+            fi
+            echo "Waiting for dev server (attempt $attempt/60)..."
+            sleep 2
+          done
+          echo "::warning::Dev server did not become ready within 120s."
+          tail -n 200 "$RUNNER_TEMP/dev-server.log" || true
+          exit 1
+
+      - name: Run E2E critical paths
+        id: e2e
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          E2E_BASE_URL: http://localhost:3000
+        run: |
+          set +e
+          pnpm test:e2e
+          status=$?
+          echo "E2E status: exit=$status"
+          echo "e2e_status=$status" >> "$GITHUB_OUTPUT"
+          exit $status
+
+      - name: Report E2E result
+        if: always()
+        run: |
+          if [ "${{ steps.e2e.outcome }}" = "success" ]; then
+            echo "E2E status: PASSED"
+          else
+            echo "::warning::E2E status: ${{ steps.e2e.outcome }} (non-blocking)"
+            echo "Last 200 lines of dev server log:"
+            tail -n 200 "$RUNNER_TEMP/dev-server.log" || true
+          fi
+
+      - name: Stop dev server
+        if: always()
+        continue-on-error: true
+        run: |
+          if [ -f "$RUNNER_TEMP/dev-server.pid" ]; then
+            pid=$(cat "$RUNNER_TEMP/dev-server.pid")
+            echo "Stopping dev server pid=$pid"
+            kill "$pid" 2>/dev/null || true
+            sleep 2
+            kill -9 "$pid" 2>/dev/null || true
+          fi
+          # Belt-and-suspenders: free port 3000 if anything else is bound.
+          if command -v lsof >/dev/null 2>&1; then
+            stragglers=$(lsof -ti :3000 || true)
+            if [ -n "$stragglers" ]; then
+              echo "Killing stragglers on :3000: $stragglers"
+              echo "$stragglers" | xargs -r kill -9 || true
+            fi
+          fi

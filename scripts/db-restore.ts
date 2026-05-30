@@ -1,0 +1,123 @@
+import { access } from 'node:fs/promises';
+import path from 'node:path';
+import process from 'node:process';
+import { parseArgs } from 'node:util';
+
+const environment = Reflect.get(process, 'env') as Record<string, string | undefined>;
+
+function readString(value: string | boolean | string[] | boolean[] | undefined) {
+  return typeof value === 'string' ? value : undefined;
+}
+
+function requireDatabaseUri(value: string | undefined) {
+  if (value?.trim()) {
+    return value.trim();
+  }
+
+  throw new Error('DATABASE_URI is required. Pass --database-uri or set DATABASE_URI.');
+}
+
+function parseDatabaseUri(databaseUri: string) {
+  try {
+    const parsedUri = new URL(databaseUri);
+
+    if (parsedUri.protocol !== 'postgresql:' && parsedUri.protocol !== 'postgres:') {
+      throw new Error('Database URI must use postgresql:// or postgres://.');
+    }
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith('Database URI must')) {
+      throw error;
+    }
+
+    throw new Error('DATABASE_URI must be a valid PostgreSQL connection string.');
+  }
+}
+
+function redactDatabaseUri(databaseUri: string) {
+  const parsedUri = new URL(databaseUri);
+
+  if (parsedUri.password) {
+    parsedUri.password = '***';
+  }
+
+  return parsedUri.toString();
+}
+
+function quoteForDisplay(value: string) {
+  return /^[A-Za-z0-9_./:@=-]+$/.test(value) ? value : `"${value.replaceAll('"', '\\"')}"`;
+}
+
+async function fileExists(filePath: string) {
+  try {
+    await access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function buildRestoreCommand(sourcePath: string, redactedDatabaseUri: string) {
+  if (sourcePath.toLowerCase().endsWith('.sql')) {
+    return ['psql', '--dbname', redactedDatabaseUri, '--file', sourcePath];
+  }
+
+  return [
+    'pg_restore',
+    '--clean',
+    '--if-exists',
+    '--no-owner',
+    '--dbname',
+    redactedDatabaseUri,
+    sourcePath,
+  ];
+}
+
+async function main() {
+  const { values } = parseArgs({
+    options: {
+      'database-uri': { type: 'string' },
+      execute: { type: 'boolean' },
+      from: { type: 'string' },
+      'strict-file': { type: 'boolean' },
+    },
+  });
+
+  if (values.execute === true) {
+    throw new Error(
+      'Actual restore execution is intentionally disabled in this local-safe helper. Restore only after explicit approval and a test-database rehearsal.',
+    );
+  }
+
+  const sourcePathValue = readString(values.from);
+
+  if (!sourcePathValue) {
+    throw new Error('Pass --from <backup-file> to generate a restore plan.');
+  }
+
+  const databaseUri = requireDatabaseUri(
+    readString(values['database-uri']) ?? environment.DATABASE_URI,
+  );
+  parseDatabaseUri(databaseUri);
+
+  const sourcePath = path.resolve(sourcePathValue);
+  const exists = await fileExists(sourcePath);
+
+  if (!exists && values['strict-file'] === true) {
+    throw new Error(`Backup file was not found: ${sourcePath}`);
+  }
+
+  const redactedDatabaseUri = redactDatabaseUri(databaseUri);
+  const restoreCommand = buildRestoreCommand(sourcePath, redactedDatabaseUri);
+
+  console.log('mode: dry-run');
+  console.log(`source: ${sourcePath}`);
+  console.log(`sourceExists: ${exists ? 'yes' : 'no'}`);
+  console.log(`database: ${redactedDatabaseUri}`);
+  console.log(`command: ${restoreCommand.map(quoteForDisplay).join(' ')}`);
+  console.log('dry-run complete: restore was not executed.');
+}
+
+void main().catch((error: unknown) => {
+  console.error(error instanceof Error ? error.message : error);
+  process.exitCode = 1;
+});

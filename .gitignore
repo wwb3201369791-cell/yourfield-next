@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+
+# Next.js / Payload / build outputs
+.next/
+build/
+dist/
+out/
+.cache/
+.turbo/
+coverage/
+playwright-report/
+test-results/
+
+# Runtime / temporary files
+.tmp/
+tmp/
+output/
+outputs/
+*.tsbuildinfo
+*.log
+*.pid
+tmp-*.png
+tmp-*.json
+*.tmp.txt
+*.tmp.json
+.tmp-*.json
+.tmp-*.txt
+array-debug.tmp.txt
+payload-debug.tmp.txt
+products-db.tmp.txt
+.tmp-products.json
+health-current.json
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+*.pem
+test.pem
+
+# Local editor / agent state
+.vscode/
+.idea/
+.claude/
+.playwright-mcp/
+.codex-dev*.log
+progress.md
+findings.md
+task_plan.md
+
+# Generated Husky helper files
+.husky/_/
+
+# Script caches / scratch files
+scripts/__pycache__/
+scripts/tmp-*

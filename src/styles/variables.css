@@ -1,0 +1,28 @@
+:root {
+  --primary: #1e3a5f;
+  --primary-dark: #152a45;
+  --primary-light: #2a4a73;
+  --accent: #e63946;
+  --accent-hover: #c1121f;
+  --text: #333;
+  --text-light: #666;
+  --text-lighter: #999;
+  --bg: #fff;
+  --bg-light: #f8f9fa;
+  --bg-dark: #1a1a2e;
+  --border: #e0e0e0;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 14px 34px rgba(12, 32, 58, 0.06);
+  --shadow-card-hover: 0 18px 46px rgba(12, 32, 58, 0.12);
+  --radius: 8px;
+  --radius-lg: 16px;
+  --transition: all 0.3s ease;
+  --focus-ring: rgba(230, 57, 70, 0.35);
+  --container-max: 1200px;
+  --container-padding: 20px;
+}
+
+html {
+  scroll-padding-top: 100px;
+}

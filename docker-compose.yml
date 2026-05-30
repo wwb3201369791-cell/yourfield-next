@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: yourfield-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.local or the shell}
+      POSTGRES_DB: yourfield_dev
+      UMAMI_DATABASE_PASSWORD: ${UMAMI_DATABASE_PASSWORD:?Set UMAMI_DATABASE_PASSWORD in .env.local or the shell}
+    ports:
+      - '5432:5432'
+    volumes:
+      - yourfield_postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d yourfield_dev']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-v2.18.1
+    container_name: yourfield-umami
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_DATABASE_PASSWORD:?Set UMAMI_DATABASE_PASSWORD in .env.local or the shell}@postgres:5432/umami
+      DATABASE_TYPE: postgresql
+      APP_SECRET: ${UMAMI_APP_SECRET:?Set UMAMI_APP_SECRET in .env.local or the shell}
+    ports:
+      - '3002:3000'
+
+volumes:
+  yourfield_postgres_data:

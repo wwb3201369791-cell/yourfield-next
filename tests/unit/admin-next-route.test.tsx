@@ -1,0 +1,42 @@
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/payload.config', () => ({
+  default: Promise.resolve({}),
+}));
+
+vi.mock('@/app/(payload)/admin/importMap.js', () => ({
+  importMap: {},
+}));
+
+vi.mock('@payloadcms/next/views', () => ({
+  generatePageMetadata: vi.fn(async () => ({ title: 'Payload Admin' })),
+  RootPage: vi.fn(async () => <main>Payload Admin</main>),
+}));
+
+describe('Next route for Payload admin', () => {
+  it('normalizes optional catch-all params for the Payload 3 admin route', async () => {
+    const views = await import('@payloadcms/next/views');
+    const { default: PayloadAdminPage, generateMetadata } =
+      await import('@/app/(payload)/admin/[[...segments]]/page');
+    const props = {
+      params: Promise.resolve({}),
+      searchParams: Promise.resolve({}),
+    };
+
+    await generateMetadata(props);
+    await PayloadAdminPage(props);
+
+    const generatePageMetadataMock = vi.mocked(views.generatePageMetadata);
+    const rootPageMock = vi.mocked(views.RootPage);
+
+    expect(generatePageMetadataMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        params: expect.any(Promise),
+      }),
+    );
+    await expect(generatePageMetadataMock.mock.calls[0]?.[0].params).resolves.toEqual({
+      segments: [],
+    });
+    await expect(rootPageMock.mock.calls[0]?.[0].params).resolves.toEqual({ segments: [] });
+  });
+});

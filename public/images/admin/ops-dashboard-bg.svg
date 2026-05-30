@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="460" viewBox="0 0 1280 460" fill="none">
+  <rect width="1280" height="460" fill="#F7FBFF"/>
+  <path d="M0 360C190 315 319 379 497 330C661 284 733 161 893 142C1036 125 1129 197 1280 156V460H0V360Z" fill="#EAF5FB"/>
+  <path d="M742 62H1184C1210.51 62 1232 83.4903 1232 110V392H790C763.49 392 742 370.51 742 344V62Z" fill="url(#paint0_linear_654_445)" opacity=".78"/>
+  <path d="M788 113H1186M788 170H1186M788 227H1186M788 284H1186M788 341H1186" stroke="#B7D4E6" stroke-width="1" opacity=".55"/>
+  <path d="M844 86V371M936 86V371M1028 86V371M1120 86V371" stroke="#C7DDEA" stroke-width="1" opacity=".5"/>
+  <path d="M78 88H454C480.51 88 502 109.49 502 136V314C502 340.51 480.51 362 454 362H78V88Z" fill="#FFFFFF" opacity=".76"/>
+  <path d="M114 322L184 248L250 281L336 184L430 224" stroke="#176DA6" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" opacity=".12"/>
+  <path d="M114 322L184 248L250 281L336 184L430 224" stroke="#176DA6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="184" cy="248" r="11" fill="#FFFFFF" stroke="#176DA6" stroke-width="5"/>
+  <circle cx="336" cy="184" r="11" fill="#FFFFFF" stroke="#EF3B49" stroke-width="5"/>
+  <path d="M1008 194C1057.71 194 1098 234.294 1098 284C1098 333.706 1057.71 374 1008 374C958.294 374 918 333.706 918 284C918 234.294 958.294 194 1008 194Z" stroke="#18385C" stroke-width="2" opacity=".16"/>
+  <path d="M1008 232C1036.72 232 1060 255.281 1060 284C1060 312.719 1036.72 336 1008 336C979.281 336 956 312.719 956 284C956 255.281 979.281 232 1008 232Z" stroke="#EF3B49" stroke-width="2" opacity=".22"/>
+  <path d="M1008 284L1122 162" stroke="#EF3B49" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+  <path d="M648 0L740 460" stroke="#F6C85F" stroke-width="72" opacity=".1"/>
+  <path d="M708 0L800 460" stroke="#EF3B49" stroke-width="18" opacity=".08"/>
+  <path d="M28 32H1252V428H28V32Z" stroke="#D7E6F0" stroke-width="2" stroke-dasharray="12 12" opacity=".58"/>
+  <defs>
+    <linearGradient id="paint0_linear_654_445" x1="742" y1="62" x2="1232" y2="392" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset=".48" stop-color="#E7F3FB"/>
+      <stop offset="1" stop-color="#FFF6F4"/>
+    </linearGradient>
+  </defs>
+</svg>

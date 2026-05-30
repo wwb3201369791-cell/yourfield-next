@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "incremental": false,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": false,
+    "outDir": "node_modules/.cache/yourfield-scripts",
+    "rootDir": ".",
+    "sourceMap": false,
+    "tsBuildInfoFile": "node_modules/.cache/yourfield-scripts/tsconfig.scripts.tsbuildinfo"
+  },
+  "include": ["scripts/**/*.ts"]
+}
