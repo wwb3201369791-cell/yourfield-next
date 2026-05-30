@@ -17,6 +17,7 @@ vi.mock('@payloadcms/ui', () => ({
       name: '吴文斌',
     },
   }),
+  useTranslation: () => ({ i18n: { language: 'zh' } }),
 }));
 
 const dashboardState: DashboardState = {

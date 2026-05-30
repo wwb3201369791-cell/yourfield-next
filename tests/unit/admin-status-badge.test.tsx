@@ -2,7 +2,11 @@
 
 import { cleanup, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@payloadcms/ui', () => ({
+  useTranslation: () => ({ i18n: { language: 'zh' } }),
+}));
 
 import DraftStatusCell from '@/components/admin/cells/DraftStatusCell';
 import SubmissionStatusCell from '@/components/admin/cells/SubmissionStatusCell';

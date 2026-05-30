@@ -39,4 +39,10 @@ describe('Next route for Payload admin', () => {
     });
     await expect(rootPageMock.mock.calls[0]?.[0].params).resolves.toEqual({ segments: [] });
   });
+
+  it('keeps the authenticated admin route dynamic instead of serving a stale 404 shell', async () => {
+    const adminRoute = await import('@/app/(payload)/admin/[[...segments]]/page');
+
+    expect(adminRoute.dynamic).toBe('force-dynamic');
+  });
 });

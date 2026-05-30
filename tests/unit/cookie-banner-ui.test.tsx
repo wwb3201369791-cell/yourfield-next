@@ -32,7 +32,9 @@ describe('CookieBanner UI', () => {
     const close = await screen.findByRole('button', { name: '关闭' });
     const details = screen.getByRole('link', { name: '查看 Cookie 用途' });
 
-    expect(banner.className).toContain('bottom-0');
+    expect(banner.className).toContain('bottom-4');
+    expect(banner.className).toContain('md:max-w-2xl');
+    expect(banner.className).not.toContain('inset-x-0');
     expect(close).not.toBeNull();
     expect(details.getAttribute('href')).toBe('/zh/cookies');
     expect(screen.getByRole('button', { name: '接受' })).not.toBeNull();

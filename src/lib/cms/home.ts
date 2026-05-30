@@ -4,8 +4,37 @@ import type { Product } from '@/lib/product/types';
 import { getCmsProductGroups, getCmsProducts, type CmsProductGroup } from './products';
 
 const homeFeaturedProductLimit = 5;
+const hanTextPattern = /[\u3400-\u9fff]/u;
+const internalProductLabelPattern = /^official-[a-z0-9-]+$/i;
 
 type HomeProductGroup = Pick<CmsProductGroup, 'id'>;
+
+function localizedProductField(value: Readonly<Record<Locale, string>>, locale: Locale) {
+  return value[locale]?.trim() ?? '';
+}
+
+function isLocalizedPublicProduct(product: Product, locale: Locale) {
+  if (locale === 'zh') {
+    return true;
+  }
+
+  const visibleFields = [
+    localizedProductField(product.name, locale),
+    localizedProductField(product.description, locale),
+    localizedProductField(product.categoryName, locale),
+  ];
+  const name = visibleFields[0] ?? '';
+
+  return (
+    Boolean(name) &&
+    !internalProductLabelPattern.test(name) &&
+    !visibleFields.some((value) => hanTextPattern.test(value))
+  );
+}
+
+function productsForHomeLocale(products: readonly Product[], locale: Locale) {
+  return products.filter((product) => isLocalizedPublicProduct(product, locale));
+}
 
 function firstProductsByGroup(products: readonly Product[]) {
   const productsByGroup = new Map<string, Product>();
@@ -86,8 +115,9 @@ export async function getHomeFeaturedProducts(locale: Locale, draft = false): Pr
     getCmsProducts(locale, draft),
     getCmsProductGroups(locale),
   ]);
+  const localizedProducts = productsForHomeLocale(products, locale);
 
-  return pickHomeFeaturedProducts(products, groups);
+  return pickHomeFeaturedProducts(localizedProducts, groups);
 }
 
 export async function getHomeProductSearchStats(locale: Locale, draft = false) {

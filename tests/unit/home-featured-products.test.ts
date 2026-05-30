@@ -126,6 +126,66 @@ describe('home featured products', () => {
     expect(waterRescue?.id).toBe('water-rescue-first');
   });
 
+  it('hides non-localized CMS products on English and Russian home previews', async () => {
+    const products = [
+      product({
+        categoryName: { en: 'Electrical protection', ru: 'Электрозащита', zh: '电力防护' },
+        description: {
+          en: 'Certified arc flash protection for electrical crews.',
+          ru: 'Сертифицированная защита от дуги для электротехнических бригад.',
+          zh: '电力电网中文介绍',
+        },
+        groupId: 'electrical-protection',
+        id: 'arc-flash-localized',
+        name: {
+          en: 'Arc flash shirt suit',
+          ru: 'Костюм от дугового разряда',
+          zh: '防电弧服中文名',
+        },
+      }),
+      product({
+        description: {
+          en: '电力电网、光伏、新能源及工业企业变电站等可能遭受电弧伤害的电气作业场景。',
+          ru: '',
+          zh: '电力电网中文介绍',
+        },
+        groupId: 'fire-rescue',
+        id: 'official-yftg-fs24526',
+        name: { en: '1级防电弧服（衬衫款）', ru: '', zh: '1级防电弧服（衬衫款）' },
+      }),
+      product({
+        description: { en: 'Internal import slug awaiting translation.', ru: '', zh: '待翻译' },
+        groupId: 'water-rescue',
+        id: 'official-hyf-3537',
+        name: { en: 'official-hyf-3537', ru: '', zh: '牛尾绳' },
+      }),
+    ];
+
+    vi.doMock('@/lib/cms/products', () => ({
+      getCmsProductCategories: vi.fn(() => Promise.resolve([])),
+      getCmsProductGroups: vi.fn(() =>
+        Promise.resolve([
+          {
+            categoryIds: [],
+            id: 'electrical-protection',
+            order: 1,
+            title: 'Electrical protection',
+          },
+          { categoryIds: [], id: 'fire-rescue', order: 2, title: 'Fire rescue' },
+          { categoryIds: [], id: 'water-rescue', order: 3, title: 'Water rescue' },
+        ]),
+      ),
+      getCmsProducts: vi.fn(() => Promise.resolve(products)),
+    }));
+
+    const { getHomeFeaturedProducts } = await import('@/lib/cms/home');
+    const englishResult = await getHomeFeaturedProducts('en');
+    const russianResult = await getHomeFeaturedProducts('ru');
+
+    expect(englishResult.map((item) => item.id)).toEqual(['arc-flash-localized']);
+    expect(russianResult.map((item) => item.id)).toEqual(['arc-flash-localized']);
+  });
+
   it('propagates CMS product query errors instead of returning silent empty fallbacks', async () => {
     vi.doMock('@/lib/cms/products', () => ({
       getCmsProductCategories: vi.fn(() => Promise.reject(new Error('schema drift'))),

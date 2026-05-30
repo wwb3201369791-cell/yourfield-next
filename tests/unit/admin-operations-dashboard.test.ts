@@ -11,6 +11,7 @@ vi.mock('@payloadcms/ui', () => ({
       name: '运营同事',
     },
   }),
+  useTranslation: () => ({ i18n: { language: 'zh' } }),
 }));
 
 import {

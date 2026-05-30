@@ -64,12 +64,12 @@ export function CookieBanner({ cookiesHref, copy, enabled }: CookieBannerProps) 
 
   return (
     <aside
-      className="fixed inset-x-0 bottom-0 z-[1500] border-t border-border bg-white/[0.94] px-4 py-3 text-primary shadow-[0_-18px_50px_rgba(5,18,33,0.16)] backdrop-blur-xl sm:px-6"
+      className="fixed bottom-4 left-4 right-4 z-[1500] rounded-2xl border border-border bg-white/[0.96] px-4 py-3 text-primary shadow-[0_18px_50px_rgba(5,18,33,0.18)] backdrop-blur-xl md:left-auto md:right-6 md:max-w-2xl md:px-5"
       role="region"
       aria-label={copy.title}
       aria-live="polite"
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 pr-10 md:flex-row md:items-center md:justify-between md:gap-6 md:pr-0">
+      <div className="flex w-full flex-col gap-3 pr-10 md:flex-row md:items-center md:justify-between md:gap-5 md:pr-8">
         <div className="flex min-w-0 items-start gap-3">
           <span
             className="mt-0.5 inline-flex h-9 w-9 flex-none items-center justify-center rounded border border-border bg-white text-primary shadow-sm"

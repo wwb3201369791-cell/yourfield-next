@@ -30,6 +30,7 @@ vi.mock('@payloadcms/ui', () => ({
       },
     },
   }),
+  useTranslation: () => ({ i18n: { language: 'zh' } }),
 }));
 
 const options: readonly StatusTabOption[] = [
