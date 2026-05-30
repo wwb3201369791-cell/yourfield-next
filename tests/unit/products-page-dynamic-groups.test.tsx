@@ -132,6 +132,13 @@ describe('products page dynamic catalog groups', () => {
             order: 10,
             title: '化学与医用防护',
           },
+          {
+            categoryIds: [],
+            description: '后台刚创建但还没放入产品的大类说明',
+            id: 'qa-empty-group',
+            order: 20,
+            title: '后台空产品大类',
+          },
         ]),
       ),
       getCmsProducts: vi.fn(() =>
@@ -196,7 +203,7 @@ describe('products page dynamic catalog groups', () => {
     const catalogElement = findElementByType(element, ProductCatalog);
     const props = catalogElement?.props as ProductCatalogProps | undefined;
 
-    expect(props?.groups).toHaveLength(2);
+    expect(props?.groups).toHaveLength(3);
     expect(props?.groups[0]).toMatchObject({
       categorySummary: '定制防护第一款 / 定制防护第二款',
       id: 'custom-protection',
@@ -214,6 +221,12 @@ describe('products page dynamic catalog groups', () => {
     expect(props?.groups[1]?.slots[0]).toMatchObject({
       href: '/zh/products/chemical-protective-suit',
       title: '防化服',
+    });
+    expect(props?.groups[2]).toMatchObject({
+      categorySummary: '后台刚创建但还没放入产品的大类说明',
+      id: 'qa-empty-group',
+      slots: [],
+      title: '后台空产品大类',
     });
     expect(props?.overview.stats).toBeUndefined();
   });

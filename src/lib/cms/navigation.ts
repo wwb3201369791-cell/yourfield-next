@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
+import { env } from '@/lib/env';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import type { Locale } from '@/lib/i18n/locale';
 import {
@@ -411,4 +412,10 @@ const getCachedCmsNavigation = unstable_cache(getCmsNavigationUncached, ['cms-na
   tags: [cmsGlobalCacheTag('navigation'), cmsCollectionCacheTag('solutions')],
 });
 
-export const getCmsNavigation = cache(getCachedCmsNavigation);
+function shouldBypassNavigationCache() {
+  return env.NODE_ENV !== 'production' || !env.REVALIDATE_SECRET;
+}
+
+export const getCmsNavigation = cache(async (locale: Locale) =>
+  shouldBypassNavigationCache() ? getCmsNavigationUncached(locale) : getCachedCmsNavigation(locale),
+);
