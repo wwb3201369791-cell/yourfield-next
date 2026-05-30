@@ -1,3 +1,4 @@
+import '@payloadcms/next/css';
 import '@/styles/payload-admin.css';
 
 import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts';
