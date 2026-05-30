@@ -8,6 +8,10 @@ import nextConfig, {
 } from '../../next.config';
 
 describe('next config security headers', () => {
+  it('keeps the development indicator out of local click testing', () => {
+    expect(nextConfig.devIndicators).toBe(false);
+  });
+
   it('leaves CSP to middleware so production pages can receive request nonces', async () => {
     expect(nextConfig.headers).toBeTypeOf('function');
 

@@ -16,6 +16,7 @@ type PayloadPrivateRouteEnv = Pick<
   | 'PAYLOAD_PUBLIC_API_PATH'
   | 'PAYLOAD_PUBLIC_GRAPHQL_PATH'
   | 'PAYLOAD_PUBLIC_GRAPHQL_PLAYGROUND_PATH'
+  | 'NODE_ENV'
 >;
 
 const normalizePath = (value: string) => {
@@ -92,12 +93,24 @@ export function createPayloadPrivateRouteProtection(envValues: PayloadPrivateRou
   const basicUser = envValues.PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_USER;
   const basicPassword = envValues.PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_PASSWORD;
   const hasBasicAuth = Boolean(basicUser && basicPassword);
+  const hasPrivateRouteProtection =
+    envValues.PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION || hasBasicAuth || allowlist.size > 0;
 
   return (request: Request, response: Response, next: NextFunction) => {
     const pathname = new URL(request.originalUrl, 'http://localhost').pathname;
 
     if (!isPrivateRoute(pathname, protectedRoots)) {
       next();
+      return;
+    }
+
+    if (!hasPrivateRouteProtection) {
+      if (envValues.NODE_ENV !== 'production') {
+        next();
+        return;
+      }
+
+      response.status(503).send('Payload private route protection is not configured.');
       return;
     }
 

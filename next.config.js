@@ -137,6 +137,7 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  devIndicators: false,
   experimental: experimentalConfig,
   serverExternalPackages,
   poweredByHeader: false,
