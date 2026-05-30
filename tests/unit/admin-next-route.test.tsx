@@ -14,7 +14,7 @@ vi.mock('@payloadcms/next/views', () => ({
 }));
 
 describe('Next route for Payload admin', () => {
-  it('normalizes optional catch-all params for the Payload 3 admin route', async () => {
+  it('preserves the admin root as the dashboard route instead of /admin/', async () => {
     const views = await import('@payloadcms/next/views');
     const { default: PayloadAdminPage, generateMetadata } =
       await import('@/app/(payload)/admin/[[...segments]]/page');
@@ -34,10 +34,8 @@ describe('Next route for Payload admin', () => {
         params: expect.any(Promise),
       }),
     );
-    await expect(generatePageMetadataMock.mock.calls[0]?.[0].params).resolves.toEqual({
-      segments: [],
-    });
-    await expect(rootPageMock.mock.calls[0]?.[0].params).resolves.toEqual({ segments: [] });
+    await expect(generatePageMetadataMock.mock.calls[0]?.[0].params).resolves.toEqual({});
+    await expect(rootPageMock.mock.calls[0]?.[0].params).resolves.toEqual({});
   });
 
   it('keeps the authenticated admin route dynamic instead of serving a stale 404 shell', async () => {
