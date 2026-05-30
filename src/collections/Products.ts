@@ -441,6 +441,9 @@ export const Products: CollectionConfig = {
               admin: {
                 description:
                   '必填。创建产品时先选择产品大类，前台产品中心会直接把该产品放到这个大类下面。',
+                components: {
+                  Cell: '@/components/admin/cells/ProductGroupCell',
+                },
               },
             },
           ],

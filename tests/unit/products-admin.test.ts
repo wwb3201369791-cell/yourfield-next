@@ -79,10 +79,15 @@ describe('Products admin structure', () => {
     ).toBe(false);
   });
 
-  it('requires products to belong directly to a product group', () => {
+  it('requires products to belong directly to a product group with a stable admin list cell', () => {
     const productGroup = getNamedField('productGroup');
 
     expect(productGroup).toMatchObject({
+      admin: {
+        components: {
+          Cell: '@/components/admin/cells/ProductGroupCell',
+        },
+      },
       label: '所属产品大类',
       relationTo: 'product-groups',
       required: true,

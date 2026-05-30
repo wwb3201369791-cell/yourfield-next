@@ -4,6 +4,7 @@ import { default as default_58a3567919654d5ba43db2f2f03c843c } from '@/component
 import { default as default_bba462316deccb203c716e523e0f12cd } from '@/components/admin/cells/SolutionPositionCell'
 import { default as default_4f4e24fe13f7bfd45261f0af9a3e042e } from '@/components/admin/media-upload/SimpleMediaUploadField'
 import { default as default_30989b2842ece380ff7a5a5f06b6152f } from '@/components/admin/cells/DraftStatusCell'
+import { default as default_922e50e7f589472331e6d093f28ed248 } from '@/components/admin/cells/ProductGroupCell'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -51,6 +52,7 @@ export const importMap = {
   "@/components/admin/cells/SolutionPositionCell#default": default_bba462316deccb203c716e523e0f12cd,
   "@/components/admin/media-upload/SimpleMediaUploadField#default": default_4f4e24fe13f7bfd45261f0af9a3e042e,
   "@/components/admin/cells/DraftStatusCell#default": default_30989b2842ece380ff7a5a5f06b6152f,
+  "@/components/admin/cells/ProductGroupCell#default": default_922e50e7f589472331e6d093f28ed248,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
