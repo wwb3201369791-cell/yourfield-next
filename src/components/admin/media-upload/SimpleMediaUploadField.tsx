@@ -1,11 +1,11 @@
 ﻿'use client';
 
 import { useConfig, useField, useLocale } from '@payloadcms/ui';
-import type { UploadField, Validate } from 'payload';
+import type { UploadFieldClientProps, Validate } from 'payload';
 import { upload as validateUpload } from 'payload/shared';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useAdminText } from '../adminUiLocale';
+import { useAdminText, type AdminBilingualText } from '../adminUiLocale';
 
 import {
   buildMediaUploadAltText,
@@ -17,11 +17,14 @@ import {
   type MediaUploadKind,
 } from './mediaUploadUtils';
 
-type SimpleMediaUploadFieldProps = Omit<UploadField, 'type'> & {
+type SimpleMediaUploadFieldConfig = UploadFieldClientProps['field'] & {
   custom?: {
     mediaKind?: MediaUploadKind;
   };
-  path: string;
+};
+
+type SimpleMediaUploadFieldProps = Omit<UploadFieldClientProps, 'field'> & {
+  field: SimpleMediaUploadFieldConfig;
 };
 
 function mediaId(value: unknown) {
@@ -37,8 +40,50 @@ function mediaId(value: unknown) {
   return undefined;
 }
 
-function labelToText(label: SimpleMediaUploadFieldProps['label'], name: string) {
-  return typeof label === 'string' && label.trim() ? label : name;
+function labelToText(
+  label: SimpleMediaUploadFieldConfig['label'],
+  fallbackName: string,
+): AdminBilingualText {
+  if (typeof label === 'string' && label.trim()) {
+    return label;
+  }
+
+  if (label && typeof label === 'object' && !Array.isArray(label)) {
+    return label as AdminBilingualText;
+  }
+
+  return fallbackName.trim() || '媒体';
+}
+
+function isEmptyUploadValue(value: unknown) {
+  return (
+    value === null ||
+    typeof value === 'undefined' ||
+    value === '' ||
+    (Array.isArray(value) && value.length === 0)
+  );
+}
+
+function hasUploadRelationMetadata(
+  options: Parameters<Validate>[1] & { relationTo?: SimpleMediaUploadFieldConfig['relationTo'] },
+) {
+  const collections = (
+    options.req?.payload as { collections?: Record<string, unknown> } | undefined
+  )?.collections;
+
+  if (!collections) {
+    return false;
+  }
+
+  if (typeof options.relationTo === 'string') {
+    return Boolean(collections[options.relationTo]);
+  }
+
+  if (Array.isArray(options.relationTo)) {
+    return options.relationTo.every((collectionSlug) => Boolean(collections[collectionSlug]));
+  }
+
+  return true;
 }
 
 async function uploadMedia({
@@ -99,16 +144,15 @@ async function uploadMedia({
 
 export default function SimpleMediaUploadField(props: SimpleMediaUploadFieldProps) {
   const t = useAdminText();
+  const { field, path, readOnly: formReadOnly, validate = validateUpload as Validate } = props;
   const {
-    admin: { condition, description, readOnly, style, width } = {},
+    admin: { description, readOnly: fieldReadOnly, style, width } = {},
     custom,
     label,
     name,
-    path,
     relationTo,
     required,
-    validate = validateUpload as Validate,
-  } = props;
+  } = field;
   const {
     config: { routes, serverURL },
   } = useConfig();
@@ -117,25 +161,34 @@ export default function SimpleMediaUploadField(props: SimpleMediaUploadFieldProp
   const [media, setMedia] = useState<AdminMediaDoc | undefined>();
   const [uploadError, setUploadError] = useState('');
   const [uploading, setUploading] = useState(false);
+  const isReadOnly = Boolean(formReadOnly || fieldReadOnly);
 
   const memoizedValidate = useCallback(
     (value: unknown, options: Parameters<Validate>[1]) => {
-      const validateOptions = required === undefined ? options : { ...options, required };
+      const validateOptions =
+        required === undefined ? { ...options, relationTo } : { ...options, relationTo, required };
+
+      if (validateOptions.required && isEmptyUploadValue(value)) {
+        return validateOptions.req?.t?.('validation:required') ?? 'This field is required.';
+      }
+
+      if (!hasUploadRelationMetadata(validateOptions)) {
+        return true;
+      }
 
       return (
         validate as (value: unknown, options: Parameters<Validate>[1]) => ReturnType<Validate>
       )(value, validateOptions);
     },
-    [required, validate],
+    [relationTo, required, validate],
   );
   const { errorMessage, setValue, showError, value } = useField<number | string | null>({
-    ...(condition ? { condition } : {}),
     path,
     validate: memoizedValidate,
   });
   const selectedId = mediaId(value);
   const apiBase = `${serverURL ?? ''}${routes.api}`;
-  const fieldLabel = t(labelToText(label, name));
+  const fieldLabel = t(labelToText(label, name || path));
   const mediaKind: MediaUploadKind = custom?.mediaKind === 'video' ? 'video' : 'image';
   const isVideoUpload = mediaKind === 'video';
   const previewUrl = getMediaPreviewUrl(media);
@@ -237,7 +290,7 @@ export default function SimpleMediaUploadField(props: SimpleMediaUploadFieldProp
         </label>
         <button
           type="button"
-          disabled={readOnly || uploading}
+          disabled={isReadOnly || uploading}
           onClick={() => inputRef.current?.click()}
         >
           {media
@@ -256,7 +309,7 @@ export default function SimpleMediaUploadField(props: SimpleMediaUploadFieldProp
         id={`field-${path.replace(/\./g, '__')}`}
         ref={inputRef}
         accept={isVideoUpload ? 'video/mp4' : 'image/gif,image/jpeg,image/png,image/webp'}
-        disabled={readOnly || uploading}
+        disabled={isReadOnly || uploading}
         type="file"
         onChange={(event) => {
           void onFileSelected(event);
@@ -279,7 +332,7 @@ export default function SimpleMediaUploadField(props: SimpleMediaUploadFieldProp
             <strong>{media.filename || t(isVideoUpload ? '已选择视频' : '已选择图片')}</strong>
             {fileMeta ? <span>{fileMeta}</span> : null}
           </div>
-          {!readOnly ? (
+          {!isReadOnly ? (
             <button type="button" className="simple-media-upload__remove" onClick={removeMedia}>
               {t('移除')}
             </button>
@@ -289,7 +342,7 @@ export default function SimpleMediaUploadField(props: SimpleMediaUploadFieldProp
         <button
           type="button"
           className="simple-media-upload__empty"
-          disabled={readOnly || uploading}
+          disabled={isReadOnly || uploading}
           onClick={() => inputRef.current?.click()}
         >
           {t(isVideoUpload ? '从本地选择一个视频' : '从本地选择一张图片')}

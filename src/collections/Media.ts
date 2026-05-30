@@ -24,7 +24,7 @@ export const Media: CollectionConfig = {
     delete: canDelete('media'),
   },
   upload: {
-    staticDir: 'uploads',
+    staticDir: 'src/uploads',
     imageSizes: [
       { name: 'thumbnail', width: 200, height: 200, position: 'centre' },
       { name: 'card', width: 600, height: 400, position: 'centre' },

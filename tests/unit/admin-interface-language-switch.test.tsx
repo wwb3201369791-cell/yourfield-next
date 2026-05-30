@@ -7,6 +7,7 @@ import {
   AdminInterfaceLanguageSwitch,
   asAdminInterfaceLocale,
 } from '@/components/admin/AdminInterfaceLanguageSwitch';
+import { adminUiText } from '@/components/admin/adminUiLocale';
 
 const translationMock = vi.hoisted(() => {
   const i18n = { language: 'zh' };
@@ -37,6 +38,12 @@ describe('AdminInterfaceLanguageSwitch', () => {
     expect(asAdminInterfaceLocale('zh-CN')).toBe('zh');
     expect(asAdminInterfaceLocale('en-US')).toBe('en');
     expect(asAdminInterfaceLocale('ru')).toBe('zh');
+  });
+
+  it('falls back safely for missing bilingual admin copy', () => {
+    expect(adminUiText('zh', undefined)).toBe('');
+    expect(adminUiText('zh', { en: 'Cover image' })).toBe('Cover image');
+    expect(adminUiText('en', { zh: '方案主图' })).toBe('方案主图');
   });
 
   it('switches and persists admin interface language without touching content locale controls', () => {

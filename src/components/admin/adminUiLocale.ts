@@ -5,7 +5,9 @@ import { useMemo } from 'react';
 
 import { asAdminInterfaceLocale, type AdminInterfaceLocale } from './AdminInterfaceLanguageSwitch';
 
-export type AdminBilingualText = string | Readonly<{ en: string; zh: string }>;
+export type AdminBilingualText =
+  | string
+  | Readonly<Partial<Record<AdminInterfaceLocale, string>> & { en?: string; zh?: string }>;
 
 const adminTextDictionary: Readonly<Record<string, string>> = {
   三语内容编辑: 'Three-language content editing',
@@ -406,16 +408,29 @@ const adminTextDictionary: Readonly<Record<string, string>> = {
   点击填写参数值: 'Add spec value',
 };
 
-export function adminUiText(locale: AdminInterfaceLocale, value: AdminBilingualText): string {
-  if (typeof value !== 'string') {
-    return value[locale];
+export function adminUiText(
+  locale: AdminInterfaceLocale,
+  value: AdminBilingualText | null | undefined,
+): string {
+  if (typeof value === 'string') {
+    if (locale === 'zh') {
+      return value;
+    }
+
+    return adminTextDictionary[value] ?? value;
   }
 
-  if (locale === 'zh') {
-    return value;
+  if (!value || typeof value !== 'object') {
+    return '';
   }
 
-  return adminTextDictionary[value] ?? value;
+  return (
+    value[locale] ??
+    value.zh ??
+    value.en ??
+    Object.values(value).find((candidate): candidate is string => typeof candidate === 'string') ??
+    ''
+  );
 }
 
 export function useAdminInterfaceLocale(): AdminInterfaceLocale {
