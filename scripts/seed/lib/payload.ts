@@ -1,7 +1,10 @@
 import { getPayload } from 'payload';
 
-import config from '@/payload.config';
+import { loadLocalEnv } from '@/lib/loadEnvFile';
 
 export const initPayload = async () => {
+  loadLocalEnv();
+  const { default: config } = await import('@/payload.config');
+
   return getPayload({ config });
 };

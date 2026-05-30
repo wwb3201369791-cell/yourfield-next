@@ -18,7 +18,7 @@ import {
   ProductVisualGroups,
 } from '@/components/product-detail/sections';
 import { JsonLd } from '@/components/public/JsonLd';
-import { getCmsProductBySlug } from '@/lib/cms/products';
+import { getCmsProductBySlug, getCmsProductStaticParams } from '@/lib/cms/products';
 import { getCmsSiteSettings } from '@/lib/cms/site-settings';
 import { buildSectionPropsFromCms } from '@/lib/content/buildSectionProps';
 import { getTranslations } from '@/lib/i18n/getTranslations';
@@ -33,6 +33,10 @@ type ProductDetailPageProps = Readonly<{
 }>;
 
 export const revalidate = 300;
+
+export async function generateStaticParams() {
+  return getCmsProductStaticParams();
+}
 
 export async function generateMetadata({ params }: ProductDetailPageProps) {
   const { locale, slug } = await resolveRouteLocaleAndSlug(params);

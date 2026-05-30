@@ -14,9 +14,8 @@ const formatError = (error: unknown) => {
 
 const run = async () => {
   const payload = await initPayload();
-  const options = { skipExisting: false };
-  const media = await importLegacyMedia(payload, options);
-  const news = await importLegacyNews(payload, options, media.manifest);
+  const media = await importLegacyMedia(payload, { skipExisting: true });
+  const news = await importLegacyNews(payload, { skipExisting: false }, media.manifest);
 
   console.log(
     JSON.stringify({

@@ -1,7 +1,7 @@
 'use client';
 
+import { useTranslation } from '@payloadcms/ui';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 const adminLanguageStorageKey = 'lng';
 const adminInterfaceLocales = ['zh', 'en'] as const;
@@ -49,24 +49,15 @@ function switchCopy(locale: AdminInterfaceLocale) {
 }
 
 export function AdminInterfaceLanguageSwitch() {
-  const { i18n } = useTranslation();
+  const { i18n, switchLanguage } = useTranslation();
   const [currentLocale, setCurrentLocale] = useState<AdminInterfaceLocale>(() =>
     asAdminInterfaceLocale(i18n.language),
   );
   const copy = switchCopy(currentLocale);
 
   useEffect(() => {
-    const syncLanguage = (nextLanguage: string) => {
-      setCurrentLocale(asAdminInterfaceLocale(nextLanguage));
-    };
-
-    syncLanguage(i18n.language);
-    i18n.on('languageChanged', syncLanguage);
-
-    return () => {
-      i18n.off('languageChanged', syncLanguage);
-    };
-  }, [i18n]);
+    setCurrentLocale(asAdminInterfaceLocale(i18n.language));
+  }, [i18n.language]);
 
   const changeLocale = (nextLocale: AdminInterfaceLocale) => {
     if (nextLocale === currentLocale) {
@@ -75,7 +66,7 @@ export function AdminInterfaceLanguageSwitch() {
 
     persistAdminInterfaceLocale(nextLocale);
     setCurrentLocale(nextLocale);
-    void i18n.changeLanguage(nextLocale);
+    void switchLanguage?.(nextLocale);
   };
 
   return (

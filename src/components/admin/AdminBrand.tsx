@@ -1,8 +1,7 @@
 'use client';
 
 /* eslint-disable @next/next/no-img-element */
-import { useSyncExternalStore } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '@payloadcms/ui';
 
 import { type AdminInterfaceLocale, asAdminInterfaceLocale } from './AdminInterfaceLanguageSwitch';
 import { AdminLoginEnhancer } from './AdminLoginEnhancer';
@@ -43,19 +42,7 @@ const adminBrandCopy = {
 
 function useAdminBrandCopy(): (typeof adminBrandCopy)[AdminInterfaceLocale] {
   const { i18n } = useTranslation();
-  const locale = useSyncExternalStore<AdminInterfaceLocale>(
-    (onStoreChange) => {
-      if (typeof i18n.on !== 'function' || typeof i18n.off !== 'function') {
-        return () => undefined;
-      }
-
-      i18n.on('languageChanged', onStoreChange);
-
-      return () => i18n.off('languageChanged', onStoreChange);
-    },
-    () => asAdminInterfaceLocale(i18n.language),
-    () => 'zh',
-  );
+  const locale = asAdminInterfaceLocale(i18n.language);
 
   return adminBrandCopy[locale];
 }

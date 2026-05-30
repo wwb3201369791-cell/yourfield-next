@@ -1,9 +1,8 @@
 'use client';
 
-import { useConfig } from '@payloadcms/ui';
+import { useConfig, useTranslation } from '@payloadcms/ui';
 import { RefreshCw } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { asAdminInterfaceLocale } from './AdminInterfaceLanguageSwitch';
 import { DashboardHealthPanel } from './dashboard/sections/DashboardHealthPanel';

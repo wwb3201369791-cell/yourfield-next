@@ -8,28 +8,18 @@ import {
   asAdminInterfaceLocale,
 } from '@/components/admin/AdminInterfaceLanguageSwitch';
 
-const i18nMock = vi.hoisted(() => {
-  const listeners = new Set<(language: string) => void>();
-  const i18n = {
-    changeLanguage: vi.fn((language: string) => {
-      i18n.language = language;
-      listeners.forEach((listener) => listener(language));
-      return Promise.resolve();
-    }),
-    language: 'zh',
-    off: vi.fn((_event: string, listener: (language: string) => void) => {
-      listeners.delete(listener);
-    }),
-    on: vi.fn((_event: string, listener: (language: string) => void) => {
-      listeners.add(listener);
-    }),
-  };
+const translationMock = vi.hoisted(() => {
+  const i18n = { language: 'zh' };
+  const switchLanguage = vi.fn((language: string) => {
+    i18n.language = language;
+    return Promise.resolve();
+  });
 
-  return i18n;
+  return { i18n, switchLanguage };
 });
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({ i18n: i18nMock }),
+vi.mock('@payloadcms/ui', () => ({
+  useTranslation: () => translationMock,
 }));
 
 afterEach(() => {
@@ -37,8 +27,8 @@ afterEach(() => {
 });
 
 beforeEach(() => {
-  i18nMock.changeLanguage.mockClear();
-  i18nMock.language = 'zh';
+  translationMock.switchLanguage.mockClear();
+  translationMock.i18n.language = 'zh';
   window.localStorage.clear();
 });
 
@@ -54,7 +44,7 @@ describe('AdminInterfaceLanguageSwitch', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'EN' }));
 
-    expect(i18nMock.changeLanguage).toHaveBeenCalledWith('en');
+    expect(translationMock.switchLanguage).toHaveBeenCalledWith('en');
     expect(window.localStorage.getItem('lng')).toBe('en');
     expect(document.cookie).toContain('lng=en');
     expect(screen.getByLabelText('Switch admin interface language')).toBeTruthy();

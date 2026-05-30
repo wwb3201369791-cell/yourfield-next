@@ -7,7 +7,7 @@ import { AdminDashboardIntro, AdminLoginIntro, AdminNavBrand } from '@/component
 
 const i18nMock = vi.hoisted(() => ({ language: 'zh' }));
 
-vi.mock('react-i18next', () => ({
+vi.mock('@payloadcms/ui', () => ({
   useTranslation: () => ({ i18n: i18nMock }),
 }));
 

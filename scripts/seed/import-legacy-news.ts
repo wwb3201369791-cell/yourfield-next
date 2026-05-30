@@ -103,10 +103,6 @@ const legacyNewsSeeds: LegacyNewsSeed[] = [
         ),
       },
       {
-        imagePath: centralSafetyValleyImagePath,
-        type: 'image',
-      },
-      {
         type: 'paragraph',
         text: localized(
           '中心党委书记、主任邓光亮带队，省工业和信息化厅产业政策与法规处、中心、省同天工业设计创新中心相关负责同志及高校设计专家和工业设计机构代表共同参与。湘潭市人民政府副秘书长李先金主持座谈会，湘潭市工业和信息化局相关人员参加活动。',
@@ -258,6 +254,7 @@ const updateLocalizedNewsData = async (
   for (const locale of nonDefaultLocales) {
     await payload.update({
       collection: 'news',
+      draft: false,
       id,
       data: localizedData[locale] as PayloadData,
       depth: 0,

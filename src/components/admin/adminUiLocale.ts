@@ -1,7 +1,7 @@
 'use client';
 
+import { useTranslation } from '@payloadcms/ui';
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { asAdminInterfaceLocale, type AdminInterfaceLocale } from './AdminInterfaceLanguageSwitch';
 
