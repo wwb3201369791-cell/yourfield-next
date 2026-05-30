@@ -2,7 +2,7 @@ import '@payloadcms/next/css';
 import '@/styles/payload-admin.css';
 
 import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts';
-import type { ServerFunctionClientArgs } from 'payload';
+import type { ServerFunctionClient } from 'payload';
 import type { ReactNode } from 'react';
 
 import config from '@/payload.config';
@@ -13,13 +13,13 @@ type PayloadRootLayoutProps = Readonly<{
   children: ReactNode;
 }>;
 
+const serverFunction: ServerFunctionClient = async function serverFunction(args) {
+  'use server';
+
+  return handleServerFunctions({ ...args, config, importMap });
+};
+
 export default function PayloadRootLayout({ children }: PayloadRootLayoutProps) {
-  const serverFunction = async (args: ServerFunctionClientArgs) => {
-    'use server';
-
-    return handleServerFunctions({ ...args, config, importMap });
-  };
-
   return (
     <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
       {children}

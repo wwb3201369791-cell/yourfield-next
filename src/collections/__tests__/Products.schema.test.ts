@@ -11,9 +11,15 @@ type FieldLike = {
   label?: string;
   maxRows?: number;
   name?: string;
+  required?: boolean;
   tabs?: Array<{ fields: FieldLike[]; label: string }>;
   type?: string;
 };
+
+type ProductBeforeChangeHook = (args: {
+  data: Record<string, unknown>;
+  originalDoc?: Record<string, unknown>;
+}) => unknown;
 
 const rootFields = Products.fields as FieldLike[];
 const tabsField = rootFields.find((field) => field.type === 'tabs');
@@ -51,14 +57,80 @@ function hasField(label: string, name: string) {
   return Boolean(tab(label)?.fields.some((field) => field.name === name));
 }
 
+function runProductBeforeChangeHooks(
+  data: Record<string, unknown>,
+  originalDoc?: Record<string, unknown>,
+) {
+  let nextData = data;
+  const hooks = (Products.hooks?.beforeChange ?? []) as ProductBeforeChangeHook[];
+
+  for (const hook of hooks) {
+    const result = hook(originalDoc ? { data: nextData, originalDoc } : { data: nextData });
+
+    if (result && typeof result === 'object') {
+      nextData = result as Record<string, unknown>;
+    }
+  }
+
+  return nextData;
+}
+
 describe('Products schema for visual product editing', () => {
+  it('uses the supported Payload document default view key for the frontend-like fill-in editor', () => {
+    const editViews = Products.admin?.components?.views?.edit as
+      | Record<string, { Component?: string } | undefined>
+      | undefined;
+
+    expect(editViews?.default?.Component).toBe(
+      '@/components/admin/product-editor/ProductVisualEditor',
+    );
+    expect(editViews?.Default).toBeUndefined();
+  });
+
   it('keeps hero images to one main image while leaving visual group images uncapped', () => {
     const productImages = findFieldByName(rootFields, 'images');
     const visualGroups = findFieldByName(rootFields, 'visualGroups');
     const visualGroupImages = visualGroups?.fields?.find((field) => field.name === 'images');
 
     expect(productImages?.maxRows).toBe(1);
+    expect(productImages?.label).toContain('发布必填');
     expect(visualGroupImages?.maxRows).toBeUndefined();
+  });
+
+  it('blocks publishing product records without a real main image', () => {
+    expect(() =>
+      runProductBeforeChangeHooks({
+        _status: 'published',
+        images: [],
+        name: '无图产品',
+        productId: 'missing-image-product',
+      }),
+    ).toThrow('产品发布前必须上传产品主图');
+  });
+
+  it('allows drafts without images and published updates that keep an existing image', () => {
+    expect(() =>
+      runProductBeforeChangeHooks({
+        _status: 'draft',
+        images: [],
+        name: '草稿无图产品',
+        productId: 'draft-missing-image-product',
+      }),
+    ).not.toThrow();
+
+    expect(() =>
+      runProductBeforeChangeHooks(
+        {
+          _status: 'published',
+          name: '已有图片产品',
+          productId: 'product-with-image',
+        },
+        {
+          _status: 'published',
+          images: [{ file: 1 }],
+        },
+      ),
+    ).not.toThrow();
   });
 
   it('organizes product tabs in the same order as the frontend detail page blocks', () => {

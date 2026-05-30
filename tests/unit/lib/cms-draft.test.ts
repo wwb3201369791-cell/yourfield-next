@@ -41,6 +41,7 @@ const defaultDocs: DocsByCollection = {
   products: [
     {
       id: 'product-1',
+      images: [{ file: { url: '/media/cms-only-product.png' } }],
       name: 'Firefighter Suit',
       productId: 'cms-only-product',
       slug: 'cms-only-product',
@@ -226,8 +227,7 @@ describe('CMS draft query construction', () => {
           features: [],
           groupId: 'chemical-medical',
           id: 'cms-scenario-product',
-          image: '/images/products/cms-scenario-product/main.png',
-          images: ['/images/products/cms-scenario-product/main.png'],
+          images: [{ file: { url: '/images/products/cms-scenario-product/main.png' } }],
           materials: [],
           model: 'CMS-001',
           name: 'CMS 场景产品',
@@ -544,6 +544,7 @@ describe('CMS product optional content normalization', () => {
         {
           displayOrder: 0,
           id: 'product-zero',
+          images: [{ file: { url: '/media/zero-priority-product.png' } }],
           name: 'Zero priority product',
           productId: 'zero-priority-product',
           slug: 'zero-priority-product',
@@ -551,6 +552,7 @@ describe('CMS product optional content normalization', () => {
         {
           displayOrder: 3,
           id: 'product-three',
+          images: [{ file: { url: '/media/third-product.png' } }],
           name: 'Third product',
           productId: 'third-product',
           slug: 'third-product',
@@ -558,6 +560,7 @@ describe('CMS product optional content normalization', () => {
         {
           displayOrder: 1,
           id: 'product-one',
+          images: [{ file: { url: '/media/first-product.png' } }],
           name: 'First product',
           productId: 'first-product',
           slug: 'first-product',
@@ -576,7 +579,7 @@ describe('CMS product optional content normalization', () => {
     ]);
   });
 
-  it('keeps backend products visible even when optional images and description are blank', async () => {
+  it('keeps backend products visible even when optional description is blank', async () => {
     const { products } = await loadCmsModules();
 
     const items = await products.getCmsProducts('zh', false);
@@ -586,21 +589,21 @@ describe('CMS product optional content normalization', () => {
     expect(listItem).toMatchObject({
       description: { zh: '' },
       id: 'cms-only-product',
-      image: '',
-      images: [],
+      image: '/media/cms-only-product.png',
+      images: ['/media/cms-only-product.png'],
       model: '',
       name: { zh: 'Firefighter Suit' },
     });
     expect(detail).toMatchObject({
       description: { zh: '' },
       id: 'cms-only-product',
-      image: '',
-      images: [],
+      image: '/media/cms-only-product.png',
+      images: ['/media/cms-only-product.png'],
       model: '',
     });
   });
 
-  it('does not use extracted product images when backend images are blank', async () => {
+  it('hides published products without backend images instead of showing placeholders', async () => {
     const payload = createPayloadStub({
       products: [
         {
@@ -609,21 +612,31 @@ describe('CMS product optional content normalization', () => {
           productId: 'live-line-shielding-suit',
           slug: 'live-line-shielding-suit',
         },
+        {
+          id: 'product-2',
+          images: [{ file: { url: '/media/real-product.png' } }],
+          name: '有图产品',
+          productId: 'real-product',
+          slug: 'real-product',
+        },
       ],
     });
     const { products } = await loadCmsModules(payload);
 
     const items = await products.getCmsProducts('zh', false);
     const detail = await products.getCmsProductBySlug('zh', 'live-line-shielding-suit', false);
+    const draftItems = await products.getCmsProducts('zh', true);
+    const draftDetail = await products.getCmsProductBySlug('zh', 'live-line-shielding-suit', true);
 
-    expect(items[0]).toMatchObject({
+    expect(items.map((item) => item.id)).toEqual(['real-product']);
+    expect(detail).toBeNull();
+    expect(draftItems.map((item) => item.id)).toEqual(['live-line-shielding-suit', 'real-product']);
+    expect(draftDetail).toMatchObject({
       id: 'live-line-shielding-suit',
       image: '',
       images: [],
       name: { zh: '后台保留的旧文案' },
     });
-    expect(detail?.image).toBe('');
-    expect(detail?.images).toEqual([]);
   });
 
   it('does not restore fallback products after backend products are unpublished or deleted', async () => {

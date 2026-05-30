@@ -88,10 +88,17 @@ function hasVisibleProductImage(product: Readonly<{ image: string; images: reado
   return Boolean(product.image || product.images.some(Boolean));
 }
 
+function onlyPublicProductsWithImages(products: readonly ReturnType<typeof mapCmsProduct>[]) {
+  return products.filter(hasVisibleProductImage);
+}
+
 export const getCmsProducts = cache(async (locale: Locale, draft = false) => {
-  return draft || shouldBypassProductCache()
-    ? getCmsProductsUncached(locale, draft)
-    : getCachedCmsProducts(locale);
+  const products =
+    draft || shouldBypassProductCache()
+      ? await getCmsProductsUncached(locale, draft)
+      : await getCachedCmsProducts(locale);
+
+  return draft ? products : onlyPublicProductsWithImages(products);
 });
 
 async function getCmsProductBySlugUncached(locale: Locale, slug: string, draft = false) {
@@ -118,6 +125,10 @@ async function getCmsProductBySlugUncached(locale: Locale, slug: string, draft =
 
   const mappedProduct = mapCmsProduct(await findCmsProductById(payload, product, locale, draft));
 
+  if (!draft && !hasVisibleProductImage(mappedProduct)) {
+    return null;
+  }
+
   return mappedProduct;
 }
 
@@ -137,10 +148,12 @@ export const getCmsProductBySlug = cache(async (locale: Locale, slug: string, dr
 });
 
 async function getFeaturedCmsProductsUncached(locale: Locale, limit = 6, draft = false) {
-  const products = await getCmsProductsUncached(locale, draft);
+  const products = draft
+    ? await getCmsProductsUncached(locale, draft)
+    : onlyPublicProductsWithImages(await getCmsProductsUncached(locale, draft));
   const productsWithImages = products.filter(hasVisibleProductImage);
 
-  return (productsWithImages.length > 0 ? productsWithImages : products).slice(0, limit);
+  return (draft && productsWithImages.length > 0 ? productsWithImages : products).slice(0, limit);
 }
 
 const getCachedFeaturedCmsProducts = unstable_cache(

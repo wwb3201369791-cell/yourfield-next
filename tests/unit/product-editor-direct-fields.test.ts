@@ -55,6 +55,20 @@ describe('product editor direct fields', () => {
     expect(detail.sections.hero.productId).toBe('draft-product');
   });
 
+  it('uses populated product group names as the visible category in the visual editor', () => {
+    const detail = buildSectionPropsFromFormValues(
+      {
+        name: '干式水域救援服',
+        productGroup: { id: 5, groupId: 'water-rescue', name: '水域救援防护' },
+      },
+      'zh',
+      t,
+    );
+
+    expect(detail.productCategory).toBe('水域救援防护');
+    expect(detail.sections.hero.productCategory).toBe('水域救援防护');
+  });
+
   it('builds the FAQ section from direct product question and answer rows', () => {
     const detail = buildSectionPropsFromFormValues(
       {

@@ -27,6 +27,7 @@ const createPayloadStub = () => ({
               },
             },
             id: 'product-db-1',
+            images: [{ file: { url: '/media/firefighter-suit-combat.jpg' } }],
             model: 'HYF-5506',
             name: '消防员灭火防护服',
             productId: 'firefighter-suit-combat',

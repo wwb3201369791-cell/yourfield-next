@@ -60,7 +60,7 @@ describe('Payload hot search terms cache', () => {
     const payload = {
       find: vi.fn(async (args: { collection: string }) =>
         args.collection === 'products'
-          ? { docs: [{ name: '消防员灭火防护服' }] }
+          ? { docs: [{ images: [{ file: 1 }], name: '消防员灭火防护服' }] }
           : { docs: [{ eventType: 'search', hits: 2, locale: 'zh', query: '防电弧服' }] },
       ),
     };
@@ -87,7 +87,10 @@ describe('Payload hot search terms cache', () => {
       find: vi.fn(async (args: { collection: string }) => {
         if (args.collection === 'products') {
           return {
-            docs: [{ name: '消防员灭火防护服' }, { name: '防电弧服' }],
+            docs: [
+              { images: [{ file: 1 }], name: '消防员灭火防护服' },
+              { images: [{ file: 2 }], name: '防电弧服' },
+            ],
           };
         }
 

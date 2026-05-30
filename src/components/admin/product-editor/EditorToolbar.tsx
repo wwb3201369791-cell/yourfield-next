@@ -154,6 +154,7 @@ export function EditorToolbar() {
   const [preflight, setPreflight] = useState<PublishPreflightResult | null>(null);
   const [handledDeepLink, setHandledDeepLink] = useState(false);
   const [previewError, setPreviewError] = useState('');
+  const [clientHrefReady, setClientHrefReady] = useState(false);
 
   const currentLocale = asProductLocale(locale?.code);
   const currentValues = useMemo(
@@ -175,9 +176,10 @@ export function EditorToolbar() {
       buildLocaleBadges({
         completeness,
         currentLocale,
-        hrefForLocale: (nextLocale) => updateSearchParams({ locale: nextLocale }),
+        hrefForLocale: (nextLocale) =>
+          clientHrefReady ? updateSearchParams({ locale: nextLocale }) : '#',
       }),
-    [completeness, currentLocale],
+    [clientHrefReady, completeness, currentLocale],
   );
   const sectionSummary = useMemo(
     () =>
@@ -207,6 +209,10 @@ export function EditorToolbar() {
   const hasPublishedAt = hasFormValue(currentValues.publishedAt);
   const hasProductGroup = hasFormValue(currentValues.productGroup);
   const storefrontState = isPublished && hasPublishedAt && hasProductGroup ? 'visible' : 'draft';
+
+  useEffect(() => {
+    setClientHrefReady(true);
+  }, []);
 
   useEffect(() => {
     if (!id) {

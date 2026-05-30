@@ -229,7 +229,7 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
         .filter((slot) => slot.groupId === group.id)
         .sort(sortCatalogSlots);
 
-      if (groupSlots.length === 0 && query.trim()) {
+      if (groupSlots.length === 0) {
         return null;
       }
 

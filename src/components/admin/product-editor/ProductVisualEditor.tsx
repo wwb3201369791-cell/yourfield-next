@@ -1,9 +1,21 @@
-﻿'use client';
+'use client';
 
-import { DefaultEditView, useField, useLocale } from '@payloadcms/ui';
-import type { AdminViewProps } from 'payload';
-import React, { type ComponentType } from 'react';
+import {
+  Form,
+  OperationProvider,
+  useConfig,
+  useDocumentInfo,
+  useField,
+  useForm,
+  useLocale,
+} from '@payloadcms/ui';
+import type { DocumentViewClientProps } from 'payload';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import {
+  buildProductFromFormValues,
+  buildSectionPropsFromFormValues,
+} from '@/lib/content/buildSectionProps';
 import type { Locale } from '@/lib/i18n/locale';
 
 import { useAdminText } from '../adminUiLocale';
@@ -38,15 +50,12 @@ import { SizeGuideDrawer } from './drawers/SizeGuideDrawer';
 import { SpecDrawer } from './drawers/SpecDrawer';
 import { VisualGroupsDrawer } from './drawers/VisualGroupsDrawer';
 import { useProductImageArrayUpload } from './hooks/useProductImageArrayUpload';
+import { useFormValues } from './utils/buildProductFromForm';
 import {
-  useFormProduct,
-  useFormValues,
-  useSectionPropsFromForm,
-} from './utils/buildProductFromForm';
-
-type ProductVisualEditorProps = AdminViewProps;
-
-const ProductDefaultEditView = DefaultEditView as unknown as ComponentType<AdminViewProps>;
+  buildProductDocumentHydrationUrl,
+  getProductDocumentIdFromPathname,
+  hasVisualEditorSeedValues,
+} from './utils/productEditorHydration';
 
 registerDrawer('care', CareDrawer);
 registerDrawer('evidence', EvidenceDrawer);
@@ -250,17 +259,83 @@ function AdminHeroPreview({
   );
 }
 
-export default function ProductVisualEditor(props: ProductVisualEditorProps) {
+function useHydratedProductDocument(currentLocale: Locale, formValues: Record<string, unknown>) {
+  const {
+    config: { routes, serverURL },
+  } = useConfig();
+  const { id } = useDocumentInfo();
+  const { reset } = useForm();
+  const [hydratedDoc, setHydratedDoc] = useState<Record<string, unknown> | null>(null);
+  const hydratedKeyRef = useRef('');
+
+  useEffect(() => {
+    const documentId =
+      id && String(id).trim()
+        ? String(id)
+        : typeof window !== 'undefined'
+          ? getProductDocumentIdFromPathname(window.location.pathname)
+          : '';
+
+    if (!documentId) {
+      setHydratedDoc(null);
+      hydratedKeyRef.current = '';
+      return undefined;
+    }
+
+    if (hasVisualEditorSeedValues(formValues)) {
+      return undefined;
+    }
+
+    const hydrationKey = `${String(documentId)}:${currentLocale}`;
+    if (hydratedKeyRef.current === hydrationKey) {
+      return undefined;
+    }
+
+    hydratedKeyRef.current = hydrationKey;
+    const controller = new AbortController();
+    const apiBase = `${serverURL ?? ''}${routes.api}`;
+    const url = buildProductDocumentHydrationUrl({
+      apiBase,
+      id: documentId,
+      locale: currentLocale,
+    });
+
+    void fetch(url, { credentials: 'include', signal: controller.signal })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((doc) => {
+        if (!controller.signal.aborted && doc && typeof doc === 'object') {
+          setHydratedDoc(doc as Record<string, unknown>);
+          void reset(doc);
+        }
+      })
+      .catch(() => {
+        if (!controller.signal.aborted && hydratedKeyRef.current === hydrationKey) {
+          hydratedKeyRef.current = '';
+          setHydratedDoc(null);
+        }
+      });
+
+    return () => controller.abort();
+  }, [currentLocale, formValues, id, reset, routes.api, serverURL]);
+
+  return hydratedDoc;
+}
+
+function ProductVisualEditorContent() {
   const adminT = useAdminText();
   const locale = useLocale();
   const currentLocale = (locale?.code || 'zh') as Locale;
   const formValues = useFormValues();
-  const detail = useSectionPropsFromForm(currentLocale, productLabel);
-  const product = useFormProduct(currentLocale);
+  const hydratedDoc = useHydratedProductDocument(currentLocale, formValues);
+  const visualValues = hasVisualEditorSeedValues(formValues)
+    ? formValues
+    : (hydratedDoc ?? formValues);
+  const detail = useMemo(
+    () => buildSectionPropsFromFormValues(visualValues, currentLocale, productLabel),
+    [currentLocale, visualValues],
+  );
+  const product = useMemo(() => buildProductFromFormValues(visualValues), [visualValues]);
   const productImages = useProductImageArrayUpload('images', { maxRows: 1 });
-  const showClassic =
-    typeof window !== 'undefined' &&
-    new URLSearchParams(window.location.search).get('view') === 'classic';
   const heroImages =
     productImages.imageUrls.length > 0
       ? productImages.imageUrls.slice(0, 1)
@@ -269,15 +344,11 @@ export default function ProductVisualEditor(props: ProductVisualEditorProps) {
         : detail.mainProductImage
           ? [detail.mainProductImage]
           : [];
-  if (showClassic) {
-    return <ProductDefaultEditView {...props} />;
-  }
-
   return (
     <EditorShell
       sidebar={
         <ProductEditorSidebar
-          formValues={formValues}
+          formValues={visualValues}
           navTitle="详情目录"
           sections={detail.sections}
         />
@@ -391,5 +462,26 @@ export default function ProductVisualEditor(props: ProductVisualEditorProps) {
         </div>
       }
     />
+  );
+}
+
+export default function ProductVisualEditor({ formState }: DocumentViewClientProps) {
+  const { action, hasSavePermission, id, isInitializing, isTrashed } = useDocumentInfo();
+  const operation = id ? 'update' : 'create';
+
+  return (
+    <OperationProvider operation={operation}>
+      <Form
+        {...(action ? { action } : {})}
+        {...(!isInitializing && formState ? { initialState: formState } : {})}
+        className="ype-document-form"
+        disabled={Boolean(isInitializing || !hasSavePermission || isTrashed)}
+        isDocumentForm
+        isInitializing={isInitializing}
+        method={id ? 'PATCH' : 'POST'}
+      >
+        <ProductVisualEditorContent />
+      </Form>
+    </OperationProvider>
   );
 }

@@ -40,6 +40,56 @@ function publicProductSearchWhere(): Where {
   };
 }
 
+function mediaObjectHasUrl(value: unknown) {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const media = value as { sizes?: Record<string, { url?: string } | undefined>; url?: string };
+
+  return Boolean(media.url || media.sizes?.card?.url);
+}
+
+function productHasVisibleImage(product: SearchSourceDocument) {
+  const image = product.image;
+  if (typeof image === 'string' && image.trim()) {
+    return true;
+  }
+
+  if (mediaObjectHasUrl(image)) {
+    return true;
+  }
+
+  return (
+    Array.isArray(product.images) &&
+    product.images.some((row) => {
+      if (!row || typeof row !== 'object') {
+        return false;
+      }
+
+      const record = row as { file?: unknown; url?: string };
+      if (typeof record.url === 'string' && record.url.trim()) {
+        return true;
+      }
+
+      const file = record.file;
+      if (typeof file === 'number') {
+        return true;
+      }
+
+      if (typeof file === 'string') {
+        return file.trim().length > 0;
+      }
+
+      return mediaObjectHasUrl(file);
+    })
+  );
+}
+
+function onlyPublicProductSearchDocs(products: readonly SearchSourceDocument[]) {
+  return products.filter(productHasVisibleImage);
+}
+
 async function findPublishedSearchProducts(locale: SearchLocale) {
   const payload = await getPayloadClient();
 
@@ -161,7 +211,7 @@ export async function getPayloadSearchSources(input: SearchQuery): Promise<Searc
     industryCases: [],
     news: news.docs,
     pages: pages.docs,
-    products: products.docs,
+    products: onlyPublicProductSearchDocs(products.docs),
     solutions: solutions.docs,
   };
 }
@@ -266,7 +316,11 @@ export async function getPayloadRecommendedProductHits(
     where: publicProductSearchWhere(),
   });
 
-  return recommendedProductHitsFromSources({ products: products.docs }, input.locale, 3);
+  return recommendedProductHitsFromSources(
+    { products: onlyPublicProductSearchDocs(products.docs) },
+    input.locale,
+    3,
+  );
 }
 
 type PayloadClient = Awaited<ReturnType<typeof getPayloadClient>>;
@@ -312,7 +366,7 @@ async function getRecentPublishedProductHotTerms(
       where: publicProductSearchWhere(),
     });
 
-    return dedupeTerms((products.docs as SearchSourceDocument[]).map(productHotTerm));
+    return dedupeTerms(onlyPublicProductSearchDocs(products.docs).map(productHotTerm));
   } catch (error) {
     console.warn('[search] recent product hot terms query failed', {
       error: error instanceof Error ? error.message : 'Unknown product hot terms error',

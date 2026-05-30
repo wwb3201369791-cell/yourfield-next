@@ -28,7 +28,7 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { default as default_85bb588098939b5ff0c83065ec0897bb } from '@/components/admin/product-editor/ProductVisualEditorLoader'
+import { default as default_709f92269b4ab60b9dbcefb5595348c6 } from '@/components/admin/product-editor/ProductVisualEditor'
 import { default as default_9681a6a6ee0cd65ba6b74ba0830ade1e } from '@/components/admin/cells/SolutionTitleCell'
 import { SearchLogsStatsPanel as SearchLogsStatsPanel_465a1122331e14da4af3e21d5a62553e } from '@/components/admin/search-logs/SearchLogsStatsPanel'
 import { AdminLogoutButton as AdminLogoutButton_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
@@ -76,7 +76,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@/components/admin/product-editor/ProductVisualEditorLoader#default": default_85bb588098939b5ff0c83065ec0897bb,
+  "@/components/admin/product-editor/ProductVisualEditor#default": default_709f92269b4ab60b9dbcefb5595348c6,
   "@/components/admin/cells/SolutionTitleCell#default": default_9681a6a6ee0cd65ba6b74ba0830ade1e,
   "@/components/admin/search-logs/SearchLogsStatsPanel#SearchLogsStatsPanel": SearchLogsStatsPanel_465a1122331e14da4af3e21d5a62553e,
   "@/components/admin/AdminBrand#AdminLogoutButton": AdminLogoutButton_c3544fd04a86558fd1f1e4a8d6afed38,

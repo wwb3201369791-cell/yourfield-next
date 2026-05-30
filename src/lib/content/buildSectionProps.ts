@@ -77,6 +77,19 @@ function textFromUnknown(value: unknown): string {
     return '';
   }
 
+  const record = value as Record<string, unknown>;
+  for (const key of ['value', 'label', 'title', 'name', 'groupId', 'slug', 'productId', 'model']) {
+    const entry = record[key];
+    if (typeof entry === 'string' && entry.trim()) {
+      return entry.trim();
+    }
+  }
+
+  const localizedZh = record.zh;
+  if (typeof localizedZh === 'string' && localizedZh.trim()) {
+    return localizedZh.trim();
+  }
+
   const parts: string[] = [];
   const walk = (node: unknown) => {
     if (!node || typeof node !== 'object') {

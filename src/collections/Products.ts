@@ -1,4 +1,4 @@
-﻿import type { CollectionConfig, Field } from 'payload';
+﻿import type { CollectionBeforeChangeHook, CollectionConfig, Field } from 'payload';
 
 import {
   canCreate,
@@ -77,6 +77,38 @@ const specificationsField: Field = {
 };
 
 const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前；0 表示不优先。';
+
+function hasProductMainImage(images: unknown) {
+  return Array.isArray(images)
+    ? images.some((image) => {
+        if (!image || typeof image !== 'object') {
+          return false;
+        }
+
+        return Boolean((image as { file?: unknown }).file);
+      })
+    : false;
+}
+
+const requireProductMainImageOnPublish: CollectionBeforeChangeHook = ({ data, originalDoc }) => {
+  const incoming = data as Record<string, unknown>;
+  const previous = originalDoc as Record<string, unknown> | undefined;
+  const nextStatus = incoming._status ?? previous?._status;
+
+  if (nextStatus !== 'published') {
+    return incoming;
+  }
+
+  const nextImages = Object.prototype.hasOwnProperty.call(incoming, 'images')
+    ? incoming.images
+    : previous?.images;
+
+  if (!hasProductMainImage(nextImages)) {
+    throw new Error('产品发布前必须上传产品主图。没有真实主图的产品不会在前台展示。');
+  }
+
+  return incoming;
+};
 
 const certificationsField: Field = {
   name: 'certifications',
@@ -346,12 +378,12 @@ export const Products: CollectionConfig = {
     group: '产品管理',
     defaultColumns: ['model', 'name', 'productGroup', 'statusBadge', 'publishedAt'],
     description:
-      '维护前台产品卡片和详情页内容。产品编号和名称用于识别与链接；图片、型号、介绍、参数、特点等都可留空，前台只展示已填写的数据。',
+      '维护前台产品卡片和详情页内容。产品编号和名称用于识别与链接；发布前必须上传产品主图，没有真实主图的产品不会在前台展示。',
     components: {
       views: {
         edit: {
-          Default: {
-            Component: '@/components/admin/product-editor/ProductVisualEditorLoader',
+          default: {
+            Component: '@/components/admin/product-editor/ProductVisualEditor',
           },
         },
       },
@@ -375,7 +407,7 @@ export const Products: CollectionConfig = {
     delete: canDelete('products'),
   },
   hooks: {
-    beforeChange: [autoSetPublishedAtOnPublish()],
+    beforeChange: [requireProductMainImageOnPublish, autoSetPublishedAtOnPublish()],
     afterChange: [auditAfterChange('products'), revalidateCollectionAfterChange('products')],
     afterDelete: [auditAfterDelete('products'), revalidateCollectionAfterDelete('products')],
   },
@@ -453,7 +485,7 @@ export const Products: CollectionConfig = {
           fields: [
             uploadArrayField({
               name: 'images',
-              label: '产品主图（可选）',
+              label: '产品主图（发布必填）',
               maxRows: 1,
             }),
             {

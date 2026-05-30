@@ -72,4 +72,36 @@ describe('getPayloadSearchSources', () => {
       'solutions',
     ]);
   });
+
+  it('omits image-less products from public search sources', async () => {
+    const payload = {
+      find: vi.fn(async (args: PayloadFindArgs) => {
+        if (args.collection === 'products') {
+          return {
+            docs: [
+              { images: [{ file: { url: '/media/with-image.jpg' } }], name: '有图产品' },
+              { images: [], name: '无图产品' },
+              { image: { sizes: { card: { url: '/media/card.jpg' } } }, name: '卡片图产品' },
+            ],
+          };
+        }
+
+        return { docs: [] };
+      }),
+    };
+    const unstableCache = vi.fn((fn: unknown) => fn);
+
+    vi.resetModules();
+    vi.doMock('next/cache', () => ({
+      unstable_cache: unstableCache,
+    }));
+    vi.doMock('@/lib/cms/payload', () => ({
+      getPayloadClient: vi.fn(() => Promise.resolve(payload)),
+    }));
+    const { getPayloadSearchSources } = await import('@/lib/search/payload');
+
+    const sources = await getPayloadSearchSources(input);
+
+    expect(sources.products.map((product) => product.name)).toEqual(['有图产品', '卡片图产品']);
+  });
 });

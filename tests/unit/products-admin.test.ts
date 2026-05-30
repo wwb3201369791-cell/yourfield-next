@@ -151,6 +151,7 @@ describe('Products admin structure', () => {
     const beforeChangeHooks = Products.hooks?.beforeChange ?? [];
     let data: Record<string, unknown> = {
       _status: 'published',
+      images: [{ file: 'media-1' }],
       name: '防电弧服',
       productGroup: 'product-groups-1',
       productId: 'arc-flash-suit',
