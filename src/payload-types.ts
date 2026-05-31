@@ -169,14 +169,14 @@ export interface FormSubmission {
   productRef?: (number | null) | Product;
   status: 'new' | 'processing' | 'replied' | 'closed';
   /**
-   * 直接填写线下跟进人姓名。
+   * Enter the offline follow-up owner’s name directly.
    */
   assignedTo?: string | null;
   notes?:
     | {
         at: string;
         /**
-         * 直接填写跟进人姓名。
+         * Enter the follow-up owner’s name directly.
          */
         user?: string | null;
         text: string;
@@ -184,7 +184,7 @@ export interface FormSubmission {
       }[]
     | null;
   /**
-   * 由提交页面自动记录。
+   * Recorded automatically by the submission page.
    */
   sourceUrl?: string | null;
   sourceLocale?: ('zh' | 'en' | 'ru') | null;
@@ -192,7 +192,7 @@ export interface FormSubmission {
   userAgent?: string | null;
   consentAcceptedAt: string;
   /**
-   * 仅系统在软删除流程中写入；为空表示当前记录正常。
+   * Written only by the system during soft delete. Empty means the record is active.
    */
   deletedAt?: string | null;
   updatedAt: string;
@@ -207,21 +207,21 @@ export interface FormSubmission {
 export interface Product {
   id: number;
   /**
-   * 稳定编号，用于前台详情页链接。创建后不建议修改。
+   * Stable ID used in storefront detail-page links. Avoid changing it after creation.
    */
   productId: string;
   sku?: string | null;
   /**
-   * 可选。展示在前台详情页主图右侧和规格参数区。
+   * Optional. Shown beside the storefront detail hero image and in the specifications area.
    */
   model?: string | null;
   name: string;
   /**
-   * 默认从 productId 生成；P2.S4 接入完整拼音与唯一性处理。
+   * Generated from productId by default. P2.S4 adds full pinyin and uniqueness handling.
    */
   slug: string;
   /**
-   * 必填。创建产品时先选择产品大类，前台产品中心会直接把该产品放到这个大类下面。
+   * Required. Choose the product group first when creating a product; the storefront Product Center will place the product under that group.
    */
   productGroup: number | ProductGroup;
   images?:
@@ -231,7 +231,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * 展示在主图右侧摘要，也会作为“商品介绍”区块的概述内容。
+   * Shown as the summary beside the hero image and used as the overview in the Product Introduction section.
    */
   description?: {
     root: {
@@ -267,7 +267,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * 没有特点时可不添加。前台只展示已填写的特点。
+   * Leave empty when there are no features. The storefront only shows filled items.
    */
   features?:
     | {
@@ -277,7 +277,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * P3+ 扩展字段：营销卖点。
+   * P3+ extended field: marketing selling points.
    */
   sellingPoints?:
     | {
@@ -288,14 +288,14 @@ export interface Product {
       }[]
     | null;
   /**
-   * 按旧版详情页参数表填写。可添加：型号、执行标准、颜色、尺码、材料、类别、结构等；没有的数据不要添加，前台会自动隐藏空项。
+   * Use the legacy detail-page specification table. You can add model, standards, color, size, material, category, structure, etc. Do not add empty items; the storefront hides empty values automatically.
    */
   specifications?:
     | {
         label?: string | null;
         value?: string | null;
         /**
-         * 可选分组，如“尺寸”“性能”。
+         * Optional group, such as “Size” or “Performance”.
          */
         group?: string | null;
         order?: number | null;
@@ -303,7 +303,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * 有尺码对应表时再填写；没有可留空，前台不会展示该区块。
+   * Fill this only when there is a size guide. Leave empty and the storefront will hide this section.
    */
   sizeGuide?: {
     title?: string | null;
@@ -334,7 +334,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * 用于产品详情页“适用场景”卡片，例如“灭火救援 / 应急抢险 / 灾害处置”。不填时前台可继续使用旧模板或适用场景文本。
+   * Used for the Product Detail “Application Scenarios” cards, such as “Fire rescue / Emergency response / Disaster relief”. If empty, the storefront can keep using the legacy template or scenario text.
    */
   scenarios?:
     | {
@@ -344,7 +344,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * 用于详情页下方图片分组。建议按旧站整理为“场景图 / 建模图 / 模特上身图”；没有对应图片时不要添加。图片数量不限，前台用轮播和懒加载展示。
+   * Used for image groups below the detail page. Recommended legacy groups: scene images / renderings / model images. Do not add groups without matching images. Image count is unlimited; the storefront uses carousel and lazy loading.
    */
   visualGroups?:
     | {
@@ -363,7 +363,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * P3+ 扩展字段：认证与证书。
+   * P3+ extended field: certifications and certificates.
    */
   certifications?:
     | {
@@ -377,7 +377,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * P3+ 扩展字段：质量证据。
+   * P3+ extended field: quality evidence.
    */
   qualityEvidence?:
     | {
@@ -396,7 +396,7 @@ export interface Product {
       }[]
     | null;
   /**
-   * 直接填写该产品详情页展示的问题和答案；不需要先去关联 FAQ。
+   * Enter the questions and answers shown on this product detail page directly; no FAQ relationship is required first.
    */
   productFaqs?:
     | {
@@ -408,7 +408,7 @@ export interface Product {
   faqs?: (number | Faq)[] | null;
   video?: (number | null) | Media;
   /**
-   * 直接填 1、2、3；数字越小越靠前；发布前必须填写，0 仅用于草稿暂存。
+   * Enter 1, 2, or 3. Smaller numbers appear first. Required before publishing; use 0 only for draft temporary saves.
    */
   displayOrder?: number | null;
   publishedAt?: string | null;
@@ -425,11 +425,11 @@ export interface Product {
 export interface ProductGroup {
   id: number;
   /**
-   * 用户在产品中心看到的大类标题，例如“洁净化学与医疗防护”。
+   * Group title visitors see in the Product Center, such as “Cleanroom Chemical & Medical Protection”.
    */
   name: string;
   /**
-   * 显示在产品中心大类标题旁边的摘要位置。不填时，前台会优先用该大类下的子分类或产品名称补充。
+   * Shown as the summary beside the Product Center group title. If empty, the storefront uses subcategories or product names under this group.
    */
   description?: string | null;
   showOnFrontend?: boolean | null;
@@ -438,36 +438,36 @@ export interface ProductGroup {
    */
   order?: number | null;
   /**
-   * 给系统识别用，会用于链接、筛选和产品归类。创建后不要随意修改。
+   * Used by the system for links, filters, and product grouping. Do not change it casually after creation.
    */
   groupId: string;
   /**
-   * 会出现在网址里，建议和“大类英文标识”保持一致。一般留空自动生成即可，保存后不建议频繁修改。
+   * This appears in the URL. Keep it aligned with the group key. Usually leave it empty for auto-generation and avoid changing it after saving.
    */
   slug: string;
   seo?: {
     /**
-     * 显示在浏览器标题和搜索结果标题里；不填时通常会使用页面名称。
+     * Shown in the browser title and search-result title. If empty, the page name is usually used.
      */
     title?: string | null;
     /**
-     * 搜索结果里的摘要文案，建议控制在 200 字以内。
+     * Summary text for search results. Keep it within 200 Chinese characters when possible.
      */
     description?: string | null;
     /**
-     * 用逗号分隔，建议 3-7 个。现在搜索引擎不强依赖它，填核心词即可。
+     * Separate with commas; 3–7 keywords are recommended. Search engines no longer rely on this heavily, so enter only core terms.
      */
     keywords?: string | null;
     /**
-     * 页面被分享到微信、社媒或聊天软件时，可能会作为预览图。
+     * May be used as the preview image when the page is shared on WeChat, social media, or chat apps.
      */
     ogImage?: (number | null) | Media;
     /**
-     * 一般不要开启。开启后，这个页面会尽量不出现在搜索结果里。
+     * Usually leave this off. When enabled, this page will be kept out of search results where possible.
      */
     noindex?: boolean | null;
     /**
-     * 用于告诉搜索引擎哪个地址是主版本；不懂可以留空。
+     * Tells search engines which URL is the canonical version. Leave empty if unsure.
      */
     canonical?: string | null;
   };
@@ -481,7 +481,7 @@ export interface ProductGroup {
 export interface Media {
   id: number;
   /**
-   * 系统会根据上传场景或文件名自动生成。
+   * The system generates this from the upload context or file name automatically.
    */
   alt: string;
   caption?: string | null;
@@ -494,7 +494,7 @@ export interface Media {
     | null;
   folder?: ('brand' | 'products' | 'news' | 'icons' | 'video' | 'pdf' | 'misc') | null;
   /**
-   * P2.S4 媒体引用统计 hook 自动维护。
+   * Maintained automatically by the P2.S4 media reference statistics hook.
    */
   usageCount?: number | null;
   updatedAt: string;
@@ -592,7 +592,7 @@ export interface Faq {
       }[]
     | null;
   /**
-   * 直接填 1、2、3；数字越小越靠前。
+   * Enter 1, 2, or 3. Smaller numbers appear first.
    */
   order?: number | null;
   isPublished: boolean;
@@ -606,7 +606,7 @@ export interface Faq {
 export interface Page {
   id: number;
   /**
-   * 固定页面标识，创建后不要修改。
+   * Fixed page identifier. Do not change it after creation.
    */
   pageKey:
     | 'home'
@@ -621,7 +621,7 @@ export interface Page {
     | 'terms';
   title: string;
   /**
-   * 固定页面路由 slug；home 可填空字符串。
+   * Fixed page route slug. Use an empty string for home.
    */
   slug?: string | null;
   hero?: {
@@ -739,27 +739,27 @@ export interface Page {
     | null;
   seo?: {
     /**
-     * 显示在浏览器标题和搜索结果标题里；不填时通常会使用页面名称。
+     * Shown in the browser title and search-result title. If empty, the page name is usually used.
      */
     title?: string | null;
     /**
-     * 搜索结果里的摘要文案，建议控制在 200 字以内。
+     * Summary text for search results. Keep it within 200 Chinese characters when possible.
      */
     description?: string | null;
     /**
-     * 用逗号分隔，建议 3-7 个。现在搜索引擎不强依赖它，填核心词即可。
+     * Separate with commas; 3–7 keywords are recommended. Search engines no longer rely on this heavily, so enter only core terms.
      */
     keywords?: string | null;
     /**
-     * 页面被分享到微信、社媒或聊天软件时，可能会作为预览图。
+     * May be used as the preview image when the page is shared on WeChat, social media, or chat apps.
      */
     ogImage?: (number | null) | Media;
     /**
-     * 一般不要开启。开启后，这个页面会尽量不出现在搜索结果里。
+     * Usually leave this off. When enabled, this page will be kept out of search results where possible.
      */
     noindex?: boolean | null;
     /**
-     * 用于告诉搜索引擎哪个地址是主版本；不懂可以留空。
+     * Tells search engines which URL is the canonical version. Leave empty if unsure.
      */
     canonical?: string | null;
   };
@@ -769,7 +769,7 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * 兼容旧数据的细分分类。日常维护优先使用“产品大类”和“产品”。
+ * Legacy subcategory data. For daily maintenance, use Product Groups and Products first.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product-categories".
@@ -777,21 +777,21 @@ export interface Page {
 export interface ProductCategory {
   id: number;
   /**
-   * 旧站 category id，不可改名。
+   * Legacy site category ID. Do not rename it.
    */
   categoryId: string;
   /**
-   * 通常与 categoryId 一致；留空时 P2.S3 placeholder 从 categoryId 生成。
+   * Usually the same as categoryId. If empty, the P2.S3 placeholder is generated from categoryId.
    */
   slug: string;
   name: string;
   description?: string | null;
   /**
-   * 前台产品中心使用的大类。新增分类请优先选择这里。
+   * Product groups used by the storefront Product Center. Choose this first when creating categories.
    */
   productGroup?: (number | null) | ProductGroup;
   /**
-   * 旧版固定大类字段，仅用于兼容历史数据。
+   * Legacy fixed-group field, kept only for historical data compatibility.
    */
   group?:
     | (
@@ -806,32 +806,32 @@ export interface ProductCategory {
   cover?: (number | null) | Media;
   icon?: (number | null) | Media;
   /**
-   * 直接填 1、2、3；数字越小越靠前。
+   * Enter 1, 2, or 3. Smaller numbers appear first.
    */
   order?: number | null;
   seo?: {
     /**
-     * 显示在浏览器标题和搜索结果标题里；不填时通常会使用页面名称。
+     * Shown in the browser title and search-result title. If empty, the page name is usually used.
      */
     title?: string | null;
     /**
-     * 搜索结果里的摘要文案，建议控制在 200 字以内。
+     * Summary text for search results. Keep it within 200 Chinese characters when possible.
      */
     description?: string | null;
     /**
-     * 用逗号分隔，建议 3-7 个。现在搜索引擎不强依赖它，填核心词即可。
+     * Separate with commas; 3–7 keywords are recommended. Search engines no longer rely on this heavily, so enter only core terms.
      */
     keywords?: string | null;
     /**
-     * 页面被分享到微信、社媒或聊天软件时，可能会作为预览图。
+     * May be used as the preview image when the page is shared on WeChat, social media, or chat apps.
      */
     ogImage?: (number | null) | Media;
     /**
-     * 一般不要开启。开启后，这个页面会尽量不出现在搜索结果里。
+     * Usually leave this off. When enabled, this page will be kept out of search results where possible.
      */
     noindex?: boolean | null;
     /**
-     * 用于告诉搜索引擎哪个地址是主版本；不懂可以留空。
+     * Tells search engines which URL is the canonical version. Leave empty if unsure.
      */
     canonical?: string | null;
   };
@@ -846,37 +846,37 @@ export interface News {
   id: number;
   title: string;
   /**
-   * 显示在新闻列表和详情页标题下方；留空时前台会从正文截取。
+   * Shown under the title in news lists and detail pages. If empty, the storefront extracts text from the article body.
    */
   excerpt?: string | null;
   author?: string | null;
   /**
-   * 用于新闻列表和详情页的静态封面。视频新闻可不上传；没有视频时建议上传，避免前台只显示占位图。
+   * Static cover used in news lists and detail pages. Video news can omit it, but upload one when there is no video to avoid a storefront placeholder.
    */
   cover?: (number | null) | Media;
   /**
-   * 用于新闻中心顶部三张大卡片的视频预览。中文和英文页面使用这个视频；封面图会作为视频封面帧。不上传视频时，前台会退回显示封面图。
+   * Video preview for the top three featured News Center cards. Chinese and English pages use this video; the cover image is used as the poster frame. If no video is uploaded, the storefront falls back to the cover image.
    */
   featuredVideo?: (number | null) | Media;
   /**
-   * 用于俄语页面的重点新闻速览视频；客户提供俄语素材后替换这里。未上传时俄语页面会回退使用英文/中文视频。
+   * Featured-news preview video for Russian pages. Replace it when Russian material is available. If empty, Russian pages fall back to the English/Chinese video.
    */
   featuredVideoRu?: (number | null) | Media;
   category: 'news' | 'event' | 'announcement' | 'exhibition';
   /**
-   * 系统在点击发布时自动写入，用于前台显示日期和新闻排序。
+   * Written automatically when publishing. Used for storefront dates and news sorting.
    */
   publishedAt?: string | null;
   /**
-   * 控制新闻中心顶部三张重点新闻卡片和首页新闻预览顺序；直接填 1、2、3，数字越小越靠前。留空或 0 表示按发布时间补位。
+   * Controls the order of the three featured News Center cards and homepage news preview. Enter 1, 2, or 3; smaller numbers appear first. Empty or 0 lets publish time fill the slot.
    */
   featuredOrder?: number | null;
   /**
-   * 勾选后进入首页和新闻中心顶部重点位；如果已填写重点位置，也会自动作为重点新闻参与排序。
+   * When checked, this appears in the homepage and News Center featured area. If a featured position is set, it is also included in featured sorting automatically.
    */
   isFeatured?: boolean | null;
   /**
-   * 新闻正文支持段落、标题、列表和媒体图片；插入图片后，前台详情页会以独立图片区块展示。
+   * The article body supports paragraphs, headings, lists, and media images. Inserted images appear as standalone image sections on the storefront detail page.
    */
   content: {
     root: {
@@ -902,7 +902,7 @@ export interface News {
   relatedNews?: (number | News)[] | null;
   relatedProducts?: (number | Product)[] | null;
   /**
-   * 留空从标题生成；P2.S4 接入完整拼音与唯一性处理。
+   * Leave empty to generate from the title. P2.S4 adds full pinyin and uniqueness handling.
    */
   slug: string;
   updatedAt: string;
@@ -929,19 +929,19 @@ export interface FaqContentBlock {
 export interface Solution {
   id: number;
   /**
-   * 前台卡片标题，例如“电力与能源”“应急救援”。
+   * Storefront card title, such as “Power & Energy” or “Emergency Rescue”.
    */
   title: string;
   /**
-   * 前台卡片展示的一段说明，建议 40-90 个中文字符。
+   * Description shown on the storefront card. Recommended length: 40–90 Chinese characters.
    */
   summary?: string | null;
   /**
-   * 前台解决方案卡片使用的主图。
+   * Main image used by the storefront solution card.
    */
   cover?: (number | null) | Media;
   /**
-   * 控制解决方案页面、顶部下拉菜单与页脚导航的展示顺序；直接填 1、2、3，数字越小越靠前。
+   * Controls display order on the Solutions page, header dropdown, and footer navigation. Enter 1, 2, or 3; smaller numbers appear first.
    */
   order?: number | null;
   features?:
@@ -957,7 +957,7 @@ export interface Solution {
       }[]
     | null;
   /**
-   * 一般可留空；需要补充长文说明时再填写。
+   * Usually optional. Fill this only when a longer explanation is needed.
    */
   content?: {
     root: {
@@ -975,31 +975,31 @@ export interface Solution {
     [k: string]: unknown;
   } | null;
   /**
-   * 系统在点击发布时自动写入，用于后台列表和前台同步判断。
+   * Written automatically when publishing. Used by admin lists and storefront sync checks.
    */
   publishedAt?: string | null;
   /**
-   * 用于前台锚点和导入更新的稳定标识，例如 power-energy。通常不要修改。
+   * Stable identifier for storefront anchors and import updates, such as power-energy. Usually do not change it.
    */
   solutionId: string;
   /**
-   * 前台访问链接后缀；留空时从系统标识生成，通常不要手动修改。
+   * Storefront URL slug. Leave empty to generate from the system key; usually do not edit manually.
    */
   slug: string;
   /**
-   * 内部预留字段。当前前台“查看产品”统一进入产品页，不在列表展示关联关系。
+   * Reserved internal field. The storefront “View products” action goes to the Products page and this relationship is not shown in lists.
    */
   relatedProductGroups?: (number | ProductGroup)[] | null;
   /**
-   * 旧站遗留字段，新方案优先维护“关联产品大类”和“关联产品”。
+   * Legacy field. For new solutions, maintain Related Product Groups and Related Products first.
    */
   relatedCategories?: (number | ProductCategory)[] | null;
   /**
-   * 内部预留字段。当前前台“查看产品”统一进入产品页。
+   * Reserved internal field. The storefront “View products” action currently goes to the Products page.
    */
   relatedProducts?: (number | Product)[] | null;
   /**
-   * 内部兼容字段。当前前台解决方案集合里的发布内容都会作为上方大图方案展示。
+   * Internal compatibility field. Published solution items currently appear as large solution cards on the storefront.
    */
   isFeatured?: boolean | null;
   updatedAt: string;
@@ -1007,7 +1007,7 @@ export interface Solution {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * 站内搜索统计：热门关键词、零结果查询与轻量点击率。
+ * Site-search analytics: popular keywords, zero-result queries, and lightweight click-through rate.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "search-logs".
@@ -1015,12 +1015,12 @@ export interface Solution {
 export interface SearchLog {
   id: number;
   /**
-   * 区分一次搜索还是搜索结果点击。
+   * Distinguishes a search event from a search-result click.
    */
   eventType: 'search' | 'result-click';
   query: string;
   /**
-   * 记录用户使用的前台语言版本。
+   * Records the storefront language version used by the visitor.
    */
   locale: 'zh' | 'en' | 'ru';
   hits: number;
@@ -1041,23 +1041,23 @@ export interface User {
   id: number;
   name: string;
   /**
-   * 选择后台权限角色。
+   * Choose admin permission roles.
    */
   role: number | Role;
   /**
-   * P2.S4/P4 登录 hook 自动维护。
+   * Maintained automatically by the P2.S4/P4 login hook.
    */
   lastLoginAt?: string | null;
   /**
-   * P4 启用二次验证时使用。
+   * Used when P4 two-factor authentication is enabled.
    */
   twoFactorEnabled?: boolean | null;
   /**
-   * P4 启用后需加密存储；不要在日志中输出。
+   * Encrypt this after P4 is enabled; never output it in logs.
    */
   twoFactorSecret?: string | null;
   /**
-   * 软删除标记；保留审计追溯。
+   * Soft-delete marker retained for audit traceability.
    */
   deletedAt?: string | null;
   updatedAt: string;
@@ -1089,7 +1089,7 @@ export interface Role {
   slug: string;
   description?: string | null;
   /**
-   * 权限矩阵预留；一期 super-admin 使用 * 全权限。
+   * Reserved for a permission matrix. Phase 1 super-admin uses * for full access.
    */
   permissions:
     | {
@@ -2026,27 +2026,27 @@ export interface SiteSetting {
   themeColor: string;
   defaultSeo?: {
     /**
-     * 显示在浏览器标题和搜索结果标题里；不填时通常会使用页面名称。
+     * Shown in the browser title and search-result title. If empty, the page name is usually used.
      */
     title?: string | null;
     /**
-     * 搜索结果里的摘要文案，建议控制在 200 字以内。
+     * Summary text for search results. Keep it within 200 Chinese characters when possible.
      */
     description?: string | null;
     /**
-     * 用逗号分隔，建议 3-7 个。现在搜索引擎不强依赖它，填核心词即可。
+     * Separate with commas; 3–7 keywords are recommended. Search engines no longer rely on this heavily, so enter only core terms.
      */
     keywords?: string | null;
     /**
-     * 页面被分享到微信、社媒或聊天软件时，可能会作为预览图。
+     * May be used as the preview image when the page is shared on WeChat, social media, or chat apps.
      */
     ogImage?: (number | null) | Media;
     /**
-     * 一般不要开启。开启后，这个页面会尽量不出现在搜索结果里。
+     * Usually leave this off. When enabled, this page will be kept out of search results where possible.
      */
     noindex?: boolean | null;
     /**
-     * 用于告诉搜索引擎哪个地址是主版本；不懂可以留空。
+     * Tells search engines which URL is the canonical version. Leave empty if unsure.
      */
     canonical?: string | null;
   };
@@ -2068,13 +2068,13 @@ export interface SiteSetting {
   analytics?: {
     enabled?: boolean | null;
     /**
-     * 仅保存公开 websiteId；不要填写 API Key。
+     * Only save the public website ID. Do not enter an API key.
      */
     umamiWebsiteId?: string | null;
   };
   icp: string;
   /**
-   * [NEEDS-INPUT] 格式：湘公网安备 XXXXXXXXXXXXX号。
+   * [NEEDS INPUT] Format: public security registration number.
    */
   publicSecurityRecord?: string | null;
   updatedAt?: string | null;

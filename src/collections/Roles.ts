@@ -1,6 +1,7 @@
-﻿import type { CollectionConfig } from 'payload';
+import type { CollectionConfig } from 'payload';
 
 import { canCreate, canDelete, canRead, canUpdate } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 
 const superAdminPermissions = {
@@ -16,12 +17,12 @@ const superAdminPermissions = {
 export const Roles: CollectionConfig = {
   slug: 'roles',
   labels: {
-    singular: '角色',
-    plural: '角色',
+    singular: adminLabel('角色'),
+    plural: adminLabel('角色'),
   },
   admin: {
     useAsTitle: 'name',
-    group: '系统设置',
+    group: adminLabel('系统设置'),
     hidden: true,
   },
   access: {
@@ -57,7 +58,7 @@ export const Roles: CollectionConfig = {
       required: true,
       defaultValue: superAdminPermissions,
       admin: {
-        description: '权限矩阵预留；一期 super-admin 使用 * 全权限。',
+        description: adminLabel('权限矩阵预留；一期 super-admin 使用 * 全权限。'),
       },
     },
   ],

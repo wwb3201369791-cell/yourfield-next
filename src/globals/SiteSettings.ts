@@ -1,6 +1,7 @@
-﻿import type { Field, GlobalConfig } from 'payload';
+import type { Field, GlobalConfig } from 'payload';
 
 import { canUpdate, isPublic } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditGlobalAfterChange } from '../lib/payload/audit';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import {
@@ -38,7 +39,7 @@ const hiddenAdminField = {
 } satisfies Pick<Field, 'admin'>;
 
 const hiddenDefaultSeo = {
-  ...createSeoGroup({ name: 'defaultSeo', label: '默认 SEO' }),
+  ...createSeoGroup({ name: 'defaultSeo', label: adminLabel('默认 SEO') }),
   admin: {
     hidden: true,
   },
@@ -46,9 +47,9 @@ const hiddenDefaultSeo = {
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
-  label: '联系方式',
+  label: adminLabel('联系方式'),
   admin: {
-    group: '全局设置',
+    group: adminLabel('全局设置'),
     hideAPIURL: true,
     components: {
       views: {
@@ -86,28 +87,28 @@ export const SiteSettings: GlobalConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: '联系方式',
+          label: adminLabel('联系方式'),
           fields: [
             {
               name: 'contact',
-              label: '联系信息',
+              label: adminLabel('联系信息'),
               type: 'group',
               fields: [
                 {
                   name: 'phone',
-                  label: '电话',
+                  label: adminLabel('电话'),
                   type: 'text',
                   defaultValue: '400-6800181',
                 },
                 {
                   name: 'email',
-                  label: '邮箱',
+                  label: adminLabel('邮箱'),
                   type: 'email',
                   defaultValue: 'hnyf@yourfield.net',
                 },
                 {
                   name: 'address',
-                  label: '地址',
+                  label: adminLabel('地址'),
                   type: 'textarea',
                   localized: true,
                 },
@@ -159,7 +160,7 @@ export const SiteSettings: GlobalConfig = {
         },
         imageUploadField({
           name: 'icon',
-          label: '图标',
+          label: adminLabel('图标'),
         }),
       ],
     },
@@ -183,12 +184,12 @@ export const SiteSettings: GlobalConfig = {
       fields: [
         imageUploadField({
           name: 'light',
-          label: '浅色 Logo',
+          label: adminLabel('浅色 Logo'),
           required: true,
         }),
         imageUploadField({
           name: 'dark',
-          label: '深色 Logo',
+          label: adminLabel('深色 Logo'),
           required: true,
         }),
       ],
@@ -276,7 +277,7 @@ export const SiteSettings: GlobalConfig = {
           name: 'umamiWebsiteId',
           type: 'text',
           admin: {
-            description: '仅保存公开 websiteId；不要填写 API Key。',
+            description: adminLabel('仅保存公开 websiteId；不要填写 API Key。'),
           },
         },
       ],
@@ -294,7 +295,7 @@ export const SiteSettings: GlobalConfig = {
       type: 'text',
       admin: {
         hidden: true,
-        description: '[NEEDS-INPUT] 格式：湘公网安备 XXXXXXXXXXXXX号。',
+        description: adminLabel('[NEEDS-INPUT] 格式：湘公网安备 XXXXXXXXXXXXX号。'),
       },
     },
   ],

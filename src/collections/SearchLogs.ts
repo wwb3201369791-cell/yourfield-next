@@ -1,6 +1,7 @@
-﻿import type { CollectionConfig } from 'payload';
+import type { CollectionConfig, Option } from 'payload';
 
 import { canRead, deny } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { localeOptions } from '../lib/payload/fields/options';
 import {
   handleSearchStatsEndpoint,
@@ -14,9 +15,9 @@ export { SearchLogsStatsPanel } from '../components/admin/search-logs/SearchLogs
 export { renderSearchStatsHtml } from '../lib/search/statsHtml';
 
 const searchLogEventOptions = [
-  { label: '搜索', value: 'search' },
-  { label: '结果点击', value: 'result-click' },
-] satisfies Array<{ label: string; value: string }>;
+  { label: adminLabel('搜索'), value: 'search' },
+  { label: adminLabel('结果点击'), value: 'result-click' },
+] satisfies Option[];
 
 const searchResultTypeOptions = searchHitTypes.map((value) => ({
   label: value,
@@ -26,13 +27,13 @@ const searchResultTypeOptions = searchHitTypes.map((value) => ({
 export const SearchLogs: CollectionConfig = {
   slug: 'search-logs',
   labels: {
-    singular: '搜索日志',
-    plural: '搜索日志',
+    singular: adminLabel('搜索日志'),
+    plural: adminLabel('搜索日志'),
   },
   admin: {
     useAsTitle: 'query',
-    group: '运营管理',
-    description: '站内搜索统计：热门关键词、零结果查询与轻量点击率。',
+    group: adminLabel('运营管理'),
+    description: adminLabel('站内搜索统计：热门关键词、零结果查询与轻量点击率。'),
     defaultColumns: ['query', 'locale', 'eventType', 'hits', 'resultType', 'createdAt'],
     hidden: true,
     components: {
@@ -115,20 +116,20 @@ export const SearchLogs: CollectionConfig = {
   fields: [
     {
       name: 'eventType',
-      label: '事件类型',
+      label: adminLabel('事件类型'),
       type: 'select',
       required: true,
       defaultValue: 'search',
       options: searchLogEventOptions,
       index: true,
       admin: {
-        description: '区分一次搜索还是搜索结果点击。',
+        description: adminLabel('区分一次搜索还是搜索结果点击。'),
         readOnly: true,
       },
     },
     {
       name: 'query',
-      label: '关键词',
+      label: adminLabel('关键词'),
       type: 'text',
       required: true,
       maxLength: 80,
@@ -139,19 +140,19 @@ export const SearchLogs: CollectionConfig = {
     },
     {
       name: 'locale',
-      label: '语言',
+      label: adminLabel('语言'),
       type: 'select',
       required: true,
       options: localeOptions,
       index: true,
       admin: {
-        description: '记录用户使用的前台语言版本。',
+        description: adminLabel('记录用户使用的前台语言版本。'),
         readOnly: true,
       },
     },
     {
       name: 'hits',
-      label: '结果数',
+      label: adminLabel('结果数'),
       type: 'number',
       required: true,
       min: 0,
@@ -162,7 +163,7 @@ export const SearchLogs: CollectionConfig = {
     },
     {
       name: 'resultId',
-      label: '结果 ID',
+      label: adminLabel('结果 ID'),
       type: 'text',
       maxLength: 120,
       admin: {
@@ -171,7 +172,7 @@ export const SearchLogs: CollectionConfig = {
     },
     {
       name: 'resultTitle',
-      label: '结果标题',
+      label: adminLabel('结果标题'),
       type: 'text',
       maxLength: 180,
       admin: {
@@ -180,7 +181,7 @@ export const SearchLogs: CollectionConfig = {
     },
     {
       name: 'resultType',
-      label: '结果类型',
+      label: adminLabel('结果类型'),
       type: 'select',
       options: searchResultTypeOptions,
       index: true,
@@ -190,7 +191,7 @@ export const SearchLogs: CollectionConfig = {
     },
     {
       name: 'resultUrl',
-      label: '结果链接',
+      label: adminLabel('结果链接'),
       type: 'text',
       maxLength: 300,
       admin: {
@@ -199,7 +200,7 @@ export const SearchLogs: CollectionConfig = {
     },
     {
       name: 'userId',
-      label: '用户 ID',
+      label: adminLabel('用户 ID'),
       type: 'text',
       admin: {
         readOnly: true,
@@ -207,7 +208,7 @@ export const SearchLogs: CollectionConfig = {
     },
     {
       name: 'ip',
-      label: 'IP 地址',
+      label: adminLabel('IP 地址'),
       type: 'text',
       required: true,
       maxLength: 100,

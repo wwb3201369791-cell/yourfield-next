@@ -1,7 +1,8 @@
-﻿import type { CollectionConfig } from 'payload';
+import type { CollectionConfig } from 'payload';
 
 import { pageBlocks } from '../blocks';
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { heroVariantOptions, pageKeyOptions } from '../lib/payload/fields/options';
@@ -17,12 +18,12 @@ const contentLocales = ['zh', 'en', 'ru'] as const;
 export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: {
-    singular: '页面',
-    plural: '页面',
+    singular: adminLabel('页面'),
+    plural: adminLabel('页面'),
   },
   admin: {
     useAsTitle: 'title',
-    group: '内容管理',
+    group: adminLabel('内容管理'),
     defaultColumns: ['pageKey', 'title', 'slug', '_status', 'publishedAt'],
     hidden: true,
   },
@@ -56,7 +57,7 @@ export const Pages: CollectionConfig = {
       options: pageKeyOptions,
       admin: {
         position: 'sidebar',
-        description: '固定页面标识，创建后不要修改。',
+        description: adminLabel('固定页面标识，创建后不要修改。'),
       },
     },
     {
@@ -65,7 +66,10 @@ export const Pages: CollectionConfig = {
       required: true,
       localized: true,
     },
-    slugField({ required: false, description: '固定页面路由 slug；home 可填空字符串。' }),
+    slugField({
+      required: false,
+      description: adminLabel('固定页面路由 slug；home 可填空字符串。'),
+    }),
     {
       name: 'hero',
       type: 'group',
@@ -93,7 +97,7 @@ export const Pages: CollectionConfig = {
         },
         imageUploadField({
           name: 'backgroundImage',
-          label: '背景图片',
+          label: adminLabel('背景图片'),
         }),
         {
           name: 'backgroundVideo',

@@ -1,6 +1,7 @@
-﻿import type { CollectionConfig, Field, TextareaField } from 'payload';
+import type { CollectionConfig, Field, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { createSeoGroup } from '../lib/payload/fields/seo';
@@ -27,7 +28,7 @@ const frontendOrderDescription = {
 };
 
 const productGroupSeoGroup = {
-  ...createSeoGroup({ label: 'SEO 设置（系统）' }),
+  ...createSeoGroup({ label: adminLabel('SEO 设置（系统）') }),
   admin: {
     hidden: true,
     disableListColumn: true,
@@ -100,25 +101,26 @@ export const ProductGroups: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: '基本信息',
+          label: adminLabel('基本信息'),
           fields: [
             {
               name: 'name',
               type: 'text',
               required: true,
               localized: true,
-              label: '前台显示名称',
+              label: adminLabel('前台显示名称'),
               admin: {
-                description: '用户在产品中心看到的大类标题，例如“洁净化学与医疗防护”。',
+                description: adminLabel('用户在产品中心看到的大类标题，例如“洁净化学与医疗防护”。'),
                 disableListFilter: true,
               },
             },
             {
               ...localizedTextareaField('description'),
-              label: '大类说明（可选）',
+              label: adminLabel('大类说明（可选）'),
               admin: {
-                description:
+                description: adminLabel(
                   '显示在产品中心大类标题旁边的摘要位置。不填时，前台会优先用该大类下的子分类或产品名称补充。',
+                ),
                 disableListColumn: true,
                 disableListFilter: true,
               },
@@ -126,12 +128,12 @@ export const ProductGroups: CollectionConfig = {
           ],
         },
         {
-          label: '前台展示',
+          label: adminLabel('前台展示'),
           fields: [
             {
               name: 'showOnFrontend',
               type: 'checkbox',
-              label: '在前台产品中心显示',
+              label: adminLabel('在前台产品中心显示'),
               defaultValue: true,
               index: true,
               admin: {
@@ -142,7 +144,7 @@ export const ProductGroups: CollectionConfig = {
             {
               name: 'order',
               type: 'number',
-              label: '前台展示位置',
+              label: adminLabel('前台展示位置'),
               defaultValue: 1,
               index: true,
               admin: {
@@ -163,10 +165,10 @@ export const ProductGroups: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
-      label: '大类英文标识（系统）',
+      label: adminLabel('大类英文标识（系统）'),
       admin: {
         hidden: true,
-        description: '给系统识别用，会用于链接、筛选和产品归类。创建后不要随意修改。',
+        description: adminLabel('给系统识别用，会用于链接、筛选和产品归类。创建后不要随意修改。'),
         disableListFilter: true,
         disableListColumn: true,
       },
@@ -177,15 +179,16 @@ export const ProductGroups: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      label: '访问链接后缀（系统）',
+      label: adminLabel('访问链接后缀（系统）'),
       required: true,
       unique: true,
       index: true,
       admin: {
         hidden: true,
         position: 'sidebar',
-        description:
+        description: adminLabel(
           '会出现在网址里，建议和“大类英文标识”保持一致。一般留空自动生成即可，保存后不建议频繁修改。',
+        ),
         disableListColumn: true,
         disableListFilter: true,
       },

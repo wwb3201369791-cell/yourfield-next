@@ -2,6 +2,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { Products } from '@/collections/Products';
+import { adminLabel } from '@/lib/payload/adminText';
 
 vi.mock('@/components/admin/media-upload/SimpleMediaUploadField', () => ({
   default: () => null,
@@ -49,7 +50,7 @@ describe('Products admin structure', () => {
       'statusBadge',
       'publishedAt',
     ]);
-    expect(getNamedField('statusBadge')).toMatchObject({ label: '状态', type: 'ui' });
+    expect(getNamedField('statusBadge')).toMatchObject({ label: adminLabel('状态'), type: 'ui' });
     expect(getNamedField('productId')?.admin).toMatchObject({
       disableListColumn: true,
     });
@@ -60,17 +61,17 @@ describe('Products admin structure', () => {
 
     expect(tabsField).toMatchObject({ type: 'tabs' });
     expect(tabsField && 'tabs' in tabsField ? tabsField.tabs.map((tab) => tab.label) : []).toEqual([
-      '基本信息',
-      '主图与简介',
-      '核心卖点',
-      '规格参数',
-      '尺码对应表',
-      '应用场景',
-      '详情页图组',
-      '资料与认证状态',
-      '洗护与维护',
-      '常见问题',
-      '媒体',
+      adminLabel('基本信息'),
+      adminLabel('主图与简介'),
+      adminLabel('核心卖点'),
+      adminLabel('规格参数'),
+      adminLabel('尺码对应表'),
+      adminLabel('应用场景'),
+      adminLabel('详情页图组'),
+      adminLabel('资料与认证状态'),
+      adminLabel('洗护与维护'),
+      adminLabel('常见问题'),
+      adminLabel('媒体'),
     ]);
     expect(
       tabsField && 'tabs' in tabsField
@@ -88,7 +89,7 @@ describe('Products admin structure', () => {
           Cell: '@/components/admin/cells/ProductGroupCell',
         },
       },
-      label: '所属产品大类',
+      label: adminLabel('所属产品大类'),
       relationTo: 'product-groups',
       required: true,
       type: 'relationship',
@@ -100,12 +101,12 @@ describe('Products admin structure', () => {
 
     expect(displayOrder).toMatchObject({
       defaultValue: 0,
-      label: '前台展示位置',
+      label: adminLabel('前台展示位置'),
       name: 'displayOrder',
       type: 'number',
     });
     expect(displayOrder?.admin).toMatchObject({
-      description: '直接填 1、2、3；数字越小越靠前；发布前必须填写，0 仅用于草稿暂存。',
+      description: adminLabel('直接填 1、2、3；数字越小越靠前；发布前必须填写，0 仅用于草稿暂存。'),
       position: 'sidebar',
     });
   });
@@ -122,8 +123,8 @@ describe('Products admin structure', () => {
     const label = fields.find((field) => 'name' in field && field.name === 'label');
     const value = fields.find((field) => 'name' in field && field.name === 'value');
 
-    expect(label).toMatchObject({ label: '参数名', type: 'text' });
-    expect(value).toMatchObject({ label: '参数值', type: 'text' });
+    expect(label).toMatchObject({ label: adminLabel('参数名'), type: 'text' });
+    expect(value).toMatchObject({ label: adminLabel('参数值'), type: 'text' });
     expect(label && 'required' in label ? label.required : undefined).toBeUndefined();
     expect(value && 'required' in value ? value.required : undefined).toBeUndefined();
   });

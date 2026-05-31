@@ -8,11 +8,11 @@ vi.mock('@/components/admin/media-upload/SimpleMediaUploadField', () => ({
 
 type FieldLike = {
   fields?: FieldLike[];
-  label?: string;
+  label?: unknown;
   maxRows?: number;
   name?: string;
   required?: boolean;
-  tabs?: Array<{ fields: FieldLike[]; label: string }>;
+  tabs?: Array<{ fields: FieldLike[]; label: unknown }>;
   type?: string;
 };
 
@@ -24,6 +24,12 @@ type ProductBeforeChangeHook = (args: {
 const rootFields = Products.fields as FieldLike[];
 const tabsField = rootFields.find((field) => field.type === 'tabs');
 const tabs = tabsField?.tabs ?? [];
+
+function zhLabel(label: unknown) {
+  return typeof label === 'object' && label !== null && 'zh' in label
+    ? (label as { zh?: unknown }).zh
+    : label;
+}
 
 function findFieldByName(fields: FieldLike[], name: string): FieldLike | undefined {
   for (const field of fields) {
@@ -50,7 +56,7 @@ function findFieldByName(fields: FieldLike[], name: string): FieldLike | undefin
 }
 
 function tab(label: string) {
-  return tabs.find((candidate) => candidate.label === label);
+  return tabs.find((candidate) => zhLabel(candidate.label) === label);
 }
 
 function hasField(label: string, name: string) {
@@ -93,7 +99,7 @@ describe('Products schema for visual product editing', () => {
     const visualGroupImages = visualGroups?.fields?.find((field) => field.name === 'images');
 
     expect(productImages?.maxRows).toBe(1);
-    expect(productImages?.label).toContain('发布必填');
+    expect(zhLabel(productImages?.label)).toContain('发布必填');
     expect(visualGroupImages?.maxRows).toBeUndefined();
   });
 
@@ -148,7 +154,7 @@ describe('Products schema for visual product editing', () => {
   });
 
   it('organizes product tabs in the same order as the frontend detail page blocks', () => {
-    expect(tabs.map((candidate) => candidate.label)).toEqual([
+    expect(tabs.map((candidate) => zhLabel(candidate.label))).toEqual([
       '基本信息',
       '主图与简介',
       '核心卖点',

@@ -212,12 +212,20 @@ describe('admin collection tabs', () => {
       expect(isReadOnly(field)).toBe(true);
     }
 
-    expect(namedField(FormSubmissions.fields, 'deletedAt')).toMatchObject({
-      label: '软删除时间（系统）',
-      admin: {
-        description: '仅系统在软删除流程中写入；为空表示当前记录正常。',
-      },
-    });
+    const deletedAt = namedField(FormSubmissions.fields, 'deletedAt');
+
+    expect(zhLabel((deletedAt as { label?: unknown } | undefined)?.label)).toBe(
+      '软删除时间（系统）',
+    );
+    expect(
+      zhLabel((deletedAt as { admin?: { description?: unknown } } | undefined)?.admin?.description),
+    ).toBe('仅系统在软删除流程中写入；为空表示当前记录正常。');
+    expect(
+      localizedLabel(
+        (deletedAt as { admin?: { description?: unknown } } | undefined)?.admin?.description,
+        'en',
+      ),
+    ).toContain('system during soft delete');
   });
 
   it.each([Products, News, Solutions] as const)(
@@ -303,14 +311,21 @@ describe('admin collection tabs', () => {
       { label: '展会信息', value: 'exhibition' },
     ]);
     expect(cover).toMatchObject({
-      admin: {
-        description:
-          '用于新闻列表和详情页的静态封面。视频新闻可不上传；没有视频时建议上传，避免前台只显示占位图。',
-      },
       name: 'cover',
       relationTo: 'media',
       type: 'upload',
     });
+    expect(
+      zhLabel((cover as { admin?: { description?: unknown } } | undefined)?.admin?.description),
+    ).toBe(
+      '用于新闻列表和详情页的静态封面。视频新闻可不上传；没有视频时建议上传，避免前台只显示占位图。',
+    );
+    expect(
+      localizedLabel(
+        (cover as { admin?: { description?: unknown } } | undefined)?.admin?.description,
+        'en',
+      ),
+    ).toContain('Static cover');
     expect((cover as { required?: unknown } | undefined)?.required).not.toBe(true);
     expect(featuredVideo).toMatchObject({
       custom: {
@@ -370,15 +385,24 @@ describe('admin collection tabs', () => {
       'publishedAt',
     ]);
     expect(featuredOrder).toMatchObject({
-      admin: {
-        description:
-          '控制新闻中心顶部三张重点新闻卡片和首页新闻预览顺序；直接填 1、2、3，数字越小越靠前。留空或 0 表示按发布时间补位。',
-      },
       max: 3,
       min: 0,
       name: 'featuredOrder',
       type: 'number',
     });
+    expect(
+      zhLabel(
+        (featuredOrder as { admin?: { description?: unknown } } | undefined)?.admin?.description,
+      ),
+    ).toBe(
+      '控制新闻中心顶部三张重点新闻卡片和首页新闻预览顺序；直接填 1、2、3，数字越小越靠前。留空或 0 表示按发布时间补位。',
+    );
+    expect(
+      localizedLabel(
+        (featuredOrder as { admin?: { description?: unknown } } | undefined)?.admin?.description,
+        'en',
+      ),
+    ).toContain('featured News Center cards');
     expect(isFeatured).toMatchObject({
       admin: {
         disableListColumn: true,
@@ -427,24 +451,36 @@ describe('admin collection tabs', () => {
         disableListFilter: true,
         hidden: true,
       },
-      label: '系统标识（隐藏）',
       name: 'solutionId',
       type: 'text',
     });
+    expect(zhLabel((solutionId as { label?: unknown } | undefined)?.label)).toBe(
+      '系统标识（隐藏）',
+    );
+    expect(localizedLabel((solutionId as { label?: unknown } | undefined)?.label, 'en')).toBe(
+      'System key (hidden)',
+    );
     expect(order).toMatchObject({
       admin: {
-        description:
-          '控制解决方案页面、顶部下拉菜单与页脚导航的展示顺序；直接填 1、2、3，数字越小越靠前。',
         disableListFilter: true,
         components: {
           Cell: '@/components/admin/cells/SolutionPositionCell',
         },
       },
       defaultValue: 1,
-      label: '前台位置',
       name: 'order',
       type: 'number',
     });
+    expect(zhLabel((order as { label?: unknown } | undefined)?.label)).toBe('前台位置');
+    expect(
+      zhLabel((order as { admin?: { description?: unknown } } | undefined)?.admin?.description),
+    ).toBe('控制解决方案页面、顶部下拉菜单与页脚导航的展示顺序；直接填 1、2、3，数字越小越靠前。');
+    expect(
+      localizedLabel(
+        (order as { admin?: { description?: unknown } } | undefined)?.admin?.description,
+        'en',
+      ),
+    ).toContain('Solutions page');
     expect(isFeatured).toMatchObject({
       admin: {
         components: {
@@ -454,9 +490,9 @@ describe('admin collection tabs', () => {
         disableListFilter: true,
         hidden: true,
       },
-      label: '状态',
       name: 'isFeatured',
     });
+    expect(zhLabel((isFeatured as { label?: unknown } | undefined)?.label)).toBe('状态');
     expect(relatedProductGroups).toMatchObject({
       admin: {
         disableListColumn: true,

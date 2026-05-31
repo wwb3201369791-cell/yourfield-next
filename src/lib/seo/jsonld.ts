@@ -1,7 +1,8 @@
 import type { NewsItem } from '@/lib/cms/news';
 import type { CmsSiteSettings } from '@/lib/cms/site-settings';
 import type { Locale } from '@/lib/i18n/locale';
-import { localized, specValue, type Product, type ProductFaq } from '@/lib/product/types';
+import { localizedPublicText, publicLocaleText } from '@/lib/product/publicText';
+import { specValue, type Product, type ProductFaq } from '@/lib/product/types';
 import { absoluteUrl, localizedPath, siteName } from '@/lib/seo/buildMetadata';
 
 export type BreadcrumbItem = Readonly<{
@@ -115,11 +116,20 @@ export function collectionPageJsonLd(
 
 export function productJsonLd(product: Product, locale: Locale, settings?: CmsSiteSettings) {
   const path = localizedPath(locale, `/products/${product.id}`);
-
-  return {
+  const name = localizedPublicText(product.name, locale) || product.id;
+  const category = localizedPublicText(product.categoryName, locale);
+  const description = localizedPublicText(product.description, locale);
+  const additionalProperty = product.specifications
+    .map((item) => ({
+      '@type': 'PropertyValue',
+      name: localizedPublicText(item.label, locale),
+      value: publicLocaleText(specValue(item.value, locale), locale),
+    }))
+    .filter((item) => item.name && item.value);
+  const data: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: localized(product.name, locale),
+    name,
     url: absoluteUrl(path),
     mainEntityOfPage: absoluteUrl(path),
     sku: product.sku || product.model,
@@ -128,31 +138,42 @@ export function productJsonLd(product: Product, locale: Locale, settings?: CmsSi
       '@type': 'Brand',
       name: organizationName(locale, settings),
     },
-    category: localized(product.categoryName, locale),
-    description: localized(product.description, locale),
     image: product.images.filter(Boolean).map((image) => absoluteUrl(image)),
-    additionalProperty: product.specifications.map((item) => ({
-      '@type': 'PropertyValue',
-      name: localized(item.label, locale),
-      value: specValue(item.value, locale),
-    })),
   };
+
+  if (category) {
+    data.category = category;
+  }
+
+  if (description) {
+    data.description = description;
+  }
+
+  if (additionalProperty.length > 0) {
+    data.additionalProperty = additionalProperty;
+  }
+
+  return data;
 }
 
 export function faqPageJsonLd(faqs: readonly ProductFaq[], locale: Locale, path: string) {
+  const mainEntity = faqs
+    .map((faq) => ({
+      '@type': 'Question',
+      name: localizedPublicText(faq.question, locale),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: localizedPublicText(faq.answer, locale),
+      },
+    }))
+    .filter((faq) => faq.name && faq.acceptedAnswer.text);
+
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     url: absoluteUrl(path),
     inLanguage: locale,
-    mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
-      name: localized(faq.question, locale),
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: localized(faq.answer, locale),
-      },
-    })),
+    mainEntity,
   };
 }
 

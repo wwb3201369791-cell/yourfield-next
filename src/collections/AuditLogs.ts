@@ -1,17 +1,18 @@
-﻿import type { CollectionConfig } from 'payload';
+import type { CollectionConfig } from 'payload';
 
 import { canRead, deny } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditActionOptions } from '../lib/payload/fields/options';
 
 export const AuditLogs: CollectionConfig = {
   slug: 'audit-logs',
   labels: {
-    singular: '审计日志',
-    plural: '审计日志',
+    singular: adminLabel('审计日志'),
+    plural: adminLabel('审计日志'),
   },
   admin: {
     useAsTitle: 'action',
-    group: '系统设置',
+    group: adminLabel('系统设置'),
     defaultColumns: ['action', 'userEmail', 'collection', 'documentId', 'createdAt'],
     hidden: true,
   },

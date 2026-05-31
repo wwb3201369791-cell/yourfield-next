@@ -1,4 +1,6 @@
-﻿import type { Field } from 'payload';
+import type { Field } from 'payload';
+
+import { adminLabel } from '../adminText';
 
 import { navTargetOptions } from './options';
 import { imageUploadField } from './simpleMediaUpload';
@@ -17,7 +19,7 @@ export const childNavItemFields: Field[] = [
   },
   imageUploadField({
     name: 'icon',
-    label: '图标',
+    label: adminLabel('图标'),
   }),
   {
     name: 'target',

@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ProductGroups } from '@/collections/ProductGroups';
 import SolutionPositionCell from '@/components/admin/cells/SolutionPositionCell';
+import { adminLabel } from '@/lib/payload/adminText';
 
 vi.mock('@/components/admin/adminUiLocale', () => ({
   useAdminText: () => (copy: string | { zh: string }) =>
@@ -39,10 +40,14 @@ describe('ProductGroups admin list', () => {
     const showOnFrontendField = getField('showOnFrontend');
     const orderField = getField('order');
 
-    expect((field as { label?: unknown } | undefined)?.label).toBe('大类英文标识（系统）');
+    expect((field as { label?: unknown } | undefined)?.label).toEqual(
+      adminLabel('大类英文标识（系统）'),
+    );
     expect(field?.admin).toMatchObject({ disableListColumn: true });
     expect(showOnFrontendField?.admin).toMatchObject({ disableListColumn: true });
-    expect((orderField as { label?: unknown } | undefined)?.label).toBe('前台展示位置');
+    expect((orderField as { label?: unknown } | undefined)?.label).toEqual(
+      adminLabel('前台展示位置'),
+    );
     expect(orderField).toMatchObject({ defaultValue: 1 });
     expect(orderField?.admin).toMatchObject({
       components: {
@@ -77,8 +82,8 @@ describe('ProductGroups admin list', () => {
 
     expect(tabsField).toMatchObject({ type: 'tabs' });
     expect(tabsField && 'tabs' in tabsField ? tabsField.tabs.map((tab) => tab.label) : []).toEqual([
-      '基本信息',
-      '前台展示',
+      adminLabel('基本信息'),
+      adminLabel('前台展示'),
     ]);
     expect(
       tabsField && 'tabs' in tabsField

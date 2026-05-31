@@ -1,6 +1,7 @@
-﻿import type { CollectionConfig, Field, TextareaField } from 'payload';
+import type { CollectionConfig, Field, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField } from '../lib/payload/fields/arrays';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
@@ -28,12 +29,13 @@ const localizedTextareaField = (name: string): TextareaField => ({
   localized: true,
 });
 
-const frontendOrderDescription =
-  '控制解决方案页面、顶部下拉菜单与页脚导航的展示顺序；直接填 1、2、3，数字越小越靠前。';
+const frontendOrderDescription = adminLabel(
+  '控制解决方案页面、顶部下拉菜单与页脚导航的展示顺序；直接填 1、2、3，数字越小越靠前。',
+);
 
 const draftStatusListCellField: Field = {
   name: 'statusBadge',
-  label: '状态',
+  label: adminLabel('状态'),
   type: 'ui',
   admin: {
     components: {
@@ -109,30 +111,30 @@ export const Solutions: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: '前台展示',
+          label: adminLabel('前台展示'),
           fields: [
             {
               name: 'title',
               type: 'text',
               required: true,
               localized: true,
-              label: '方案标题',
+              label: adminLabel('方案标题'),
               admin: {
-                description: '前台卡片标题，例如“电力与能源”“应急救援”。',
+                description: adminLabel('前台卡片标题，例如“电力与能源”“应急救援”。'),
               },
             },
             {
               ...localizedTextareaField('summary'),
-              label: '卡片说明',
+              label: adminLabel('卡片说明'),
               admin: {
-                description: '前台卡片展示的一段说明，建议 40-90 个中文字符。',
+                description: adminLabel('前台卡片展示的一段说明，建议 40-90 个中文字符。'),
               },
             },
             imageUploadField({
               name: 'cover',
-              label: '方案主图',
+              label: adminLabel('方案主图'),
               admin: {
-                description: '前台解决方案卡片使用的主图。',
+                description: adminLabel('前台解决方案卡片使用的主图。'),
               },
             }),
             {
@@ -140,7 +142,7 @@ export const Solutions: CollectionConfig = {
               type: 'number',
               defaultValue: 1,
               index: true,
-              label: '前台位置',
+              label: adminLabel('前台位置'),
               admin: {
                 description: frontendOrderDescription,
                 disableListFilter: true,
@@ -152,27 +154,27 @@ export const Solutions: CollectionConfig = {
           ],
         },
         {
-          label: '内容要点',
+          label: adminLabel('内容要点'),
           fields: [
             textArrayField({
               name: 'features',
               localized: true,
-              label: '方案要点',
+              label: adminLabel('方案要点'),
               maxRows: 6,
             }),
             textArrayField({
               name: 'productTags',
               localized: true,
-              label: '核心产品标签',
+              label: adminLabel('核心产品标签'),
               maxRows: 8,
             }),
             {
               name: 'content',
               type: 'richText',
               localized: true,
-              label: '详细说明（可选）',
+              label: adminLabel('详细说明（可选）'),
               admin: {
-                description: '一般可留空；需要补充长文说明时再填写。',
+                description: adminLabel('一般可留空；需要补充长文说明时再填写。'),
               },
             },
           ],
@@ -182,13 +184,13 @@ export const Solutions: CollectionConfig = {
     {
       name: 'publishedAt',
       type: 'date',
-      label: '发布时间',
+      label: adminLabel('发布时间'),
       admin: {
         condition: () => false,
         date: {
           pickerAppearance: 'dayAndTime',
         },
-        description: '系统在点击发布时自动写入，用于后台列表和前台同步判断。',
+        description: adminLabel('系统在点击发布时自动写入，用于后台列表和前台同步判断。'),
         position: 'sidebar',
       },
     },
@@ -198,10 +200,12 @@ export const Solutions: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
-      label: '系统标识（隐藏）',
+      label: adminLabel('系统标识（隐藏）'),
       admin: {
         hidden: true,
-        description: '用于前台锚点和导入更新的稳定标识，例如 power-energy。通常不要修改。',
+        description: adminLabel(
+          '用于前台锚点和导入更新的稳定标识，例如 power-energy。通常不要修改。',
+        ),
         disableListFilter: true,
         components: {
           Cell: '@/components/admin/cells/SolutionTitleCell',
@@ -214,14 +218,14 @@ export const Solutions: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      label: '访问链接后缀（隐藏）',
+      label: adminLabel('访问链接后缀（隐藏）'),
       required: true,
       unique: true,
       index: true,
       admin: {
         hidden: true,
         position: 'sidebar',
-        description: '前台访问链接后缀；留空时从系统标识生成，通常不要手动修改。',
+        description: adminLabel('前台访问链接后缀；留空时从系统标识生成，通常不要手动修改。'),
         disableListColumn: true,
         disableListFilter: true,
       },
@@ -235,12 +239,14 @@ export const Solutions: CollectionConfig = {
       relationTo: 'product-groups',
       hasMany: true,
       maxRows: 5,
-      label: '关联产品大类',
+      label: adminLabel('关联产品大类'),
       admin: {
         hidden: true,
         disableListColumn: true,
         disableListFilter: true,
-        description: '内部预留字段。当前前台“查看产品”统一进入产品页，不在列表展示关联关系。',
+        description: adminLabel(
+          '内部预留字段。当前前台“查看产品”统一进入产品页，不在列表展示关联关系。',
+        ),
       },
     },
     {
@@ -249,12 +255,12 @@ export const Solutions: CollectionConfig = {
       relationTo: 'product-categories',
       hasMany: true,
       maxRows: 12,
-      label: '旧产品分类（内部兼容）',
+      label: adminLabel('旧产品分类（内部兼容）'),
       admin: {
         hidden: true,
         disableListColumn: true,
         disableListFilter: true,
-        description: '旧站遗留字段，新方案优先维护“关联产品大类”和“关联产品”。',
+        description: adminLabel('旧站遗留字段，新方案优先维护“关联产品大类”和“关联产品”。'),
       },
     },
     {
@@ -263,12 +269,12 @@ export const Solutions: CollectionConfig = {
       relationTo: 'products',
       hasMany: true,
       maxRows: 12,
-      label: '关联产品',
+      label: adminLabel('关联产品'),
       admin: {
         hidden: true,
         disableListColumn: true,
         disableListFilter: true,
-        description: '内部预留字段。当前前台“查看产品”统一进入产品页。',
+        description: adminLabel('内部预留字段。当前前台“查看产品”统一进入产品页。'),
       },
     },
     {
@@ -276,7 +282,7 @@ export const Solutions: CollectionConfig = {
       type: 'checkbox',
       defaultValue: false,
       index: true,
-      label: '状态',
+      label: adminLabel('状态'),
       admin: {
         hidden: true,
         disableListColumn: true,
@@ -284,7 +290,9 @@ export const Solutions: CollectionConfig = {
         components: {
           Cell: '@/components/admin/cells/DraftStatusCell',
         },
-        description: '内部兼容字段。当前前台解决方案集合里的发布内容都会作为上方大图方案展示。',
+        description: adminLabel(
+          '内部兼容字段。当前前台解决方案集合里的发布内容都会作为上方大图方案展示。',
+        ),
       },
     },
   ],

@@ -1,6 +1,7 @@
-﻿import type { Field } from 'payload';
+import type { Field } from 'payload';
 
 import type { RequiredI18nPath } from '../../i18n/i18nCompleteness';
+import { adminLabel } from '../adminText';
 
 type I18nEditGuideFieldArgs = Readonly<{
   collectionSlug?: string;
@@ -15,7 +16,7 @@ export function i18nEditGuideField({
 }: I18nEditGuideFieldArgs): Field {
   return {
     name: 'i18nEditGuide',
-    label: '三语编辑',
+    label: adminLabel('三语编辑'),
     type: 'ui',
     custom: {
       ...(collectionSlug ? { collectionSlug } : {}),

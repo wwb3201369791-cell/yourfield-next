@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import { renderSearchStatsHtml, SearchLogs, SearchLogsStatsPanel } from '@/collections/SearchLogs';
+import { adminLabel } from '@/lib/payload/adminText';
 
 describe('SearchLogs admin stats display', () => {
   it('mounts a SearchLogs stats panel before the admin list', () => {
@@ -75,7 +76,7 @@ describe('SearchLogs admin stats display', () => {
     expect(html).not.toContain('<HYF>');
   });
 
-  it('uses Chinese labels and descriptions in the Payload list fields', () => {
+  it('uses bilingual labels and descriptions in the Payload list fields', () => {
     const eventTypeField = SearchLogs.fields.find(
       (field) => 'name' in field && field.name === 'eventType',
     );
@@ -92,12 +93,12 @@ describe('SearchLogs admin stats display', () => {
       'createdAt',
     ]);
     expect(eventTypeField).toMatchObject({
-      admin: { description: '区分一次搜索还是搜索结果点击。' },
-      label: '事件类型',
+      admin: { description: adminLabel('区分一次搜索还是搜索结果点击。') },
+      label: adminLabel('事件类型'),
     });
     expect(localeField).toMatchObject({
-      admin: { description: '记录用户使用的前台语言版本。' },
-      label: '语言',
+      admin: { description: adminLabel('记录用户使用的前台语言版本。') },
+      label: adminLabel('语言'),
     });
   });
 });

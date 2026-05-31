@@ -15,6 +15,7 @@ import { buildProductDetailFacts } from '@/lib/content/productDetail';
 import { buildProductDetailNavItems } from '@/lib/content/productDetailNav';
 import { productPrimaryImage, productVisualGroups } from '@/lib/content/productVisuals';
 import type { Locale } from '@/lib/i18n/locale';
+import { localizedPublicText, publicLocaleText } from '@/lib/product/publicText';
 import {
   localized,
   specValue,
@@ -322,18 +323,28 @@ export function buildSectionPropsFromCms(
   locale: Locale,
   t: ProductDetailTranslator,
 ): ProductDetailDerivedData {
-  const productTitle = localized(product.name, locale);
-  const productCategory = localized(product.categoryName, locale);
-  const productDescription = localized(product.description, locale);
+  const productTitle =
+    localizedPublicText(product.name, locale) || (locale === 'zh' ? '' : product.id);
+  const productCategory = localizedPublicText(product.categoryName, locale);
+  const productDescription = localizedPublicText(product.description, locale);
   const mainProductImage = productPrimaryImage(product);
-  const visualGroups = productVisualGroups(product);
+  const localizedVisualGroups = productVisualGroups(product)
+    .map((group) => ({
+      description: localizedPublicText(group.description, locale),
+      images: group.images,
+      title: localizedPublicText(group.title, locale),
+      variant: group.variant,
+    }))
+    .filter((group) => group.title && group.images.length > 0);
   const materials = product.materials
-    .map((material) => localized(material, locale))
+    .map((material) => localizedPublicText(material, locale))
     .filter(Boolean);
   const applications = product.applications
-    .map((application) => localized(application, locale))
+    .map((application) => localizedPublicText(application, locale))
     .filter(Boolean);
-  const features = product.features.map((feature) => localized(feature, locale)).filter(Boolean);
+  const features = product.features
+    .map((feature) => localizedPublicText(feature, locale))
+    .filter(Boolean);
   const { facts } = buildProductDetailFacts(product, locale, {
     category: t('product.detail.category'),
     color: t('product.detail.color'),
@@ -345,15 +356,15 @@ export function buildSectionPropsFromCms(
   });
   const specifications = product.specifications
     .map((specification) => ({
-      label: localized(specification.label, locale).trim(),
-      value: specValue(specification.value, locale).trim(),
+      label: localizedPublicText(specification.label, locale),
+      value: publicLocaleText(specValue(specification.value, locale), locale),
     }))
     .filter((specification) => specification.label && specification.value);
   const specificationRows = specifications.length > 0 ? specifications : facts;
   const explicitSellingPoints = (product.sellingPoints ?? [])
     .map((point) => ({
-      text: localized(point.text, locale).trim(),
-      title: localized(point.title, locale).trim(),
+      text: localizedPublicText(point.text, locale),
+      title: localizedPublicText(point.title, locale),
     }))
     .filter((point) => point.title);
   const sellingPointCards =
@@ -362,8 +373,8 @@ export function buildSectionPropsFromCms(
       : features.slice(0, 4).map((feature) => ({ text: '', title: feature }));
   const explicitScenarios = (product.scenarios ?? [])
     .map((scenario) => ({
-      text: localized(scenario.text, locale).trim(),
-      title: localized(scenario.title, locale).trim(),
+      text: localizedPublicText(scenario.text, locale),
+      title: localizedPublicText(scenario.title, locale),
     }))
     .filter((scenario) => scenario.title);
   const scenarioCards =
@@ -372,33 +383,47 @@ export function buildSectionPropsFromCms(
       : applications.map((application) => ({ text: '', title: application }));
   const qualityEvidence = (product.qualityEvidence ?? [])
     .map((item) => ({
-      description: localized(item.description, locale).trim(),
-      status: localized(item.status, locale).trim(),
-      title: localized(item.title, locale).trim(),
+      description: localizedPublicText(item.description, locale),
+      status: localizedPublicText(item.status, locale),
+      title: localizedPublicText(item.title, locale),
     }))
     .filter((item) => item.title);
   const careInstructions = (product.careInstructions ?? [])
-    .map((instruction) => localized(instruction, locale).trim())
+    .map((instruction) => localizedPublicText(instruction, locale))
     .filter(Boolean);
-  const sizeGuide = product.sizeGuide;
+  const sizeGuide = product.sizeGuide
+    ? {
+        columns: product.sizeGuide.columns
+          .map((column) => publicLocaleText(column, locale))
+          .filter(Boolean),
+        cornerLabel: product.sizeGuide.cornerLabel
+          ? localizedPublicText(product.sizeGuide.cornerLabel, locale)
+          : '',
+        rows: product.sizeGuide.rows
+          .map((row) => ({
+            label: publicLocaleText(row.label, locale),
+            values: row.values.map((value) => publicLocaleText(value, locale)),
+          }))
+          .filter((row) => row.label && row.values.some(Boolean)),
+        title: product.sizeGuide.title ? localizedPublicText(product.sizeGuide.title, locale) : '',
+      }
+    : undefined;
   const hasSizeGuide = Boolean(
     sizeGuide && sizeGuide.columns.length > 0 && sizeGuide.rows.length > 0,
   );
-  const sizeGuideTitle = sizeGuide?.title
-    ? localized(sizeGuide.title, locale)
-    : t('product.detail.sizeGuide');
-  const sizeGuideCornerLabel = sizeGuide?.cornerLabel
-    ? localized(sizeGuide.cornerLabel, locale)
-    : '';
+  const sizeGuideTitle = sizeGuide?.title || t('product.detail.sizeGuide');
+  const sizeGuideCornerLabel = sizeGuide?.cornerLabel ?? '';
   const hasIntroContent =
     Boolean(productDescription) ||
     materials.length > 0 ||
     features.length > 0 ||
     applications.length > 0;
-  const faqEntries = product.faqs.map((faq) => ({
-    answer: localized(faq.answer, locale),
-    question: localized(faq.question, locale),
-  }));
+  const faqEntries = product.faqs
+    .map((faq) => ({
+      answer: localizedPublicText(faq.answer, locale),
+      question: localizedPublicText(faq.question, locale),
+    }))
+    .filter((faq) => faq.question && faq.answer);
   const detailNavItems = buildProductDetailNavItems([
     {
       id: 'product-intro',
@@ -428,7 +453,7 @@ export function buildSectionPropsFromCms(
     {
       id: 'visual-gallery',
       label: t('product.detail.visualTitle'),
-      show: visualGroups.length > 0,
+      show: localizedVisualGroups.length > 0,
     },
     {
       id: 'quality-evidence',
@@ -443,7 +468,7 @@ export function buildSectionPropsFromCms(
     {
       id: 'faq',
       label: t('product.detail.faq'),
-      show: product.faqs.length > 0,
+      show: faqEntries.length > 0,
     },
   ]);
 
@@ -557,16 +582,11 @@ export function buildSectionPropsFromCms(
             }
           : null,
       visualGroups:
-        visualGroups.length > 0
+        localizedVisualGroups.length > 0
           ? {
               carouselNextLabel: t('product.detail.carouselNext'),
               carouselPreviousLabel: t('product.detail.carouselPrevious'),
-              groups: visualGroups.map((group) => ({
-                description: localized(group.description, locale),
-                images: group.images,
-                title: localized(group.title, locale),
-                variant: group.variant,
-              })),
+              groups: localizedVisualGroups,
               heading: t('product.detail.visualTitle'),
               locale,
               tagLabel: t('product.detail.visualTag'),

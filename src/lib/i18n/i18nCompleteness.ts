@@ -1,10 +1,12 @@
 ﻿import type { Field } from 'payload';
 
+import { adminUiText, type AdminBilingualText } from '../payload/adminText';
+
 export type LocaleCode = string;
 
 export type RequiredI18nPath = Readonly<{
   path: string;
-  label?: string;
+  label?: AdminBilingualText;
 }>;
 
 export type CheckKind = 'array' | 'value';
@@ -66,9 +68,25 @@ function fieldHasName(field: Field): field is Field & { name: string } {
   return 'name' in field && typeof field.name === 'string';
 }
 
+function textLabel(label: unknown, fallback: string) {
+  if (typeof label === 'string' && label.trim()) {
+    return label;
+  }
+
+  if (typeof label === 'object' && label !== null) {
+    const translated = adminUiText('zh', label as AdminBilingualText).trim();
+
+    if (translated) {
+      return translated;
+    }
+  }
+
+  return fallback;
+}
+
 function fieldLabel(field: Field, fallback: string) {
-  if ('label' in field && typeof field.label === 'string' && field.label.trim()) {
-    return field.label;
+  if ('label' in field) {
+    return textLabel(field.label, fallback);
   }
 
   return fallback;
@@ -226,7 +244,10 @@ export function filterSpecs(specs: readonly CheckSpec[], paths: RequireAllLocale
     .map((spec) => {
       const directKey = normalizePath(spec.path.join('.'));
       const blockKey = normalizePath(pathKey(spec.path, spec.blockType));
-      const label = configuredPaths.get(directKey) ?? configuredPaths.get(blockKey) ?? spec.label;
+      const label = textLabel(
+        configuredPaths.get(directKey) ?? configuredPaths.get(blockKey),
+        spec.label,
+      );
 
       return {
         ...spec,

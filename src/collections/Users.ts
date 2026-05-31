@@ -7,6 +7,7 @@ import { Forbidden } from 'payload';
 
 import { env } from '../lib/env';
 import { canRead, deny, isAdminOrSelf, isSuperAdminField } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 
 const useSecureAuthCookies = env.PAYLOAD_PUBLIC_SERVER_URL.startsWith('https://');
@@ -70,8 +71,8 @@ const preventSelfRoleChange: BeforeChangeHook = ({ data, operation, originalDoc,
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
-    singular: '后台用户',
-    plural: '后台用户',
+    singular: adminLabel('后台用户'),
+    plural: adminLabel('后台用户'),
   },
   auth: {
     tokenExpiration: 60 * 60 * 24,
@@ -86,7 +87,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'email',
-    group: '系统设置',
+    group: adminLabel('系统设置'),
     hidden: true,
   },
   access: {
@@ -104,13 +105,13 @@ export const Users: CollectionConfig = {
   fields: [
     {
       name: 'name',
-      label: '姓名',
+      label: adminLabel('姓名'),
       type: 'text',
       required: true,
     },
     {
       name: 'role',
-      label: '角色',
+      label: adminLabel('角色'),
       type: 'relationship',
       relationTo: 'roles',
       required: true,
@@ -120,50 +121,50 @@ export const Users: CollectionConfig = {
       },
       admin: {
         allowCreate: false,
-        description: '选择后台权限角色。',
+        description: adminLabel('选择后台权限角色。'),
         hidden: true,
       },
     },
     {
       name: 'lastLoginAt',
-      label: '上次登录时间',
+      label: adminLabel('上次登录时间'),
       type: 'date',
       admin: {
         hidden: true,
         position: 'sidebar',
         readOnly: true,
-        description: 'P2.S4/P4 登录 hook 自动维护。',
+        description: adminLabel('P2.S4/P4 登录 hook 自动维护。'),
       },
     },
     {
       name: 'twoFactorEnabled',
-      label: '启用二次验证',
+      label: adminLabel('启用二次验证'),
       type: 'checkbox',
       defaultValue: false,
       admin: {
         hidden: true,
         position: 'sidebar',
-        description: 'P4 启用二次验证时使用。',
+        description: adminLabel('P4 启用二次验证时使用。'),
       },
     },
     {
       name: 'twoFactorSecret',
-      label: '二次验证密钥',
+      label: adminLabel('二次验证密钥'),
       type: 'text',
       admin: {
         hidden: true,
         position: 'sidebar',
-        description: 'P4 启用后需加密存储；不要在日志中输出。',
+        description: adminLabel('P4 启用后需加密存储；不要在日志中输出。'),
       },
     },
     {
       name: 'deletedAt',
-      label: '删除标记时间',
+      label: adminLabel('删除标记时间'),
       type: 'date',
       admin: {
         hidden: true,
         position: 'sidebar',
-        description: '软删除标记；保留审计追溯。',
+        description: adminLabel('软删除标记；保留审计追溯。'),
       },
     },
   ],

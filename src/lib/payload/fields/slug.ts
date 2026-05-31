@@ -1,19 +1,22 @@
 ﻿import type { Field } from 'payload';
 
+import { adminLabel, type AdminBilingualText } from '../adminText';
 import { generateSlug } from '../hooks/generateSlug';
 
 type SlugFieldArgs = {
-  label?: string;
+  label?: AdminBilingualText;
   required?: boolean;
-  description?: string;
+  description?: AdminBilingualText;
   disableListColumn?: boolean;
   disableListFilter?: boolean;
 };
 
 export const slugField = ({
-  label = '访问链接后缀（Slug）',
+  label = adminLabel('访问链接后缀（Slug）'),
   required = true,
-  description = '留空会自动生成。建议使用小写英文、数字和短横线，保存后不建议频繁修改。',
+  description = adminLabel(
+    '留空会自动生成。建议使用小写英文、数字和短横线，保存后不建议频繁修改。',
+  ),
   disableListColumn = false,
   disableListFilter = false,
 }: SlugFieldArgs = {}): Field => ({

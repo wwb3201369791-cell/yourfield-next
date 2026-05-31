@@ -1,6 +1,7 @@
-﻿import type { CollectionConfig } from 'payload';
+import type { CollectionConfig } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrFaqPublished } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField } from '../lib/payload/fields/arrays';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
@@ -15,17 +16,17 @@ const requiredI18nPaths = [
   { path: 'answer', label: '答案' },
 ] as const;
 
-const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前。';
+const frontendOrderDescription = adminLabel('直接填 1、2、3；数字越小越靠前。');
 
 export const FAQs: CollectionConfig = {
   slug: 'faqs',
   labels: {
-    singular: '常见问题',
-    plural: '常见问题',
+    singular: adminLabel('常见问题'),
+    plural: adminLabel('常见问题'),
   },
   admin: {
     useAsTitle: 'question',
-    group: '内容管理',
+    group: adminLabel('内容管理'),
     defaultColumns: ['question', 'scope', 'isPublished', 'order'],
     hidden: true,
   },
@@ -95,7 +96,7 @@ export const FAQs: CollectionConfig = {
     {
       name: 'order',
       type: 'number',
-      label: '展示位置',
+      label: adminLabel('展示位置'),
       defaultValue: 0,
       index: true,
       admin: {

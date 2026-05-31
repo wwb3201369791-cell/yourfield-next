@@ -1,5 +1,6 @@
 import type { Locale } from '@/lib/i18n/locale';
-import { localized, specValue, type Product } from '@/lib/product/types';
+import { localizedPublicText, publicLocaleText } from '@/lib/product/publicText';
+import { specValue, type Product } from '@/lib/product/types';
 
 type ProductDetailFactKey =
   | 'category'
@@ -42,8 +43,8 @@ function normalizeFactLabel(value: string) {
 function localizedSpecifications(product: Product, locale: Locale) {
   return product.specifications
     .map((specification) => {
-      const label = localized(specification.label, locale).trim();
-      const value = specValue(specification.value, locale).trim();
+      const label = localizedPublicText(specification.label, locale);
+      const value = publicLocaleText(specValue(specification.value, locale), locale);
 
       return {
         label,
@@ -54,9 +55,9 @@ function localizedSpecifications(product: Product, locale: Locale) {
     .filter((specification) => specification.label && specification.value);
 }
 
-function textList(values: readonly string[]) {
+function textList(values: readonly string[], locale: Locale) {
   return values
-    .map((value) => value.trim())
+    .map((value) => publicLocaleText(value, locale))
     .filter(Boolean)
     .join(' / ');
 }
@@ -102,9 +103,9 @@ export function buildProductDetailFacts(
       factLabelAliases[key],
     );
   const materials = product.materials
-    .map((material) => localized(material, locale))
+    .map((material) => localizedPublicText(material, locale))
     .filter(Boolean);
-  const category = localized(product.categoryName, locale);
+  const category = localizedPublicText(product.categoryName, locale);
   const modelFromSpec = pick('model');
   const standardFromSpec = pick('standard');
   const colorFromSpec = pick('color');
@@ -114,9 +115,9 @@ export function buildProductDetailFacts(
   const structureFromSpec = pick('structure');
   const facts = [
     detailFact(labels.model, product.model || modelFromSpec),
-    detailFact(labels.standard, textList(product.standards) || standardFromSpec),
+    detailFact(labels.standard, textList(product.standards, locale) || standardFromSpec),
     detailFact(labels.color, colorFromSpec),
-    detailFact(labels.sizeRange, textList(product.sizeRange ?? []) || sizeRangeFromSpec),
+    detailFact(labels.sizeRange, textList(product.sizeRange ?? [], locale) || sizeRangeFromSpec),
     detailFact(labels.materials, materials.slice(0, 3).join(' / ') || materialsFromSpec),
     detailFact(labels.category, category || categoryFromSpec),
     detailFact(labels.structure, structureFromSpec),

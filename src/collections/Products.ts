@@ -1,4 +1,4 @@
-﻿import type { CollectionBeforeChangeHook, CollectionConfig, Field } from 'payload';
+import type { CollectionBeforeChangeHook, CollectionConfig, Field } from 'payload';
 
 import {
   canCreate,
@@ -6,6 +6,7 @@ import {
   canUpdate,
   isAdminOrPublishedWithPublishedAt,
 } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField, textareaArrayField, uploadArrayField } from '../lib/payload/fields/arrays';
 import {
@@ -24,10 +25,10 @@ import {
 const featuresField: Field = {
   name: 'features',
   type: 'array',
-  label: '产品特点（可选）',
+  label: adminLabel('产品特点（可选）'),
   localized: true,
   admin: {
-    description: '没有特点时可不添加。前台只展示已填写的特点。',
+    description: adminLabel('没有特点时可不添加。前台只展示已填写的特点。'),
   },
   fields: [
     {
@@ -44,29 +45,30 @@ const featuresField: Field = {
 const specificationsField: Field = {
   name: 'specifications',
   type: 'array',
-  label: '详情页参数表（可选）',
+  label: adminLabel('详情页参数表（可选）'),
   admin: {
-    description:
+    description: adminLabel(
       '按旧版详情页参数表填写。可添加：型号、执行标准、颜色、尺码、材料、类别、结构等；没有的数据不要添加，前台会自动隐藏空项。',
+    ),
   },
   fields: [
     {
       name: 'label',
       type: 'text',
       localized: true,
-      label: '参数名',
+      label: adminLabel('参数名'),
     },
     {
       name: 'value',
       type: 'text',
       localized: true,
-      label: '参数值',
+      label: adminLabel('参数值'),
     },
     {
       name: 'group',
       type: 'text',
       admin: {
-        description: '可选分组，如“尺寸”“性能”。',
+        description: adminLabel('可选分组，如“尺寸”“性能”。'),
       },
     },
     {
@@ -76,8 +78,9 @@ const specificationsField: Field = {
   ],
 };
 
-const frontendOrderDescription =
-  '直接填 1、2、3；数字越小越靠前；发布前必须填写，0 仅用于草稿暂存。';
+const frontendOrderDescription = adminLabel(
+  '直接填 1、2、3；数字越小越靠前；发布前必须填写，0 仅用于草稿暂存。',
+);
 
 function hasProductMainImage(images: unknown) {
   return Array.isArray(images)
@@ -131,7 +134,7 @@ const certificationsField: Field = {
   name: 'certifications',
   type: 'array',
   admin: {
-    description: 'P3+ 扩展字段：认证与证书。',
+    description: adminLabel('P3+ 扩展字段：认证与证书。'),
   },
   fields: [
     {
@@ -167,9 +170,9 @@ const certificationsField: Field = {
 const sizeGuideField: Field = {
   name: 'sizeGuide',
   type: 'group',
-  label: '尺码对应表（可选）',
+  label: adminLabel('尺码对应表（可选）'),
   admin: {
-    description: '有尺码对应表时再填写；没有可留空，前台不会展示该区块。',
+    description: adminLabel('有尺码对应表时再填写；没有可留空，前台不会展示该区块。'),
   },
   fields: [
     {
@@ -222,7 +225,7 @@ const qualityEvidenceField: Field = {
   type: 'array',
   localized: true,
   admin: {
-    description: 'P3+ 扩展字段：质量证据。',
+    description: adminLabel('P3+ 扩展字段：质量证据。'),
   },
   fields: [
     {
@@ -254,10 +257,11 @@ const visualGroupsField: Field = {
   name: 'visualGroups',
   type: 'array',
   localized: true,
-  label: '详情页图片分组（可选）',
+  label: adminLabel('详情页图片分组（可选）'),
   admin: {
-    description:
+    description: adminLabel(
       '用于详情页下方图片分组。建议按旧站整理为“场景图 / 建模图 / 模特上身图”；没有对应图片时不要添加。图片数量不限，前台用轮播和懒加载展示。',
+    ),
   },
   fields: [
     {
@@ -265,19 +269,19 @@ const visualGroupsField: Field = {
       type: 'select',
       options: visualVariantOptions,
       defaultValue: 'gallery',
-      label: '图片类型',
+      label: adminLabel('图片类型'),
     },
     {
       name: 'title',
       type: 'text',
-      label: '分组标题',
+      label: adminLabel('分组标题'),
     },
     {
       name: 'description',
       type: 'textarea',
-      label: '分组说明',
+      label: adminLabel('分组说明'),
     },
-    uploadArrayField({ name: 'images', label: '分组图片' }),
+    uploadArrayField({ name: 'images', label: adminLabel('分组图片') }),
   ],
 };
 
@@ -285,23 +289,24 @@ const scenariosField: Field = {
   name: 'scenarios',
   type: 'array',
   localized: true,
-  label: '应用场景卡片（可选）',
+  label: adminLabel('应用场景卡片（可选）'),
   admin: {
-    description:
+    description: adminLabel(
       '用于产品详情页“适用场景”卡片，例如“灭火救援 / 应急抢险 / 灾害处置”。不填时前台可继续使用旧模板或适用场景文本。',
+    ),
   },
   fields: [
     {
       name: 'title',
       type: 'text',
       localized: true,
-      label: '场景标题',
+      label: adminLabel('场景标题'),
     },
     {
       name: 'description',
       type: 'textarea',
       localized: true,
-      label: '场景说明',
+      label: adminLabel('场景说明'),
     },
   ],
 };
@@ -311,7 +316,7 @@ const sellingPointsField: Field = {
   type: 'array',
   localized: true,
   admin: {
-    description: 'P3+ 扩展字段：营销卖点。',
+    description: adminLabel('P3+ 扩展字段：营销卖点。'),
   },
   fields: [
     {
@@ -324,7 +329,7 @@ const sellingPointsField: Field = {
     },
     imageUploadField({
       name: 'icon',
-      label: '图标',
+      label: adminLabel('图标'),
     }),
   ],
 };
@@ -333,22 +338,22 @@ const productFaqsField: Field = {
   name: 'productFaqs',
   type: 'array',
   localized: true,
-  label: '常见问题（可选）',
+  label: adminLabel('常见问题（可选）'),
   admin: {
-    description: '直接填写该产品详情页展示的问题和答案；不需要先去关联 FAQ。',
+    description: adminLabel('直接填写该产品详情页展示的问题和答案；不需要先去关联 FAQ。'),
   },
   fields: [
     {
       name: 'question',
       type: 'text',
       localized: true,
-      label: '问题',
+      label: adminLabel('问题'),
     },
     {
       name: 'answer',
       type: 'textarea',
       localized: true,
-      label: '答案',
+      label: adminLabel('答案'),
     },
   ],
 };
@@ -358,7 +363,7 @@ const legacyFaqRelationsField: Field = {
   type: 'relationship',
   relationTo: 'faqs',
   hasMany: true,
-  label: '旧 FAQ 关联',
+  label: adminLabel('旧 FAQ 关联'),
   admin: {
     hidden: true,
   },
@@ -366,7 +371,7 @@ const legacyFaqRelationsField: Field = {
 
 const draftStatusListCellField: Field = {
   name: 'statusBadge',
-  label: '状态',
+  label: adminLabel('状态'),
   type: 'ui',
   admin: {
     components: {
@@ -445,7 +450,7 @@ export const Products: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: '基本信息',
+          label: adminLabel('基本信息'),
           fields: [
             {
               name: 'productId',
@@ -453,25 +458,25 @@ export const Products: CollectionConfig = {
               required: true,
               unique: true,
               index: true,
-              label: '产品编号',
+              label: adminLabel('产品编号'),
               admin: {
                 disableListColumn: true,
-                description: '稳定编号，用于前台详情页链接。创建后不建议修改。',
+                description: adminLabel('稳定编号，用于前台详情页链接。创建后不建议修改。'),
               },
             },
             {
               name: 'sku',
               type: 'text',
               index: true,
-              label: 'SKU / 内部编码',
+              label: adminLabel('SKU / 内部编码'),
             },
             {
               name: 'model',
               type: 'text',
               index: true,
-              label: '型号 / 规格',
+              label: adminLabel('型号 / 规格'),
               admin: {
-                description: '可选。展示在前台详情页主图右侧和规格参数区。',
+                description: adminLabel('可选。展示在前台详情页主图右侧和规格参数区。'),
               },
             },
             {
@@ -479,19 +484,22 @@ export const Products: CollectionConfig = {
               type: 'text',
               required: true,
               localized: true,
-              label: '产品名称',
+              label: adminLabel('产品名称'),
             },
-            slugField({ description: '默认从 productId 生成；P2.S4 接入完整拼音与唯一性处理。' }),
+            slugField({
+              description: adminLabel('默认从 productId 生成；P2.S4 接入完整拼音与唯一性处理。'),
+            }),
             {
               name: 'productGroup',
               type: 'relationship',
               relationTo: 'product-groups',
               index: true,
               required: true,
-              label: '所属产品大类',
+              label: adminLabel('所属产品大类'),
               admin: {
-                description:
+                description: adminLabel(
                   '必填。创建产品时先选择产品大类，前台产品中心会直接把该产品放到这个大类下面。',
+                ),
                 components: {
                   Cell: '@/components/admin/cells/ProductGroupCell',
                 },
@@ -500,69 +508,73 @@ export const Products: CollectionConfig = {
           ],
         },
         {
-          label: '主图与简介',
+          label: adminLabel('主图与简介'),
           fields: [
             uploadArrayField({
               name: 'images',
-              label: '产品主图（发布必填）',
+              label: adminLabel('产品主图（发布必填）'),
               maxRows: 1,
             }),
             {
               name: 'description',
               type: 'richText',
               localized: true,
-              label: '产品介绍（可选）',
+              label: adminLabel('产品介绍（可选）'),
               admin: {
-                description: '展示在主图右侧摘要，也会作为“商品介绍”区块的概述内容。',
+                description: adminLabel('展示在主图右侧摘要，也会作为“商品介绍”区块的概述内容。'),
               },
             },
-            textArrayField({ name: 'standards', label: '执行标准（可选）' }),
-            textArrayField({ name: 'sizeRange', label: '尺码范围（可选）' }),
-            textArrayField({ name: 'materials', label: '材料（可选）', localized: true }),
+            textArrayField({ name: 'standards', label: adminLabel('执行标准（可选）') }),
+            textArrayField({ name: 'sizeRange', label: adminLabel('尺码范围（可选）') }),
+            textArrayField({
+              name: 'materials',
+              label: adminLabel('材料（可选）'),
+              localized: true,
+            }),
             featuresField,
           ],
         },
         {
-          label: '核心卖点',
+          label: adminLabel('核心卖点'),
           fields: [sellingPointsField],
         },
         {
-          label: '规格参数',
+          label: adminLabel('规格参数'),
           fields: [specificationsField],
         },
         {
-          label: '尺码对应表',
+          label: adminLabel('尺码对应表'),
           fields: [sizeGuideField],
         },
         {
-          label: '应用场景',
+          label: adminLabel('应用场景'),
           fields: [
             textareaArrayField({
               name: 'applications',
-              label: '适用场景文本（可选）',
+              label: adminLabel('适用场景文本（可选）'),
               localized: true,
             }),
             scenariosField,
           ],
         },
         {
-          label: '详情页图组',
+          label: adminLabel('详情页图组'),
           fields: [visualGroupsField],
         },
         {
-          label: '资料与认证状态',
+          label: adminLabel('资料与认证状态'),
           fields: [certificationsField, qualityEvidenceField],
         },
         {
-          label: '洗护与维护',
+          label: adminLabel('洗护与维护'),
           fields: [textareaArrayField({ name: 'careInstructions', localized: true })],
         },
         {
-          label: '常见问题',
+          label: adminLabel('常见问题'),
           fields: [productFaqsField, legacyFaqRelationsField],
         },
         {
-          label: '媒体',
+          label: adminLabel('媒体'),
           fields: [
             {
               name: 'video',
@@ -572,7 +584,7 @@ export const Products: CollectionConfig = {
             {
               name: 'displayOrder',
               type: 'number',
-              label: '前台展示位置',
+              label: adminLabel('前台展示位置'),
               defaultValue: 0,
               index: true,
               admin: {

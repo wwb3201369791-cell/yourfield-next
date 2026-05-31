@@ -1,6 +1,7 @@
-﻿import type { CollectionConfig, Field } from 'payload';
+import type { CollectionConfig, Field } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { newsCategoryOptions } from '../lib/payload/fields/options';
@@ -71,7 +72,7 @@ const hiddenSlugField: Field = {
     hidden: true,
     disableListColumn: true,
     disableListFilter: true,
-    description: '留空从标题生成；P2.S4 接入完整拼音与唯一性处理。',
+    description: adminLabel('留空从标题生成；P2.S4 接入完整拼音与唯一性处理。'),
   },
   hooks: {
     beforeValidate: [generateSlug],
@@ -145,7 +146,7 @@ export const News: CollectionConfig = {
               type: 'textarea',
               localized: true,
               admin: {
-                description: '显示在新闻列表和详情页标题下方；留空时前台会从正文截取。',
+                description: adminLabel('显示在新闻列表和详情页标题下方；留空时前台会从正文截取。'),
               },
             },
             {
@@ -158,24 +159,27 @@ export const News: CollectionConfig = {
               name: 'cover',
               label: newsAdminLabels.cover,
               admin: {
-                description:
+                description: adminLabel(
                   '用于新闻列表和详情页的静态封面。视频新闻可不上传；没有视频时建议上传，避免前台只显示占位图。',
+                ),
               },
             }),
             videoUploadField({
               name: 'featuredVideo',
               label: newsAdminLabels.featuredVideo,
               admin: {
-                description:
+                description: adminLabel(
                   '用于新闻中心顶部三张大卡片的视频预览。中文和英文页面使用这个视频；封面图会作为视频封面帧。不上传视频时，前台会退回显示封面图。',
+                ),
               },
             }),
             videoUploadField({
               name: 'featuredVideoRu',
               label: newsAdminLabels.featuredVideoRu,
               admin: {
-                description:
+                description: adminLabel(
                   '用于俄语页面的重点新闻速览视频；客户提供俄语素材后替换这里。未上传时俄语页面会回退使用英文/中文视频。',
+                ),
               },
             }),
             {
@@ -203,7 +207,7 @@ export const News: CollectionConfig = {
                 date: {
                   pickerAppearance: 'dayAndTime',
                 },
-                description: '系统在点击发布时自动写入，用于前台显示日期和新闻排序。',
+                description: adminLabel('系统在点击发布时自动写入，用于前台显示日期和新闻排序。'),
               },
             },
             {
@@ -215,8 +219,9 @@ export const News: CollectionConfig = {
               index: true,
               admin: {
                 position: 'sidebar',
-                description:
+                description: adminLabel(
                   '控制新闻中心顶部三张重点新闻卡片和首页新闻预览顺序；直接填 1、2、3，数字越小越靠前。留空或 0 表示按发布时间补位。',
+                ),
               },
             },
             {
@@ -228,8 +233,9 @@ export const News: CollectionConfig = {
               admin: {
                 position: 'sidebar',
                 disableListColumn: true,
-                description:
+                description: adminLabel(
                   '勾选后进入首页和新闻中心顶部重点位；如果已填写重点位置，也会自动作为重点新闻参与排序。',
+                ),
               },
             },
           ],
@@ -244,8 +250,9 @@ export const News: CollectionConfig = {
               localized: true,
               required: true,
               admin: {
-                description:
+                description: adminLabel(
                   '新闻正文支持段落、标题、列表和媒体图片；插入图片后，前台详情页会以独立图片区块展示。',
+                ),
               },
             },
           ],

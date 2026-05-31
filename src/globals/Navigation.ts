@@ -1,15 +1,16 @@
-﻿import type { GlobalConfig } from 'payload';
+import type { GlobalConfig } from 'payload';
 
 import { canUpdate, isPublic } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditGlobalAfterChange } from '../lib/payload/audit';
 import { navItemFields } from '../lib/payload/fields/nav';
 import { revalidateGlobalAfterChange } from '../lib/payload/hooks/revalidateContent';
 
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
-  label: '导航配置',
+  label: adminLabel('导航配置'),
   admin: {
-    group: '系统设置',
+    group: adminLabel('系统设置'),
     hidden: true,
   },
   access: {
@@ -23,13 +24,13 @@ export const Navigation: GlobalConfig = {
     {
       name: 'mainNav',
       type: 'array',
-      label: '顶部导航',
+      label: adminLabel('顶部导航'),
       fields: navItemFields,
     },
     {
       name: 'footerNav',
       type: 'array',
-      label: '页脚导航分组',
+      label: adminLabel('页脚导航分组'),
       fields: [
         {
           name: 'heading',
@@ -46,7 +47,7 @@ export const Navigation: GlobalConfig = {
     {
       name: 'mobileNav',
       type: 'array',
-      label: '移动端导航（留空则复用 mainNav）',
+      label: adminLabel('移动端导航（留空则复用 mainNav）'),
       fields: navItemFields,
     },
   ],

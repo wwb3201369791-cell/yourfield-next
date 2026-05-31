@@ -24,7 +24,7 @@ import { buildSectionPropsFromCms } from '@/lib/content/buildSectionProps';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocaleAndSlug, type LocaleSlugRouteParams } from '@/lib/i18n/route';
 import { isDraftModeEnabled } from '@/lib/preview/draft';
-import { localized } from '@/lib/product/types';
+import { localizedPublicText } from '@/lib/product/publicText';
 import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, faqPageJsonLd, productJsonLd } from '@/lib/seo/jsonld';
 
@@ -47,11 +47,14 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
     return {};
   }
 
+  const productTitle = localizedPublicText(product.name, locale) || product.id;
+  const productDescription = localizedPublicText(product.description, locale) || productTitle;
+
   return buildPageMetadata({
     locale,
     path: `/products/${product.id}`,
-    title: localized(product.name, locale),
-    description: localized(product.description, locale) || localized(product.name, locale),
+    title: productTitle,
+    description: productDescription,
     image: product.image || '/images/headers/products-center.png',
     noIndex: isDraft,
   });

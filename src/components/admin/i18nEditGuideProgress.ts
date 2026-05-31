@@ -9,6 +9,7 @@ import {
   type CheckSpec,
   type RequiredI18nPath,
 } from '@/lib/i18n/i18nCompleteness';
+import { adminUiText } from '@/lib/payload/adminText';
 
 export const localeOrder = ['zh', 'en', 'ru'] as const;
 
@@ -61,11 +62,15 @@ function docForLocale(doc: Record<string, unknown> | undefined, locale: ContentL
 }
 
 function labelForPath(path: RequiredI18nPath) {
-  return path.label?.trim() || path.path;
+  return adminUiText('zh', path.label).trim() || path.path;
 }
 
-export function requiredLabelSummary(paths: readonly RequiredI18nPath[]) {
-  return Array.from(new Set(paths.map(labelForPath))).join('、');
+export function requiredLabelSummary(
+  paths: readonly RequiredI18nPath[],
+  translate: (label: string) => string = (label) => label,
+  separator = '、',
+) {
+  return Array.from(new Set(paths.map((path) => translate(labelForPath(path))))).join(separator);
 }
 
 function specsFromRequiredPaths(paths: readonly RequiredI18nPath[]) {

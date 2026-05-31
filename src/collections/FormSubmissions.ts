@@ -2,6 +2,7 @@ import type { CollectionAfterChangeHook as AfterChangeHook, CollectionConfig } f
 
 import { sendNotification } from '../lib/email/sendNotification';
 import { canDelete, canRead, canUpdate, deny } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import {
   inquiryTypeOptions,
@@ -79,49 +80,49 @@ export const FormSubmissions: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: '客户信息',
+          label: adminLabel('客户信息'),
           fields: [
             {
               name: 'name',
-              label: '姓名',
+              label: adminLabel('姓名'),
               type: 'text',
               required: true,
             },
             {
               name: 'country',
-              label: '国家 / 地区',
+              label: adminLabel('国家 / 地区'),
               type: 'text',
             },
             {
               name: 'company',
-              label: '公司',
+              label: adminLabel('公司'),
               type: 'text',
             },
             {
               name: 'position',
-              label: '职位',
+              label: adminLabel('职位'),
               type: 'text',
             },
             {
               name: 'phone',
-              label: '电话',
+              label: adminLabel('电话'),
               type: 'text',
               required: true,
             },
             {
               name: 'email',
-              label: '邮箱',
+              label: adminLabel('邮箱'),
               type: 'email',
               required: true,
             },
           ],
         },
         {
-          label: '咨询内容',
+          label: adminLabel('咨询内容'),
           fields: [
             {
               name: 'inquiryType',
-              label: '咨询类型',
+              label: adminLabel('咨询类型'),
               type: 'select',
               required: true,
               options: inquiryTypeOptions,
@@ -130,24 +131,24 @@ export const FormSubmissions: CollectionConfig = {
             },
             {
               name: 'message',
-              label: '留言内容',
+              label: adminLabel('留言内容'),
               type: 'textarea',
               required: true,
             },
             {
               name: 'productRef',
-              label: '关联产品',
+              label: adminLabel('关联产品'),
               type: 'relationship',
               relationTo: 'products',
             },
           ],
         },
         {
-          label: '处理跟进',
+          label: adminLabel('处理跟进'),
           fields: [
             {
               name: 'status',
-              label: '处理状态',
+              label: adminLabel('处理状态'),
               type: 'select',
               required: true,
               options: submissionStatusOptions,
@@ -161,20 +162,20 @@ export const FormSubmissions: CollectionConfig = {
             },
             {
               name: 'assignedTo',
-              label: '负责人',
+              label: adminLabel('负责人'),
               type: 'text',
               admin: {
-                description: '直接填写线下跟进人姓名。',
+                description: adminLabel('直接填写线下跟进人姓名。'),
               },
             },
             {
               name: 'notes',
-              label: '跟进记录',
+              label: adminLabel('跟进记录'),
               type: 'array',
               fields: [
                 {
                   name: 'at',
-                  label: '时间',
+                  label: adminLabel('时间'),
                   type: 'date',
                   required: true,
                   defaultValue: () => new Date().toISOString(),
@@ -186,15 +187,15 @@ export const FormSubmissions: CollectionConfig = {
                 },
                 {
                   name: 'user',
-                  label: '跟进人',
+                  label: adminLabel('跟进人'),
                   type: 'text',
                   admin: {
-                    description: '直接填写跟进人姓名。',
+                    description: adminLabel('直接填写跟进人姓名。'),
                   },
                 },
                 {
                   name: 'text',
-                  label: '记录内容',
+                  label: adminLabel('记录内容'),
                   type: 'textarea',
                   required: true,
                 },
@@ -206,17 +207,17 @@ export const FormSubmissions: CollectionConfig = {
     },
     {
       name: 'sourceUrl',
-      label: '来源页面（系统）',
+      label: adminLabel('来源页面（系统）'),
       type: 'text',
       admin: {
         hidden: true,
         readOnly: true,
-        description: '由提交页面自动记录。',
+        description: adminLabel('由提交页面自动记录。'),
       },
     },
     {
       name: 'sourceLocale',
-      label: '来源语言（系统）',
+      label: adminLabel('来源语言（系统）'),
       type: 'select',
       options: localeOptions,
       admin: {
@@ -226,7 +227,7 @@ export const FormSubmissions: CollectionConfig = {
     },
     {
       name: 'ip',
-      label: 'IP 地址（系统）',
+      label: adminLabel('IP 地址（系统）'),
       type: 'text',
       admin: {
         hidden: true,
@@ -235,7 +236,7 @@ export const FormSubmissions: CollectionConfig = {
     },
     {
       name: 'userAgent',
-      label: '浏览器信息（系统）',
+      label: adminLabel('浏览器信息（系统）'),
       type: 'text',
       admin: {
         hidden: true,
@@ -244,7 +245,7 @@ export const FormSubmissions: CollectionConfig = {
     },
     {
       name: 'consentAcceptedAt',
-      label: '隐私同意时间（系统）',
+      label: adminLabel('隐私同意时间（系统）'),
       type: 'date',
       required: true,
       admin: {
@@ -257,13 +258,13 @@ export const FormSubmissions: CollectionConfig = {
     },
     {
       name: 'deletedAt',
-      label: '软删除时间（系统）',
+      label: adminLabel('软删除时间（系统）'),
       type: 'date',
       admin: {
         hidden: true,
         position: 'sidebar',
         readOnly: true,
-        description: '仅系统在软删除流程中写入；为空表示当前记录正常。',
+        description: adminLabel('仅系统在软删除流程中写入；为空表示当前记录正常。'),
       },
     },
   ],

@@ -6,7 +6,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { isRecord, type RequiredI18nPath } from '@/lib/i18n/i18nCompleteness';
 
 import { markCurrentAdminContentLocaleIntent } from './adminContentLocaleState';
-import { useAdminText } from './adminUiLocale';
+import { useAdminInterfaceLocale, useAdminText } from './adminUiLocale';
 import {
   asContentLocale,
   collectLocaleSummaries,
@@ -39,6 +39,7 @@ function updateLocaleHref(nextLocale: ContentLocale) {
 
 export default function I18nEditGuide({ custom }: I18nEditGuideProps) {
   const t = useAdminText();
+  const adminLocale = useAdminInterfaceLocale();
   const locale = useLocale();
   const fields = useFormFields(([formFields]) => formFields);
   const {
@@ -52,7 +53,10 @@ export default function I18nEditGuide({ custom }: I18nEditGuideProps) {
   const requiredPaths = custom?.requiredPaths ?? emptyRequiredPaths;
   const currentLocale = asContentLocale(locale?.code);
   const currentValues = useMemo(() => formValuesForI18nSummary(fields), [fields]);
-  const requiredLabels = useMemo(() => requiredLabelSummary(requiredPaths), [requiredPaths]);
+  const requiredLabels = useMemo(
+    () => requiredLabelSummary(requiredPaths, t, adminLocale === 'en' ? ', ' : '、'),
+    [adminLocale, requiredPaths, t],
+  );
   const summaries = useMemo(
     () =>
       collectLocaleSummaries({
@@ -123,10 +127,11 @@ export default function I18nEditGuide({ custom }: I18nEditGuideProps) {
         {summaries.map((summary) => {
           const isActive = summary.code === currentLocale;
           const hasMissing = canShowProgress && summary.missingLabels.length > 0;
+          const missingLabels = summary.missingLabels.map((label) => t(label));
           const title = hasMissing
             ? t({
-                en: `${t(localeLabels[summary.code])} missing: ${summary.missingLabels.join(', ')}`,
-                zh: `${localeLabels[summary.code]}缺失：${summary.missingLabels.join('、')}`,
+                en: `${t(localeLabels[summary.code])} missing: ${missingLabels.join(', ')}`,
+                zh: `${localeLabels[summary.code]}缺失：${missingLabels.join('、')}`,
               })
             : t({
                 en: `${t(localeLabels[summary.code])} content ${canShowProgress ? 'complete' : 'editing'}`,

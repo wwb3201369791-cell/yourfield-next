@@ -1,6 +1,7 @@
-﻿import type { CollectionConfig, TextareaField } from 'payload';
+import type { CollectionConfig, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access';
+import { adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { productGroupOptions } from '../lib/payload/fields/options';
 import { seoGroup } from '../lib/payload/fields/seo';
@@ -14,20 +15,20 @@ const localizedTextareaField = (name: string): TextareaField => ({
   localized: true,
 });
 
-const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前。';
+const frontendOrderDescription = adminLabel('直接填 1、2、3；数字越小越靠前。');
 
 export const ProductCategories: CollectionConfig = {
   slug: 'product-categories',
   labels: {
-    singular: '产品分类',
-    plural: '产品分类',
+    singular: adminLabel('产品分类'),
+    plural: adminLabel('产品分类'),
   },
   admin: {
     useAsTitle: 'name',
-    group: '产品管理',
+    group: adminLabel('产品管理'),
     hidden: true,
     defaultColumns: ['categoryId', 'name', 'group', 'order'],
-    description: '兼容旧数据的细分分类。日常维护优先使用“产品大类”和“产品”。',
+    description: adminLabel('兼容旧数据的细分分类。日常维护优先使用“产品大类”和“产品”。'),
   },
   access: {
     read: isPublic,
@@ -50,11 +51,13 @@ export const ProductCategories: CollectionConfig = {
       unique: true,
       index: true,
       admin: {
-        description: '旧站 category id，不可改名。',
+        description: adminLabel('旧站 category id，不可改名。'),
       },
     },
     slugField({
-      description: '通常与 categoryId 一致；留空时 P2.S3 placeholder 从 categoryId 生成。',
+      description: adminLabel(
+        '通常与 categoryId 一致；留空时 P2.S3 placeholder 从 categoryId 生成。',
+      ),
     }),
     {
       name: 'name',
@@ -69,7 +72,7 @@ export const ProductCategories: CollectionConfig = {
       relationTo: 'product-groups',
       index: true,
       admin: {
-        description: '前台产品中心使用的大类。新增分类请优先选择这里。',
+        description: adminLabel('前台产品中心使用的大类。新增分类请优先选择这里。'),
       },
     },
     {
@@ -79,7 +82,7 @@ export const ProductCategories: CollectionConfig = {
       index: true,
       admin: {
         hidden: true,
-        description: '旧版固定大类字段，仅用于兼容历史数据。',
+        description: adminLabel('旧版固定大类字段，仅用于兼容历史数据。'),
       },
     },
     {
@@ -89,16 +92,16 @@ export const ProductCategories: CollectionConfig = {
     },
     imageUploadField({
       name: 'cover',
-      label: '封面图',
+      label: adminLabel('封面图'),
     }),
     imageUploadField({
       name: 'icon',
-      label: '图标',
+      label: adminLabel('图标'),
     }),
     {
       name: 'order',
       type: 'number',
-      label: '前台展示位置',
+      label: adminLabel('前台展示位置'),
       defaultValue: 0,
       index: true,
       admin: {

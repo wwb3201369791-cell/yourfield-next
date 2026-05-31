@@ -1,10 +1,12 @@
-﻿import type { Field } from 'payload';
+import type { Field } from 'payload';
+
+import { adminLabel, type AdminBilingualText } from '../adminText';
 
 import { imageUploadField } from './simpleMediaUpload';
 
 type TextArrayArgs = {
   name: string;
-  label?: string;
+  label?: AdminBilingualText;
   localized?: boolean;
   required?: boolean;
   minRows?: number;
@@ -12,7 +14,7 @@ type TextArrayArgs = {
 };
 
 type OptionalArrayPropsArgs = {
-  label?: string | undefined;
+  label?: AdminBilingualText | undefined;
   maxRows?: number | undefined;
   minRows?: number | undefined;
 };
@@ -78,5 +80,5 @@ export const uploadArrayField = ({
   ...optionalArrayProps({ label, minRows, maxRows }),
   type: 'array',
   required,
-  fields: [imageUploadField({ name: 'file', label: '图片', required: true })],
+  fields: [imageUploadField({ name: 'file', label: adminLabel('图片'), required: true })],
 });
