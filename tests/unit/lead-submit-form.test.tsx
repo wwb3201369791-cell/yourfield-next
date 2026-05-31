@@ -136,7 +136,7 @@ describe('LeadSubmitForm', () => {
     expect(clickSpy).not.toHaveBeenCalled();
   });
 
-  it('does not leave the form stuck after a successful submission', async () => {
+  it('keeps the success email backup visible until the visitor edits the form again', async () => {
     const fetchMock = vi.fn().mockImplementation(() =>
       Promise.resolve(
         new Response(JSON.stringify({ id: 'submission-1', ok: true }), {
@@ -166,10 +166,15 @@ describe('LeadSubmitForm', () => {
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
     expect(screen.getByRole('status').textContent).toBe('已收到您的咨询，我们会尽快与您联系。');
+    expect(screen.getByRole('link', { name: '打开邮箱发送咨询' })).toBeTruthy();
     expect(screen.getByRole<HTMLButtonElement>('button', { name: '发送咨询' }).disabled).toBe(
       false,
     );
     expect(screen.getByLabelText<HTMLInputElement>(/姓名/).disabled).toBe(false);
+
+    await new Promise((resolve) => window.setTimeout(resolve, 8_500));
+    expect(screen.getByRole('status').textContent).toBe('已收到您的咨询，我们会尽快与您联系。');
+    expect(screen.getByRole('link', { name: '打开邮箱发送咨询' })).toBeTruthy();
 
     fireEvent.change(screen.getByLabelText(/姓名/), { target: { value: '第二位客户' } });
     expect(screen.queryByRole('status')).toBeNull();
@@ -188,7 +193,7 @@ describe('LeadSubmitForm', () => {
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
     expect(screen.getByRole('status').textContent).toBe('已收到您的咨询，我们会尽快与您联系。');
-  });
+  }, 12_000);
 
   it('offers a mail client fallback when the backend cannot accept a submission', async () => {
     const fetchMock = vi.fn().mockImplementation(() =>

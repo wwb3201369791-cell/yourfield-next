@@ -50,7 +50,6 @@ type FormStatus =
   | Readonly<{ fallbackEmailHref?: string; kind: 'success'; message: string }>
   | Readonly<{ fallbackEmailHref?: string; kind: 'error'; message: string }>;
 
-const successMessageVisibleMs = 8_000;
 const defaultSupportEmail = 'hnyf@yourfield.net';
 const safeEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 
@@ -257,18 +256,6 @@ export function LeadSubmitForm({
   useEffect(() => {
     setIsHydrated(true);
   }, []);
-
-  useEffect(() => {
-    if (status.kind !== 'success') {
-      return undefined;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setStatus({ kind: 'idle' });
-    }, successMessageVisibleMs);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [status]);
 
   function clearSettledStatus() {
     if (status.kind === 'success' || status.kind === 'error') {
