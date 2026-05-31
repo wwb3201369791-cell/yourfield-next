@@ -214,7 +214,7 @@ describe('admin status tabs', () => {
     expect(allParams.get('where[or][1][assignedTo][exists]')).toBeNull();
   });
 
-  it('uses concise operator copy for form submission status filters', () => {
+  it('uses concise operator copy for form submission status filters', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(() => jsonResponse({ totalDocs: 0 })),
@@ -237,7 +237,9 @@ describe('admin status tabs', () => {
     expect(screen.queryByText('流转')).toBeNull();
     expect(screen.queryByText('今日提交')).toBeNull();
     expect(screen.getByText('工作视图')).toBeTruthy();
-    expect(screen.getByText('当前筛选：优先处理 · 招商咨询')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('当前筛选：优先处理 · 招商咨询')).toBeTruthy();
+    });
     expect(screen.getByRole('link', { name: '优先处理' }).getAttribute('aria-current')).toBe(
       'page',
     );
@@ -249,7 +251,7 @@ describe('admin status tabs', () => {
     );
   });
 
-  it('shows metric-only filters in the current filter summary', () => {
+  it('shows metric-only filters in the current filter summary', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(() => jsonResponse({ totalDocs: 0 })),
@@ -262,7 +264,9 @@ describe('admin status tabs', () => {
 
     render(<FormSubmissionsStatusTabs />);
 
-    expect(screen.getByText('当前筛选：今日新增 · 留言咨询')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('当前筛选：今日新增 · 留言咨询')).toBeTruthy();
+    });
   });
 
   it('reloads manager metric counts when the Payload list data changes after mutations', async () => {

@@ -101,21 +101,14 @@ export interface Config {
     roles: RolesSelect<false> | RolesSelect<true>;
     'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-locked-documents':
-      | PayloadLockedDocumentsSelect<false>
-      | PayloadLockedDocumentsSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
     defaultIDType: number;
   };
-  fallbackLocale:
-    | ('false' | 'none' | 'null')
-    | false
-    | null
-    | ('zh' | 'en' | 'ru')
-    | ('zh' | 'en' | 'ru')[];
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('zh' | 'en' | 'ru') | ('zh' | 'en' | 'ru')[];
   globals: {
     navigation: Navigation;
     'site-settings': SiteSetting;
@@ -348,9 +341,7 @@ export interface Product {
    */
   visualGroups?:
     | {
-        variant?:
-          | ('gallery' | 'scene' | 'modeling' | 'model' | 'detail' | 'certificate' | 'comparison')
-          | null;
+        variant?: ('gallery' | 'scene' | 'modeling' | 'model' | 'detail' | 'certificate' | 'comparison') | null;
         title?: string | null;
         description?: string | null;
         images?:
@@ -793,15 +784,7 @@ export interface ProductCategory {
   /**
    * 旧版固定大类字段，仅用于兼容历史数据。
    */
-  group?:
-    | (
-        | 'fire-rescue'
-        | 'electrical-protection'
-        | 'thermal-welding'
-        | 'chemical-medical'
-        | 'water-rescue'
-      )
-    | null;
+  group?: ('fire-rescue' | 'electrical-protection' | 'thermal-welding' | 'chemical-medical' | 'water-rescue') | null;
   parent?: (number | null) | ProductCategory;
   cover?: (number | null) | Media;
   icon?: (number | null) | Media;

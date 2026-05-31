@@ -354,7 +354,12 @@ export function FormSubmissionsStatusTabs({ data }: FormSubmissionsStatusTabsPro
   } = useConfig();
   const [counts, setCounts] = useState<SubmissionCounts>({});
   const [failed, setFailed] = useState(false);
-  const search = currentSearch();
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    setSearch(currentSearch());
+  }, []);
+
   const activeView = activeWorkView(search);
   const activeInquiryType = inquiryTypeFromSearch(search);
   const allHref = buildFormSubmissionAllRecordsHref(routes.admin, search);
