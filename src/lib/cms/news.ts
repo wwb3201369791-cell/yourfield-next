@@ -25,6 +25,7 @@ type CmsNews = {
   excerpt?: string;
   featuredOrder?: number;
   featuredVideo?: CmsUpload | number | string;
+  featuredVideoRu?: CmsUpload | number | string;
   isFeatured?: boolean;
   publishedAt?: string;
   slug?: string;
@@ -265,6 +266,14 @@ function normalizedFeaturedOrder(value: unknown) {
   return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : undefined;
 }
 
+function localizedFeaturedVideo(item: CmsNews, locale: Locale) {
+  if (locale === 'ru') {
+    return item.featuredVideoRu ?? item.featuredVideo;
+  }
+
+  return item.featuredVideo;
+}
+
 function mapCmsNews(item: CmsNews, locale: Locale): NewsItem {
   const slug = asString(item.slug);
   const title = asString(item.title, slug);
@@ -278,7 +287,7 @@ function mapCmsNews(item: CmsNews, locale: Locale): NewsItem {
   const dateModified = asString(item.updatedAt, datePublished);
   const featuredOrder = normalizedFeaturedOrder(item.featuredOrder);
   const image = mediaUrl(item.cover);
-  const featuredVideoSrc = mediaOriginalUrl(item.featuredVideo);
+  const featuredVideoSrc = mediaOriginalUrl(localizedFeaturedVideo(item, locale));
   const isFeatured = Boolean(item.isFeatured || featuredOrder);
 
   return {

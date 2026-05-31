@@ -269,6 +269,24 @@ describe('admin status tabs', () => {
     });
   });
 
+  it('summarizes the composite priority filter as priority rather than only unassigned', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => jsonResponse({ totalDocs: 0 })),
+    );
+    window.history.replaceState(
+      {},
+      '',
+      '/admin/collections/form-submissions?where[or][0][status][equals]=new&where[or][1][assignedTo][exists]=false&where[inquiryType][equals]=franchise',
+    );
+
+    render(<FormSubmissionsStatusTabs />);
+
+    await waitFor(() => {
+      expect(screen.getByText('当前筛选：优先处理 · 招商咨询')).toBeTruthy();
+    });
+  });
+
   it('updates active filter state after Payload client-side URL changes', async () => {
     vi.stubGlobal(
       'fetch',

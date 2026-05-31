@@ -427,6 +427,46 @@ describe('CMS draft query construction', () => {
     ]);
   });
 
+  it('maps Chinese and English featured news previews to the English video and Russian previews to the Russian video', async () => {
+    const payload = createPayloadStub({
+      news: [
+        {
+          cover: {
+            sizes: {
+              card: { url: '/media/news-card.webp' },
+            },
+            url: '/media/news-cover.webp',
+          },
+          excerpt: 'Localized video excerpt',
+          featuredOrder: 1,
+          featuredVideo: {
+            mimeType: 'video/mp4',
+            url: '/media/news-featured-en.mp4',
+          },
+          featuredVideoRu: {
+            mimeType: 'video/mp4',
+            url: '/media/news-featured-ru.mp4',
+          },
+          id: 'news-localized-video',
+          publishedAt: '2026-05-20T00:00:00.000Z',
+          slug: 'localized-video-news',
+          title: 'Localized video news',
+        },
+      ],
+    });
+    const { news } = await loadCmsModules(payload);
+
+    await expect(news.getCmsNews('zh', false)).resolves.toMatchObject([
+      { video: { src: '/media/news-featured-en.mp4' } },
+    ]);
+    await expect(news.getCmsNews('en', false)).resolves.toMatchObject([
+      { video: { src: '/media/news-featured-en.mp4' } },
+    ]);
+    await expect(news.getCmsNews('ru', false)).resolves.toMatchObject([
+      { video: { src: '/media/news-featured-ru.mp4' } },
+    ]);
+  });
+
   it('prioritizes homepage-recommended news before filling with newest items', async () => {
     const { news } = await loadCmsModules();
     const items = [

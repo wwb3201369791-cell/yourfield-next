@@ -329,7 +329,10 @@ function activeFilterWorkLabel(search: string, activeView: WorkViewKey) {
     return '今日新增';
   }
 
-  if (activeView === 'priority' && hasUnassignedClause(search)) {
+  const statuses = statusValuesFromSearch(search);
+  const isCompositePriorityFilter = activeView === 'priority' && statuses.has('new');
+
+  if (activeView === 'priority' && hasUnassignedClause(search) && !isCompositePriorityFilter) {
     return '未分配';
   }
 

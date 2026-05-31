@@ -855,9 +855,13 @@ export interface News {
    */
   cover?: (number | null) | Media;
   /**
-   * 用于新闻中心顶部三张大卡片的视频预览；封面图会作为视频封面帧。不上传视频时，前台会退回显示封面图。
+   * 用于新闻中心顶部三张大卡片的视频预览。中文和英文页面使用这个视频；封面图会作为视频封面帧。不上传视频时，前台会退回显示封面图。
    */
   featuredVideo?: (number | null) | Media;
+  /**
+   * 用于俄语页面的重点新闻速览视频；客户提供俄语素材后替换这里。未上传时俄语页面会回退使用英文/中文视频。
+   */
+  featuredVideoRu?: (number | null) | Media;
   category: 'news' | 'event' | 'announcement' | 'exhibition';
   /**
    * 系统在点击发布时自动写入，用于前台显示日期和新闻排序。
@@ -1548,6 +1552,7 @@ export interface NewsSelect<T extends boolean = true> {
   author?: T;
   cover?: T;
   featuredVideo?: T;
+  featuredVideoRu?: T;
   category?: T;
   publishedAt?: T;
   featuredOrder?: T;

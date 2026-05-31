@@ -249,7 +249,8 @@ describe('admin collection tabs', () => {
       ['excerpt', '列表摘要'],
       ['author', '作者 / 来源'],
       ['cover', '封面图'],
-      ['featuredVideo', '重点卡片视频'],
+      ['featuredVideo', '英文/中文重点卡片视频'],
+      ['featuredVideoRu', '俄语重点卡片视频'],
       ['content', '新闻正文'],
       ['tags', '标签'],
       ['publishedAt', '发布时间'],
@@ -269,6 +270,7 @@ describe('admin collection tabs', () => {
     const category = namedField(News.fields, 'category');
     const cover = namedField(News.fields, 'cover');
     const featuredVideo = namedField(News.fields, 'featuredVideo');
+    const featuredVideoRu = namedField(News.fields, 'featuredVideoRu');
     const tags = namedField(News.fields, 'tags');
     const relatedNews = namedField(News.fields, 'relatedNews');
     const relatedProducts = namedField(News.fields, 'relatedProducts');
@@ -310,6 +312,14 @@ describe('admin collection tabs', () => {
         mediaKind: 'video',
       },
       name: 'featuredVideo',
+      relationTo: 'media',
+      type: 'upload',
+    });
+    expect(featuredVideoRu).toMatchObject({
+      custom: {
+        mediaKind: 'video',
+      },
+      name: 'featuredVideoRu',
       relationTo: 'media',
       type: 'upload',
     });

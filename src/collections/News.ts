@@ -27,7 +27,8 @@ const newsAdminLabels = {
   excerpt: { en: 'List excerpt', zh: '列表摘要' },
   featured: { en: 'Featured news', zh: '重点新闻' },
   featuredOrder: { en: 'Featured position', zh: '重点位置' },
-  featuredVideo: { en: 'Featured card video', zh: '重点卡片视频' },
+  featuredVideo: { en: 'English / Chinese featured card video', zh: '英文/中文重点卡片视频' },
+  featuredVideoRu: { en: 'Russian featured card video', zh: '俄语重点卡片视频' },
   infoTab: { en: 'News Information', zh: '新闻信息' },
   publishedAt: { en: 'Publish time', zh: '发布时间' },
   relatedNews: { en: 'Related news', zh: '相关新闻' },
@@ -166,7 +167,15 @@ export const News: CollectionConfig = {
               label: newsAdminLabels.featuredVideo,
               admin: {
                 description:
-                  '用于新闻中心顶部三张大卡片的视频预览；封面图会作为视频封面帧。不上传视频时，前台会退回显示封面图。',
+                  '用于新闻中心顶部三张大卡片的视频预览。中文和英文页面使用这个视频；封面图会作为视频封面帧。不上传视频时，前台会退回显示封面图。',
+              },
+            }),
+            videoUploadField({
+              name: 'featuredVideoRu',
+              label: newsAdminLabels.featuredVideoRu,
+              admin: {
+                description:
+                  '用于俄语页面的重点新闻速览视频；客户提供俄语素材后替换这里。未上传时俄语页面会回退使用英文/中文视频。',
               },
             }),
             {
