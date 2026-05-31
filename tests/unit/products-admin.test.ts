@@ -105,7 +105,7 @@ describe('Products admin structure', () => {
       type: 'number',
     });
     expect(displayOrder?.admin).toMatchObject({
-      description: '直接填 1、2、3；数字越小越靠前；0 表示不优先。',
+      description: '直接填 1、2、3；数字越小越靠前；发布前必须填写，0 仅用于草稿暂存。',
       position: 'sidebar',
     });
   });
@@ -151,6 +151,7 @@ describe('Products admin structure', () => {
     const beforeChangeHooks = Products.hooks?.beforeChange ?? [];
     let data: Record<string, unknown> = {
       _status: 'published',
+      displayOrder: 1,
       images: [{ file: 'media-1' }],
       name: '防电弧服',
       productGroup: 'product-groups-1',

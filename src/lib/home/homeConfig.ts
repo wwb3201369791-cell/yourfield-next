@@ -52,14 +52,6 @@ export const capabilityCards = [
   key: CapabilityKey;
 }[];
 
-export const productScenarios = [
-  { group: 'fire-rescue', labelKey: 'product.group.fireRescue' },
-  { group: 'electrical-protection', labelKey: 'product.group.electrical' },
-  { group: 'thermal-welding', labelKey: 'product.group.thermal' },
-  { group: 'chemical-medical', labelKey: 'product.group.chemicalMedical' },
-  { group: 'water-rescue', labelKey: 'product.group.waterRescue' },
-] as const satisfies readonly { group: ProductGroupId; labelKey: string }[];
-
 export const processSteps = [
   {
     className: 'process-step--selection',

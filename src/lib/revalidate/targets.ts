@@ -297,7 +297,7 @@ function pathsForPage(input: RevalidateInput, document: RevalidateDocument | und
 
 function pathsForProduct(input: RevalidateInput, document: RevalidateDocument | undefined) {
   const slug = input.slug ?? textFrom(document, 'slug') ?? textFrom(document, 'productId');
-  const suffixes = ['/products'];
+  const suffixes = ['', '/products'];
 
   if (isSafeSlug(slug)) {
     suffixes.push(`/products/${slug}`);
@@ -322,7 +322,7 @@ function pathsForCategory(input: RevalidateInput, document: RevalidateDocument |
 }
 
 function pathsForProductGroup() {
-  return ['/products'];
+  return ['', '/products'];
 }
 
 function pathsForSolution(input: RevalidateInput, document: RevalidateDocument | undefined) {
@@ -338,7 +338,7 @@ function pathsForSolution(input: RevalidateInput, document: RevalidateDocument |
 
 function pathsForNews(input: RevalidateInput, document: RevalidateDocument | undefined) {
   const slug = input.slug ?? textFrom(document, 'slug');
-  const suffixes = ['/news'];
+  const suffixes = ['', '/news'];
 
   if (isSafeSlug(slug)) {
     suffixes.push(`/news/${slug}`);

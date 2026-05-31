@@ -53,6 +53,39 @@ type NavigationTranslator = (key: string) => string;
 
 const localePathPattern = /^\/(zh|en|ru)(?=\/|$)/;
 
+const fallbackProductGroupNavigationItems: readonly FallbackNavigationItem[] = [
+  {
+    key: 'products',
+    labelKey: 'product.group.electrical',
+    path: '/products',
+    hash: 'electrical-protection',
+  },
+  {
+    key: 'products',
+    labelKey: 'product.group.fireRescue',
+    path: '/products',
+    hash: 'fire-rescue',
+  },
+  {
+    key: 'products',
+    labelKey: 'product.group.thermal',
+    path: '/products',
+    hash: 'thermal-welding',
+  },
+  {
+    key: 'products',
+    labelKey: 'product.group.chemicalMedical',
+    path: '/products',
+    hash: 'chemical-medical',
+  },
+  {
+    key: 'products',
+    labelKey: 'product.group.waterRescue',
+    path: '/products',
+    hash: 'water-rescue',
+  },
+];
+
 const fallbackMainNavigation: readonly FallbackNavigationItem[] = [
   {
     key: 'home',
@@ -82,38 +115,7 @@ const fallbackMainNavigation: readonly FallbackNavigationItem[] = [
     key: 'products',
     labelKey: 'nav.products',
     path: '/products',
-    children: [
-      {
-        key: 'products',
-        labelKey: 'product.group.fireRescue',
-        path: '/products',
-        hash: 'fire-rescue',
-      },
-      {
-        key: 'products',
-        labelKey: 'product.group.electrical',
-        path: '/products',
-        hash: 'electrical-protection',
-      },
-      {
-        key: 'products',
-        labelKey: 'product.group.thermal',
-        path: '/products',
-        hash: 'thermal-welding',
-      },
-      {
-        key: 'products',
-        labelKey: 'product.group.chemicalMedical',
-        path: '/products',
-        hash: 'chemical-medical',
-      },
-      {
-        key: 'products',
-        labelKey: 'product.group.waterRescue',
-        path: '/products',
-        hash: 'water-rescue',
-      },
-    ],
+    children: fallbackProductGroupNavigationItems,
   },
   {
     key: 'solutions',
@@ -158,38 +160,7 @@ const fallbackFooterGroups: readonly FallbackFooterGroup[] = [
   {
     key: 'products',
     labelKey: 'nav.products',
-    links: [
-      {
-        key: 'products',
-        labelKey: 'product.group.fireRescue',
-        path: '/products',
-        hash: 'fire-rescue',
-      },
-      {
-        key: 'products',
-        labelKey: 'product.group.electrical',
-        path: '/products',
-        hash: 'electrical-protection',
-      },
-      {
-        key: 'products',
-        labelKey: 'product.group.thermal',
-        path: '/products',
-        hash: 'thermal-welding',
-      },
-      {
-        key: 'products',
-        labelKey: 'product.group.chemicalMedical',
-        path: '/products',
-        hash: 'chemical-medical',
-      },
-      {
-        key: 'products',
-        labelKey: 'product.group.waterRescue',
-        path: '/products',
-        hash: 'water-rescue',
-      },
-    ],
+    links: fallbackProductGroupNavigationItems,
   },
   {
     key: 'solutions',

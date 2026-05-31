@@ -101,7 +101,7 @@ describe('POST /api/revalidate', () => {
     expect(revalidatePathMock).not.toHaveBeenCalled();
   });
 
-  it('revalidates product list and detail paths for a product publish payload', async () => {
+  it('revalidates homepage, product list and detail paths for a product publish payload', async () => {
     const { revalidatePathMock, revalidateTagMock, route } = await loadRoute();
 
     const response = await route.POST(
@@ -114,6 +114,9 @@ describe('POST /api/revalidate', () => {
 
     expect(response.status).toBe(200);
     expect(await responseJson(response)).toMatchObject({ ok: true });
+    expect(revalidatePathMock).toHaveBeenCalledWith('/zh');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/en');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/ru');
     expect(revalidatePathMock).toHaveBeenCalledWith('/zh/products');
     expect(revalidatePathMock).toHaveBeenCalledWith('/en/products');
     expect(revalidatePathMock).toHaveBeenCalledWith('/ru/products');
@@ -121,6 +124,27 @@ describe('POST /api/revalidate', () => {
     expect(revalidatePathMock).toHaveBeenCalledWith('/en/products/firefighter-suit-combat');
     expect(revalidatePathMock).toHaveBeenCalledWith('/ru/products/firefighter-suit-combat');
     expect(revalidateTagMock).toHaveBeenCalledWith('cms:collection:products', 'max');
+  });
+
+  it('revalidates homepage and product list paths for product group changes', async () => {
+    const { revalidatePathMock, revalidateTagMock, route } = await loadRoute();
+
+    const response = await route.POST(
+      revalidateRequest({
+        collection: 'product-groups',
+        operation: 'update',
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await responseJson(response)).toMatchObject({ ok: true });
+    expect(revalidatePathMock).toHaveBeenCalledWith('/zh');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/en');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/ru');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/zh/products');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/en/products');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/ru/products');
+    expect(revalidateTagMock).toHaveBeenCalledWith('cms:collection:product-groups', 'max');
   });
 
   it('maps pages.home to the three localized homepage paths', async () => {
@@ -197,6 +221,9 @@ describe('POST /api/revalidate', () => {
         overrideAccess: true,
       }),
     );
+    expect(revalidatePathMock).toHaveBeenCalledWith('/zh');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/en');
+    expect(revalidatePathMock).toHaveBeenCalledWith('/ru');
     expect(revalidatePathMock).toHaveBeenCalledWith('/zh/news');
     expect(revalidatePathMock).toHaveBeenCalledWith('/zh/news/company-update');
     expect(revalidatePathMock).toHaveBeenCalledWith('/en/news/company-update');

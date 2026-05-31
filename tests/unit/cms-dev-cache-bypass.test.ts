@@ -83,6 +83,7 @@ describe('CMS dev cache bypass for live admin CRUD QA', () => {
     }));
     vi.doMock('@/lib/cms/payload', () => ({
       getPayloadClient: vi.fn(async () => ({
+        find: vi.fn(async () => ({ docs: [] })),
         findGlobal: vi.fn(async () => ({ mainNav: [], mobileNav: [], footerNav: [] })),
       })),
     }));

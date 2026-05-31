@@ -1818,6 +1818,19 @@
   box-shadow: 0 10px 28px rgba(15, 38, 64, 0.04);
 }
 
+.yf-form-workbench__current-filter {
+  flex: 1 1 100%;
+  margin: 0;
+  padding: 8px 11px;
+  border: 1px solid rgba(23, 109, 166, 0.14);
+  border-radius: 8px;
+  background: #f5fbff;
+  color: var(--yourfield-admin-ink);
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.45;
+}
+
 .yf-form-view-switch,
 .yf-form-quick-filters {
   display: flex;

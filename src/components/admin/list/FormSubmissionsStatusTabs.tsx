@@ -26,6 +26,7 @@ type FormSubmissionsStatusTabsProps = Readonly<{
 }>;
 
 type SubmissionCountKey = 'archived' | 'priority' | 'today' | 'unassigned';
+type WorkViewKey = 'all' | 'archived' | 'priority';
 
 type SubmissionCounts = Partial<Record<SubmissionCountKey, number>>;
 
@@ -54,10 +55,17 @@ const quickFilters: readonly QuickFilter[] = [
   { label: '留言咨询', value: 'message' },
 ] as const;
 
+const workViewLabels: Record<WorkViewKey, string> = {
+  all: '全部记录',
+  archived: '已完成',
+  priority: '优先处理',
+};
+
 const INQUIRY_TYPE_CLAUSE_PATTERN = /^where(?:\[[^\]]+\])*\[inquiryType\]\[[a-z_]+\]$/;
 const WORK_VIEW_CLAUSE_PATTERN =
   /^where(?:\[[^\]]+\])*\[(assignedTo|createdAt|status)\]\[[a-z_]+\]$/;
 const ASSIGNED_TO_CLAUSE_PATTERN = /^where(?:\[[^\]]+\])*\[assignedTo\]\[[a-z_]+\]$/;
+const CREATED_AT_CLAUSE_PATTERN = /^where(?:\[[^\]]+\])*\[createdAt\]\[[a-z_]+\]$/;
 const STATUS_CLAUSE_PATTERN = /^where(?:\[[^\]]+\])*\[status\]\[[a-z_]+\]$/;
 
 function normalizedBase(path: string) {
@@ -232,7 +240,19 @@ function hasUnassignedClause(search: string) {
   return false;
 }
 
-function activeWorkView(search: string): 'all' | 'archived' | 'priority' {
+function hasCreatedAtClause(search: string) {
+  const params = new URLSearchParams(search);
+
+  for (const [key] of params.entries()) {
+    if (CREATED_AT_CLAUSE_PATTERN.test(key)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function activeWorkView(search: string): WorkViewKey {
   const statuses = statusValuesFromSearch(search);
 
   if (statuses.has('replied') && statuses.has('closed')) {
@@ -244,6 +264,22 @@ function activeWorkView(search: string): 'all' | 'archived' | 'priority' {
   }
 
   return 'all';
+}
+
+function inquiryTypeLabel(inquiryType: string) {
+  return quickFilters.find((filter) => (filter.value ?? '') === inquiryType)?.label ?? '全部类型';
+}
+
+function activeFilterWorkLabel(search: string, activeView: WorkViewKey) {
+  if (hasCreatedAtClause(search)) {
+    return '今日新增';
+  }
+
+  if (activeView === 'priority' && hasUnassignedClause(search)) {
+    return '未分配';
+  }
+
+  return workViewLabels[activeView];
 }
 
 async function fetchCount(url: string, signal?: AbortSignal) {
@@ -333,10 +369,16 @@ export function FormSubmissionsStatusTabs({ data }: FormSubmissionsStatusTabsPro
     unassigned: unassignedHref,
   };
   const workViews = [
-    { href: priorityHref, key: 'priority', label: '优先处理' },
-    { href: allHref, key: 'all', label: '全部记录' },
-    { href: archivedHref, key: 'archived', label: '已完成' },
+    { href: priorityHref, key: 'priority', label: workViewLabels.priority },
+    { href: allHref, key: 'all', label: workViewLabels.all },
+    { href: archivedHref, key: 'archived', label: workViewLabels.archived },
   ] as const;
+  const activeFilterSummary = [
+    activeFilterWorkLabel(search, activeView),
+    inquiryTypeLabel(activeInquiryType),
+  ]
+    .map((label) => t(label))
+    .join(' · ');
   const countRequests = useMemo(
     () =>
       [
@@ -438,6 +480,9 @@ export function FormSubmissionsStatusTabs({ data }: FormSubmissionsStatusTabsPro
       </div>
 
       <section className="yf-form-workbench__controls" aria-label={t('咨询列表控制')}>
+        <p className="yf-form-workbench__current-filter" aria-live="polite">
+          {t('当前筛选')}：{activeFilterSummary}
+        </p>
         <div className="yf-form-view-switch">
           <span>{t('工作视图')}</span>
           <nav className="yf-form-view-switch__nav" aria-label={t('工作视图')}>

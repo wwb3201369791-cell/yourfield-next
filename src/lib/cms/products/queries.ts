@@ -12,6 +12,7 @@ import { compareCmsProductDisplayOrder, mapCmsProduct } from './mappers';
 import type { CmsProduct } from './types';
 
 const cmsProductCacheVersion = 'cms-products-backend-only-v1';
+const productListSort = ['displayOrder', 'productId', 'id'];
 
 type PayloadClient = Awaited<ReturnType<typeof getPayloadClient>>;
 
@@ -57,7 +58,7 @@ async function getCmsProductsUncached(locale: Locale, draft = false) {
     locale,
     overrideAccess: true,
     pagination: false,
-    sort: 'displayOrder',
+    sort: productListSort,
     ...(!draft
       ? {
           where: publicProductWhere(),

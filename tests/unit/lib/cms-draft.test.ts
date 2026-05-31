@@ -12,7 +12,7 @@ type PayloadFindArgs = {
   locale?: string;
   overrideAccess?: boolean;
   pagination?: boolean;
-  sort?: string;
+  sort?: string | string[];
   where?: unknown;
 };
 
@@ -538,12 +538,12 @@ describe('CMS news copy normalization', () => {
 });
 
 describe('CMS product optional content normalization', () => {
-  it('uses direct 1-based product display order with zero-priority items last', async () => {
+  it('uses direct 1-based product display order with zero-priority items last and stable ties', async () => {
     const payload = createPayloadStub({
       products: [
         {
           displayOrder: 0,
-          id: 'product-zero',
+          id: 'product-zero-z',
           images: [{ file: { url: '/media/zero-priority-product.png' } }],
           name: 'Zero priority product',
           productId: 'zero-priority-product',
@@ -565,16 +565,25 @@ describe('CMS product optional content normalization', () => {
           productId: 'first-product',
           slug: 'first-product',
         },
+        {
+          displayOrder: 0,
+          id: 'product-zero-a',
+          images: [{ file: { url: '/media/alpha-zero-priority-product.png' } }],
+          name: 'Alpha zero priority product',
+          productId: 'alpha-zero-priority-product',
+          slug: 'alpha-zero-priority-product',
+        },
       ],
     });
     const { products } = await loadCmsModules(payload);
 
     const items = await products.getCmsProducts('zh', false);
 
-    expect(findCall(payload, 0).sort).toBe('displayOrder');
+    expect(findCall(payload, 0).sort).toEqual(['displayOrder', 'productId', 'id']);
     expect(items.map((item) => item.id)).toEqual([
       'first-product',
       'third-product',
+      'alpha-zero-priority-product',
       'zero-priority-product',
     ]);
   });

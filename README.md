@@ -121,6 +121,22 @@ pnpm audit --audit-level high
 - REVALIDATE_SECRET
 - PAYLOAD_PREVIEW_SECRET
 
+本地执行 `pnpm check:env` 或 `pnpm build` 时也会触发同一套生产安全门。缺少上述变量时失败是预期保护，不应通过降低校验强度绕过。若只做本地构建验收，请使用 shell-only 临时变量注入一次性 throwaway 值，并确保本地 PostgreSQL 已启动、`DATABASE_URI` 指向可连接的库；不要把这些值写入仓库或提交 `.env.local`。
+
+```bash
+export PAYLOAD_SECRET=replace-with-32-plus-char-throwaway
+export TURNSTILE_SECRET=replace-with-local-turnstile-test-secret
+export NEXT_PUBLIC_TURNSTILE_SITE_KEY=replace-with-local-turnstile-test-site-key
+export CRON_SECRET=replace-with-32-plus-char-throwaway
+export REVALIDATE_SECRET=replace-with-32-plus-char-throwaway
+export PAYLOAD_PREVIEW_SECRET=replace-with-32-plus-char-throwaway
+export PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION=true
+pnpm check:env
+
+# pnpm build 还会读取数据库做静态生成，需先确认本地 Postgres / Docker Compose 服务在线。
+pnpm build
+```
+
 如启用对象存储，还需完整配置 S3 相关环境变量。
 
 生产后台和 Payload 私有接口必须配置访问保护，至少满足以下一种方式：
@@ -173,6 +189,7 @@ pnpm typecheck
 - `20260530_120000_remove_placeholder_news`：移除公开新闻占位内容。
 - `20260530_130000_users_payload3_auth_columns`：补齐 Payload 3 用户 `role_id` 和 `users_sessions`。
 - `20260530_140000_search_logs_payload3_field_columns`：补齐搜索日志 `event_type` / `result_type`，避免构建期热门搜索查询退回默认值。
+- `20260531_090000_backfill_product_display_order_by_group`：按产品大类为旧产品补齐正数展示序号，避免公开首页和产品中心排序漂移。
 
 迁移文件不应删除或合并；后续环境上线前必须在目标数据库跑 `pnpm payload migrate:status` 确认全部 `Ran Yes`。
 

@@ -108,6 +108,18 @@ describe('Products schema for visual product editing', () => {
     ).toThrow('产品发布前必须上传产品主图');
   });
 
+  it('blocks publishing product records without a positive storefront display order', () => {
+    expect(() =>
+      runProductBeforeChangeHooks({
+        _status: 'published',
+        displayOrder: 0,
+        images: [{ file: 1 }],
+        name: '未排序产品',
+        productId: 'missing-display-order-product',
+      }),
+    ).toThrow('产品发布前必须填写大类内展示序号');
+  });
+
   it('allows drafts without images and published updates that keep an existing image', () => {
     expect(() =>
       runProductBeforeChangeHooks({
@@ -122,11 +134,13 @@ describe('Products schema for visual product editing', () => {
       runProductBeforeChangeHooks(
         {
           _status: 'published',
+          displayOrder: 2,
           name: '已有图片产品',
           productId: 'product-with-image',
         },
         {
           _status: 'published',
+          displayOrder: 2,
           images: [{ file: 1 }],
         },
       ),

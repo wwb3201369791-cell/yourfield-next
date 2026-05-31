@@ -33,8 +33,8 @@ import {
   industrySlides,
   partnerCards,
   processSteps,
-  productScenarios,
 } from '@/lib/home/homeConfig';
+import { buildHomeProductScenarios } from '@/lib/home/productScenarios';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocaleFromParams, type LocaleRouteParams } from '@/lib/i18n/route';
 import { getHomeHeroVideo } from '@/lib/media/localizedVideos';
@@ -78,11 +78,9 @@ export default async function LocalePage({ params }: LocalePageProps) {
   const homePreviewProducts = previewProducts.slice(0, 5);
   const productsHref = `/${locale}/products`;
   const productGroupHref = (group: ProductGroupId) => `${productsHref}?group=${group}#${group}`;
-  const homeProductScenarios: readonly HomeProductScenarioView[] = productScenarios.map(
-    (scenario) => ({
-      group: scenario.group,
-      label: t(scenario.labelKey),
-    }),
+  const homeProductScenarios: readonly HomeProductScenarioView[] = buildHomeProductScenarios(
+    homePreviewProducts,
+    locale,
   );
   const homeProductCards: readonly HomeProductPreviewView[] = homePreviewProducts.map(
     (product) => ({

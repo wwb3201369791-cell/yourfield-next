@@ -76,7 +76,8 @@ const specificationsField: Field = {
   ],
 };
 
-const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前；0 表示不优先。';
+const frontendOrderDescription =
+  '直接填 1、2、3；数字越小越靠前；发布前必须填写，0 仅用于草稿暂存。';
 
 function hasProductMainImage(images: unknown) {
   return Array.isArray(images)
@@ -88,6 +89,12 @@ function hasProductMainImage(images: unknown) {
         return Boolean((image as { file?: unknown }).file);
       })
     : false;
+}
+
+function hasPositiveDisplayOrder(value: unknown) {
+  const numberValue = typeof value === 'string' ? Number(value) : value;
+
+  return typeof numberValue === 'number' && Number.isFinite(numberValue) && numberValue > 0;
 }
 
 const requireProductMainImageOnPublish: CollectionBeforeChangeHook = ({ data, originalDoc }) => {
@@ -105,6 +112,16 @@ const requireProductMainImageOnPublish: CollectionBeforeChangeHook = ({ data, or
 
   if (!hasProductMainImage(nextImages)) {
     throw new Error('产品发布前必须上传产品主图。没有真实主图的产品不会在前台展示。');
+  }
+
+  const nextDisplayOrder = Object.prototype.hasOwnProperty.call(incoming, 'displayOrder')
+    ? incoming.displayOrder
+    : previous?.displayOrder;
+
+  if (!hasPositiveDisplayOrder(nextDisplayOrder)) {
+    throw new Error(
+      '产品发布前必须填写大类内展示序号（1、2、3）。这样首页每个大类的首个产品不会漂移。',
+    );
   }
 
   return incoming;

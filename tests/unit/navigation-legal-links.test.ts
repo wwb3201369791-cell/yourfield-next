@@ -54,18 +54,26 @@ describe('legal footer navigation', () => {
     expect(footerLinks).toEqual(expect.arrayContaining(['/privacy', '/cookies', '/terms']));
   });
 
-  it('keeps the main products dropdown as the fixed five public product groups', () => {
+  it('keeps fallback product navigation aligned with the default product group order', () => {
     const productsItem = getFallbackNavigation(translate).mainNav.find(
       (item) => item.href === '/products',
     );
+    const footerProductsGroup = getFallbackNavigation(translate).footerNav.find(
+      (group) => group.key === 'products',
+    );
 
-    expect(productsItem?.children?.map((child) => child.href)).toEqual([
-      '/products#fire-rescue',
+    const expectedProductGroupHrefs = [
       '/products#electrical-protection',
+      '/products#fire-rescue',
       '/products#thermal-welding',
       '/products#chemical-medical',
       '/products#water-rescue',
-    ]);
+    ];
+
+    expect(productsItem?.children?.map((child) => child.href)).toEqual(expectedProductGroupHrefs);
+    expect(footerProductsGroup?.links.map((child) => child.href)).toEqual(
+      expectedProductGroupHrefs,
+    );
     expect(productsItem?.children?.map((child) => child.label)).not.toContain('nav.allProducts');
   });
 
@@ -117,7 +125,7 @@ describe('legal footer navigation', () => {
     );
   });
 
-  it('overrides CMS product children so the header does not grow with backend product groups', async () => {
+  it('uses backend product group order for product children in header, mobile and footer navigation', async () => {
     const findGlobal = vi.fn().mockResolvedValue({
       mainNav: [
         {
@@ -126,7 +134,12 @@ describe('legal footer navigation', () => {
           href: '/products',
           target: '_self',
           children: [
-            { id: 'all', label: '全部产品', href: '/products', target: '_self' },
+            {
+              id: 'fire',
+              label: '旧导航消防第一',
+              href: '/products#fire-rescue',
+              target: '_self',
+            },
             {
               id: 'custom',
               label: '后台新增大类',
@@ -139,22 +152,77 @@ describe('legal footer navigation', () => {
       mobileNav: [],
       footerNav: [],
     });
+    const find = vi.fn(({ collection }) =>
+      Promise.resolve({
+        docs:
+          collection === 'product-groups'
+            ? [
+                {
+                  groupId: 'electrical-protection',
+                  name: '电力电弧与电磁防护',
+                  order: 1,
+                  showOnFrontend: true,
+                },
+                {
+                  groupId: 'fire-rescue',
+                  name: '消防与应急救援防护',
+                  order: 2,
+                  showOnFrontend: true,
+                },
+                {
+                  groupId: 'thermal-welding',
+                  name: '热工',
+                  order: 3,
+                  showOnFrontend: true,
+                },
+                {
+                  groupId: 'chemical-medical',
+                  name: '化学',
+                  order: 4,
+                  showOnFrontend: true,
+                },
+                {
+                  groupId: 'water-rescue',
+                  name: '水域',
+                  order: 5,
+                  showOnFrontend: true,
+                },
+              ]
+            : [],
+      }),
+    );
 
     vi.mocked(getPayloadClient).mockResolvedValue({
       findGlobal,
-      find: vi.fn().mockResolvedValue({ docs: [] }),
+      find,
     } as never);
 
     const navigation = await getCmsNavigation('zh');
     const productsItem = navigation.mainNav.find((item) => item.href === '/products');
-
-    expect(productsItem?.children?.map((child) => child.href)).toEqual([
-      '/products#fire-rescue',
+    const mobileProductsItem = navigation.mobileNav.find((item) => item.href === '/products');
+    const footerProductsGroup = navigation.footerNav.find((group) => group.key === 'products');
+    const expectedProductGroupHrefs = [
       '/products#electrical-protection',
+      '/products#fire-rescue',
       '/products#thermal-welding',
       '/products#chemical-medical',
       '/products#water-rescue',
+    ];
+
+    expect(productsItem?.children?.map((child) => child.href)).toEqual(expectedProductGroupHrefs);
+    expect(productsItem?.children?.map((child) => child.label)).toEqual([
+      '电力电弧与电磁防护',
+      '消防与应急救援防护',
+      '热工',
+      '化学',
+      '水域',
     ]);
+    expect(mobileProductsItem?.children?.map((child) => child.href)).toEqual(
+      expectedProductGroupHrefs,
+    );
+    expect(footerProductsGroup?.links.map((child) => child.href)).toEqual(
+      expectedProductGroupHrefs,
+    );
   });
 
   it('uses published CMS solutions for header, mobile, and footer solution links', async () => {

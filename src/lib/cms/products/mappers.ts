@@ -206,8 +206,43 @@ function displayOrderSortValue(value: CmsProduct['displayOrder']) {
     : Number.MAX_SAFE_INTEGER;
 }
 
+function productIdentitySortValue(product: CmsProduct) {
+  return asString(
+    product.productId,
+    asString(product.slug, asString(product.model, asString(product.name, asString(product.id)))),
+  );
+}
+
+function compareSortText(left: string, right: string) {
+  return left.localeCompare(right, 'en', { numeric: true, sensitivity: 'base' });
+}
+
 export function compareCmsProductDisplayOrder(left: CmsProduct, right: CmsProduct) {
-  return displayOrderSortValue(left.displayOrder) - displayOrderSortValue(right.displayOrder);
+  const displayOrderDelta =
+    displayOrderSortValue(left.displayOrder) - displayOrderSortValue(right.displayOrder);
+
+  if (displayOrderDelta !== 0) {
+    return displayOrderDelta;
+  }
+
+  const leftGroup = groupIdFromProduct(left, categoryFromProduct(left));
+  const rightGroup = groupIdFromProduct(right, categoryFromProduct(right));
+  const groupDelta = compareSortText(leftGroup, rightGroup);
+
+  if (groupDelta !== 0) {
+    return groupDelta;
+  }
+
+  const identityDelta = compareSortText(
+    productIdentitySortValue(left),
+    productIdentitySortValue(right),
+  );
+
+  if (identityDelta !== 0) {
+    return identityDelta;
+  }
+
+  return compareSortText(asString(left.id), asString(right.id));
 }
 
 export function mapCmsCategory(category: CmsCategory): CmsProductCategory | null {

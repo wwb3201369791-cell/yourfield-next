@@ -408,7 +408,7 @@ export interface Product {
   faqs?: (number | Faq)[] | null;
   video?: (number | null) | Media;
   /**
-   * 直接填 1、2、3；数字越小越靠前；0 表示不优先。
+   * 直接填 1、2、3；数字越小越靠前；发布前必须填写，0 仅用于草稿暂存。
    */
   displayOrder?: number | null;
   publishedAt?: string | null;

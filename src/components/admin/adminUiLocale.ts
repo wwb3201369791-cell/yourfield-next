@@ -178,6 +178,7 @@ const adminTextDictionary: Readonly<Record<string, string>> = {
   互动趋势: 'interaction trend',
   '按天展示搜索、点击与询盘的变化曲线。': 'Daily trend lines for searches, clicks, and inquiries.',
   切换显示的指标: 'Toggle visible metrics',
+  当前筛选: 'Current filter',
   互动趋势折线图: 'interaction trend line chart',
   近7天: 'Last 7 days',
   近30天: 'Last 30 days',

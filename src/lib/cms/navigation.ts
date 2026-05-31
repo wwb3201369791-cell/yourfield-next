@@ -15,6 +15,7 @@ import {
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag, cmsGlobalCacheTag } from './cache';
 import { getPayloadClient } from './payload';
+import { getCmsProductGroups, type CmsProductGroup } from './products';
 import { getCmsSolutions, type CmsSolution } from './solutions';
 
 type NavigationTarget = '_self' | '_blank';
@@ -210,6 +211,22 @@ function buildSolutionNavigationLinks(
   return [...solutionLinks.slice(0, solutionNavigationLimit), allSolutionsNavItem(t)];
 }
 
+function productGroupNavItem(group: CmsProductGroup, index: number): SiteNavigationItem {
+  return {
+    key: `products-${group.id || index}`,
+    label: group.title,
+    href: `/products#${group.id}`,
+    target: '_self',
+    isContact: false,
+  };
+}
+
+function buildProductGroupNavigationLinks(
+  groups: readonly CmsProductGroup[],
+): readonly SiteNavigationItem[] {
+  return groups.map(productGroupNavItem);
+}
+
 function withoutChildren(item: SiteNavigationItem): SiteNavigationItem {
   return {
     key: item.key,
@@ -236,6 +253,26 @@ function withDynamicSolutionChildren(
     return {
       ...item,
       children: solutionLinks,
+    };
+  });
+}
+
+function withDynamicProductGroupChildren(
+  items: readonly SiteNavigationItem[],
+  productGroupLinks: readonly SiteNavigationItem[],
+): readonly SiteNavigationItem[] {
+  if (productGroupLinks.length === 0) {
+    return items;
+  }
+
+  return items.map((item) => {
+    if (navigationPathKey(item) !== '/products') {
+      return item;
+    }
+
+    return {
+      ...item,
+      children: productGroupLinks,
     };
   });
 }
@@ -344,6 +381,7 @@ function mergeFooterGroups(
   fallbackGroups: readonly SiteFooterGroup[],
   cmsGroups: readonly SiteFooterGroup[],
   solutionLinks: readonly SiteNavigationItem[],
+  productGroupLinks: readonly SiteNavigationItem[],
 ): readonly SiteFooterGroup[] {
   const cmsGroupsByKey = new Map<string, SiteFooterGroup>();
 
@@ -356,6 +394,13 @@ function mergeFooterGroups(
   });
 
   return fallbackGroups.map((group) => {
+    if (group.key === 'products' && productGroupLinks.length > 0) {
+      return {
+        ...group,
+        links: productGroupLinks,
+      };
+    }
+
     if (group.key === 'solutions') {
       return {
         ...group,
@@ -368,15 +413,23 @@ function mergeFooterGroups(
 }
 
 async function getCmsNavigationUncached(locale: Locale): Promise<SiteNavigation> {
-  const [payload, t, solutions] = await Promise.all([
+  const [payload, t, solutions, productGroups] = await Promise.all([
     getPayloadClient(),
     getTranslations(locale),
     getCmsSolutions(locale),
+    getCmsProductGroups(locale),
   ]);
   const fallback = getFallbackNavigation(t);
   const solutionLinks = buildSolutionNavigationLinks(solutions, t);
-  const fallbackMainNav = withDynamicSolutionChildren(fallback.mainNav, solutionLinks);
-  const fallbackMobileNav = withDynamicSolutionChildren(fallback.mobileNav, solutionLinks);
+  const productGroupLinks = buildProductGroupNavigationLinks(productGroups);
+  const fallbackMainNav = withDynamicSolutionChildren(
+    withDynamicProductGroupChildren(fallback.mainNav, productGroupLinks),
+    solutionLinks,
+  );
+  const fallbackMobileNav = withDynamicSolutionChildren(
+    withDynamicProductGroupChildren(fallback.mobileNav, productGroupLinks),
+    solutionLinks,
+  );
   const doc = (await payload.findGlobal({
     slug: 'navigation',
     depth: 2,
@@ -386,18 +439,25 @@ async function getCmsNavigationUncached(locale: Locale): Promise<SiteNavigation>
   })) as CmsNavigationDoc | undefined;
   const mappedMainNav = mapNavigationItems(doc?.mainNav, 'main', mainNavigationPublicPaths);
   const mainNav = withDynamicSolutionChildren(
-    withFallbackDropdownChildren(mappedMainNav, fallback.mainNav),
+    withDynamicProductGroupChildren(
+      withFallbackDropdownChildren(mappedMainNav, fallback.mainNav),
+      productGroupLinks,
+    ),
     solutionLinks,
   );
   const mappedMobileNav = mapNavigationItems(doc?.mobileNav, 'mobile', mainNavigationPublicPaths);
   const mobileNav = withDynamicSolutionChildren(
-    withFallbackDropdownChildren(mappedMobileNav, fallback.mobileNav),
+    withDynamicProductGroupChildren(
+      withFallbackDropdownChildren(mappedMobileNav, fallback.mobileNav),
+      productGroupLinks,
+    ),
     solutionLinks,
   );
   const footerNav = mergeFooterGroups(
     fallback.footerNav,
     mapFooterGroups(doc?.footerNav),
     solutionLinks,
+    productGroupLinks,
   );
 
   return {
@@ -409,7 +469,11 @@ async function getCmsNavigationUncached(locale: Locale): Promise<SiteNavigation>
 
 const getCachedCmsNavigation = unstable_cache(getCmsNavigationUncached, ['cms-navigation'], {
   revalidate: CMS_CACHE_REVALIDATE_SECONDS,
-  tags: [cmsGlobalCacheTag('navigation'), cmsCollectionCacheTag('solutions')],
+  tags: [
+    cmsGlobalCacheTag('navigation'),
+    cmsCollectionCacheTag('solutions'),
+    cmsCollectionCacheTag('product-groups'),
+  ],
 });
 
 function shouldBypassNavigationCache() {
