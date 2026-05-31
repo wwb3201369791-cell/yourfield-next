@@ -73,12 +73,17 @@ function adminCondition(field: Field | undefined) {
     : undefined;
 }
 
-function editTabCondition(config: CollectionConfig | GlobalConfig) {
-  const editView = config.admin?.components?.views?.edit as
-    | { Default?: { tab?: { condition?: () => boolean } } }
+function editViewConfig(config: CollectionConfig | GlobalConfig) {
+  return config.admin?.components?.views?.edit as
+    | {
+        default?: { tab?: { condition?: () => boolean } };
+        Default?: { tab?: { condition?: () => boolean } };
+      }
     | undefined;
+}
 
-  return editView?.Default?.tab?.condition;
+function editTabCondition(config: CollectionConfig | GlobalConfig) {
+  return editViewConfig(config)?.default?.tab?.condition;
 }
 
 function zhLabel(label: unknown) {
@@ -491,6 +496,8 @@ describe('admin collection tabs', () => {
     [ProductGroups, ['groupId', 'slug', 'seo']],
   ] as const)('hides the API and redundant document tab for %s', (collection, preservedFields) => {
     expect(collection.admin?.hideAPIURL).toBe(true);
+    expect(editViewConfig(collection)?.default).toBeDefined();
+    expect(editViewConfig(collection)?.Default).toBeUndefined();
     expect(editTabCondition(collection)?.()).toBe(false);
 
     for (const fieldName of preservedFields) {
@@ -506,6 +513,8 @@ describe('admin collection tabs', () => {
     const defaultSeo = namedField(SiteSettings.fields, 'defaultSeo');
 
     expect(SiteSettings.admin?.hideAPIURL).toBe(true);
+    expect(editViewConfig(SiteSettings)?.default).toBeDefined();
+    expect(editViewConfig(SiteSettings)?.Default).toBeUndefined();
     expect(editTabCondition(SiteSettings)?.()).toBe(false);
     expect(tabs.map((tab) => zhLabel(tab.label))).toEqual(['联系方式']);
     expect(tabs.some((tab) => 'name' in tab && typeof tab.name === 'string')).toBe(false);

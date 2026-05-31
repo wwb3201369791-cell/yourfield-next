@@ -48,12 +48,12 @@ export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: '联系方式',
   admin: {
-    group: '联系方式',
+    group: '全局设置',
     hideAPIURL: true,
     components: {
       views: {
         edit: {
-          Default: {
+          default: {
             tab: {
               condition: () => false,
             },

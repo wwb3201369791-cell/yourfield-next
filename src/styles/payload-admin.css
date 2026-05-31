@@ -114,6 +114,9 @@
   margin: 0;
 }
 
+.collection-edit .doc-tabs,
+.global-edit .doc-tabs,
+.template-default .doc-header .doc-tabs,
 .doc-tabs .doc-tab:has(> .doc-tab__link[href$='/api']),
 .doc-tabs .doc-tab:has(> .doc-tab__link[href*='/versions']) {
   display: none !important;

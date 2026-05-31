@@ -4,6 +4,7 @@ import {
   buildProductDocumentHydrationUrl,
   getProductDocumentIdFromPathname,
   hasVisualEditorSeedValues,
+  mergeHydratedVisualEditorValues,
 } from '../productEditorHydration';
 
 describe('product editor hydration helpers', () => {
@@ -20,14 +21,77 @@ describe('product editor hydration helpers', () => {
     );
     expect(hasVisualEditorSeedValues({ images: [{ file: 193 }] })).toBe(false);
     expect(hasVisualEditorSeedValues({ images: [{ file: 193 }], name: '干式水域救援服' })).toBe(
-      true,
+      false,
     );
+    expect(
+      hasVisualEditorSeedValues({
+        images: [{ file: '/media/file/product.png' }],
+        name: '干式水域救援服',
+      }),
+    ).toBe(true);
+    expect(
+      hasVisualEditorSeedValues({
+        images: [{ file: '193' }],
+        name: '干式水域救援服',
+      }),
+    ).toBe(false);
     expect(
       hasVisualEditorSeedValues({
         images: [{ file: { sizes: { card: { url: '/media/file/product.png' } } } }],
         model: 'HYF-9905',
       }),
     ).toBe(true);
+    expect(
+      hasVisualEditorSeedValues({
+        images: [{ file: { sizes: { thumbnail: { url: '/media/file/product-thumb.png' } } } }],
+        model: 'HYF-9905',
+      }),
+    ).toBe(true);
+    expect(
+      hasVisualEditorSeedValues({
+        images: [{ file: { thumbnailURL: '/media/file/product-thumb.png' } }],
+        model: 'HYF-9905',
+      }),
+    ).toBe(true);
+  });
+
+  it('merges sparse live form values over hydrated documents to avoid stale editor previews', () => {
+    expect(mergeHydratedVisualEditorValues({ name: '实时名称' }, null)).toEqual({
+      name: '实时名称',
+    });
+    expect(
+      mergeHydratedVisualEditorValues(
+        {
+          images: [{ file: 194 }],
+          name: '新名称',
+        },
+        {
+          description: '旧详情',
+          images: [{ file: { url: '/media/old.png' } }],
+          name: '旧名称',
+        },
+      ),
+    ).toEqual({
+      description: '旧详情',
+      images: [{ file: { url: '/media/old.png' } }],
+      name: '新名称',
+    });
+    expect(
+      mergeHydratedVisualEditorValues(
+        {
+          images: [{ file: { url: '/media/new.png' } }],
+          name: '新名称',
+        },
+        {
+          description: '旧详情',
+          images: [{ file: { url: '/media/old.png' } }],
+          name: '旧名称',
+        },
+      ),
+    ).toEqual({
+      images: [{ file: { url: '/media/new.png' } }],
+      name: '新名称',
+    });
   });
 
   it('extracts existing product ids from Payload admin edit paths', () => {

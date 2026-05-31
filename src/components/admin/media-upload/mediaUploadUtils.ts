@@ -14,12 +14,92 @@ export type AdminMediaDoc = {
   height?: number;
   mimeType?: string;
   sizes?: Record<string, { url?: string } | undefined>;
+  thumbnailURL?: string;
   url?: string;
   width?: number;
 };
 
 const defaultImageLabel = '产品图片';
 const defaultVideoLabel = '视频';
+const mediaPathPrefix = '/media/';
+const payloadMediaFilePathSegment = '/media/file/';
+const localMediaHostnames = new Set(['localhost', '127.0.0.1', '::1', '[::1]']);
+
+function currentBrowserHostname() {
+  return typeof window === 'undefined' ? '' : window.location.hostname.toLowerCase();
+}
+
+function isLocalOrCurrentHostname(hostname: string) {
+  const currentHostname = currentBrowserHostname();
+
+  return (
+    localMediaHostnames.has(hostname) || Boolean(currentHostname && hostname === currentHostname)
+  );
+}
+
+function isRelativeMediaPath(value: string) {
+  return (
+    value.startsWith(mediaPathPrefix) ||
+    (value.startsWith('/') &&
+      !value.startsWith('//') &&
+      value.includes(payloadMediaFilePathSegment))
+  );
+}
+
+function mediaPathFromParsedUrl(parsed: URL) {
+  if (
+    parsed.pathname.startsWith(mediaPathPrefix) ||
+    parsed.pathname.includes(payloadMediaFilePathSegment)
+  ) {
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+  }
+
+  const mediaPathIndex = parsed.pathname.indexOf(mediaPathPrefix);
+
+  return mediaPathIndex >= 0
+    ? `${parsed.pathname.slice(mediaPathIndex)}${parsed.search}${parsed.hash}`
+    : '';
+}
+
+export function normalizeAdminMediaUrl(url: string | undefined) {
+  const value = url?.trim() ?? '';
+
+  if (!value) {
+    return '';
+  }
+
+  if (isRelativeMediaPath(value)) {
+    return value;
+  }
+
+  if (value.startsWith('//')) {
+    try {
+      const parsed = new URL(`http:${value}`);
+      const hostname = parsed.hostname.toLowerCase();
+
+      return isLocalOrCurrentHostname(hostname) ? mediaPathFromParsedUrl(parsed) || value : value;
+    } catch {
+      return value;
+    }
+  }
+
+  try {
+    const parsed = new URL(value);
+    const hostname = parsed.hostname.toLowerCase();
+
+    return isLocalOrCurrentHostname(hostname) ? mediaPathFromParsedUrl(parsed) || value : value;
+  } catch {
+    if (value.includes(payloadMediaFilePathSegment)) {
+      const pathStart = value.lastIndexOf('/', value.indexOf(payloadMediaFilePathSegment) - 1);
+
+      return pathStart >= 0 ? value.slice(pathStart) : value;
+    }
+
+    const mediaPathIndex = value.indexOf(mediaPathPrefix);
+
+    return mediaPathIndex >= 0 ? value.slice(mediaPathIndex) : value;
+  }
+}
 
 function mediaLabel(mediaKind: MediaUploadKind | undefined) {
   return mediaKind === 'video' ? defaultVideoLabel : defaultImageLabel;
@@ -111,11 +191,17 @@ export function normalizeMediaUploadError(
 }
 
 export function getMediaPreviewUrl(media: AdminMediaDoc | undefined) {
-  return media?.sizes?.thumbnail?.url ?? media?.sizes?.card?.url ?? media?.url ?? '';
+  return normalizeAdminMediaUrl(
+    media?.sizes?.thumbnail?.url ??
+      media?.thumbnailURL ??
+      media?.sizes?.card?.url ??
+      media?.sizes?.feature?.url ??
+      media?.url,
+  );
 }
 
 export function getMediaOriginalUrl(media: AdminMediaDoc | undefined) {
-  return media?.sizes?.card?.url ?? media?.url ?? getMediaPreviewUrl(media);
+  return normalizeAdminMediaUrl(media?.sizes?.card?.url ?? media?.url) || getMediaPreviewUrl(media);
 }
 
 export function formatMediaFileSize(bytes: number | undefined) {

@@ -55,7 +55,7 @@ export const FormSubmissions: CollectionConfig = {
       beforeList: ['@/components/admin/list/FormSubmissionsStatusTabs#FormSubmissionsStatusTabs'],
       views: {
         edit: {
-          Default: {
+          default: {
             tab: {
               condition: () => false,
             },

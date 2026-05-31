@@ -91,7 +91,7 @@ export const News: CollectionConfig = {
     components: {
       views: {
         edit: {
-          Default: {
+          default: {
             tab: {
               condition: () => false,
             },

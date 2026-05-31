@@ -70,7 +70,7 @@ export const Solutions: CollectionConfig = {
     components: {
       views: {
         edit: {
-          Default: {
+          default: {
             tab: {
               condition: () => false,
             },

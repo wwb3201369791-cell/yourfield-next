@@ -55,6 +55,7 @@ import {
   buildProductDocumentHydrationUrl,
   getProductDocumentIdFromPathname,
   hasVisualEditorSeedValues,
+  mergeHydratedVisualEditorValues,
 } from './utils/productEditorHydration';
 
 registerDrawer('care', CareDrawer);
@@ -204,8 +205,20 @@ function AdminHeroPreview({
       <div className="detail-gallery ype-detail-gallery" aria-label={adminT('产品图片')}>
         <div className="detail-main-image ype-detail-main-image">
           {mainImage ? (
-            // eslint-disable-next-line @next/next/no-img-element -- Payload admin preview reads in-progress media URLs from form state.
-            <img src={mainImage} alt={title || category || adminT('产品主图')} />
+            <button
+              type="button"
+              className="ype-image-replace-target"
+              disabled={uploading}
+              aria-label={adminT('替换产品主图')}
+              onClick={(event) => stopAndRun(event, onSelectMainImage)}
+              onKeyDown={(event) => event.stopPropagation()}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element -- Payload admin preview reads in-progress media URLs from form state. */}
+              <img src={mainImage} alt={title || category || adminT('产品主图')} />
+              <span className="ype-image-replace-target__hint">
+                {uploading ? adminT('图片上传中…') : adminT('点击替换主图')}
+              </span>
+            </button>
           ) : (
             <button
               type="button"
@@ -220,7 +233,7 @@ function AdminHeroPreview({
           )}
         </div>
         <p className="ype-main-image-guidance">
-          {adminT('建议上传 1600 × 1600 px 的 1:1 方图，主体居中；预览会按此框比例放大裁切。')}
+          {adminT('建议上传 1600 × 1600 px 的 1:1 方图，主体居中；预览会完整显示在此框内。')}
         </p>
         {uploadError ? <p className="ype-inline-upload-error">{uploadError}</p> : null}
       </div>
@@ -327,9 +340,7 @@ function ProductVisualEditorContent() {
   const currentLocale = (locale?.code || 'zh') as Locale;
   const formValues = useFormValues();
   const hydratedDoc = useHydratedProductDocument(currentLocale, formValues);
-  const visualValues = hasVisualEditorSeedValues(formValues)
-    ? formValues
-    : (hydratedDoc ?? formValues);
+  const visualValues = mergeHydratedVisualEditorValues(formValues, hydratedDoc);
   const detail = useMemo(
     () => buildSectionPropsFromFormValues(visualValues, currentLocale, productLabel),
     [currentLocale, visualValues],

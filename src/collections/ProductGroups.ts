@@ -55,7 +55,7 @@ export const ProductGroups: CollectionConfig = {
     components: {
       views: {
         edit: {
-          Default: {
+          default: {
             tab: {
               condition: () => false,
             },

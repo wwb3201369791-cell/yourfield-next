@@ -183,9 +183,17 @@ function imageRows(value: unknown): readonly string[] {
       if (file && typeof file === 'object') {
         const media = file as {
           sizes?: Record<string, { url?: string } | undefined>;
+          thumbnailURL?: string;
           url?: string;
         };
-        return media.sizes?.card?.url ?? media.url ?? '';
+        return (
+          media.sizes?.card?.url ??
+          media.url ??
+          media.sizes?.thumbnail?.url ??
+          media.thumbnailURL ??
+          media.sizes?.feature?.url ??
+          ''
+        );
       }
       return '';
     })

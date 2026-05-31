@@ -516,7 +516,7 @@ button.ype-overview-chip {
 }
 
 .ype-detail-preview .detail-hero-card {
-  grid-template-columns: minmax(280px, 0.88fr) minmax(420px, 1.12fr);
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
   border-radius: 8px;
   padding: clamp(18px, 1.8vw, 24px);
   box-shadow: none;
@@ -529,9 +529,9 @@ button.ype-overview-chip {
 .ype-detail-preview .detail-main-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
-  padding: 0;
+  padding: 18px;
 }
 
 .ype-main-image-guidance {
@@ -600,17 +600,71 @@ button.ype-overview-chip {
   outline: none;
 }
 
-.ype-image-add-target {
+.ype-image-add-target,
+.ype-image-replace-target {
   cursor: pointer;
   font: inherit;
 }
 
-.ype-image-add-target {
+.ype-image-add-target,
+.ype-image-replace-target {
   border: 0;
   margin: 0;
 }
 
-.ype-image-add-target:disabled {
+.ype-image-replace-target {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.ype-image-replace-target img {
+  transition:
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.ype-image-replace-target__hint {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(23, 49, 79, 0.88);
+  box-shadow: 0 10px 24px rgba(15, 38, 64, 0.18);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.ype-image-replace-target:hover img,
+.ype-image-replace-target:focus-visible img {
+  filter: brightness(0.92);
+  transform: scale(1.01);
+}
+
+.ype-image-replace-target:hover .ype-image-replace-target__hint,
+.ype-image-replace-target:focus-visible .ype-image-replace-target__hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ype-image-add-target:disabled,
+.ype-image-replace-target:disabled {
   cursor: not-allowed;
   opacity: 0.58;
 }

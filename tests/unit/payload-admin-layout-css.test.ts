@@ -20,4 +20,14 @@ describe('Payload admin layout CSS', () => {
       layoutSource.indexOf(overrideCssImport),
     );
   });
+
+  it('hides technical document tabs from simplified edit pages', () => {
+    const css = readFileSync(path.join(projectRoot, 'src/styles/payload-admin.css'), 'utf8');
+
+    expect(css).toContain('.collection-edit .doc-tabs');
+    expect(css).toContain('.global-edit .doc-tabs');
+    expect(css).toContain('.template-default .doc-header .doc-tabs');
+    expect(css).toContain(".doc-tab__link[href$='/api']");
+    expect(css).toContain(".doc-tab__link[href*='/versions']");
+  });
 });
