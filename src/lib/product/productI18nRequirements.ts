@@ -35,3 +35,8 @@ export const requiredProductI18nPaths = [
   { path: 'qualityEvidence.title', label: '质量证据标题' },
   { path: 'qualityEvidence.description', label: '质量证据说明' },
 ] as const satisfies readonly RequiredProductI18nPath[];
+
+export const requiredProductPublishI18nPaths = [
+  { path: 'name', label: '产品名称' },
+  { path: 'description', label: '产品介绍' },
+] as const satisfies readonly RequiredProductI18nPath[];

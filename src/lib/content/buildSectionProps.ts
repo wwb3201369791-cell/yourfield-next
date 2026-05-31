@@ -69,6 +69,25 @@ function sameText(value: unknown): LocalizedText {
   };
 }
 
+function isGenericFeatureTitle(value: string) {
+  const normalized = value.trim().toLocaleLowerCase();
+
+  return (
+    /^产品特点\s*\d*$/.test(normalized) ||
+    /^product\s+feature\s*\d*$/.test(normalized) ||
+    /^feature\s*\d*$/.test(normalized) ||
+    /^характеристика\s+продукта\s*\d*$/.test(normalized) ||
+    /^особенность\s*\d*$/.test(normalized)
+  );
+}
+
+function bestFeatureText(title: unknown, description: unknown) {
+  const titleText = textFromUnknown(title);
+  const descriptionText = textFromUnknown(description);
+
+  return titleText && !isGenericFeatureTitle(titleText) ? titleText : descriptionText || titleText;
+}
+
 function textFromUnknown(value: unknown): string {
   if (typeof value === 'string') {
     return value.trim();
@@ -243,7 +262,7 @@ function detailCards(value: unknown): readonly ProductDetailCard[] {
       const record = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
       return {
         text: sameText(record.text ?? record.description),
-        title: sameText(record.title),
+        title: sameText(bestFeatureText(record.title, record.text ?? record.description)),
       };
     })
     .filter((row) => row.title.zh);
@@ -392,27 +411,21 @@ export function buildSectionPropsFromCms(
       value: publicLocaleText(specValue(specification.value, locale), locale),
     }))
     .filter((specification) => specification.label && specification.value);
-  const specificationRows = specifications.length > 0 ? specifications : facts;
+  const specificationRows = specifications;
   const explicitSellingPoints = (product.sellingPoints ?? [])
     .map((point) => ({
       text: localizedPublicText(point.text, locale),
       title: localizedPublicText(point.title, locale),
     }))
     .filter((point) => point.title);
-  const sellingPointCards =
-    explicitSellingPoints.length > 0
-      ? explicitSellingPoints
-      : features.slice(0, 4).map((feature) => ({ text: '', title: feature }));
+  const sellingPointCards = explicitSellingPoints;
   const explicitScenarios = (product.scenarios ?? [])
     .map((scenario) => ({
       text: localizedPublicText(scenario.text, locale),
       title: localizedPublicText(scenario.title, locale),
     }))
     .filter((scenario) => scenario.title);
-  const scenarioCards =
-    explicitScenarios.length > 0
-      ? explicitScenarios
-      : applications.map((application) => ({ text: '', title: application }));
+  const scenarioCards = explicitScenarios;
   const qualityEvidence = (product.qualityEvidence ?? [])
     .map((item) => ({
       description: localizedPublicText(item.description, locale),
@@ -649,7 +662,7 @@ export function buildProductFromFormValues(values: Record<string, unknown>): Pro
           .map((feature) => {
             const record =
               feature && typeof feature === 'object' ? (feature as Record<string, unknown>) : {};
-            return sameText(record.title ?? record.description);
+            return sameText(bestFeatureText(record.title, record.description));
           })
           .filter((feature) => feature.zh)
       : [],

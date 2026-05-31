@@ -35,15 +35,10 @@ describe('product visual grouping', () => {
     expect(productPrimaryImage(product())).toBe('/media/firefighter-suit-combat-001.png');
   });
 
-  it('builds the default gallery only from backend product images', () => {
+  it('does not fabricate a default gallery from backend product images', () => {
     const groups = productVisualGroups(product());
 
-    expect(groups.map((group) => group.title.zh)).toEqual(['产品图册']);
-    expect(groups[0]?.images).toEqual([
-      '/media/firefighter-suit-combat-001.png',
-      '/media/firefighter-suit-combat-002.png',
-      '/media/firefighter-suit-combat-003.png',
-    ]);
+    expect(groups).toEqual([]);
   });
 
   it('uses CMS visual groups when the backend provides them', () => {
@@ -68,7 +63,7 @@ describe('product visual grouping', () => {
     expect(groups[0]?.images).toEqual(['/images/custom-scene.jpg']);
   });
 
-  it('uses backend product images as the default gallery for products without visual groups', () => {
+  it('keeps the hero image but hides detail galleries when CMS visual groups are empty', () => {
     const groups = productVisualGroups(
       product({
         id: 'arc-flash-suit',
@@ -83,10 +78,6 @@ describe('product visual grouping', () => {
     expect(productPrimaryImage(product({ id: 'arc-flash-suit', image: '/images/main.png' }))).toBe(
       '/images/main.png',
     );
-    expect(groups.map((group) => group.title.zh)).toEqual(['产品图册']);
-    expect(groups[0]?.images).toEqual([
-      '/images/cms/arc-flash-suit/image-001.png',
-      '/images/cms/arc-flash-suit/image-002.png',
-    ]);
+    expect(groups).toEqual([]);
   });
 });

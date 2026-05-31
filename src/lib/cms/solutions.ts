@@ -49,7 +49,7 @@ export type CmsSolution = Readonly<{
   title: string;
 }>;
 
-const fallbackSolutionImage = '/images/solutions/solution-power-grid.jpg';
+const emptySolutionImage = '';
 
 function asString(value: unknown, fallback = '') {
   return typeof value === 'string' && value.trim() ? value.trim() : fallback;
@@ -84,7 +84,7 @@ function richTextToPlainText(value: unknown) {
 
 function mediaUrl(file: CmsSolutionDoc['cover']) {
   if (!file || typeof file !== 'object') {
-    return fallbackSolutionImage;
+    return emptySolutionImage;
   }
 
   const legacyStaticPath = file.tags
@@ -95,7 +95,7 @@ function mediaUrl(file: CmsSolutionDoc['cover']) {
     legacyStaticPath
       ? `/${legacyStaticPath.replace(/^assets\//, '')}`
       : (file.sizes?.card?.url ?? file.url),
-    fallbackSolutionImage,
+    emptySolutionImage,
   );
 }
 

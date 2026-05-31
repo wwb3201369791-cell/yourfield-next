@@ -226,6 +226,9 @@ export interface Product {
   productGroup: number | ProductGroup;
   images?:
     | {
+        /**
+         * Main product image: JPG / PNG / WebP / GIF, recommended 1600 × 1600 px 1:1 square image with the subject centered, preferably under 10MB. Admin and storefront use the original media URL and scale it proportionally inside the container; displayed size is not the uploaded source dimensions.
+         */
         file: number | Media;
         id?: string | null;
       }[]
@@ -355,6 +358,9 @@ export interface Product {
         description?: string | null;
         images?:
           | {
+              /**
+               * Detail-page group images: JPG / PNG / WebP / GIF, recommended 1600 × 1200 px or at least 1200 px wide, preferably under 10MB each. The storefront scales them proportionally and lazy-loads them by layout.
+               */
               file: number | Media;
               id?: string | null;
             }[]
@@ -851,15 +857,15 @@ export interface News {
   excerpt?: string | null;
   author?: string | null;
   /**
-   * Static cover used in news lists and detail pages. Video news can omit it, but upload one when there is no video to avoid a storefront placeholder.
+   * Real cover image for news lists and detail pages. Recommended JPG / PNG / WebP / GIF, 1600 × 900 px (16:9) or at least 1200 × 675 px, preferably under 10MB. Optional for video news; recommended when there is no video. If empty, the storefront hides the media area instead of using a static placeholder.
    */
   cover?: (number | null) | Media;
   /**
-   * Video preview for the top three featured News Center cards. Chinese and English pages use this video; the cover image is used as the poster frame. If no video is uploaded, the storefront falls back to the cover image.
+   * Video preview for the top three featured news cards. Recommended MP4 (H.264/AAC), 1920 × 1080 px (16:9) or at least 1280 × 720 px, preferably under 100MB. Chinese and English pages use this video; the cover image is used as the poster frame. Without a video, the storefront falls back to the cover image.
    */
   featuredVideo?: (number | null) | Media;
   /**
-   * Featured-news preview video for Russian pages. Replace it when Russian material is available. If empty, Russian pages fall back to the English/Chinese video.
+   * Featured-news video for the Russian page. Recommended MP4 (H.264/AAC), 1920 × 1080 px (16:9) or at least 1280 × 720 px, preferably under 100MB. Replace this when Russian source material is available. If empty, the Russian page falls back to the English/Chinese video.
    */
   featuredVideoRu?: (number | null) | Media;
   category: 'news' | 'event' | 'announcement' | 'exhibition';

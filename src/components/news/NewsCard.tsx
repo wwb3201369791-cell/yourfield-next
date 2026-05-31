@@ -21,6 +21,7 @@ type NewsCardProps = Readonly<{
 
 export function NewsCard({ item, locale, actionLabel, videoMedia }: NewsCardProps) {
   const isCmsMediaImage = shouldUseUnoptimizedImage(item.image);
+  const hasImage = Boolean(item.image);
 
   return (
     <article className="group grid overflow-hidden rounded border border-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
@@ -43,7 +44,7 @@ export function NewsCard({ item, locale, actionLabel, videoMedia }: NewsCardProp
           >
             <source src={videoMedia.src} type="video/mp4" />
           </video>
-        ) : (
+        ) : hasImage ? (
           <Image
             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
             src={item.image}
@@ -52,7 +53,7 @@ export function NewsCard({ item, locale, actionLabel, videoMedia }: NewsCardProp
             sizes="(min-width: 1024px) 33vw, 100vw"
             unoptimized={isCmsMediaImage}
           />
-        )}
+        ) : null}
       </Link>
       <div className="p-5">
         <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.12em] text-accent">

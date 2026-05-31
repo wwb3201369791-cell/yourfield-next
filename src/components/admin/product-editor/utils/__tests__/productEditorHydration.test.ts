@@ -94,9 +94,53 @@ describe('product editor hydration helpers', () => {
         },
       ),
     ).toEqual({
+      description: '旧详情',
       images: [{ file: { url: '/media/new.png' } }],
       name: '新名称',
       productGroup: { id: 5, name: '水域救援防护' },
+    });
+  });
+
+  it('hydrates detail image groups and direct array sections even when hero seed values exist', () => {
+    expect(
+      hasVisualEditorSeedValues({
+        images: [{ file: { url: '/media/main.png' } }],
+        name: 'A级阻燃服',
+        productGroup: { id: 2, name: '热防护与焊接防护' },
+      }),
+    ).toBe(true);
+
+    expect(
+      mergeHydratedVisualEditorValues(
+        {
+          images: [{ file: { url: '/media/main.png' } }],
+          name: 'A级阻燃服',
+          productGroup: { id: 2, name: '热防护与焊接防护' },
+          visualGroups: [],
+        },
+        {
+          sellingPoints: [{ title: '阻燃防护', text: '满足现场防护展示。' }],
+          visualGroups: [
+            {
+              images: [{ file: { url: '/media/detail-1.png' } }],
+              title: '建模图',
+              variant: 'modeling',
+            },
+          ],
+        },
+      ),
+    ).toMatchObject({
+      images: [{ file: { url: '/media/main.png' } }],
+      name: 'A级阻燃服',
+      productGroup: { id: 2, name: '热防护与焊接防护' },
+      sellingPoints: [{ title: '阻燃防护', text: '满足现场防护展示。' }],
+      visualGroups: [
+        {
+          images: [{ file: { url: '/media/detail-1.png' } }],
+          title: '建模图',
+          variant: 'modeling',
+        },
+      ],
     });
   });
 

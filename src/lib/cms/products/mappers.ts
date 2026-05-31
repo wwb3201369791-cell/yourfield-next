@@ -43,7 +43,7 @@ function groupFromProduct(product: CmsProduct) {
 export function groupIdFromCategory(category: CmsCategory | undefined): ProductGroupId {
   const group = asString(groupFromCategory(category)?.groupId, asString(category?.group));
 
-  return isCmsProductGroupId(group) ? group : 'fire-rescue';
+  return isCmsProductGroupId(group) ? group : '';
 }
 
 function groupIdFromProduct(
@@ -52,11 +52,30 @@ function groupIdFromProduct(
 ): ProductGroupId {
   const group = asString(groupFromProduct(product)?.groupId, groupIdFromCategory(category));
 
-  return isCmsProductGroupId(group) ? group : 'fire-rescue';
+  return isCmsProductGroupId(group) ? group : '';
 }
 
 function mapRows(rows: TextRow[] | undefined) {
   return (rows ?? []).map((row) => row.value).filter((value): value is string => Boolean(value));
+}
+
+function isGenericFeatureTitle(value: string) {
+  const normalized = value.trim().toLocaleLowerCase();
+
+  return (
+    /^产品特点\s*\d*$/.test(normalized) ||
+    /^product\s+feature\s*\d*$/.test(normalized) ||
+    /^feature\s*\d*$/.test(normalized) ||
+    /^характеристика\s+продукта\s*\d*$/.test(normalized) ||
+    /^особенность\s*\d*$/.test(normalized)
+  );
+}
+
+function featureText(feature: NonNullable<CmsProduct['features']>[number]) {
+  const title = asString(feature.title);
+  const description = asString(feature.description);
+
+  return title && !isGenericFeatureTitle(title) ? title : description || title;
 }
 
 function mapFaqs(faqs: CmsProduct['faqs']): ProductFaq[] {
@@ -178,10 +197,7 @@ export function mapCmsProduct(product: CmsProduct): Product {
     materials: mapRows(product.materials).map(localizedText),
     sizeRange: mapRows(product.sizeRange),
     applications: mapRows(product.applications).map(localizedText),
-    features: (product.features ?? [])
-      .map((feature) => asString(feature.title, asString(feature.description)))
-      .filter(Boolean)
-      .map(localizedText),
+    features: (product.features ?? []).map(featureText).filter(Boolean).map(localizedText),
     specifications: (product.specifications ?? [])
       .filter((specification) => specification.label && specification.value)
       .map((specification) => ({

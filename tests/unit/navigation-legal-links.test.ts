@@ -54,7 +54,7 @@ describe('legal footer navigation', () => {
     expect(footerLinks).toEqual(expect.arrayContaining(['/privacy', '/cookies', '/terms']));
   });
 
-  it('keeps fallback product navigation aligned with the default product group order', () => {
+  it('does not fabricate static product-group navigation without CMS data', () => {
     const productsItem = getFallbackNavigation(translate).mainNav.find(
       (item) => item.href === '/products',
     );
@@ -62,19 +62,11 @@ describe('legal footer navigation', () => {
       (group) => group.key === 'products',
     );
 
-    const expectedProductGroupHrefs = [
-      '/products#electrical-protection',
-      '/products#fire-rescue',
-      '/products#thermal-welding',
-      '/products#chemical-medical',
-      '/products#water-rescue',
-    ];
-
-    expect(productsItem?.children?.map((child) => child.href)).toEqual(expectedProductGroupHrefs);
-    expect(footerProductsGroup?.links.map((child) => child.href)).toEqual(
-      expectedProductGroupHrefs,
+    expect(productsItem?.children).toBeUndefined();
+    expect(footerProductsGroup?.links).toEqual([]);
+    expect(productsItem?.children?.map((child) => child.label) ?? []).not.toContain(
+      'nav.allProducts',
     );
-    expect(productsItem?.children?.map((child) => child.label)).not.toContain('nav.allProducts');
   });
 
   it('does not keep static solution children in fallback navigation', () => {

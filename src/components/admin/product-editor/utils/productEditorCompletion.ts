@@ -80,8 +80,8 @@ export function productEditorSectionStatus(
     return 'hidden';
   }
 
-  if (section === 'visual-groups' && formValuesHaveVisualGroupImages(formValues)) {
-    return 'complete';
+  if (section === 'visual-groups') {
+    return formValuesHaveVisualGroupImages(formValues) ? 'complete' : 'hidden';
   }
 
   if (sections[contentKey]) {

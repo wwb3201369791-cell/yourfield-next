@@ -46,7 +46,7 @@ type LeadSubmitFormProps = Readonly<{
 
 type FormStatus =
   | Readonly<{ kind: 'idle' }>
-  | Readonly<{ kind: 'submitting' }>
+  | Readonly<{ fallbackEmailHref?: string; kind: 'submitting'; message?: string }>
   | Readonly<{ fallbackEmailHref?: string; kind: 'success'; message: string }>
   | Readonly<{ fallbackEmailHref?: string; kind: 'error'; message: string }>;
 
@@ -152,6 +152,20 @@ function buildFallbackMailtoHref(
   });
 
   return `mailto:${email}?${params.toString()}`;
+}
+
+function openEmailClient(href: string) {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const link = document.createElement('a');
+  link.href = href;
+  link.rel = 'noopener';
+  link.target = '_self';
+  document.body.append(link);
+  link.click();
+  link.remove();
 }
 
 function resetTurnstile() {
@@ -322,7 +336,13 @@ export function LeadSubmitForm({
       payload.sourceUrl = window.location.href;
     }
 
-    setStatus({ kind: 'submitting' });
+    const fallbackEmailHref = buildFallbackMailtoHref(supportEmail, copy, payload);
+    setStatus({
+      fallbackEmailHref,
+      kind: 'submitting',
+      message: copy.emailOpeningStatus,
+    });
+    openEmailClient(fallbackEmailHref);
 
     try {
       const response = await fetch('/api/forms/submit', {
@@ -346,7 +366,7 @@ export function LeadSubmitForm({
         }
 
         setStatus({
-          fallbackEmailHref: buildFallbackMailtoHref(supportEmail, copy, payload),
+          fallbackEmailHref,
           kind: 'error',
           message: messageForErrorCode(responseErrorCode(data), copy),
         });
@@ -356,7 +376,7 @@ export function LeadSubmitForm({
 
       form.reset();
       setStatus({
-        fallbackEmailHref: buildFallbackMailtoHref(supportEmail, copy, payload),
+        fallbackEmailHref,
         kind: 'success',
         message: copy.success,
       });
@@ -366,7 +386,7 @@ export function LeadSubmitForm({
       }
 
       setStatus({
-        fallbackEmailHref: buildFallbackMailtoHref(supportEmail, copy, payload),
+        fallbackEmailHref,
         kind: 'error',
         message: copy.genericError,
       });
@@ -484,6 +504,22 @@ export function LeadSubmitForm({
         >
           {isSubmitting ? copy.submitting : submitLabel}
         </button>
+        {status.kind === 'submitting' && status.message ? (
+          <div
+            className="grid gap-1 text-sm font-semibold text-primary sm:flex sm:items-center"
+            role="status"
+          >
+            <p>{status.message}</p>
+            {status.fallbackEmailHref ? (
+              <a
+                className="whitespace-nowrap text-primary underline underline-offset-4"
+                href={status.fallbackEmailHref}
+              >
+                {copy.emailFallbackLabel}
+              </a>
+            ) : null}
+          </div>
+        ) : null}
         {status.kind === 'success' ? (
           <>
             <p className="text-sm font-semibold text-primary" role="status">
@@ -491,7 +527,7 @@ export function LeadSubmitForm({
             </p>
             {status.fallbackEmailHref ? (
               <a
-                className="text-sm font-semibold text-primary underline underline-offset-4"
+                className="whitespace-nowrap text-sm font-semibold text-primary underline underline-offset-4"
                 href={status.fallbackEmailHref}
               >
                 {copy.emailFallbackLabel}

@@ -1,19 +1,47 @@
 'use client';
 
-import { useField } from '@payloadcms/ui';
-import { useMemo } from 'react';
+import { useField, useFormFields } from '@payloadcms/ui';
+import { reduceFieldsToValues } from 'payload/shared';
+import { useCallback, useMemo, useState } from 'react';
 
-type ArrayRow = Record<string, unknown>;
+import {
+  resolvePayloadFieldArrayRows,
+  valueAtPath,
+  type PayloadArrayRow,
+} from '../utils/payloadFieldArrayRows';
+
+type ArrayRow = PayloadArrayRow;
 type RowPatch<T extends ArrayRow> = Partial<T> | T;
 
 export function usePayloadFieldArray<T extends ArrayRow = ArrayRow>(path: string) {
   const { value, setValue } = useField<T[]>({ path });
-  const rows = useMemo(() => (Array.isArray(value) ? value : []), [value]);
+  const fields = useFormFields(([formFields]) => formFields);
+  const [hasLocalOverride, setHasLocalOverride] = useState(false);
+  const reducedValue = useMemo(() => {
+    const values = reduceFieldsToValues(fields, true, true) as Record<string, unknown>;
+    return valueAtPath(values, path);
+  }, [fields, path]);
+  const rows = useMemo(
+    () =>
+      resolvePayloadFieldArrayRows<T>({
+        fieldValue: value,
+        hasLocalOverride,
+        reducedValue,
+      }),
+    [hasLocalOverride, reducedValue, value],
+  );
+  const setRows = useCallback(
+    (nextRows: T[]) => {
+      setHasLocalOverride(true);
+      setValue(nextRows);
+    },
+    [setValue],
+  );
 
   return useMemo(
     () => ({
       addRow: (row: RowPatch<T> = {}) => {
-        setValue([...rows, row]);
+        setRows([...rows, row as T]);
       },
       moveRow: (from: number, to: number) => {
         if (from === to || from < 0 || to < 0 || from >= rows.length || to >= rows.length) {
@@ -23,29 +51,29 @@ export function usePayloadFieldArray<T extends ArrayRow = ArrayRow>(path: string
         const [row] = nextRows.splice(from, 1);
         if (!row) return;
         nextRows.splice(to, 0, row);
-        setValue(nextRows);
+        setRows(nextRows);
       },
       removeRow: (index: number) => {
-        setValue(rows.filter((_, rowIndex) => rowIndex !== index));
+        setRows(rows.filter((_, rowIndex) => rowIndex !== index));
       },
       replaceRow: (index: number, row: RowPatch<T>) => {
-        setValue(
+        setRows(
           rows.map((existingRow, rowIndex) =>
             rowIndex === index ? { ...existingRow, ...row } : existingRow,
           ),
         );
       },
       clearRows: () => {
-        setValue([]);
+        setRows([]);
       },
       rows,
-      setRows: setValue,
+      setRows,
       setRowField: (index: number, key: keyof T, fieldValue: unknown) => {
-        setValue(
+        setRows(
           rows.map((row, rowIndex) => (rowIndex === index ? { ...row, [key]: fieldValue } : row)),
         );
       },
     }),
-    [rows, setValue],
+    [rows, setRows],
   );
 }

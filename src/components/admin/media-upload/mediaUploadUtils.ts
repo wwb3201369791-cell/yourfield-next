@@ -201,7 +201,7 @@ export function getMediaPreviewUrl(media: AdminMediaDoc | undefined) {
 }
 
 export function getMediaOriginalUrl(media: AdminMediaDoc | undefined) {
-  return normalizeAdminMediaUrl(media?.sizes?.card?.url ?? media?.url) || getMediaPreviewUrl(media);
+  return normalizeAdminMediaUrl(media?.url) || getMediaPreviewUrl(media);
 }
 
 export function formatMediaFileSize(bytes: number | undefined) {

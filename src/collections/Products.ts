@@ -9,6 +9,7 @@ import {
 import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField, textareaArrayField, uploadArrayField } from '../lib/payload/fields/arrays';
+import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import {
   certificationStatusOptions,
   qualityEvidenceTypeOptions,
@@ -21,6 +22,12 @@ import {
   revalidateCollectionAfterChange,
   revalidateCollectionAfterDelete,
 } from '../lib/payload/hooks/revalidateContent';
+import { requireAllLocalesOnPublish } from '../lib/payload/hooks/validateI18nComplete';
+import {
+  productContentLocales,
+  requiredProductPublishI18nPaths,
+  requiredProductI18nPaths,
+} from '../lib/product/productI18nRequirements';
 
 const featuresField: Field = {
   name: 'features',
@@ -281,7 +288,14 @@ const visualGroupsField: Field = {
       type: 'textarea',
       label: adminLabel('分组说明'),
     },
-    uploadArrayField({ name: 'images', label: adminLabel('分组图片') }),
+    uploadArrayField({
+      name: 'images',
+      label: adminLabel('分组图片'),
+      uploadDescription: adminLabel(
+        '详情页分组图片建议 JPG / PNG / WebP / GIF，推荐 1600 × 1200 px 或至少 1200 px 宽，单图建议不超过 10MB；前台会按版式等比缩放和懒加载。',
+        'Detail-page group images: JPG / PNG / WebP / GIF, recommended 1600 × 1200 px or at least 1200 px wide, preferably under 10MB each. The storefront scales them proportionally and lazy-loads them by layout.',
+      ),
+    }),
   ],
 };
 
@@ -431,7 +445,11 @@ export const Products: CollectionConfig = {
     delete: canDelete('products'),
   },
   hooks: {
-    beforeChange: [requireProductMainImageOnPublish, autoSetPublishedAtOnPublish()],
+    beforeChange: [
+      requireProductMainImageOnPublish,
+      requireAllLocalesOnPublish(productContentLocales, { paths: requiredProductPublishI18nPaths }),
+      autoSetPublishedAtOnPublish(),
+    ],
     afterChange: [auditAfterChange('products'), revalidateCollectionAfterChange('products')],
     afterDelete: [auditAfterDelete('products'), revalidateCollectionAfterDelete('products')],
   },
@@ -444,6 +462,7 @@ export const Products: CollectionConfig = {
     maxPerDoc: 10,
   },
   fields: [
+    i18nEditGuideField({ collectionSlug: 'products', requiredPaths: requiredProductI18nPaths }),
     draftStatusListCellField,
     draftStatusDataField,
     {
@@ -514,6 +533,10 @@ export const Products: CollectionConfig = {
               name: 'images',
               label: adminLabel('产品主图（发布必填）'),
               maxRows: 1,
+              uploadDescription: adminLabel(
+                '产品主图建议 JPG / PNG / WebP / GIF，推荐 1600 × 1600 px 的 1:1 方图，主体居中，单图建议不超过 10MB。后台和前台会使用原图资源并按容器等比缩放展示，显示尺寸不等于上传源文件尺寸。',
+                'Main product image: JPG / PNG / WebP / GIF, recommended 1600 × 1600 px 1:1 square image with the subject centered, preferably under 10MB. Admin and storefront use the original media URL and scale it proportionally inside the container; displayed size is not the uploaded source dimensions.',
+              ),
             }),
             {
               name: 'description',

@@ -7,18 +7,6 @@ type ProductImageSource = Readonly<{
   visualGroups?: readonly ProductVisualGroup[];
 }>;
 
-const defaultGalleryTitle: LocalizedText = {
-  zh: '产品图册',
-  en: 'Product gallery',
-  ru: 'Галерея продукта',
-};
-
-const defaultGalleryDescription: LocalizedText = {
-  zh: '展示后台维护的产品图片。',
-  en: 'Shows product images maintained in the admin.',
-  ru: 'Показывает изображения продукта из панели управления.',
-};
-
 function cleanImages(images: readonly string[]) {
   return images.map((image) => image.trim()).filter(Boolean);
 }
@@ -52,24 +40,5 @@ export function productPrimaryImage(product: ProductImageSource) {
 }
 
 export function productVisualGroups(product: ProductImageSource) {
-  const cmsGroups = cleanVisualGroups(product.visualGroups);
-
-  if (cmsGroups.length > 0) {
-    return cmsGroups;
-  }
-
-  const galleryImages = uniqueImages([product.image ?? '', ...(product.images ?? [])]);
-
-  if (galleryImages.length === 0) {
-    return [];
-  }
-
-  return [
-    {
-      description: defaultGalleryDescription,
-      images: galleryImages,
-      title: defaultGalleryTitle,
-      variant: 'gallery',
-    },
-  ] satisfies ProductVisualGroup[];
+  return cleanVisualGroups(product.visualGroups);
 }

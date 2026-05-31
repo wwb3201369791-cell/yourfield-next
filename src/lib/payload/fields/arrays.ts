@@ -1,4 +1,4 @@
-import type { Field } from 'payload';
+import type { ArrayField, Field } from 'payload';
 
 import { adminLabel, type AdminBilingualText } from '../adminText';
 
@@ -11,6 +11,12 @@ type TextArrayArgs = {
   required?: boolean;
   minRows?: number;
   maxRows?: number;
+};
+
+type UploadArrayArgs = Omit<TextArrayArgs, 'localized'> & {
+  admin?: ArrayField['admin'];
+  uploadCustom?: Record<string, unknown>;
+  uploadDescription?: AdminBilingualText;
 };
 
 type OptionalArrayPropsArgs = {
@@ -75,10 +81,22 @@ export const uploadArrayField = ({
   minRows,
   maxRows,
   required = false,
-}: Omit<TextArrayArgs, 'localized'>): Field => ({
+  admin,
+  uploadCustom,
+  uploadDescription,
+}: UploadArrayArgs): Field => ({
   name,
   ...optionalArrayProps({ label, minRows, maxRows }),
+  ...(admin ? { admin } : {}),
   type: 'array',
   required,
-  fields: [imageUploadField({ name: 'file', label: adminLabel('图片'), required: true })],
+  fields: [
+    imageUploadField({
+      name: 'file',
+      label: adminLabel('图片'),
+      required: true,
+      ...(uploadCustom ? { custom: uploadCustom } : {}),
+      ...(uploadDescription ? { admin: { description: uploadDescription } } : {}),
+    }),
+  ],
 });

@@ -83,7 +83,7 @@ describe('LeadSubmitForm', () => {
     expect(screen.getByLabelText(/咨询问题/)).toHaveProperty('required', true);
   });
 
-  it('saves the inquiry, shows backend success, and offers an email backup without auto-opening it', async () => {
+  it('opens the email client on submit, saves the inquiry, and keeps a manual retry link', async () => {
     const fetchMock = vi.fn().mockImplementation(() =>
       Promise.resolve(
         new Response(JSON.stringify({ id: 'submission-1', ok: true }), {
@@ -93,7 +93,9 @@ describe('LeadSubmitForm', () => {
       ),
     );
     vi.stubGlobal('fetch', fetchMock);
-    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click');
+    const clickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, 'click')
+      .mockImplementation(() => undefined);
 
     renderLeadForm();
     await waitForHydratedSubmit();
@@ -110,6 +112,12 @@ describe('LeadSubmitForm', () => {
     });
     fireEvent.click(screen.getByLabelText(/我同意/));
     fireEvent.click(screen.getByRole('button', { name: '发送咨询' }));
+
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+    const openedLink = clickSpy.mock.instances[0] as unknown as HTMLAnchorElement;
+    expect(openedLink.href).toContain('mailto:hnyf@yourfield.net');
+    expect(decodeURIComponent(openedLink.href)).toContain('测试客户');
+    expect(decodeURIComponent(openedLink.href)).toContain('想了解消防服产品。');
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
     const [, requestInit] = fetchMock.mock.calls[0] as [string, RequestInit];
@@ -125,15 +133,12 @@ describe('LeadSubmitForm', () => {
       name: '测试客户',
     });
     expect((await screen.findByRole('status')).textContent).toBe(
-      '已收到您的咨询，我们会尽快与您联系。',
+      '后台已收到咨询；邮箱已为您打开，请在邮件客户端确认发送。',
     );
-    const backupLink = screen.getByRole<HTMLAnchorElement>('link', {
-      name: '打开邮箱发送咨询',
+    const retryLink = screen.getByRole<HTMLAnchorElement>('link', {
+      name: '未弹出？再次打开邮箱',
     });
-    expect(backupLink.href).toContain('mailto:hnyf@yourfield.net');
-    expect(decodeURIComponent(backupLink.href)).toContain('测试客户');
-    expect(decodeURIComponent(backupLink.href)).toContain('想了解消防服产品。');
-    expect(clickSpy).not.toHaveBeenCalled();
+    expect(retryLink.href).toContain('mailto:hnyf@yourfield.net');
   });
 
   it('keeps the success email backup visible until the visitor edits the form again', async () => {
@@ -147,6 +152,7 @@ describe('LeadSubmitForm', () => {
     );
 
     vi.stubGlobal('fetch', fetchMock);
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
 
     renderLeadForm();
     await waitForHydratedSubmit();
@@ -165,16 +171,22 @@ describe('LeadSubmitForm', () => {
     fireEvent.click(screen.getByRole('button', { name: '发送咨询' }));
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
-    expect(screen.getByRole('status').textContent).toBe('已收到您的咨询，我们会尽快与您联系。');
-    expect(screen.getByRole('link', { name: '打开邮箱发送咨询' })).toBeTruthy();
+    expect(screen.getByRole('status').textContent).toBe(
+      '后台已收到咨询；邮箱已为您打开，请在邮件客户端确认发送。',
+    );
+    expect(screen.getByRole('link', { name: '未弹出？再次打开邮箱' })).toBeTruthy();
     expect(screen.getByRole<HTMLButtonElement>('button', { name: '发送咨询' }).disabled).toBe(
       false,
     );
     expect(screen.getByLabelText<HTMLInputElement>(/姓名/).disabled).toBe(false);
 
-    await new Promise((resolve) => window.setTimeout(resolve, 8_500));
-    expect(screen.getByRole('status').textContent).toBe('已收到您的咨询，我们会尽快与您联系。');
-    expect(screen.getByRole('link', { name: '打开邮箱发送咨询' })).toBeTruthy();
+    vi.useFakeTimers();
+    await vi.advanceTimersByTimeAsync(8_500);
+    vi.useRealTimers();
+    expect(screen.getByRole('status').textContent).toBe(
+      '后台已收到咨询；邮箱已为您打开，请在邮件客户端确认发送。',
+    );
+    expect(screen.getByRole('link', { name: '未弹出？再次打开邮箱' })).toBeTruthy();
 
     fireEvent.change(screen.getByLabelText(/姓名/), { target: { value: '第二位客户' } });
     expect(screen.queryByRole('status')).toBeNull();
@@ -192,7 +204,11 @@ describe('LeadSubmitForm', () => {
     fireEvent.click(screen.getByRole('button', { name: '发送咨询' }));
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
-    expect(screen.getByRole('status').textContent).toBe('已收到您的咨询，我们会尽快与您联系。');
+    await waitFor(() =>
+      expect(screen.getByRole('status').textContent).toBe(
+        '后台已收到咨询；邮箱已为您打开，请在邮件客户端确认发送。',
+      ),
+    );
   }, 12_000);
 
   it('offers a mail client fallback when the backend cannot accept a submission', async () => {
@@ -205,6 +221,7 @@ describe('LeadSubmitForm', () => {
       ),
     );
     vi.stubGlobal('fetch', fetchMock);
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
 
     renderLeadForm();
     await waitForHydratedSubmit();
@@ -224,11 +241,11 @@ describe('LeadSubmitForm', () => {
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
     expect((await screen.findByRole('alert')).textContent).toContain(
-      '暂时无法提交，请稍后再试，或直接通过邮箱联系我们。',
+      '邮箱已尝试打开，但后台暂时未保存成功；请确认邮件客户端内容后发送，或稍后再试。',
     );
 
     const fallbackLink = screen.getByRole<HTMLAnchorElement>('link', {
-      name: '打开邮箱发送咨询',
+      name: '未弹出？再次打开邮箱',
     });
     expect(fallbackLink.href).toContain('mailto:hnyf@yourfield.net');
     expect(decodeURIComponent(fallbackLink.href)).toContain('测试客户');
@@ -238,6 +255,7 @@ describe('LeadSubmitForm', () => {
   it('shows a friendly validation message for incomplete or invalid input', async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
 
     renderLeadForm();
     await waitForHydratedSubmit();

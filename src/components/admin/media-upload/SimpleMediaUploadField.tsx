@@ -331,8 +331,8 @@ export default function SimpleMediaUploadField(props: SimpleMediaUploadFieldProp
               : t(isVideoUpload ? '选择视频' : '选择图片')}
         </button>
       </div>
-      {typeof description === 'string' ? (
-        <p className="simple-media-upload__description">{description}</p>
+      {description ? (
+        <p className="simple-media-upload__description">{t(description as AdminBilingualText)}</p>
       ) : null}
       <input
         id={`field-${path.replace(/\./g, '__')}`}

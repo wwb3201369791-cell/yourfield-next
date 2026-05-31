@@ -53,38 +53,7 @@ type NavigationTranslator = (key: string) => string;
 
 const localePathPattern = /^\/(zh|en|ru)(?=\/|$)/;
 
-const fallbackProductGroupNavigationItems: readonly FallbackNavigationItem[] = [
-  {
-    key: 'products',
-    labelKey: 'product.group.electrical',
-    path: '/products',
-    hash: 'electrical-protection',
-  },
-  {
-    key: 'products',
-    labelKey: 'product.group.fireRescue',
-    path: '/products',
-    hash: 'fire-rescue',
-  },
-  {
-    key: 'products',
-    labelKey: 'product.group.thermal',
-    path: '/products',
-    hash: 'thermal-welding',
-  },
-  {
-    key: 'products',
-    labelKey: 'product.group.chemicalMedical',
-    path: '/products',
-    hash: 'chemical-medical',
-  },
-  {
-    key: 'products',
-    labelKey: 'product.group.waterRescue',
-    path: '/products',
-    hash: 'water-rescue',
-  },
-];
+const fallbackProductGroupNavigationItems: readonly FallbackNavigationItem[] = [];
 
 const fallbackMainNavigation: readonly FallbackNavigationItem[] = [
   {

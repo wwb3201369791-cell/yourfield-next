@@ -66,6 +66,29 @@ function imageUrlLike(value: string) {
   return imageUrlPattern.test(value.trim());
 }
 
+function mediaFileLike(value: unknown): boolean {
+  if (typeof value === 'string') {
+    return imageUrlLike(value);
+  }
+
+  if (value && typeof value === 'object') {
+    const media = value as {
+      sizes?: Record<string, { url?: string } | undefined>;
+      thumbnailURL?: string;
+      url?: string;
+    };
+    return Boolean(
+      media.url ||
+      media.thumbnailURL ||
+      media.sizes?.card?.url ||
+      media.sizes?.thumbnail?.url ||
+      media.sizes?.feature?.url,
+    );
+  }
+
+  return false;
+}
+
 function imageRowsLike(value: unknown): boolean {
   return (
     Array.isArray(value) &&
@@ -74,27 +97,25 @@ function imageRowsLike(value: unknown): boolean {
         return false;
       }
 
-      const file = (row as { file?: unknown }).file;
-      if (typeof file === 'string') {
-        return imageUrlLike(file);
+      return mediaFileLike((row as { file?: unknown }).file);
+    })
+  );
+}
+
+function arrayRowsLike(value: unknown): boolean {
+  return Array.isArray(value) && value.length > 0;
+}
+
+function visualGroupRowsLike(value: unknown): boolean {
+  return (
+    Array.isArray(value) &&
+    value.some((group) => {
+      if (!group || typeof group !== 'object') {
+        return false;
       }
 
-      if (file && typeof file === 'object') {
-        const media = file as {
-          sizes?: Record<string, { url?: string } | undefined>;
-          thumbnailURL?: string;
-          url?: string;
-        };
-        return Boolean(
-          media.url ||
-          media.thumbnailURL ||
-          media.sizes?.card?.url ||
-          media.sizes?.thumbnail?.url ||
-          media.sizes?.feature?.url,
-        );
-      }
-
-      return false;
+      const images = (group as { images?: unknown }).images;
+      return imageRowsLike(images);
     })
   );
 }
@@ -111,7 +132,7 @@ export function mergeHydratedVisualEditorValues(
   formValues: Record<string, unknown>,
   hydratedDoc: Record<string, unknown> | null,
 ) {
-  if (hasVisualEditorSeedValues(formValues) || !hydratedDoc) {
+  if (!hydratedDoc) {
     return formValues;
   }
 
@@ -122,6 +143,38 @@ export function mergeHydratedVisualEditorValues(
 
   if (!imageRowsLike(formValues.images) && imageRowsLike(hydratedDoc.images)) {
     merged.images = hydratedDoc.images;
+  }
+
+  if (
+    !visualGroupRowsLike(formValues.visualGroups) &&
+    visualGroupRowsLike(hydratedDoc.visualGroups)
+  ) {
+    merged.visualGroups = hydratedDoc.visualGroups;
+  }
+
+  for (const key of [
+    'applications',
+    'careInstructions',
+    'features',
+    'materials',
+    'productFaqs',
+    'qualityEvidence',
+    'scenarios',
+    'sellingPoints',
+    'sizeRange',
+    'specifications',
+    'standards',
+  ] as const) {
+    if (!arrayRowsLike(formValues[key]) && arrayRowsLike(hydratedDoc[key])) {
+      merged[key] = hydratedDoc[key];
+    }
+  }
+
+  if (!arrayRowsLike((formValues.sizeGuide as { rows?: unknown } | undefined)?.rows)) {
+    const hydratedSizeGuide = hydratedDoc.sizeGuide as { rows?: unknown } | undefined;
+    if (arrayRowsLike(hydratedSizeGuide?.rows)) {
+      merged.sizeGuide = hydratedDoc.sizeGuide;
+    }
   }
 
   if (

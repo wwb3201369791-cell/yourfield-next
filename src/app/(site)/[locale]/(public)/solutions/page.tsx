@@ -45,13 +45,14 @@ export async function generateMetadata({ params }: SolutionsPageProps) {
   const t = await getTranslations(locale);
   const page = await getCmsPageByKey(locale, 'solutions', isDraft);
   const fallbackDescription = t('page.solutions.introText');
+  const metadataImage = page?.seoImage || page?.heroImage;
 
   return buildPageMetadata({
     locale,
     path: '/solutions',
     title: page?.seoTitle || page?.title || t('page.solutions.title'),
     description: page?.seoDescription || fallbackDescription,
-    image: page?.seoImage || page?.heroImage || '/images/solutions/solution-power-grid.jpg',
+    ...(metadataImage ? { image: metadataImage } : {}),
     noIndex: isDraft || Boolean(page?.noIndex),
   });
 }
@@ -62,7 +63,7 @@ export default async function SolutionsPage({ params }: SolutionsPageProps) {
   const t = await getTranslations(locale);
   const page = await getCmsPageByKey(locale, 'solutions', isDraft);
   const cmsSolutions = await getCmsSolutions(locale, isDraft);
-  const heroImage = page?.heroImage || '/images/solutions/solution-power-grid.jpg';
+  const heroImage = page?.heroImage || '';
   const solutionSections = buildSolutionsPageSections(cmsSolutions);
   const emptyCopy = emptySolutionsCopy(locale);
 
@@ -86,9 +87,7 @@ export default async function SolutionsPage({ params }: SolutionsPageProps) {
         <section
           className="page-header solutions-page-header"
           aria-labelledby="solutions-page-title"
-          style={{
-            backgroundImage: `url("${heroImage}")`,
-          }}
+          style={heroImage ? { backgroundImage: `url("${heroImage}")` } : undefined}
         >
           <div className="container">
             <h1 id="solutions-page-title">{page?.heroTitle || t('page.solutions.title')}</h1>
@@ -122,14 +121,16 @@ export default async function SolutionsPage({ params }: SolutionsPageProps) {
           ) : (
             solutionSections.detailCards.map((solution) => (
               <article key={solution.id} id={solution.id} className="solution-card">
-                <div className="solution-image">
-                  <Image
-                    src={solution.image}
-                    alt={solution.imageAlt}
-                    fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                  />
-                </div>
+                {solution.image ? (
+                  <div className="solution-image">
+                    <Image
+                      src={solution.image}
+                      alt={solution.imageAlt}
+                      fill
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                    />
+                  </div>
+                ) : null}
                 <div className="solution-content">
                   <div className="solution-icon">{t('page.solutions.tag')}</div>
                   <h2>{solution.title}</h2>

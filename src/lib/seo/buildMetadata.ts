@@ -60,14 +60,15 @@ export function buildPageMetadata({
   path,
   title,
   description,
-  image = '/images/hero-poster.jpg',
+  image,
   imageAlt = title,
   keywords,
   noIndex = false,
   type = 'website',
 }: BuildPageMetadataArgs): Metadata {
   const url = absoluteUrl(localizedPath(locale, path));
-  const imageUrl = absoluteUrl(image);
+  const metadataImage = image === undefined ? '/images/hero-poster.jpg' : image.trim();
+  const imageUrl = metadataImage ? absoluteUrl(metadataImage) : '';
   const fullTitle = `${siteName(locale)} | ${title}`;
   const alternateOgLocales = Object.entries(ogLocaleByLocale)
     .filter(([alternateLocale]) => alternateLocale !== locale)
@@ -89,13 +90,13 @@ export function buildPageMetadata({
       siteName: siteName(locale),
       locale: ogLocaleByLocale[locale],
       alternateLocale: alternateOgLocales,
-      images: [{ url: imageUrl, width: 1200, height: 630, alt: imageAlt }],
+      ...(imageUrl ? { images: [{ url: imageUrl, width: 1200, height: 630, alt: imageAlt }] } : {}),
     },
     twitter: {
-      card: 'summary_large_image',
+      card: imageUrl ? 'summary_large_image' : 'summary',
       title: fullTitle,
       description,
-      images: [imageUrl],
+      ...(imageUrl ? { images: [imageUrl] } : {}),
     },
     robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },
   };

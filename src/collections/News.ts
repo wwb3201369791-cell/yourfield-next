@@ -160,7 +160,8 @@ export const News: CollectionConfig = {
               label: newsAdminLabels.cover,
               admin: {
                 description: adminLabel(
-                  '用于新闻列表和详情页的静态封面。视频新闻可不上传；没有视频时建议上传，避免前台只显示占位图。',
+                  '用于新闻列表和详情页的真实封面图。建议 JPG / PNG / WebP / GIF，推荐 1600 × 900 px（16:9）或至少 1200 × 675 px，单图建议不超过 10MB。视频新闻可不上传；没有视频时建议上传，否则前台会直接隐藏媒体区域，不再使用静态占位图。',
+                  'Real cover image for news lists and detail pages. Recommended JPG / PNG / WebP / GIF, 1600 × 900 px (16:9) or at least 1200 × 675 px, preferably under 10MB. Optional for video news; recommended when there is no video. If empty, the storefront hides the media area instead of using a static placeholder.',
                 ),
               },
             }),
@@ -169,7 +170,8 @@ export const News: CollectionConfig = {
               label: newsAdminLabels.featuredVideo,
               admin: {
                 description: adminLabel(
-                  '用于新闻中心顶部三张大卡片的视频预览。中文和英文页面使用这个视频；封面图会作为视频封面帧。不上传视频时，前台会退回显示封面图。',
+                  '用于新闻中心顶部三张大卡片的视频预览。建议 MP4（H.264/AAC），推荐 1920 × 1080 px（16:9）或至少 1280 × 720 px，单个视频建议不超过 100MB。中文和英文页面使用这个视频；封面图会作为视频封面帧。不上传视频时，前台会退回显示封面图。',
+                  'Video preview for the top three featured news cards. Recommended MP4 (H.264/AAC), 1920 × 1080 px (16:9) or at least 1280 × 720 px, preferably under 100MB. Chinese and English pages use this video; the cover image is used as the poster frame. Without a video, the storefront falls back to the cover image.',
                 ),
               },
             }),
@@ -178,7 +180,8 @@ export const News: CollectionConfig = {
               label: newsAdminLabels.featuredVideoRu,
               admin: {
                 description: adminLabel(
-                  '用于俄语页面的重点新闻速览视频；客户提供俄语素材后替换这里。未上传时俄语页面会回退使用英文/中文视频。',
+                  '用于俄语页面的重点新闻速览视频。建议 MP4（H.264/AAC），推荐 1920 × 1080 px（16:9）或至少 1280 × 720 px，单个视频建议不超过 100MB。客户提供俄语素材后替换这里。未上传时俄语页面会回退使用英文/中文视频。',
+                  'Featured-news video for the Russian page. Recommended MP4 (H.264/AAC), 1920 × 1080 px (16:9) or at least 1280 × 720 px, preferably under 100MB. Replace this when Russian source material is available. If empty, the Russian page falls back to the English/Chinese video.',
                 ),
               },
             }),

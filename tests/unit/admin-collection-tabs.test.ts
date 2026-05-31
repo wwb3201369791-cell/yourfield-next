@@ -318,14 +318,14 @@ describe('admin collection tabs', () => {
     expect(
       zhLabel((cover as { admin?: { description?: unknown } } | undefined)?.admin?.description),
     ).toBe(
-      '用于新闻列表和详情页的静态封面。视频新闻可不上传；没有视频时建议上传，避免前台只显示占位图。',
+      '用于新闻列表和详情页的真实封面图。建议 JPG / PNG / WebP / GIF，推荐 1600 × 900 px（16:9）或至少 1200 × 675 px，单图建议不超过 10MB。视频新闻可不上传；没有视频时建议上传，否则前台会直接隐藏媒体区域，不再使用静态占位图。',
     );
     expect(
       localizedLabel(
         (cover as { admin?: { description?: unknown } } | undefined)?.admin?.description,
         'en',
       ),
-    ).toContain('Static cover');
+    ).toContain('Real cover image');
     expect((cover as { required?: unknown } | undefined)?.required).not.toBe(true);
     expect(featuredVideo).toMatchObject({
       custom: {

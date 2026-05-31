@@ -81,7 +81,7 @@ export type NewsContentBlock =
       width?: number;
     }>;
 
-const fallbackNewsImage = '/images/news-placeholder.svg';
+const emptyNewsImage = '';
 const categoryLabels: Record<string, Record<Locale, string>> = {
   announcement: {
     zh: '公告',
@@ -115,10 +115,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function mediaUrl(file: CmsNews['cover']) {
   if (!file || typeof file !== 'object') {
-    return fallbackNewsImage;
+    return emptyNewsImage;
   }
 
-  return normalizeCmsMediaUrl(file.sizes?.card?.url ?? file.url, fallbackNewsImage);
+  return normalizeCmsMediaUrl(file.sizes?.card?.url ?? file.url, emptyNewsImage);
 }
 
 function mediaOriginalUrl(file: CmsUpload | number | string | undefined) {

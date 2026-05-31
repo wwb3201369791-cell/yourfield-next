@@ -10,7 +10,7 @@ import {
   useLocale,
 } from '@payloadcms/ui';
 import { reduceFieldsToValues } from 'payload/shared';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent } from 'react';
 
 import { buildSectionPropsFromFormValues } from '@/lib/content/buildSectionProps';
 import {
@@ -258,6 +258,16 @@ export function EditorToolbar() {
     setHandledDeepLink(true);
   }, [handledDeepLink, openDrawer]);
 
+  const onSaveDraft = async () => {
+    setPreviewError('');
+
+    try {
+      await submit({ overrides: { _status: isPublished ? 'published' : 'draft' } });
+    } catch {
+      setPreviewError(t('保存失败，请检查必填内容或稍后重试。'));
+    }
+  };
+
   const onPublish = () => {
     const result = collectPublishPreflight({ currentLocale, requiredErrors });
 
@@ -273,6 +283,28 @@ export function EditorToolbar() {
     }
 
     setPreflight(result);
+  };
+
+  const onLocaleSwitch = async (
+    event: MouseEvent<HTMLAnchorElement>,
+    nextLocale: ProductI18nLocale,
+    href: string,
+  ) => {
+    markCurrentAdminContentLocaleIntent(nextLocale);
+
+    if (!modified || href === '#') {
+      return;
+    }
+
+    event.preventDefault();
+    setPreviewError('');
+
+    try {
+      await submit({ overrides: { _status: isPublished ? 'published' : 'draft' } });
+      window.location.href = href;
+    } catch {
+      setPreviewError(t('切换语言前保存失败，请先检查必填内容或稍后重试。'));
+    }
   };
 
   const onPreview = async () => {
@@ -327,7 +359,9 @@ export function EditorToolbar() {
                 key={badge.code}
                 className={`ype-locale-badge ${badge.active ? 'active' : ''} ${badge.status === 'missing' ? 'is-missing' : 'is-complete'}`}
                 href={badge.href}
-                onClick={() => markCurrentAdminContentLocaleIntent(badge.code)}
+                onClick={(event) => {
+                  void onLocaleSwitch(event, badge.code, badge.href);
+                }}
                 title={badge.title}
               >
                 {badge.text}
@@ -335,11 +369,14 @@ export function EditorToolbar() {
             ))}
           </div>
           <div className="ype-toolbar-spacer" />
+          <button type="button" disabled={processing} onClick={() => void onSaveDraft()}>
+            {processing ? t('保存中…') : isPublished ? t('保存修改') : t('保存草稿')}
+          </button>
           <button type="button" disabled={processing} onClick={() => void onPreview()}>
             {processing ? t('保存中…') : modified ? t('保存并预览 ↗') : t('前台预览 ↗')}
           </button>
-          <button type="button" className="ype-publish" onClick={onPublish}>
-            {t('发布')}
+          <button type="button" className="ype-publish" disabled={processing} onClick={onPublish}>
+            {processing ? t('保存中…') : t('发布上线')}
           </button>
         </div>
         <div className="ype-publish-overview" aria-label={t('发布总览')}>
@@ -400,6 +437,11 @@ export function EditorToolbar() {
           </button>
         </div>
         {previewError ? <p className="ype-toolbar-error">{previewError}</p> : null}
+        <p className="ype-toolbar-help">
+          {t(
+            '填写完成后直接点“保存草稿”暂存；确认三语和图片无误后点“发布上线”，不需要切换到经典表单页面。切换语言时如有未保存内容会先自动保存。',
+          )}
+        </p>
       </header>
       {preflight ? (
         <div

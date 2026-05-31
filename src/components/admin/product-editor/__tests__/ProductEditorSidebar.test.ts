@@ -61,4 +61,27 @@ describe('ProductEditorSidebar', () => {
       }),
     ).toBe('complete');
   });
+
+  it('does not mark visual groups complete from the public product-image gallery fallback alone', () => {
+    const sections = {
+      ...emptySections,
+      visualGroups: {
+        carouselNextLabel: '下一张',
+        carouselPreviousLabel: '上一张',
+        groups: [
+          {
+            description: '后台产品主图自动组成的图册',
+            images: ['/media/product-main.png'],
+            title: '产品图册',
+            variant: 'gallery',
+          },
+        ],
+        heading: '场景图、建模图与模特上身图',
+        locale: 'zh',
+        tagLabel: '产品图像',
+      },
+    } satisfies ProductDetailSectionProps;
+
+    expect(productEditorSectionStatus('visual-groups', sections)).toBe('hidden');
+  });
 });

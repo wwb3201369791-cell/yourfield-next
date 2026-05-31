@@ -185,6 +185,7 @@ export function newsArticleJsonLd(
   settings?: CmsSiteSettings,
 ) {
   const path = localizedPath(locale, `/news/${item.slug}`);
+  const image = item.image ? [absoluteUrl(item.image)] : undefined;
 
   return {
     '@context': 'https://schema.org',
@@ -196,7 +197,7 @@ export function newsArticleJsonLd(
     inLanguage: locale,
     datePublished: item.datePublished,
     dateModified: item.dateModified ?? item.datePublished,
-    image: [absoluteUrl(item.image)],
+    ...(image ? { image } : {}),
     author: {
       '@type': 'Organization',
       name: organizationName(locale, settings),

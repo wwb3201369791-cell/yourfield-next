@@ -18,6 +18,7 @@ vi.mock('@payloadcms/ui', () => ({
     setValue: payloadFormState.setValue,
     value: payloadFormState.value,
   }),
+  useFormFields: (selector: (state: [Record<string, unknown>]) => unknown) => selector([{}]),
 }));
 
 import { usePayloadFieldArray } from '@/components/admin/product-editor/hooks/usePayloadFieldArray';

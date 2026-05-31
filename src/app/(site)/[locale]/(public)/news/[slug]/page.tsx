@@ -116,6 +116,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
   const siteSettings = await getCmsSiteSettings(locale);
   const isCmsMediaImage = shouldUseUnoptimizedImage(item.image);
+  const hasHeroMedia = Boolean(item.video || item.image);
 
   return (
     <>
@@ -150,30 +151,32 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         </header>
 
         <div className="container max-w-4xl py-12 md:py-16">
-          <div className="relative aspect-[16/9] overflow-hidden rounded bg-bg-light shadow-lg">
-            {item.video ? (
-              // eslint-disable-next-line jsx-a11y/media-has-caption -- CMS video news uses the article body for surrounding context.
-              <video
-                className="h-full w-full object-cover"
-                controls
-                playsInline
-                preload="metadata"
-                aria-label={item.title}
-              >
-                <source src={item.video.src} type="video/mp4" />
-              </video>
-            ) : (
-              <Image
-                className="h-full w-full object-cover"
-                src={item.image}
-                alt={t('page.news.detailAlt')}
-                fill
-                priority
-                sizes="(min-width: 1024px) 900px, 100vw"
-                unoptimized={isCmsMediaImage}
-              />
-            )}
-          </div>
+          {hasHeroMedia ? (
+            <div className="relative aspect-[16/9] overflow-hidden rounded bg-bg-light shadow-lg">
+              {item.video ? (
+                // eslint-disable-next-line jsx-a11y/media-has-caption -- CMS video news uses the article body for surrounding context.
+                <video
+                  className="h-full w-full object-cover"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  aria-label={item.title}
+                >
+                  <source src={item.video.src} type="video/mp4" />
+                </video>
+              ) : item.image ? (
+                <Image
+                  className="h-full w-full object-cover"
+                  src={item.image}
+                  alt={t('page.news.detailAlt')}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 900px, 100vw"
+                  unoptimized={isCmsMediaImage}
+                />
+              ) : null}
+            </div>
+          ) : null}
           <div className="prose prose-lg mt-10 max-w-none">
             {item.content.map((block, index) => (
               <NewsArticleBlock block={block} index={index} key={`${block.type}-${index}`} />

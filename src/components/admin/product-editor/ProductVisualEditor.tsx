@@ -54,7 +54,6 @@ import { useFormValues } from './utils/buildProductFromForm';
 import {
   buildProductDocumentHydrationUrl,
   getProductDocumentIdFromPathname,
-  hasVisualEditorSeedValues,
   mergeHydratedVisualEditorValues,
 } from './utils/productEditorHydration';
 
@@ -233,7 +232,9 @@ function AdminHeroPreview({
           )}
         </div>
         <p className="ype-main-image-guidance">
-          {adminT('建议上传 1600 × 1600 px 的 1:1 方图，主体居中；预览会完整显示在此框内。')}
+          {adminT(
+            '建议 JPG / PNG / WebP / GIF，上传 1600 × 1600 px 的 1:1 方图，主体居中，单图建议不超过 10MB；后台预览使用原图资源并等比完整显示，页面显示尺寸会随版式缩放。',
+          )}
         </p>
         {uploadError ? <p className="ype-inline-upload-error">{uploadError}</p> : null}
       </div>
@@ -292,10 +293,6 @@ function useHydratedProductDocument(currentLocale: Locale, formValues: Record<st
     if (!documentId) {
       setHydratedDoc(null);
       hydratedKeyRef.current = '';
-      return undefined;
-    }
-
-    if (hasVisualEditorSeedValues(formValues)) {
       return undefined;
     }
 

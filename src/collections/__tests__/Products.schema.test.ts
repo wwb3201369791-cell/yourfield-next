@@ -17,8 +17,10 @@ type FieldLike = {
 };
 
 type ProductBeforeChangeHook = (args: {
+  collection?: typeof Products;
   data: Record<string, unknown>;
   originalDoc?: Record<string, unknown>;
+  req?: Record<string, unknown>;
 }) => unknown;
 
 const rootFields = Products.fields as FieldLike[];
@@ -63,15 +65,42 @@ function hasField(label: string, name: string) {
   return Boolean(tab(label)?.fields.some((field) => field.name === name));
 }
 
-function runProductBeforeChangeHooks(
+async function runProductBeforeChangeHooks(
   data: Record<string, unknown>,
   originalDoc?: Record<string, unknown>,
 ) {
   let nextData = data;
-  const hooks = (Products.hooks?.beforeChange ?? []) as ProductBeforeChangeHook[];
+  const hooks = (Products.hooks?.beforeChange ?? []) as unknown as ProductBeforeChangeHook[];
+  const req = {
+    locale: 'zh',
+    payload: {
+      config: {
+        localization: {
+          defaultLocale: 'zh',
+        },
+      },
+      findByID: vi.fn().mockResolvedValue({
+        description: {
+          en: 'Protective clothing for electrical work.',
+          ru: 'Защитная одежда для электромонтажных работ.',
+          zh: '用于电力作业的防护服。',
+        },
+        name: {
+          en: 'Arc flash suit',
+          ru: 'Костюм для защиты от дуговой вспышки',
+          zh: '防电弧服',
+        },
+      }),
+    },
+  };
 
   for (const hook of hooks) {
-    const result = hook(originalDoc ? { data: nextData, originalDoc } : { data: nextData });
+    const result = await hook({
+      collection: Products,
+      data: nextData,
+      ...(originalDoc ? { originalDoc } : {}),
+      req,
+    });
 
     if (result && typeof result === 'object') {
       nextData = result as Record<string, unknown>;
@@ -103,19 +132,19 @@ describe('Products schema for visual product editing', () => {
     expect(visualGroupImages?.maxRows).toBeUndefined();
   });
 
-  it('blocks publishing product records without a real main image', () => {
-    expect(() =>
+  it('blocks publishing product records without a real main image', async () => {
+    await expect(
       runProductBeforeChangeHooks({
         _status: 'published',
         images: [],
         name: '无图产品',
         productId: 'missing-image-product',
       }),
-    ).toThrow('产品发布前必须上传产品主图');
+    ).rejects.toThrow('产品发布前必须上传产品主图');
   });
 
-  it('blocks publishing product records without a positive storefront display order', () => {
-    expect(() =>
+  it('blocks publishing product records without a positive storefront display order', async () => {
+    await expect(
       runProductBeforeChangeHooks({
         _status: 'published',
         displayOrder: 0,
@@ -123,20 +152,20 @@ describe('Products schema for visual product editing', () => {
         name: '未排序产品',
         productId: 'missing-display-order-product',
       }),
-    ).toThrow('产品发布前必须填写大类内展示序号');
+    ).rejects.toThrow('产品发布前必须填写大类内展示序号');
   });
 
-  it('allows drafts without images and published updates that keep an existing image', () => {
-    expect(() =>
+  it('allows drafts without images and published updates that keep an existing image', async () => {
+    await expect(
       runProductBeforeChangeHooks({
         _status: 'draft',
         images: [],
         name: '草稿无图产品',
         productId: 'draft-missing-image-product',
       }),
-    ).not.toThrow();
+    ).resolves.toBeTruthy();
 
-    expect(() =>
+    await expect(
       runProductBeforeChangeHooks(
         {
           _status: 'published',
@@ -147,10 +176,11 @@ describe('Products schema for visual product editing', () => {
         {
           _status: 'published',
           displayOrder: 2,
+          id: 'product-with-image',
           images: [{ file: 1 }],
         },
       ),
-    ).not.toThrow();
+    ).resolves.toBeTruthy();
   });
 
   it('organizes product tabs in the same order as the frontend detail page blocks', () => {

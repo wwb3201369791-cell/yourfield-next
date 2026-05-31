@@ -210,7 +210,7 @@ describe('Footer display', () => {
     expect(html).toContain('href="/zh/news" class="footer-heading-link">新闻中心</a>');
     expect(html).toContain('href="/zh/franchise" class="footer-heading-link">招商加盟</a>');
     expect(html).toContain('href="/zh/contact" class="footer-heading-link">联系我们</a>');
-    expect(html).toContain('href="/zh/products#fire-rescue"');
+    expect(html).not.toContain('href="/zh/products#fire-rescue"');
     expect(html).not.toContain('全部产品');
     expect(html).not.toContain('公司新闻');
     expect(html).not.toContain('展会活动');

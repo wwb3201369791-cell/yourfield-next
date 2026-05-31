@@ -82,7 +82,7 @@ describe('product image upload helpers', () => {
         },
         url: 'http://localhost:3000/media/1-25.png',
       }),
-    ).toBe('/media/1-25-600x400.png');
+    ).toBe('/media/1-25.png');
   });
 
   it('normalizes media URLs for the current browser host and keeps external media URLs untouched', () => {

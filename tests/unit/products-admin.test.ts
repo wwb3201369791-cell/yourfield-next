@@ -152,6 +152,7 @@ describe('Products admin structure', () => {
     const beforeChangeHooks = Products.hooks?.beforeChange ?? [];
     let data: Record<string, unknown> = {
       _status: 'published',
+      description: '用于电力作业的防护服。',
       displayOrder: 1,
       images: [{ file: 'media-1' }],
       name: '防电弧服',
@@ -176,6 +177,18 @@ describe('Products admin structure', () => {
                 defaultLocale: 'zh',
               },
             },
+            findByID: vi.fn().mockResolvedValue({
+              description: {
+                en: 'Protective clothing for electrical work.',
+                ru: 'Защитная одежда для электромонтажных работ.',
+                zh: '用于电力作业的防护服。',
+              },
+              name: {
+                en: 'Arc flash suit',
+                ru: 'Костюм для защиты от дуговой вспышки',
+                zh: '防电弧服',
+              },
+            }),
           },
         },
       } as never)) as Record<string, unknown>;

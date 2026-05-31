@@ -717,10 +717,31 @@ const updateProductLocales = async (payload: Payload, id: string | number, data:
     showHiddenFields: true,
   } as never)) as Record<string, unknown>;
 
-  const stableIdentity = {
+  const stableIdentity: Record<string, unknown> = {
     productId: existingProduct.productId,
     slug: existingProduct.slug,
   };
+  const existingDisplayOrder =
+    typeof existingProduct.displayOrder === 'string'
+      ? Number(existingProduct.displayOrder)
+      : existingProduct.displayOrder;
+  if (
+    typeof existingDisplayOrder === 'number' &&
+    Number.isFinite(existingDisplayOrder) &&
+    existingDisplayOrder > 0
+  ) {
+    stableIdentity.displayOrder = existingDisplayOrder;
+  }
+  const existingProductGroup = existingProduct.productGroup;
+  if (typeof existingProductGroup === 'string' || typeof existingProductGroup === 'number') {
+    stableIdentity.productGroup = existingProductGroup;
+  } else if (
+    existingProductGroup &&
+    typeof existingProductGroup === 'object' &&
+    'id' in existingProductGroup
+  ) {
+    stableIdentity.productGroup = (existingProductGroup as { id?: string | number }).id;
+  }
 
   await resetProductNestedRows(payload, id);
 
