@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { mediaFolderOptions } from '../lib/payload/fields/options';
 import { enforceMediaUploadLimit } from '../lib/payload/hooks/enforceMediaUploadLimit';
@@ -10,8 +10,8 @@ import { validateLocalizedAlt } from '../lib/payload/hooks/validateLocalizedAlt'
 export const Media: CollectionConfig = {
   slug: 'media',
   labels: {
-    singular: adminLabel('媒体文件'),
-    plural: adminLabel('媒体文件'),
+    singular: adminCollectionLabel('媒体文件'),
+    plural: adminCollectionLabel('媒体文件'),
   },
   admin: {
     useAsTitle: 'filename',

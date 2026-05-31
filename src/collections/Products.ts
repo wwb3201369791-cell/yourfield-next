@@ -6,7 +6,7 @@ import {
   canUpdate,
   isAdminOrPublishedWithPublishedAt,
 } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField, textareaArrayField, uploadArrayField } from '../lib/payload/fields/arrays';
 import {
@@ -392,8 +392,8 @@ const draftStatusDataField = {
 export const Products: CollectionConfig = {
   slug: 'products',
   labels: {
-    singular: { en: 'Product', zh: '产品' },
-    plural: { en: 'Products', zh: '产品' },
+    singular: adminCollectionLabel('产品'),
+    plural: adminCollectionLabel('产品'),
   },
   admin: {
     useAsTitle: 'name',

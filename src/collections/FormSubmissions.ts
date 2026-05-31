@@ -2,7 +2,7 @@ import type { CollectionAfterChangeHook as AfterChangeHook, CollectionConfig } f
 
 import { sendNotification } from '../lib/email/sendNotification';
 import { canDelete, canRead, canUpdate, deny } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import {
   inquiryTypeOptions,
@@ -35,8 +35,8 @@ const notifyAfterCreate: AfterChangeHook<FormSubmissionDocument> = async ({
 export const FormSubmissions: CollectionConfig = {
   slug: 'form-submissions',
   labels: {
-    singular: { en: 'Inquiry form', zh: '咨询表单' },
-    plural: { en: 'Inquiry forms', zh: '咨询表单' },
+    singular: adminCollectionLabel('咨询表单'),
+    plural: adminCollectionLabel('咨询表单'),
   },
   admin: {
     hideAPIURL: true,

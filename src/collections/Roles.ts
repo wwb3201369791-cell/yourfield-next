@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload';
 
 import { canCreate, canDelete, canRead, canUpdate } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 
 const superAdminPermissions = {
@@ -17,8 +17,8 @@ const superAdminPermissions = {
 export const Roles: CollectionConfig = {
   slug: 'roles',
   labels: {
-    singular: adminLabel('角色'),
-    plural: adminLabel('角色'),
+    singular: adminCollectionLabel('角色'),
+    plural: adminCollectionLabel('角色'),
   },
   admin: {
     useAsTitle: 'name',

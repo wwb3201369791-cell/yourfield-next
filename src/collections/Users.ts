@@ -7,7 +7,7 @@ import { Forbidden } from 'payload';
 
 import { env } from '../lib/env';
 import { canRead, deny, isAdminOrSelf, isSuperAdminField } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 
 const useSecureAuthCookies = env.PAYLOAD_PUBLIC_SERVER_URL.startsWith('https://');
@@ -71,8 +71,8 @@ const preventSelfRoleChange: BeforeChangeHook = ({ data, operation, originalDoc,
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
-    singular: adminLabel('后台用户'),
-    plural: adminLabel('后台用户'),
+    singular: adminCollectionLabel('后台用户'),
+    plural: adminCollectionLabel('后台用户'),
   },
   auth: {
     tokenExpiration: 60 * 60 * 24,

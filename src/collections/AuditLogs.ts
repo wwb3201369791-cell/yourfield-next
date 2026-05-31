@@ -1,14 +1,14 @@
 import type { CollectionConfig } from 'payload';
 
 import { canRead, deny } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditActionOptions } from '../lib/payload/fields/options';
 
 export const AuditLogs: CollectionConfig = {
   slug: 'audit-logs',
   labels: {
-    singular: adminLabel('审计日志'),
-    plural: adminLabel('审计日志'),
+    singular: adminCollectionLabel('审计日志'),
+    plural: adminCollectionLabel('审计日志'),
   },
   admin: {
     useAsTitle: 'action',

@@ -1,7 +1,7 @@
 import type { CollectionConfig, Option } from 'payload';
 
 import { canRead, deny } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { localeOptions } from '../lib/payload/fields/options';
 import {
   handleSearchStatsEndpoint,
@@ -27,8 +27,8 @@ const searchResultTypeOptions = searchHitTypes.map((value) => ({
 export const SearchLogs: CollectionConfig = {
   slug: 'search-logs',
   labels: {
-    singular: adminLabel('搜索日志'),
-    plural: adminLabel('搜索日志'),
+    singular: adminCollectionLabel('搜索日志'),
+    plural: adminCollectionLabel('搜索日志'),
   },
   admin: {
     useAsTitle: 'query',

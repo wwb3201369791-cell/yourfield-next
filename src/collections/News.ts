@@ -1,7 +1,7 @@
 import type { CollectionConfig, Field } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { newsCategoryOptions } from '../lib/payload/fields/options';
@@ -82,8 +82,8 @@ const hiddenSlugField: Field = {
 export const News: CollectionConfig = {
   slug: 'news',
   labels: {
-    singular: { en: 'News', zh: '新闻动态' },
-    plural: { en: 'News', zh: '新闻动态' },
+    singular: adminCollectionLabel('新闻动态'),
+    plural: adminCollectionLabel('新闻动态'),
   },
   admin: {
     hideAPIURL: true,

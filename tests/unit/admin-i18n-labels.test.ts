@@ -81,4 +81,15 @@ describe('admin schema i18n labels', () => {
 
     expect(rawSchemaStrings).toEqual([]);
   });
+
+  it('keeps collection singular/plural labels as plain strings for Payload dashboard links', () => {
+    const unsafeCollectionLabels = sourceFiles('src/collections').flatMap((file) => {
+      const source = readFileSync(file, 'utf8');
+      const matches = Array.from(source.matchAll(/\b(singular|plural)\s*:\s*(adminLabel\(|\{)/g));
+
+      return matches.map((match) => `${file}: ${match[1]} uses ${match[2]}`);
+    });
+
+    expect(unsafeCollectionLabels).toEqual([]);
+  });
 });

@@ -1,7 +1,7 @@
 import type { CollectionConfig, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { productGroupOptions } from '../lib/payload/fields/options';
 import { seoGroup } from '../lib/payload/fields/seo';
@@ -20,8 +20,8 @@ const frontendOrderDescription = adminLabel('直接填 1、2、3；数字越小�
 export const ProductCategories: CollectionConfig = {
   slug: 'product-categories',
   labels: {
-    singular: adminLabel('产品分类'),
-    plural: adminLabel('产品分类'),
+    singular: adminCollectionLabel('产品分类'),
+    plural: adminCollectionLabel('产品分类'),
   },
   admin: {
     useAsTitle: 'name',

@@ -99,15 +99,15 @@ function localizedLabel(label: unknown, locale: 'en' | 'zh') {
 }
 
 describe('admin collection tabs', () => {
-  it('localizes high-touch collection chrome for English admin operators', () => {
-    expect(localizedLabel(FormSubmissions.labels?.singular, 'en')).toBe('Inquiry form');
-    expect(localizedLabel(FormSubmissions.labels?.plural, 'en')).toBe('Inquiry forms');
-    expect(localizedLabel(ProductGroups.labels?.singular, 'en')).toBe('Product group');
-    expect(localizedLabel(ProductGroups.labels?.plural, 'en')).toBe('Product groups');
-    expect(localizedLabel(Solutions.labels?.singular, 'en')).toBe('Solution');
-    expect(localizedLabel(Solutions.labels?.plural, 'en')).toBe('Solutions');
-    expect(localizedLabel(Products.labels?.singular, 'en')).toBe('Product');
-    expect(localizedLabel(Products.labels?.plural, 'en')).toBe('Products');
+  it('keeps dashboard collection labels string-safe while localizing detailed admin copy', () => {
+    expect(FormSubmissions.labels?.singular).toBe('咨询表单');
+    expect(FormSubmissions.labels?.plural).toBe('咨询表单');
+    expect(ProductGroups.labels?.singular).toBe('产品大类');
+    expect(ProductGroups.labels?.plural).toBe('产品大类');
+    expect(Solutions.labels?.singular).toBe('解决方案');
+    expect(Solutions.labels?.plural).toBe('解决方案');
+    expect(Products.labels?.singular).toBe('产品');
+    expect(Products.labels?.plural).toBe('产品');
     expect(localizedLabel(ProductGroups.admin?.group, 'en')).toBe('Product management');
     expect(localizedLabel(Products.admin?.group, 'en')).toBe('Product management');
     expect(ProductGroups.admin?.description).toMatchObject({

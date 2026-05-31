@@ -1,7 +1,7 @@
 import type { CollectionConfig, Field, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { createSeoGroup } from '../lib/payload/fields/seo';
@@ -39,8 +39,8 @@ const productGroupSeoGroup = {
 export const ProductGroups: CollectionConfig = {
   slug: 'product-groups',
   labels: {
-    singular: { en: 'Product group', zh: '产品大类' },
-    plural: { en: 'Product groups', zh: '产品大类' },
+    singular: adminCollectionLabel('产品大类'),
+    plural: adminCollectionLabel('产品大类'),
   },
   defaultSort: 'order',
   admin: {

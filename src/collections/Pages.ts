@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload';
 
 import { pageBlocks } from '../blocks';
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { heroVariantOptions, pageKeyOptions } from '../lib/payload/fields/options';
@@ -18,8 +18,8 @@ const contentLocales = ['zh', 'en', 'ru'] as const;
 export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: {
-    singular: adminLabel('页面'),
-    plural: adminLabel('页面'),
+    singular: adminCollectionLabel('页面'),
+    plural: adminCollectionLabel('页面'),
   },
   admin: {
     useAsTitle: 'title',

@@ -699,3 +699,7 @@ export function adminLabel(value: string, enOverride?: string) {
     zh: value,
   } as const;
 }
+
+export function adminCollectionLabel(value: string) {
+  return value;
+}

@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrFaqPublished } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField } from '../lib/payload/fields/arrays';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
@@ -21,8 +21,8 @@ const frontendOrderDescription = adminLabel('直接填 1、2、3；数字越小�
 export const FAQs: CollectionConfig = {
   slug: 'faqs',
   labels: {
-    singular: adminLabel('常见问题'),
-    plural: adminLabel('常见问题'),
+    singular: adminCollectionLabel('常见问题'),
+    plural: adminCollectionLabel('常见问题'),
   },
   admin: {
     useAsTitle: 'question',

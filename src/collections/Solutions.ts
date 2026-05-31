@@ -1,7 +1,7 @@
 import type { CollectionConfig, Field, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { textArrayField } from '../lib/payload/fields/arrays';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
@@ -56,8 +56,8 @@ const draftStatusDataField = {
 export const Solutions: CollectionConfig = {
   slug: 'solutions',
   labels: {
-    singular: { en: 'Solution', zh: '解决方案' },
-    plural: { en: 'Solutions', zh: '解决方案' },
+    singular: adminCollectionLabel('解决方案'),
+    plural: adminCollectionLabel('解决方案'),
   },
   defaultSort: 'order',
   admin: {
