@@ -64,6 +64,30 @@ function isEmptyUploadValue(value: unknown) {
   );
 }
 
+function inferMediaKindFromText(...values: Array<string | undefined>) {
+  const text = values.filter(Boolean).join(' ').toLowerCase();
+
+  return /(?:video|视频|видео)/i.test(text) ? 'video' : 'image';
+}
+
+function resolveMediaKind({
+  customMediaKind,
+  fieldLabel,
+  name,
+  path,
+}: {
+  customMediaKind: MediaUploadKind | undefined;
+  fieldLabel: string;
+  name?: string;
+  path: string;
+}): MediaUploadKind {
+  if (customMediaKind === 'video' || customMediaKind === 'image') {
+    return customMediaKind;
+  }
+
+  return inferMediaKindFromText(name, path, fieldLabel);
+}
+
 function hasUploadRelationMetadata(
   options: Parameters<Validate>[1] & { relationTo?: SimpleMediaUploadFieldConfig['relationTo'] },
 ) {
@@ -189,7 +213,12 @@ export default function SimpleMediaUploadField(props: SimpleMediaUploadFieldProp
   const selectedId = mediaId(value);
   const apiBase = `${serverURL ?? ''}${routes.api}`;
   const fieldLabel = t(labelToText(label, name || path));
-  const mediaKind: MediaUploadKind = custom?.mediaKind === 'video' ? 'video' : 'image';
+  const mediaKind = resolveMediaKind({
+    customMediaKind: custom?.mediaKind,
+    fieldLabel,
+    name,
+    path,
+  });
   const isVideoUpload = mediaKind === 'video';
   const previewUrl = getMediaPreviewUrl(media);
   const fileMeta = useMemo(

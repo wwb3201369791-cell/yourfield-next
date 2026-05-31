@@ -158,9 +158,41 @@ const imageUrlPattern =
   /^(https?:|\/|data:image\/|blob:)|\.(avif|gif|jpe?g|png|svg|webp)([?#].*)?$/i;
 
 function imageUrlFromText(value: string) {
-  const text = value.trim();
+  const text = normalizeEditorMediaUrl(value.trim());
 
   return imageUrlPattern.test(text) ? text : '';
+}
+
+function normalizeEditorMediaUrl(value: string) {
+  if (
+    !value ||
+    value.startsWith('/') ||
+    value.startsWith('data:image/') ||
+    value.startsWith('blob:')
+  ) {
+    return value;
+  }
+
+  try {
+    const parsed = new URL(value);
+    const isLocalHost = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(
+      parsed.hostname.toLowerCase(),
+    );
+    const isCurrentHost =
+      typeof window !== 'undefined' && parsed.hostname.toLowerCase() === window.location.hostname;
+
+    if ((isLocalHost || isCurrentHost) && parsed.pathname.includes('/media/')) {
+      const mediaPathIndex = parsed.pathname.indexOf('/media/');
+      return `${parsed.pathname.slice(mediaPathIndex)}${parsed.search}${parsed.hash}`;
+    }
+  } catch {
+    const mediaPathIndex = value.indexOf('/media/');
+    if (mediaPathIndex >= 0) {
+      return value.slice(mediaPathIndex);
+    }
+  }
+
+  return value;
 }
 
 function imageRows(value: unknown): readonly string[] {
@@ -187,13 +219,13 @@ function imageRows(value: unknown): readonly string[] {
           thumbnailURL?: string;
           url?: string;
         };
-        return (
+        return imageUrlFromText(
           media.sizes?.card?.url ??
-          media.url ??
-          media.sizes?.thumbnail?.url ??
-          media.thumbnailURL ??
-          media.sizes?.feature?.url ??
-          ''
+            media.url ??
+            media.sizes?.thumbnail?.url ??
+            media.thumbnailURL ??
+            media.sizes?.feature?.url ??
+            '',
         );
       }
       return '';

@@ -27,6 +27,7 @@ describe('product editor hydration helpers', () => {
       hasVisualEditorSeedValues({
         images: [{ file: '/media/file/product.png' }],
         name: '干式水域救援服',
+        productGroup: { id: 5, name: '水域救援防护' },
       }),
     ).toBe(true);
     expect(
@@ -39,18 +40,21 @@ describe('product editor hydration helpers', () => {
       hasVisualEditorSeedValues({
         images: [{ file: { sizes: { card: { url: '/media/file/product.png' } } } }],
         model: 'HYF-9905',
+        productGroup: { id: 5, name: '水域救援防护' },
       }),
     ).toBe(true);
     expect(
       hasVisualEditorSeedValues({
         images: [{ file: { sizes: { thumbnail: { url: '/media/file/product-thumb.png' } } } }],
         model: 'HYF-9905',
+        productGroup: { id: 5, name: '水域救援防护' },
       }),
     ).toBe(true);
     expect(
       hasVisualEditorSeedValues({
         images: [{ file: { thumbnailURL: '/media/file/product-thumb.png' } }],
         model: 'HYF-9905',
+        productGroup: { id: 5, name: '水域救援防护' },
       }),
     ).toBe(true);
   });
@@ -81,6 +85,7 @@ describe('product editor hydration helpers', () => {
         {
           images: [{ file: { url: '/media/new.png' } }],
           name: '新名称',
+          productGroup: { id: 5, name: '水域救援防护' },
         },
         {
           description: '旧详情',
@@ -91,6 +96,7 @@ describe('product editor hydration helpers', () => {
     ).toEqual({
       images: [{ file: { url: '/media/new.png' } }],
       name: '新名称',
+      productGroup: { id: 5, name: '水域救援防护' },
     });
   });
 

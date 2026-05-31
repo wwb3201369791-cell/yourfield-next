@@ -44,12 +44,19 @@ describe('product size guide form values', () => {
         { file: 105 },
         { file: '/media/products/main.png' },
         { file: { sizes: { card: { url: '/media/products/card.png' } }, url: '/media/raw.png' } },
+        {
+          file: { sizes: { card: { url: 'http://localhost:3000/media/products/local-card.png' } } },
+        },
       ],
       name: '带图产品',
       productId: 'image-product',
     });
 
-    expect(product.images).toEqual(['/media/products/main.png', '/media/products/card.png']);
+    expect(product.images).toEqual([
+      '/media/products/main.png',
+      '/media/products/card.png',
+      '/media/products/local-card.png',
+    ]);
   });
 
   it('does not use frontend extracted images when editor image rows are empty', () => {

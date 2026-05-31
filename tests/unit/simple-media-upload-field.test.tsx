@@ -114,4 +114,16 @@ describe('SimpleMediaUploadField', () => {
 
     expect(screen.getByText('cover')).toBeTruthy();
   });
+
+  it('treats video-labeled fields as video uploads when Payload omits custom metadata', () => {
+    renderUploadField({
+      custom: undefined,
+      label: { en: 'Featured card video', zh: '重点卡片视频' },
+      name: 'featuredVideo',
+    });
+
+    expect(screen.getByRole('button', { name: '选择视频' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: '从本地选择一个视频' })).toBeTruthy();
+    expect(document.querySelector('input[type="file"]')?.getAttribute('accept')).toBe('video/mp4');
+  });
 });

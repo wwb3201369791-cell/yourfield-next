@@ -33,6 +33,32 @@ function textLike(value: unknown): boolean {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
+function relationshipTextLike(value: unknown): boolean {
+  if (textLike(value)) {
+    return true;
+  }
+
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const record = value as Record<string, unknown>;
+  for (const key of ['name', 'label', 'title', 'groupId', 'slug']) {
+    const entry = record[key];
+    if (textLike(entry)) {
+      return true;
+    }
+    if (entry && typeof entry === 'object') {
+      const localized = entry as Record<string, unknown>;
+      if (textLike(localized.zh) || textLike(localized.en) || textLike(localized.ru)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 const imageUrlPattern =
   /^(https?:|\/|data:image\/|blob:)|\.(avif|gif|jpe?g|png|svg|webp)([?#].*)?$/i;
 
@@ -75,8 +101,10 @@ function imageRowsLike(value: unknown): boolean {
 
 export function hasVisualEditorSeedValues(values: Record<string, unknown>) {
   const hasIdentity = textLike(values.name) || textLike(values.model);
+  const hasProductGroup =
+    relationshipTextLike(values.productGroup) || relationshipTextLike(values.category);
 
-  return hasIdentity && imageRowsLike(values.images);
+  return hasIdentity && hasProductGroup && imageRowsLike(values.images);
 }
 
 export function mergeHydratedVisualEditorValues(
@@ -94,6 +122,17 @@ export function mergeHydratedVisualEditorValues(
 
   if (!imageRowsLike(formValues.images) && imageRowsLike(hydratedDoc.images)) {
     merged.images = hydratedDoc.images;
+  }
+
+  if (
+    !relationshipTextLike(formValues.productGroup) &&
+    relationshipTextLike(hydratedDoc.productGroup)
+  ) {
+    merged.productGroup = hydratedDoc.productGroup;
+  }
+
+  if (!relationshipTextLike(formValues.category) && relationshipTextLike(hydratedDoc.category)) {
+    merged.category = hydratedDoc.category;
   }
 
   return merged;
