@@ -34,8 +34,8 @@ const notifyAfterCreate: AfterChangeHook<FormSubmissionDocument> = async ({
 export const FormSubmissions: CollectionConfig = {
   slug: 'form-submissions',
   labels: {
-    singular: '咨询表单',
-    plural: '咨询表单',
+    singular: { en: 'Inquiry form', zh: '咨询表单' },
+    plural: { en: 'Inquiry forms', zh: '咨询表单' },
   },
   admin: {
     hideAPIURL: true,

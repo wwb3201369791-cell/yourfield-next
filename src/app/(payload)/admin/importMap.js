@@ -1,6 +1,7 @@
 import { default as default_b784dc38bb5496e6b88d5f1021dc0c04 } from '@/components/admin/cells/SubmissionStatusCell'
 import { FormSubmissionsStatusTabs as FormSubmissionsStatusTabs_d303dfd4f00c0934ce208c1244b6d42b } from '@/components/admin/list/FormSubmissionsStatusTabs'
 import { default as default_58a3567919654d5ba43db2f2f03c843c } from '@/components/admin/I18nEditGuideLoader'
+import { default as default_a0ded7dd6cfb9858330a14decb30169b } from '@/components/admin/cells/VisibilityStatusCell'
 import { default as default_bba462316deccb203c716e523e0f12cd } from '@/components/admin/cells/SolutionPositionCell'
 import { default as default_4f4e24fe13f7bfd45261f0af9a3e042e } from '@/components/admin/media-upload/SimpleMediaUploadField'
 import { default as default_30989b2842ece380ff7a5a5f06b6152f } from '@/components/admin/cells/DraftStatusCell'
@@ -49,6 +50,7 @@ export const importMap = {
   "@/components/admin/cells/SubmissionStatusCell#default": default_b784dc38bb5496e6b88d5f1021dc0c04,
   "@/components/admin/list/FormSubmissionsStatusTabs#FormSubmissionsStatusTabs": FormSubmissionsStatusTabs_d303dfd4f00c0934ce208c1244b6d42b,
   "@/components/admin/I18nEditGuideLoader#default": default_58a3567919654d5ba43db2f2f03c843c,
+  "@/components/admin/cells/VisibilityStatusCell#default": default_a0ded7dd6cfb9858330a14decb30169b,
   "@/components/admin/cells/SolutionPositionCell#default": default_bba462316deccb203c716e523e0f12cd,
   "@/components/admin/media-upload/SimpleMediaUploadField#default": default_4f4e24fe13f7bfd45261f0af9a3e042e,
   "@/components/admin/cells/DraftStatusCell#default": default_30989b2842ece380ff7a5a5f06b6152f,

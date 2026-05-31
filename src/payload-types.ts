@@ -101,14 +101,21 @@ export interface Config {
     roles: RolesSelect<false> | RolesSelect<true>;
     'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-locked-documents':
+      | PayloadLockedDocumentsSelect<false>
+      | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('zh' | 'en' | 'ru') | ('zh' | 'en' | 'ru')[];
+  fallbackLocale:
+    | ('false' | 'none' | 'null')
+    | false
+    | null
+    | ('zh' | 'en' | 'ru')
+    | ('zh' | 'en' | 'ru')[];
   globals: {
     navigation: Navigation;
     'site-settings': SiteSetting;
@@ -192,7 +199,7 @@ export interface FormSubmission {
   createdAt: string;
 }
 /**
- * 维护前台产品卡片和详情页内容。产品编号和名称用于识别与链接；发布前必须上传产品主图，没有真实主图的产品不会在前台展示。
+ * Maintain storefront product cards and detail pages. Product numbers and names identify products and build links; a real main image is required before publishing.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".
@@ -341,7 +348,9 @@ export interface Product {
    */
   visualGroups?:
     | {
-        variant?: ('gallery' | 'scene' | 'modeling' | 'model' | 'detail' | 'certificate' | 'comparison') | null;
+        variant?:
+          | ('gallery' | 'scene' | 'modeling' | 'model' | 'detail' | 'certificate' | 'comparison')
+          | null;
         title?: string | null;
         description?: string | null;
         images?:
@@ -408,7 +417,7 @@ export interface Product {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * 这里创建的是前台产品中心的一条横向产品栏目。保存后，再把产品归到这个大类下，前台就会显示这个大类和里面的产品。
+ * Create and maintain one horizontal storefront product category. After saving, assign products to this group so the storefront product center displays the category and its products.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product-groups".
@@ -425,7 +434,7 @@ export interface ProductGroup {
   description?: string | null;
   showOnFrontend?: boolean | null;
   /**
-   * 直接填 1、2、3；数字越小越靠前。
+   * Use 1, 2, 3… Lower numbers appear first on the storefront.
    */
   order?: number | null;
   /**
@@ -784,7 +793,15 @@ export interface ProductCategory {
   /**
    * 旧版固定大类字段，仅用于兼容历史数据。
    */
-  group?: ('fire-rescue' | 'electrical-protection' | 'thermal-welding' | 'chemical-medical' | 'water-rescue') | null;
+  group?:
+    | (
+        | 'fire-rescue'
+        | 'electrical-protection'
+        | 'thermal-welding'
+        | 'chemical-medical'
+        | 'water-rescue'
+      )
+    | null;
   parent?: (number | null) | ProductCategory;
   cover?: (number | null) | Media;
   icon?: (number | null) | Media;
@@ -900,7 +917,7 @@ export interface FaqContentBlock {
   blockType: 'faq';
 }
 /**
- * 这里维护前台解决方案页面、顶部下拉菜单与页脚导航。新增、删除或调整前台位置后，前台会按发布内容同步展示。
+ * Maintain the Solutions page, header dropdown, and footer navigation. Created, removed, or reordered published items are synced to the storefront.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "solutions".

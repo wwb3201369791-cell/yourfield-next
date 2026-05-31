@@ -29,7 +29,7 @@ const getField = (name: string) =>
 
 describe('ProductGroups admin list', () => {
   it('keeps the list focused on frontend catalog maintenance', () => {
-    expect(ProductGroups.admin?.defaultColumns).toEqual(['name', 'order']);
+    expect(ProductGroups.admin?.defaultColumns).toEqual(['name', 'showOnFrontendBadge', 'order']);
     expect(ProductGroups.defaultSort).toBe('order');
     expect(ProductGroups.admin?.listSearchableFields).toEqual(['name', 'groupId']);
   });
@@ -52,9 +52,10 @@ describe('ProductGroups admin list', () => {
     expect(
       (showOnFrontendField?.admin as { description?: unknown } | undefined)?.description,
     ).toBeUndefined();
-    expect((orderField?.admin as { description?: unknown } | undefined)?.description).toBe(
-      '直接填 1、2、3；数字越小越靠前。',
-    );
+    expect((orderField?.admin as { description?: unknown } | undefined)?.description).toEqual({
+      en: 'Use 1, 2, 3… Lower numbers appear first on the storefront.',
+      zh: '直接填 1、2、3；数字越小越靠前。',
+    });
   });
 
   it('uses exact operator-facing labels for frontend positions', () => {

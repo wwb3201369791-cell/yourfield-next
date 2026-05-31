@@ -31,6 +31,7 @@ type WorkViewKey = 'all' | 'archived' | 'priority';
 type SubmissionCounts = Partial<Record<SubmissionCountKey, number>>;
 
 const collectionSlug = 'form-submissions';
+const locationChangeEvent = 'yf-form-submissions-location-change';
 
 const metricCards: readonly {
   accent?: 'hot';
@@ -74,6 +75,59 @@ function normalizedBase(path: string) {
 
 function currentSearch() {
   return typeof window === 'undefined' ? '' : window.location.search;
+}
+
+function dispatchLocationChange() {
+  window.dispatchEvent(new Event(locationChangeEvent));
+}
+
+function useReactiveSearch() {
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const updateSearch = () => setSearch(currentSearch());
+    const originalPushState = window.history.pushState.bind(window.history) as History['pushState'];
+    const originalReplaceState = window.history.replaceState.bind(
+      window.history,
+    ) as History['replaceState'];
+    const pushState = function pushState(...args: Parameters<History['pushState']>) {
+      const result = originalPushState(...args);
+      dispatchLocationChange();
+
+      return result;
+    } as History['pushState'];
+    const replaceState = function replaceState(...args: Parameters<History['replaceState']>) {
+      const result = originalReplaceState(...args);
+      dispatchLocationChange();
+
+      return result;
+    } as History['replaceState'];
+
+    window.history.pushState = pushState;
+    window.history.replaceState = replaceState;
+    window.addEventListener('popstate', updateSearch);
+    window.addEventListener(locationChangeEvent, updateSearch);
+    updateSearch();
+
+    return () => {
+      window.removeEventListener('popstate', updateSearch);
+      window.removeEventListener(locationChangeEvent, updateSearch);
+
+      if (window.history.pushState === pushState) {
+        window.history.pushState = originalPushState;
+      }
+
+      if (window.history.replaceState === replaceState) {
+        window.history.replaceState = originalReplaceState;
+      }
+    };
+  }, []);
+
+  return search;
 }
 
 function startOfTodayIso() {
@@ -354,11 +408,7 @@ export function FormSubmissionsStatusTabs({ data }: FormSubmissionsStatusTabsPro
   } = useConfig();
   const [counts, setCounts] = useState<SubmissionCounts>({});
   const [failed, setFailed] = useState(false);
-  const [search, setSearch] = useState('');
-
-  useEffect(() => {
-    setSearch(currentSearch());
-  }, []);
+  const search = useReactiveSearch();
 
   const activeView = activeWorkView(search);
   const activeInquiryType = inquiryTypeFromSearch(search);

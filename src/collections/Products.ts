@@ -387,15 +387,17 @@ const draftStatusDataField = {
 export const Products: CollectionConfig = {
   slug: 'products',
   labels: {
-    singular: '产品',
-    plural: '产品',
+    singular: { en: 'Product', zh: '产品' },
+    plural: { en: 'Products', zh: '产品' },
   },
   admin: {
     useAsTitle: 'name',
-    group: '产品管理',
+    group: { en: 'Product management', zh: '产品管理' },
     defaultColumns: ['model', 'name', 'productGroup', 'statusBadge', 'publishedAt'],
-    description:
-      '维护前台产品卡片和详情页内容。产品编号和名称用于识别与链接；发布前必须上传产品主图，没有真实主图的产品不会在前台展示。',
+    description: {
+      en: 'Maintain storefront product cards and detail pages. Product numbers and names identify products and build links; a real main image is required before publishing.',
+      zh: '维护前台产品卡片和详情页内容。产品编号和名称用于识别与链接；发布前必须上传产品主图，没有真实主图的产品不会在前台展示。',
+    },
     components: {
       views: {
         edit: {

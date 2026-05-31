@@ -54,8 +54,8 @@ const draftStatusDataField = {
 export const Solutions: CollectionConfig = {
   slug: 'solutions',
   labels: {
-    singular: '解决方案',
-    plural: '解决方案',
+    singular: { en: 'Solution', zh: '解决方案' },
+    plural: { en: 'Solutions', zh: '解决方案' },
   },
   defaultSort: 'order',
   admin: {
@@ -63,8 +63,10 @@ export const Solutions: CollectionConfig = {
     useAsTitle: 'solutionId',
     listSearchableFields: ['title'],
     defaultColumns: ['title', 'statusBadge', 'order', 'publishedAt'],
-    description:
-      '这里维护前台解决方案页面、顶部下拉菜单与页脚导航。新增、删除或调整前台位置后，前台会按发布内容同步展示。',
+    description: {
+      en: 'Maintain the Solutions page, header dropdown, and footer navigation. Created, removed, or reordered published items are synced to the storefront.',
+      zh: '这里维护前台解决方案页面、顶部下拉菜单与页脚导航。新增、删除或调整前台位置后，前台会按发布内容同步展示。',
+    },
     components: {
       views: {
         edit: {

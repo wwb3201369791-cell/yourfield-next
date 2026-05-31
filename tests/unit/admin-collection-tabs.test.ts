@@ -87,7 +87,43 @@ function zhLabel(label: unknown) {
     : label;
 }
 
+function localizedLabel(label: unknown, locale: 'en' | 'zh') {
+  return typeof label === 'object' && label !== null && locale in label
+    ? (label as Record<string, unknown>)[locale]
+    : label;
+}
+
 describe('admin collection tabs', () => {
+  it('localizes high-touch collection chrome for English admin operators', () => {
+    expect(localizedLabel(FormSubmissions.labels?.singular, 'en')).toBe('Inquiry form');
+    expect(localizedLabel(FormSubmissions.labels?.plural, 'en')).toBe('Inquiry forms');
+    expect(localizedLabel(ProductGroups.labels?.singular, 'en')).toBe('Product group');
+    expect(localizedLabel(ProductGroups.labels?.plural, 'en')).toBe('Product groups');
+    expect(localizedLabel(Solutions.labels?.singular, 'en')).toBe('Solution');
+    expect(localizedLabel(Solutions.labels?.plural, 'en')).toBe('Solutions');
+    expect(localizedLabel(Products.labels?.singular, 'en')).toBe('Product');
+    expect(localizedLabel(Products.labels?.plural, 'en')).toBe('Products');
+    expect(localizedLabel(ProductGroups.admin?.group, 'en')).toBe('Product management');
+    expect(localizedLabel(Products.admin?.group, 'en')).toBe('Product management');
+    expect(ProductGroups.admin?.description).toMatchObject({
+      en: expect.stringContaining('storefront product category'),
+      zh: expect.stringContaining('前台产品中心'),
+    });
+    expect(Solutions.admin?.description).toMatchObject({
+      en: expect.stringContaining('Solutions page'),
+      zh: expect.stringContaining('解决方案页面'),
+    });
+  });
+
+  it('shows visibility and storefront order on the product group list', () => {
+    expect(ProductGroups.admin?.defaultColumns).toEqual(['name', 'showOnFrontendBadge', 'order']);
+    expect(namedField(ProductGroups.fields, 'showOnFrontendBadge')).toMatchObject({
+      label: { en: 'Visibility', zh: '显示状态' },
+      name: 'showOnFrontendBadge',
+      type: 'ui',
+    });
+  });
+
   it.each([
     [FormSubmissions, ['客户信息', '咨询内容', '处理跟进']],
     [ProductGroups, ['基本信息', '前台展示']],

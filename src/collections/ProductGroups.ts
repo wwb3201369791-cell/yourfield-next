@@ -21,7 +21,10 @@ const localizedTextareaField = (name: string): TextareaField => ({
   localized: true,
 });
 
-const frontendOrderDescription = '直接填 1、2、3；数字越小越靠前。';
+const frontendOrderDescription = {
+  en: 'Use 1, 2, 3… Lower numbers appear first on the storefront.',
+  zh: '直接填 1、2、3；数字越小越靠前。',
+};
 
 const productGroupSeoGroup = {
   ...createSeoGroup({ label: 'SEO 设置（系统）' }),
@@ -35,18 +38,20 @@ const productGroupSeoGroup = {
 export const ProductGroups: CollectionConfig = {
   slug: 'product-groups',
   labels: {
-    singular: '产品大类',
-    plural: '产品大类',
+    singular: { en: 'Product group', zh: '产品大类' },
+    plural: { en: 'Product groups', zh: '产品大类' },
   },
   defaultSort: 'order',
   admin: {
     hideAPIURL: true,
     useAsTitle: 'name',
-    group: '产品管理',
-    defaultColumns: ['name', 'order'],
+    group: { en: 'Product management', zh: '产品管理' },
+    defaultColumns: ['name', 'showOnFrontendBadge', 'order'],
     listSearchableFields: ['name', 'groupId'],
-    description:
-      '这里创建的是前台产品中心的一条横向产品栏目。保存后，再把产品归到这个大类下，前台就会显示这个大类和里面的产品。',
+    description: {
+      en: 'Create and maintain one horizontal storefront product category. After saving, assign products to this group so the storefront product center displays the category and its products.',
+      zh: '这里创建的是前台产品中心的一条横向产品栏目。保存后，再把产品归到这个大类下，前台就会显示这个大类和里面的产品。',
+    },
     components: {
       views: {
         edit: {
@@ -80,6 +85,17 @@ export const ProductGroups: CollectionConfig = {
   },
   fields: [
     i18nEditGuideField({ collectionSlug: 'product-groups', requiredPaths: requiredI18nPaths }),
+    {
+      name: 'showOnFrontendBadge',
+      label: { en: 'Visibility', zh: '显示状态' },
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '@/components/admin/cells/VisibilityStatusCell',
+          Field: false,
+        },
+      },
+    },
     {
       type: 'tabs',
       tabs: [

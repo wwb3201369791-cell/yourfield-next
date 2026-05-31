@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { FormSubmissions } from '@/collections/FormSubmissions';
@@ -267,6 +267,38 @@ describe('admin status tabs', () => {
     await waitFor(() => {
       expect(screen.getByText('当前筛选：今日新增 · 留言咨询')).toBeTruthy();
     });
+  });
+
+  it('updates active filter state after Payload client-side URL changes', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => jsonResponse({ totalDocs: 0 })),
+    );
+    window.history.replaceState({}, '', '/admin/collections/form-submissions');
+
+    render(<FormSubmissionsStatusTabs />);
+
+    await waitFor(() => {
+      expect(screen.getByText('当前筛选：全部记录 · 全部类型')).toBeTruthy();
+    });
+
+    act(() => {
+      window.history.pushState(
+        {},
+        '',
+        '/admin/collections/form-submissions?where[or][0][status][equals]=new&where[inquiryType][equals]=franchise',
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('当前筛选：优先处理 · 招商咨询')).toBeTruthy();
+    });
+    expect(screen.getByRole('link', { name: '优先处理' }).getAttribute('aria-current')).toBe(
+      'page',
+    );
+    expect(screen.getByRole('link', { name: '招商咨询' }).getAttribute('aria-current')).toBe(
+      'page',
+    );
   });
 
   it('reloads manager metric counts when the Payload list data changes after mutations', async () => {
