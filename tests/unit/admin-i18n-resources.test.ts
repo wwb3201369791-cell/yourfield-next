@@ -15,9 +15,11 @@ describe('Payload admin zh i18n resources', () => {
     });
   });
 
-  it('overrides terse pagination and empty-state copy through i18n.resources', () => {
+  it('overrides stiff Payload empty-state copy with natural admin wording', () => {
     expect(adminI18nResources.zh.general).toMatchObject({
-      noResults: '暂无符合条件的{{label}}记录。',
+      noResults: '暂无匹配的 {{label}}。',
+      noResultsDescription: '清空搜索或调整筛选条件后再试。',
+      noResultsFound: '暂时没有记录',
       notFound: '未找到相关条目',
       of: '共',
     });
