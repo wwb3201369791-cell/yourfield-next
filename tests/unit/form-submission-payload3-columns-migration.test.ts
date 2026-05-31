@@ -23,6 +23,9 @@ describe('form submission Payload 3 columns migration', () => {
     expect(formSubmissionPayload3ColumnsSql).toContain('SET "inquiry_type" = "inquiryType"');
     expect(formSubmissionPayload3ColumnsSql).toContain('SET "inquiry_type" = \'message\'');
     expect(formSubmissionPayload3ColumnsSql).toContain('ALTER COLUMN "inquiry_type" SET NOT NULL');
+    expect(formSubmissionPayload3ColumnsSql).toContain(
+      'ALTER TABLE "form_submissions" ALTER COLUMN "inquiryType" DROP NOT NULL',
+    );
     expect(formSubmissionPayload3ColumnsSql).toContain("column_name = 'sourceLocale'");
     expect(formSubmissionPayload3ColumnsSql).toContain('SET "source_locale" = "sourceLocale"');
     expect(formSubmissionPayload3ColumnsSql).toContain('FROM "form_submissions_rels"');

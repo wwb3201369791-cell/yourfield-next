@@ -7,6 +7,7 @@ import { Fragment } from 'react';
 import { LeadSubmitForm } from '@/components/forms/LeadSubmitForm';
 import { JsonLd } from '@/components/public/JsonLd';
 import { getCmsPageByKey } from '@/lib/cms/pages';
+import { getCmsSiteSettings } from '@/lib/cms/site-settings';
 import { env } from '@/lib/env';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocaleFromParams, type LocaleRouteParams } from '@/lib/i18n/route';
@@ -83,7 +84,10 @@ export default async function FranchisePage({ params }: FranchisePageProps) {
   const locale = await resolveRouteLocaleFromParams(params);
   const isDraft = await isDraftModeEnabled();
   const t = await getTranslations(locale);
-  const page = await getCmsPageByKey(locale, 'franchise', isDraft);
+  const [page, siteSettings] = await Promise.all([
+    getCmsPageByKey(locale, 'franchise', isDraft),
+    getCmsSiteSettings(locale),
+  ]);
   const heroImage = page?.heroImage || '/images/headers/franchise-partnership.png';
   const turnstileSiteKey = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -379,6 +383,7 @@ export default async function FranchisePage({ params }: FranchisePageProps) {
               messageLabel={t('page.franchise.formMessageLabel')}
               messagePlaceholder={t('page.franchise.formMessagePlaceholder')}
               submitLabel={t('page.franchise.formSubmit')}
+              supportEmail={siteSettings.contact.email}
               textareaClassName="franchise-textarea"
               {...(turnstileSiteKey ? { turnstileSiteKey } : {})}
             />

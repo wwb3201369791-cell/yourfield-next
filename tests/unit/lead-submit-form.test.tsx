@@ -83,7 +83,7 @@ describe('LeadSubmitForm', () => {
     expect(screen.getByLabelText(/咨询问题/)).toHaveProperty('required', true);
   });
 
-  it('saves the inquiry and shows inline success without opening an email draft', async () => {
+  it('saves the inquiry, shows backend success, and offers an email backup without auto-opening it', async () => {
     const fetchMock = vi.fn().mockImplementation(() =>
       Promise.resolve(
         new Response(JSON.stringify({ id: 'submission-1', ok: true }), {
@@ -127,6 +127,12 @@ describe('LeadSubmitForm', () => {
     expect((await screen.findByRole('status')).textContent).toBe(
       '已收到您的咨询，我们会尽快与您联系。',
     );
+    const backupLink = screen.getByRole<HTMLAnchorElement>('link', {
+      name: '打开邮箱发送咨询',
+    });
+    expect(backupLink.href).toContain('mailto:hnyf@yourfield.net');
+    expect(decodeURIComponent(backupLink.href)).toContain('测试客户');
+    expect(decodeURIComponent(backupLink.href)).toContain('想了解消防服产品。');
     expect(clickSpy).not.toHaveBeenCalled();
   });
 
@@ -182,6 +188,46 @@ describe('LeadSubmitForm', () => {
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
     expect(screen.getByRole('status').textContent).toBe('已收到您的咨询，我们会尽快与您联系。');
+  });
+
+  it('offers a mail client fallback when the backend cannot accept a submission', async () => {
+    const fetchMock = vi.fn().mockImplementation(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({ error: { code: 'SERVER_ERROR' }, ok: false }), {
+          headers: { 'Content-Type': 'application/json' },
+          status: 500,
+        }),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderLeadForm();
+    await waitForHydratedSubmit();
+
+    fireEvent.change(screen.getByLabelText(/姓名/), { target: { value: '测试客户' } });
+    fireEvent.change(screen.getByLabelText(/邮箱/), {
+      target: { value: 'lead@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/联系电话/), {
+      target: { value: '+44 20 7946 0958' },
+    });
+    fireEvent.change(screen.getByLabelText(/咨询问题/), {
+      target: { value: '想了解招商合作。' },
+    });
+    fireEvent.click(screen.getByLabelText(/我同意/));
+    fireEvent.click(screen.getByRole('button', { name: '发送咨询' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    expect((await screen.findByRole('alert')).textContent).toContain(
+      '暂时无法提交，请稍后再试，或直接通过邮箱联系我们。',
+    );
+
+    const fallbackLink = screen.getByRole<HTMLAnchorElement>('link', {
+      name: '打开邮箱发送咨询',
+    });
+    expect(fallbackLink.href).toContain('mailto:hnyf@yourfield.net');
+    expect(decodeURIComponent(fallbackLink.href)).toContain('测试客户');
+    expect(decodeURIComponent(fallbackLink.href)).toContain('想了解招商合作。');
   });
 
   it('shows a friendly validation message for incomplete or invalid input', async () => {

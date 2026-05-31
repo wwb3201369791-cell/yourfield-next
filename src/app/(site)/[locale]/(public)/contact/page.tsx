@@ -213,6 +213,7 @@ export default async function ContactPage({ params, searchParams }: ContactPageP
                   messageLabel={t('page.contact.messageLabel')}
                   messagePlaceholder={t('page.contact.messagePlaceholder')}
                   submitLabel={t('page.contact.submit')}
+                  supportEmail={contactEmail}
                   textareaClassName="contact-textarea"
                   {...(productKey ? { productKey } : {})}
                   {...(turnstileSiteKey ? { turnstileSiteKey } : {})}

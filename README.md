@@ -115,18 +115,19 @@ pnpm audit --audit-level high
 
 - DATABASE_URI
 - PAYLOAD_SECRET
-- TURNSTILE_SECRET
-- NEXT_PUBLIC_TURNSTILE_SITE_KEY
 - CRON_SECRET
 - REVALIDATE_SECRET
 - PAYLOAD_PREVIEW_SECRET
+
+可选启用 Cloudflare Turnstile（免费套餐可用）：如果配置 `NEXT_PUBLIC_TURNSTILE_SITE_KEY`，必须同时配置 `TURNSTILE_SECRET`；正式生产域名不能使用 Cloudflare 官方测试 key（例如 `1x00000000000000000000AA`），否则页面会显示“仅用于测试”。暂未申请正式 key 时可留空，表单仍会写入后台，并依靠 honeypot、限流和字段校验做基础防护。
 
 本地执行 `pnpm check:env` 或 `pnpm build` 时也会触发同一套生产安全门。缺少上述变量时失败是预期保护，不应通过降低校验强度绕过。若只做本地构建验收，请使用 shell-only 临时变量注入一次性 throwaway 值，并确保本地 PostgreSQL 已启动、`DATABASE_URI` 指向可连接的库；不要把这些值写入仓库或提交 `.env.local`。
 
 ```bash
 export PAYLOAD_SECRET=replace-with-32-plus-char-throwaway
-export TURNSTILE_SECRET=replace-with-local-turnstile-test-secret
-export NEXT_PUBLIC_TURNSTILE_SITE_KEY=replace-with-local-turnstile-test-site-key
+# 如要本地测试 Turnstile，可使用 Cloudflare 官方测试 key；生产不要使用测试 key。
+# export TURNSTILE_SECRET=replace-with-local-turnstile-test-secret
+# export NEXT_PUBLIC_TURNSTILE_SITE_KEY=replace-with-local-turnstile-test-site-key
 export CRON_SECRET=replace-with-32-plus-char-throwaway
 export REVALIDATE_SECRET=replace-with-32-plus-char-throwaway
 export PAYLOAD_PREVIEW_SECRET=replace-with-32-plus-char-throwaway

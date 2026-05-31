@@ -39,6 +39,7 @@ type LeadSubmitFormProps = Readonly<{
   messagePlaceholder: string;
   productKey?: string;
   submitLabel: string;
+  supportEmail?: string;
   textareaClassName?: string;
   turnstileSiteKey?: string;
 }>;
@@ -46,10 +47,12 @@ type LeadSubmitFormProps = Readonly<{
 type FormStatus =
   | Readonly<{ kind: 'idle' }>
   | Readonly<{ kind: 'submitting' }>
-  | Readonly<{ kind: 'success'; message: string }>
-  | Readonly<{ kind: 'error'; message: string }>;
+  | Readonly<{ fallbackEmailHref?: string; kind: 'success'; message: string }>
+  | Readonly<{ fallbackEmailHref?: string; kind: 'error'; message: string }>;
 
 const successMessageVisibleMs = 8_000;
+const defaultSupportEmail = 'hnyf@yourfield.net';
+const safeEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 
 export type LeadFormPayload = {
   consentAccepted: true;
@@ -119,6 +122,37 @@ function messageForErrorCode(code: string | undefined, copy: ReturnType<typeof g
     default:
       return copy.genericError;
   }
+}
+
+function normalizeSupportEmail(email: string | undefined) {
+  const trimmed = email?.trim();
+
+  return trimmed && safeEmailPattern.test(trimmed) ? trimmed : defaultSupportEmail;
+}
+
+function buildFallbackMailtoHref(
+  supportEmail: string | undefined,
+  copy: ReturnType<typeof getLeadFormCopy>,
+  payload: LeadFormPayload,
+) {
+  const email = normalizeSupportEmail(supportEmail);
+  const bodyLines = [
+    `Name: ${payload.name}`,
+    payload.mobile ? `Phone: ${payload.mobile}` : undefined,
+    payload.email ? `Email: ${payload.email}` : undefined,
+    payload.company ? `Company: ${payload.company}` : undefined,
+    payload.country ? `Country / Region: ${payload.country}` : undefined,
+    payload.inquiryType ? `Inquiry type: ${payload.inquiryType}` : undefined,
+    payload.sourceUrl ? `Source: ${payload.sourceUrl}` : undefined,
+    '',
+    payload.message,
+  ].filter((line): line is string => typeof line === 'string');
+  const params = new URLSearchParams({
+    body: bodyLines.join('\n'),
+    subject: copy.emailFallbackSubject,
+  });
+
+  return `mailto:${email}?${params.toString()}`;
 }
 
 function resetTurnstile() {
@@ -210,6 +244,7 @@ export function LeadSubmitForm({
   messagePlaceholder,
   productKey,
   submitLabel,
+  supportEmail = defaultSupportEmail,
   textareaClassName = 'min-h-36 rounded border border-border bg-white px-4 py-3 text-base font-normal text-text disabled:cursor-not-allowed disabled:opacity-70',
   turnstileSiteKey,
 }: LeadSubmitFormProps) {
@@ -324,6 +359,7 @@ export function LeadSubmitForm({
         }
 
         setStatus({
+          fallbackEmailHref: buildFallbackMailtoHref(supportEmail, copy, payload),
           kind: 'error',
           message: messageForErrorCode(responseErrorCode(data), copy),
         });
@@ -333,6 +369,7 @@ export function LeadSubmitForm({
 
       form.reset();
       setStatus({
+        fallbackEmailHref: buildFallbackMailtoHref(supportEmail, copy, payload),
         kind: 'success',
         message: copy.success,
       });
@@ -341,7 +378,11 @@ export function LeadSubmitForm({
         resetTurnstile();
       }
 
-      setStatus({ kind: 'error', message: copy.genericError });
+      setStatus({
+        fallbackEmailHref: buildFallbackMailtoHref(supportEmail, copy, payload),
+        kind: 'error',
+        message: copy.genericError,
+      });
     }
   }
 
@@ -457,14 +498,32 @@ export function LeadSubmitForm({
           {isSubmitting ? copy.submitting : submitLabel}
         </button>
         {status.kind === 'success' ? (
-          <p className="text-sm font-semibold text-primary" role="status">
-            {status.message}
-          </p>
+          <>
+            <p className="text-sm font-semibold text-primary" role="status">
+              {status.message}
+            </p>
+            {status.fallbackEmailHref ? (
+              <a
+                className="text-sm font-semibold text-primary underline underline-offset-4"
+                href={status.fallbackEmailHref}
+              >
+                {copy.emailFallbackLabel}
+              </a>
+            ) : null}
+          </>
         ) : null}
         {status.kind === 'error' ? (
-          <p className="text-sm font-semibold text-red-700" role="alert">
-            {status.message}
-          </p>
+          <div className="grid gap-1 text-sm font-semibold text-red-700" role="alert">
+            <p>{status.message}</p>
+            {status.fallbackEmailHref ? (
+              <a
+                className="text-primary underline underline-offset-4"
+                href={status.fallbackEmailHref}
+              >
+                {copy.emailFallbackLabel}
+              </a>
+            ) : null}
+          </div>
         ) : null}
       </div>
     </form>

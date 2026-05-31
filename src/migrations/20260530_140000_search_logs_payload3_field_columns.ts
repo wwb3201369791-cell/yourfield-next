@@ -50,6 +50,19 @@ WHERE "event_type" IS NULL;
 
 ALTER TABLE IF EXISTS "search_logs" ALTER COLUMN "event_type" SET NOT NULL;
 
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = current_schema()
+      AND table_name = 'search_logs'
+      AND column_name = 'eventType'
+  ) THEN
+    ALTER TABLE "search_logs" ALTER COLUMN "eventType" DROP NOT NULL;
+  END IF;
+END $$;
+
 CREATE INDEX IF NOT EXISTS "search_logs_event_type_v3_idx" ON "search_logs" USING btree ("event_type");
 CREATE INDEX IF NOT EXISTS "search_logs_result_type_v3_idx" ON "search_logs" USING btree ("result_type");
 `;

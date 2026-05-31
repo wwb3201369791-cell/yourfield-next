@@ -14,6 +14,31 @@ const emptyStringToUndefined = (value: unknown) => {
 const optionalString = z.preprocess(emptyStringToUndefined, z.string().min(1).optional());
 const optionalUrl = z.preprocess(emptyStringToUndefined, z.string().url().optional());
 const optionalEmail = z.preprocess(emptyStringToUndefined, z.string().email().optional());
+const turnstileTestSiteKeys = new Set([
+  '1x00000000000000000000AA',
+  '2x00000000000000000000AB',
+  '1x00000000000000000000BB',
+  '2x00000000000000000000BB',
+  '3x00000000000000000000FF',
+]);
+const turnstileTestSecretKeys = new Set([
+  '1x0000000000000000000000000000000AA',
+  '2x0000000000000000000000000000000AA',
+  '3x0000000000000000000000000000000AA',
+]);
+
+function normalizedSecretLike(value: string | undefined) {
+  const trimmed = value?.trim();
+  const firstChar = trimmed?.[0];
+  const lastChar = trimmed?.[trimmed.length - 1];
+
+  return trimmed &&
+    trimmed.length >= 2 &&
+    (firstChar === '"' || firstChar === "'") &&
+    firstChar === lastChar
+    ? trimmed.slice(1, -1).trim()
+    : trimmed;
+}
 
 const s3StorageRequiredEnvKeys = [
   'S3_ENDPOINT',
@@ -168,7 +193,10 @@ const envSchema = z
       });
     }
 
-    if (data.TURNSTILE_SECRET && !data.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+    const hasTurnstileSiteKey = Boolean(data.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
+    const hasTurnstileSecret = Boolean(data.TURNSTILE_SECRET);
+
+    if (hasTurnstileSecret && !hasTurnstileSiteKey) {
       context.addIssue({
         code: 'custom',
         path: ['NEXT_PUBLIC_TURNSTILE_SITE_KEY'],
@@ -176,30 +204,46 @@ const envSchema = z
       });
     }
 
+    if (hasTurnstileSiteKey && !hasTurnstileSecret) {
+      context.addIssue({
+        code: 'custom',
+        path: ['TURNSTILE_SECRET'],
+        message: 'TURNSTILE_SECRET is required when NEXT_PUBLIC_TURNSTILE_SITE_KEY is configured',
+      });
+    }
+
     const shouldRequireProductionRuntimeSecrets =
       data.NODE_ENV === 'production' && !data.SKIP_ENV_VALIDATION;
+
+    if (
+      shouldRequireProductionRuntimeSecrets &&
+      turnstileTestSiteKeys.has(normalizedSecretLike(data.NEXT_PUBLIC_TURNSTILE_SITE_KEY) ?? '')
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['NEXT_PUBLIC_TURNSTILE_SITE_KEY'],
+        message:
+          'NEXT_PUBLIC_TURNSTILE_SITE_KEY must not use a Cloudflare Turnstile test site key in production',
+      });
+    }
+
+    if (
+      shouldRequireProductionRuntimeSecrets &&
+      turnstileTestSecretKeys.has(normalizedSecretLike(data.TURNSTILE_SECRET) ?? '')
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['TURNSTILE_SECRET'],
+        message:
+          'TURNSTILE_SECRET must not use a Cloudflare Turnstile test secret key in production',
+      });
+    }
 
     if (data.NODE_ENV === 'production' && !data.PAYLOAD_SECRET) {
       context.addIssue({
         code: 'custom',
         path: ['PAYLOAD_SECRET'],
         message: 'PAYLOAD_SECRET is required in production',
-      });
-    }
-
-    if (shouldRequireProductionRuntimeSecrets && !data.TURNSTILE_SECRET) {
-      context.addIssue({
-        code: 'custom',
-        path: ['TURNSTILE_SECRET'],
-        message: 'TURNSTILE_SECRET is required in production',
-      });
-    }
-
-    if (shouldRequireProductionRuntimeSecrets && !data.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
-      context.addIssue({
-        code: 'custom',
-        path: ['NEXT_PUBLIC_TURNSTILE_SITE_KEY'],
-        message: 'NEXT_PUBLIC_TURNSTILE_SITE_KEY is required in production',
       });
     }
 

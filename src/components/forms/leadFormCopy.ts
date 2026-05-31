@@ -3,6 +3,8 @@ export type LeadFormLocale = 'zh' | 'en' | 'ru';
 type LeadFormCopy = Readonly<{
   captchaError: string;
   consent: string;
+  emailFallbackLabel: string;
+  emailFallbackSubject: string;
   genericError: string;
   rateLimited: string;
   requiredLabel: string;
@@ -16,6 +18,8 @@ const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
   zh: {
     captchaError: '信息验证失败，请稍后再试。',
     consent: '我同意永霏为回复本次咨询使用以上信息。',
+    emailFallbackLabel: '打开邮箱发送咨询',
+    emailFallbackSubject: '官网咨询',
     genericError: '提交失败，请稍后再试，或直接通过邮箱联系我们。',
     rateLimited: '提交过于频繁，请稍后再试。',
     requiredLabel: '必填',
@@ -27,6 +31,8 @@ const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
   en: {
     captchaError: 'Form verification failed. Please try again later.',
     consent: 'I agree that YourField may use the information above to respond to this inquiry.',
+    emailFallbackLabel: 'Open email to send inquiry',
+    emailFallbackSubject: 'Website inquiry',
     genericError: 'Submission failed. Please try again later or contact us by email.',
     rateLimited: 'Too many submissions. Please try again later.',
     requiredLabel: 'required',
@@ -40,6 +46,8 @@ const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
   ru: {
     captchaError: 'Проверка формы не пройдена. Повторите попытку позже.',
     consent: 'Я согласен(на), что YourField может использовать эти данные для ответа на запрос.',
+    emailFallbackLabel: 'Открыть почту для отправки запроса',
+    emailFallbackSubject: 'Запрос с сайта',
     genericError: 'Не удалось отправить форму. Повторите попытку позже или напишите нам по email.',
     rateLimited: 'Слишком много отправок. Повторите попытку позже.',
     requiredLabel: 'обязательно',

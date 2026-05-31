@@ -8,8 +8,6 @@ const protectedProductionSecrets = [
 const requiredProductionEnvKeys = [
   'PAYLOAD_SECRET',
   'DATABASE_URI',
-  'TURNSTILE_SECRET',
-  'NEXT_PUBLIC_TURNSTILE_SITE_KEY',
   ...protectedProductionSecrets,
 ] as const;
 
@@ -24,10 +22,12 @@ const productionBaseEnv = {
 type EnvImport = {
   env: {
     CRON_SECRET?: string;
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY?: string;
     NODE_ENV: 'development' | 'production' | 'test';
     PAYLOAD_PREVIEW_SECRET?: string;
     REVALIDATE_SECRET?: string;
     SKIP_ENV_VALIDATION: boolean;
+    TURNSTILE_SECRET?: string;
   };
 };
 
@@ -70,6 +70,46 @@ describe('environment validation', () => {
     requiredProductionEnvKeys.forEach((envName) => {
       expect(message).toContain(`${envName} is required in production`);
     });
+  });
+
+  it('allows production startup without Turnstile keys when other required secrets are configured', async () => {
+    const { env } = await importEnvWith({
+      CRON_SECRET: 'test-cron-secret',
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: '',
+      PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION: 'true',
+      REVALIDATE_SECRET: 'test-revalidate-secret',
+      PAYLOAD_PREVIEW_SECRET: 'test-preview-secret',
+      TURNSTILE_SECRET: '',
+    });
+
+    expect(env.CRON_SECRET).toBe('test-cron-secret');
+    expect(env.REVALIDATE_SECRET).toBe('test-revalidate-secret');
+    expect(env.PAYLOAD_PREVIEW_SECRET).toBe('test-preview-secret');
+    expect(env.NEXT_PUBLIC_TURNSTILE_SITE_KEY).toBeUndefined();
+    expect(env.TURNSTILE_SECRET).toBeUndefined();
+  });
+
+  it('rejects Cloudflare Turnstile dummy keys on production domains', async () => {
+    const error = await importEnvWith({
+      CRON_SECRET: 'test-cron-secret',
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
+      PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION: 'true',
+      PAYLOAD_PREVIEW_SECRET: 'test-preview-secret',
+      REVALIDATE_SECRET: 'test-revalidate-secret',
+      TURNSTILE_SECRET: '1x0000000000000000000000000000000AA',
+    }).then(
+      () => undefined,
+      (caughtError: unknown) => caughtError,
+    );
+
+    expect(error).toBeInstanceOf(Error);
+    const message = error instanceof Error ? error.message : '';
+    expect(message).toContain(
+      'NEXT_PUBLIC_TURNSTILE_SITE_KEY must not use a Cloudflare Turnstile test site key in production',
+    );
+    expect(message).toContain(
+      'TURNSTILE_SECRET must not use a Cloudflare Turnstile test secret key in production',
+    );
   });
 
   it('allows production startup when internal webhook secrets are configured', async () => {

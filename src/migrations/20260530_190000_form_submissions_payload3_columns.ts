@@ -42,6 +42,19 @@ BEGIN
     FROM information_schema.columns
     WHERE table_schema = current_schema()
       AND table_name = 'form_submissions'
+      AND column_name = 'inquiryType'
+  ) THEN
+    ALTER TABLE "form_submissions" ALTER COLUMN "inquiryType" DROP NOT NULL;
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = current_schema()
+      AND table_name = 'form_submissions'
       AND column_name = 'sourceLocale'
   ) THEN
     UPDATE "form_submissions"
