@@ -30,4 +30,13 @@ describe('Payload admin layout CSS', () => {
     expect(css).toContain(".doc-tab__link[href$='/api']");
     expect(css).toContain(".doc-tab__link[href*='/versions']");
   });
+
+  it('keeps opened row action menus above table row hover backgrounds', () => {
+    const css = readFileSync(path.join(projectRoot, 'src/styles/payload-admin.css'), 'utf8');
+
+    expect(css).toContain('.collection-list .table tbody tr:has(.yf-list-row-actions__panel)');
+    expect(css).toContain('td:has(.yf-list-row-actions)');
+    expect(css).toContain('.yf-list-row-actions:has(.yf-list-row-actions__panel)');
+    expect(css).toContain('background: linear-gradient(90deg, rgba(23, 109, 166, 0.13)');
+  });
 });
