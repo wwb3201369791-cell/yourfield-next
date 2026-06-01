@@ -3,6 +3,7 @@ import type { CollectionConfig, Field } from 'payload';
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
 import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
+import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { newsCategoryOptions } from '../lib/payload/fields/options';
 import { imageUploadField, videoUploadField } from '../lib/payload/fields/simpleMediaUpload';
@@ -88,7 +89,7 @@ export const News: CollectionConfig = {
   admin: {
     hideAPIURL: true,
     useAsTitle: 'title',
-    defaultColumns: ['title', 'statusBadge', 'featuredOrder', 'publishedAt'],
+    defaultColumns: ['title', 'statusBadge', 'featuredOrder', 'publishedAt', 'rowActions'],
     components: {
       views: {
         edit: {
@@ -308,5 +309,6 @@ export const News: CollectionConfig = {
       },
     },
     hiddenSlugField,
+    adminRowActionsField,
   ],
 };

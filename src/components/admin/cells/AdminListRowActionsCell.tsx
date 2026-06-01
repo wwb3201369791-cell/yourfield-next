@@ -21,8 +21,18 @@ import {
 } from './listRowActions';
 
 type CellProps = Readonly<{
+  collectionSlug?: unknown;
   rowData?: Readonly<Record<string, unknown>>;
 }>;
+
+function normalizeCollectionSlug(value: unknown): AdminListRowActionCollection | null {
+  return value === 'news' ||
+    value === 'solutions' ||
+    value === 'product-groups' ||
+    value === 'products'
+    ? value
+    : null;
+}
 
 function currentCollectionSlug(): AdminListRowActionCollection | null {
   if (typeof window === 'undefined') {
@@ -41,18 +51,22 @@ async function readJson(response: Response): Promise<unknown> {
   }
 }
 
-export default function AdminListRowActionsCell({ rowData }: CellProps) {
+export default function AdminListRowActionsCell({
+  collectionSlug: collectionSlugProp,
+  rowData,
+}: CellProps) {
   const t = useAdminText();
   const {
     config: { routes },
   } = useConfig();
   const [moving, setMoving] = useState<AdminListRowActionDirection | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const collectionSlug = currentCollectionSlug();
+  const collectionSlug = normalizeCollectionSlug(collectionSlugProp) ?? currentCollectionSlug();
   const config = collectionSlug ? adminListRowActionConfig[collectionSlug] : null;
   const documentId = rowActionDocumentId(rowData);
-  const order = config ? rowActionOrderValue(rowData, config.orderField) : null;
+  const order = config?.orderField ? rowActionOrderValue(rowData, config.orderField) : null;
   const productGroupId = rowActionProductGroupId(rowData);
+  const [menuOpen, setMenuOpen] = useState(false);
   const editHref =
     collectionSlug && documentId
       ? buildAdminListEditHref(routes.admin, collectionSlug, documentId)
@@ -74,12 +88,15 @@ export default function AdminListRowActionsCell({ rowData }: CellProps) {
 
   const moveRow = useCallback(
     async (direction: AdminListRowActionDirection) => {
-      if (!collectionSlug || !config || !documentId || order === null) {
+      if (!collectionSlug || !config?.orderField || !documentId || order === null) {
         return;
       }
 
+      const orderField = config.orderField;
+
       setMoving(direction);
       setMessage(null);
+      setMenuOpen(false);
 
       try {
         const neighborResponse = await fetch(
@@ -88,7 +105,7 @@ export default function AdminListRowActionsCell({ rowData }: CellProps) {
             collectionSlug,
             direction,
             order,
-            orderField: config.orderField,
+            orderField,
             productGroupId: config.scopeByProductGroup ? productGroupId : null,
           }),
           { credentials: 'include' },
@@ -100,7 +117,7 @@ export default function AdminListRowActionsCell({ rowData }: CellProps) {
 
         const neighborDoc = neighborDocFromApiResponse(await readJson(neighborResponse));
         const neighborId = rowActionDocumentId(neighborDoc);
-        const neighborOrder = rowActionOrderValue(neighborDoc, config.orderField);
+        const neighborOrder = rowActionOrderValue(neighborDoc, orderField);
 
         if (!neighborId || neighborOrder === null) {
           setMessage(t(direction === 'up' ? '已经是第一位' : '已经是最后一位'));
@@ -108,7 +125,7 @@ export default function AdminListRowActionsCell({ rowData }: CellProps) {
         }
 
         const patchOptions = (nextOrder: number) => ({
-          body: JSON.stringify({ [config.orderField]: nextOrder }),
+          body: JSON.stringify({ [orderField]: nextOrder }),
           credentials: 'include' as const,
           headers: { 'Content-Type': 'application/json' },
           method: 'PATCH',
@@ -135,47 +152,89 @@ export default function AdminListRowActionsCell({ rowData }: CellProps) {
         setMoving(null);
       }
     },
-    [collectionSlug, config, documentId, order, productGroupId, routes.api, t],
+    [collectionSlug, config, documentId, order, productGroupId, routes.api, setMenuOpen, t],
   );
 
   if (!collectionSlug || !config || !documentId) {
     return <span className="yf-list-row-actions__empty">—</span>;
   }
 
-  const canMove = order !== null;
+  const hasMoveActions = Boolean(config.orderField);
+  const canMove = hasMoveActions && order !== null;
+  const hasMenuActions = hasMoveActions || createLinks.length > 0;
 
   return (
     <div className="yf-list-row-actions" aria-label={t('操作')}>
-      {editHref ? (
-        <a className="yf-list-row-actions__button" href={editHref}>
-          {t('编辑')}
-        </a>
-      ) : null}
-      <button
-        className="yf-list-row-actions__button"
-        disabled={!canMove || moving !== null}
-        type="button"
-        onClick={() => void moveRow('up')}
-      >
-        {moving === 'up' ? t('调整中') : t('上移')}
-      </button>
-      <button
-        className="yf-list-row-actions__button"
-        disabled={!canMove || moving !== null}
-        type="button"
-        onClick={() => void moveRow('down')}
-      >
-        {moving === 'down' ? t('调整中') : t('下移')}
-      </button>
-      {createLinks.map((action) => (
-        <a
-          className="yf-list-row-actions__button yf-list-row-actions__button--secondary"
-          href={action.href}
-          key={action.key}
-        >
-          {t(action.label)}
-        </a>
-      ))}
+      <div className="yf-list-row-actions__compound">
+        {editHref ? (
+          <a className="yf-list-row-actions__primary" href={editHref}>
+            {t('编辑')}
+          </a>
+        ) : null}
+        <div className="yf-list-row-actions__menu">
+          <button
+            aria-expanded={menuOpen}
+            aria-haspopup="menu"
+            className="yf-list-row-actions__trigger"
+            disabled={!hasMenuActions}
+            type="button"
+            onClick={() => setMenuOpen((value) => !value)}
+          >
+            <span>{t({ en: 'More', zh: '更多操作' })}</span>
+            <span aria-hidden="true" className="yf-list-row-actions__chevron">
+              ▾
+            </span>
+          </button>
+          {menuOpen ? (
+            <div
+              className="yf-list-row-actions__panel"
+              role="menu"
+              tabIndex={-1}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  setMenuOpen(false);
+                }
+              }}
+            >
+              {hasMoveActions ? (
+                <>
+                  <button
+                    className="yf-list-row-actions__menu-item"
+                    disabled={!canMove || moving !== null}
+                    role="menuitem"
+                    type="button"
+                    onClick={() => void moveRow('up')}
+                  >
+                    {moving === 'up' ? t('调整中') : t('上移')}
+                  </button>
+                  <button
+                    className="yf-list-row-actions__menu-item"
+                    disabled={!canMove || moving !== null}
+                    role="menuitem"
+                    type="button"
+                    onClick={() => void moveRow('down')}
+                  >
+                    {moving === 'down' ? t('调整中') : t('下移')}
+                  </button>
+                </>
+              ) : null}
+              {hasMoveActions && createLinks.length > 0 ? (
+                <span className="yf-list-row-actions__separator" role="presentation" />
+              ) : null}
+              {createLinks.map((action) => (
+                <a
+                  className="yf-list-row-actions__menu-item yf-list-row-actions__menu-item--secondary"
+                  href={action.href}
+                  key={action.key}
+                  role="menuitem"
+                >
+                  {t(action.label)}
+                </a>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      </div>
       {message ? <span className="yf-list-row-actions__message">{message}</span> : null}
     </div>
   );

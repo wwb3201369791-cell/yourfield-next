@@ -3,11 +3,12 @@
 import { readFileSync } from 'node:fs';
 import { createElement } from 'react';
 
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ProductGroups } from '@/collections/ProductGroups';
 import { Products } from '@/collections/Products';
+import { News } from '@/collections/News';
 import { Solutions } from '@/collections/Solutions';
 import AdminListRowActionsCell from '@/components/admin/cells/AdminListRowActionsCell';
 import {
@@ -42,6 +43,7 @@ describe('admin collection row actions', () => {
 
     expect(configSource).not.toContain('AdminPageQuickActions');
     expect(configSource).toContain('AdminInterfaceLanguageSwitch');
+    expect(News.admin?.defaultColumns).toContain('rowActions');
     expect(Solutions.admin?.defaultColumns).toContain('rowActions');
     expect(ProductGroups.admin?.defaultColumns).toContain('rowActions');
     expect(Products.admin?.defaultColumns).toContain('rowActions');
@@ -58,6 +60,9 @@ describe('admin collection row actions', () => {
     expect(
       adminListRowActionConfig.solutions.createActions.map((action) => action.collectionSlug),
     ).toEqual(['solutions', 'product-groups', 'products']);
+    expect(
+      adminListRowActionConfig.news.createActions.map((action) => action.collectionSlug),
+    ).toEqual(['news']);
     expect(
       adminListRowActionConfig['product-groups'].createActions.map((action) => action.key),
     ).toEqual(['create-product-group', 'create-product']);
@@ -98,7 +103,7 @@ describe('admin collection row actions', () => {
     );
   });
 
-  it('renders row-level edit, reorder, and related create actions for product groups', () => {
+  it('renders row-level edit plus a rounded compound action menu for product groups', () => {
     window.history.pushState({}, '', '/admin/collections/product-groups');
 
     render(
@@ -108,17 +113,39 @@ describe('admin collection row actions', () => {
     expect(screen.getByRole('link', { name: '编辑' }).getAttribute('href')).toBe(
       '/admin/collections/product-groups/5',
     );
-    expect((screen.getByRole('button', { name: '上移' }) as HTMLButtonElement).disabled).toBe(
+    fireEvent.click(screen.getByRole('button', { name: /更多操作/ }));
+
+    expect((screen.getByRole('menuitem', { name: '上移' }) as HTMLButtonElement).disabled).toBe(
       false,
     );
-    expect((screen.getByRole('button', { name: '下移' }) as HTMLButtonElement).disabled).toBe(
+    expect((screen.getByRole('menuitem', { name: '下移' }) as HTMLButtonElement).disabled).toBe(
       false,
     );
-    expect(screen.getByRole('link', { name: '添加产品大类' }).getAttribute('href')).toBe(
+    expect(screen.getByRole('menuitem', { name: '添加产品大类' }).getAttribute('href')).toBe(
       '/admin/collections/product-groups/create',
     );
-    expect(screen.getByRole('link', { name: '添加产品' }).getAttribute('href')).toBe(
+    expect(screen.getByRole('menuitem', { name: '添加产品' }).getAttribute('href')).toBe(
       '/admin/collections/products/create?productGroup=5',
     );
+  });
+
+  it('keeps the news row menu scoped to news-only actions', () => {
+    window.history.pushState({}, '', '/admin/collections/news');
+
+    render(createElement(AdminListRowActionsCell, { rowData: { id: 9, featuredOrder: 1 } }));
+
+    expect(screen.getByRole('link', { name: '编辑' }).getAttribute('href')).toBe(
+      '/admin/collections/news/9',
+    );
+    fireEvent.click(screen.getByRole('button', { name: /更多操作/ }));
+
+    expect(screen.getByRole('menuitem', { name: '添加新闻' }).getAttribute('href')).toBe(
+      '/admin/collections/news/create',
+    );
+    expect(screen.queryByRole('menuitem', { name: '添加解决方案' })).toBeNull();
+    expect(screen.queryByRole('menuitem', { name: '添加产品大类' })).toBeNull();
+    expect(screen.queryByRole('menuitem', { name: '添加产品' })).toBeNull();
+    expect(screen.queryByRole('menuitem', { name: '上移' })).toBeNull();
+    expect(screen.queryByRole('menuitem', { name: '下移' })).toBeNull();
   });
 });

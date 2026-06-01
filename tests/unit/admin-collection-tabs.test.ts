@@ -388,6 +388,7 @@ describe('admin collection tabs', () => {
       'statusBadge',
       'featuredOrder',
       'publishedAt',
+      'rowActions',
     ]);
     expect(featuredOrder).toMatchObject({
       max: 3,

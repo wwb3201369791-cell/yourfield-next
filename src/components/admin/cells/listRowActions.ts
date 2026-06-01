@@ -1,4 +1,4 @@
-export type AdminListRowActionCollection = 'solutions' | 'product-groups' | 'products';
+export type AdminListRowActionCollection = 'news' | 'solutions' | 'product-groups' | 'products';
 
 export type AdminListRowActionDirection = 'up' | 'down';
 
@@ -11,11 +11,20 @@ type CreateActionConfig = Readonly<{
 
 type RowActionConfig = Readonly<{
   createActions: readonly CreateActionConfig[];
-  orderField: 'displayOrder' | 'order';
+  orderField?: 'displayOrder' | 'order';
   scopeByProductGroup?: boolean;
 }>;
 
 export const adminListRowActionConfig: Record<AdminListRowActionCollection, RowActionConfig> = {
+  news: {
+    createActions: [
+      {
+        key: 'create-news',
+        collectionSlug: 'news',
+        label: { en: 'Add news', zh: '添加新闻' },
+      },
+    ],
+  },
   solutions: {
     orderField: 'order',
     createActions: [
@@ -136,7 +145,9 @@ export function collectionSlugFromAdminPath(pathname: string): AdminListRowActio
   const match = pathname.match(/\/collections\/([^/?#]+)/);
   const slug = match?.[1];
 
-  return slug === 'solutions' || slug === 'product-groups' || slug === 'products' ? slug : null;
+  return slug === 'news' || slug === 'solutions' || slug === 'product-groups' || slug === 'products'
+    ? slug
+    : null;
 }
 
 export function buildNeighborLookupUrl(args: {
