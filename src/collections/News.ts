@@ -1,7 +1,7 @@
 import type { CollectionConfig, Field } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
-import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel, adminNavLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
@@ -87,6 +87,7 @@ export const News: CollectionConfig = {
     plural: adminCollectionLabel('新闻动态'),
   },
   admin: {
+    group: adminNavLabel('内容管理'),
     hideAPIURL: true,
     useAsTitle: 'title',
     defaultColumns: ['title', 'statusBadge', 'featuredOrder', 'publishedAt', 'rowActions'],

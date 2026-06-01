@@ -1,7 +1,7 @@
 import type { CollectionConfig, Field, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access';
-import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel, adminNavLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
@@ -47,7 +47,7 @@ export const ProductGroups: CollectionConfig = {
   admin: {
     hideAPIURL: true,
     useAsTitle: 'name',
-    group: { en: 'Product management', zh: '产品管理' },
+    group: adminNavLabel('产品管理'),
     defaultColumns: ['name', 'showOnFrontendBadge', 'order', 'rowActions'],
     listSearchableFields: ['name', 'groupId'],
     description: {

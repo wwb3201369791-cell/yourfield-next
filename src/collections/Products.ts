@@ -6,7 +6,7 @@ import {
   canUpdate,
   isAdminOrPublishedWithPublishedAt,
 } from '../lib/payload/access';
-import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel, adminNavLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { textArrayField, textareaArrayField, uploadArrayField } from '../lib/payload/fields/arrays';
@@ -412,7 +412,7 @@ export const Products: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    group: { en: 'Product management', zh: '产品管理' },
+    group: adminNavLabel('产品管理'),
     defaultColumns: ['model', 'name', 'productGroup', 'statusBadge', 'publishedAt', 'rowActions'],
     description: {
       en: 'Maintain storefront product cards and detail pages. Product numbers and names identify products and build links; a real main image is required before publishing.',

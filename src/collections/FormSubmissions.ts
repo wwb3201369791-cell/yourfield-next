@@ -2,7 +2,7 @@ import type { CollectionAfterChangeHook as AfterChangeHook, CollectionConfig } f
 
 import { sendNotification } from '../lib/email/sendNotification';
 import { canDelete, canRead, canUpdate, deny } from '../lib/payload/access';
-import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel, adminNavLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import {
   inquiryTypeOptions,
@@ -39,6 +39,7 @@ export const FormSubmissions: CollectionConfig = {
     plural: adminCollectionLabel('咨询表单'),
   },
   admin: {
+    group: adminNavLabel('内容管理'),
     hideAPIURL: true,
     useAsTitle: 'name',
     listSearchableFields: ['name', 'phone', 'email', 'company'],

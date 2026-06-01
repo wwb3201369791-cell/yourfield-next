@@ -108,8 +108,13 @@ describe('admin collection tabs', () => {
     expect(Solutions.labels?.plural).toBe('解决方案');
     expect(Products.labels?.singular).toBe('产品');
     expect(Products.labels?.plural).toBe('产品');
-    expect(localizedLabel(ProductGroups.admin?.group, 'en')).toBe('Product management');
-    expect(localizedLabel(Products.admin?.group, 'en')).toBe('Product management');
+    expect(FormSubmissions.admin?.group).toBe('内容管理');
+    expect(News.admin?.group).toBe('内容管理');
+    expect(Solutions.admin?.group).toBe('内容管理');
+    expect(ProductGroups.admin?.group).toBe('产品管理');
+    expect(Products.admin?.group).toBe('产品管理');
+    expect(SiteSettings.label).toBe('联系方式');
+    expect(SiteSettings.admin?.group).toBe('全局设置');
     expect(ProductGroups.admin?.description).toMatchObject({
       en: expect.stringContaining('storefront product category'),
       zh: expect.stringContaining('前台产品中心'),

@@ -1,7 +1,7 @@
 import type { CollectionConfig, Field, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
-import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
+import { adminCollectionLabel, adminLabel, adminNavLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { textArrayField } from '../lib/payload/fields/arrays';
@@ -62,6 +62,7 @@ export const Solutions: CollectionConfig = {
   },
   defaultSort: 'order',
   admin: {
+    group: adminNavLabel('内容管理'),
     hideAPIURL: true,
     useAsTitle: 'solutionId',
     listSearchableFields: ['title'],

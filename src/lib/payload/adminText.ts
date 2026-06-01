@@ -740,3 +740,7 @@ export function adminLabel(value: string, enOverride?: string) {
 export function adminCollectionLabel(value: string) {
   return value;
 }
+
+export function adminNavLabel(value: string) {
+  return value;
+}

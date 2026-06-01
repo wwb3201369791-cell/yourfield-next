@@ -1,7 +1,7 @@
 import type { Field, GlobalConfig } from 'payload';
 
 import { canUpdate, isPublic } from '../lib/payload/access';
-import { adminLabel } from '../lib/payload/adminText';
+import { adminLabel, adminNavLabel } from '../lib/payload/adminText';
 import { auditGlobalAfterChange } from '../lib/payload/audit';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import {
@@ -47,9 +47,9 @@ const hiddenDefaultSeo = {
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
-  label: adminLabel('联系方式'),
+  label: adminNavLabel('联系方式'),
   admin: {
-    group: adminLabel('全局设置'),
+    group: adminNavLabel('全局设置'),
     hideAPIURL: true,
     components: {
       views: {
