@@ -1,4 +1,4 @@
-﻿import type { Field } from 'payload';
+import type { Field } from 'payload';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Products } from '@/collections/Products';
@@ -49,6 +49,7 @@ describe('Products admin structure', () => {
       'productGroup',
       'statusBadge',
       'publishedAt',
+      'rowActions',
     ]);
     expect(getNamedField('statusBadge')).toMatchObject({ label: adminLabel('状态'), type: 'ui' });
     expect(getNamedField('productId')?.admin).toMatchObject({

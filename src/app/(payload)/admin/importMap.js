@@ -2,6 +2,7 @@ import { default as default_b784dc38bb5496e6b88d5f1021dc0c04 } from '@/component
 import { FormSubmissionsStatusTabs as FormSubmissionsStatusTabs_d303dfd4f00c0934ce208c1244b6d42b } from '@/components/admin/list/FormSubmissionsStatusTabs'
 import { default as default_58a3567919654d5ba43db2f2f03c843c } from '@/components/admin/I18nEditGuideLoader'
 import { default as default_a0ded7dd6cfb9858330a14decb30169b } from '@/components/admin/cells/VisibilityStatusCell'
+import { default as default_5ca3cc19131eeec42a8b51d3c1499139 } from '@/components/admin/cells/AdminListRowActionsCell'
 import { default as default_bba462316deccb203c716e523e0f12cd } from '@/components/admin/cells/SolutionPositionCell'
 import { default as default_4f4e24fe13f7bfd45261f0af9a3e042e } from '@/components/admin/media-upload/SimpleMediaUploadField'
 import { default as default_30989b2842ece380ff7a5a5f06b6152f } from '@/components/admin/cells/DraftStatusCell'
@@ -35,7 +36,6 @@ import { SearchLogsStatsPanel as SearchLogsStatsPanel_465a1122331e14da4af3e21d5a
 import { AdminLogoutButton as AdminLogoutButton_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
 import { YourfieldAdminIcon as YourfieldAdminIcon_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
 import { YourfieldAdminLogo as YourfieldAdminLogo_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
-import { AdminPageQuickActions as AdminPageQuickActions_8cbc2c443dfacd4d265d46a61152f988 } from '@/components/admin/AdminPageQuickActions'
 import { AdminInterfaceLanguageSwitch as AdminInterfaceLanguageSwitch_9721b8f7fa1ddef27c995aba5aba0bfa } from '@/components/admin/AdminInterfaceLanguageSwitch'
 import { AdminLoginSupport as AdminLoginSupport_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
 import { AdminDashboardIntro as AdminDashboardIntro_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
@@ -52,6 +52,7 @@ export const importMap = {
   "@/components/admin/list/FormSubmissionsStatusTabs#FormSubmissionsStatusTabs": FormSubmissionsStatusTabs_d303dfd4f00c0934ce208c1244b6d42b,
   "@/components/admin/I18nEditGuideLoader#default": default_58a3567919654d5ba43db2f2f03c843c,
   "@/components/admin/cells/VisibilityStatusCell#default": default_a0ded7dd6cfb9858330a14decb30169b,
+  "@/components/admin/cells/AdminListRowActionsCell#default": default_5ca3cc19131eeec42a8b51d3c1499139,
   "@/components/admin/cells/SolutionPositionCell#default": default_bba462316deccb203c716e523e0f12cd,
   "@/components/admin/media-upload/SimpleMediaUploadField#default": default_4f4e24fe13f7bfd45261f0af9a3e042e,
   "@/components/admin/cells/DraftStatusCell#default": default_30989b2842ece380ff7a5a5f06b6152f,
@@ -85,7 +86,6 @@ export const importMap = {
   "@/components/admin/AdminBrand#AdminLogoutButton": AdminLogoutButton_c3544fd04a86558fd1f1e4a8d6afed38,
   "@/components/admin/AdminBrand#YourfieldAdminIcon": YourfieldAdminIcon_c3544fd04a86558fd1f1e4a8d6afed38,
   "@/components/admin/AdminBrand#YourfieldAdminLogo": YourfieldAdminLogo_c3544fd04a86558fd1f1e4a8d6afed38,
-  "@/components/admin/AdminPageQuickActions#AdminPageQuickActions": AdminPageQuickActions_8cbc2c443dfacd4d265d46a61152f988,
   "@/components/admin/AdminInterfaceLanguageSwitch#AdminInterfaceLanguageSwitch": AdminInterfaceLanguageSwitch_9721b8f7fa1ddef27c995aba5aba0bfa,
   "@/components/admin/AdminBrand#AdminLoginSupport": AdminLoginSupport_c3544fd04a86558fd1f1e4a8d6afed38,
   "@/components/admin/AdminBrand#AdminDashboardIntro": AdminDashboardIntro_c3544fd04a86558fd1f1e4a8d6afed38,

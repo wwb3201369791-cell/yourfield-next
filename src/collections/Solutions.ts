@@ -3,6 +3,7 @@ import type { CollectionConfig, Field, TextareaField } from 'payload';
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
 import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
+import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { textArrayField } from '../lib/payload/fields/arrays';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
@@ -64,7 +65,7 @@ export const Solutions: CollectionConfig = {
     hideAPIURL: true,
     useAsTitle: 'solutionId',
     listSearchableFields: ['title'],
-    defaultColumns: ['title', 'statusBadge', 'order', 'publishedAt'],
+    defaultColumns: ['title', 'statusBadge', 'order', 'publishedAt', 'rowActions'],
     description: {
       en: 'Maintain the Solutions page, header dropdown, and footer navigation. Created, removed, or reordered published items are synced to the storefront.',
       zh: '这里维护前台解决方案页面、顶部下拉菜单与页脚导航。新增、删除或调整前台位置后，前台会按发布内容同步展示。',
@@ -107,6 +108,7 @@ export const Solutions: CollectionConfig = {
     i18nEditGuideField({ collectionSlug: 'solutions', requiredPaths: requiredI18nPaths }),
     draftStatusListCellField,
     draftStatusDataField,
+    adminRowActionsField,
     {
       type: 'tabs',
       tabs: [

@@ -3,6 +3,7 @@ import type { CollectionConfig, Field, TextareaField } from 'payload';
 import { canCreate, canDelete, canUpdate, isPublic } from '../lib/payload/access';
 import { adminCollectionLabel, adminLabel } from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
+import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { createSeoGroup } from '../lib/payload/fields/seo';
 import { generateSlug } from '../lib/payload/hooks/generateSlug';
@@ -47,7 +48,7 @@ export const ProductGroups: CollectionConfig = {
     hideAPIURL: true,
     useAsTitle: 'name',
     group: { en: 'Product management', zh: '产品管理' },
-    defaultColumns: ['name', 'showOnFrontendBadge', 'order'],
+    defaultColumns: ['name', 'showOnFrontendBadge', 'order', 'rowActions'],
     listSearchableFields: ['name', 'groupId'],
     description: {
       en: 'Create and maintain one horizontal storefront product category. After saving, assign products to this group so the storefront product center displays the category and its products.',
@@ -97,6 +98,7 @@ export const ProductGroups: CollectionConfig = {
         },
       },
     },
+    adminRowActionsField,
     {
       type: 'tabs',
       tabs: [

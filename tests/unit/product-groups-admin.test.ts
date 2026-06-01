@@ -30,7 +30,12 @@ const getField = (name: string) =>
 
 describe('ProductGroups admin list', () => {
   it('keeps the list focused on frontend catalog maintenance', () => {
-    expect(ProductGroups.admin?.defaultColumns).toEqual(['name', 'showOnFrontendBadge', 'order']);
+    expect(ProductGroups.admin?.defaultColumns).toEqual([
+      'name',
+      'showOnFrontendBadge',
+      'order',
+      'rowActions',
+    ]);
     expect(ProductGroups.defaultSort).toBe('order');
     expect(ProductGroups.admin?.listSearchableFields).toEqual(['name', 'groupId']);
   });

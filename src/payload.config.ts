@@ -57,10 +57,7 @@ export default buildConfig({
     user: Users.slug,
     dateFormat: 'yyyy年MM月dd日 HH:mm',
     components: {
-      actions: [
-        '@/components/admin/AdminPageQuickActions#AdminPageQuickActions',
-        '@/components/admin/AdminInterfaceLanguageSwitch#AdminInterfaceLanguageSwitch',
-      ],
+      actions: ['@/components/admin/AdminInterfaceLanguageSwitch#AdminInterfaceLanguageSwitch'],
       afterLogin: ['@/components/admin/AdminBrand#AdminLoginSupport'],
       beforeDashboard: [
         '@/components/admin/AdminBrand#AdminDashboardIntro',

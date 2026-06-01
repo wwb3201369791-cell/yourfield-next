@@ -121,7 +121,12 @@ describe('admin collection tabs', () => {
   });
 
   it('shows visibility and storefront order on the product group list', () => {
-    expect(ProductGroups.admin?.defaultColumns).toEqual(['name', 'showOnFrontendBadge', 'order']);
+    expect(ProductGroups.admin?.defaultColumns).toEqual([
+      'name',
+      'showOnFrontendBadge',
+      'order',
+      'rowActions',
+    ]);
     expect(namedField(ProductGroups.fields, 'showOnFrontendBadge')).toMatchObject({
       label: { en: 'Visibility', zh: '显示状态' },
       name: 'showOnFrontendBadge',
@@ -442,6 +447,7 @@ describe('admin collection tabs', () => {
       'statusBadge',
       'order',
       'publishedAt',
+      'rowActions',
     ]);
     expect(solutionId).toMatchObject({
       admin: {

@@ -82,6 +82,20 @@ describe('admin schema i18n labels', () => {
     expect(rawSchemaStrings).toEqual([]);
   });
 
+  it('localizes collection row action labels used in admin lists', () => {
+    expect(adminTextDictionary).toMatchObject({
+      操作: 'Actions',
+      编辑: 'Edit',
+      上移: 'Move up',
+      下移: 'Move down',
+      调整中: 'Moving',
+      调整顺序失败: 'Move failed',
+      添加解决方案: 'Add solution',
+      添加产品大类: 'Add product group',
+      添加产品: 'Add product',
+    });
+  });
+
   it('keeps collection singular/plural labels as plain strings for Payload dashboard links', () => {
     const unsafeCollectionLabels = sourceFiles('src/collections').flatMap((file) => {
       const source = readFileSync(file, 'utf8');
