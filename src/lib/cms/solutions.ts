@@ -87,16 +87,7 @@ function mediaUrl(file: CmsSolutionDoc['cover']) {
     return emptySolutionImage;
   }
 
-  const legacyStaticPath = file.tags
-    ?.map((tag) => tag.value)
-    .find((value): value is string => Boolean(value?.startsWith('assets/images/solutions/')));
-
-  return normalizeCmsMediaUrl(
-    legacyStaticPath
-      ? `/${legacyStaticPath.replace(/^assets\//, '')}`
-      : (file.sizes?.card?.url ?? file.url),
-    emptySolutionImage,
-  );
+  return normalizeCmsMediaUrl(file.url ?? file.sizes?.card?.url, emptySolutionImage);
 }
 
 function mapRows(rows: TextRow[] | undefined) {

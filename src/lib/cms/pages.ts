@@ -56,7 +56,7 @@ function mediaUrl(file: CmsUpload | number | string | undefined) {
     return undefined;
   }
 
-  return normalizeCmsMediaUrl(file.sizes?.card?.url ?? file.url, '');
+  return normalizeCmsMediaUrl(file.url ?? file.sizes?.card?.url, '');
 }
 
 function mapCmsPage(page: CmsPage): CmsPageContent {

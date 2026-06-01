@@ -416,11 +416,11 @@ describe('CMS draft query construction', () => {
     await expect(news.getCmsNews('zh', false)).resolves.toMatchObject([
       {
         featuredOrder: 1,
-        image: '/media/news-card.webp',
+        image: '/media/news-cover.webp',
         isFeatured: true,
         slug: 'featured-video-news',
         video: {
-          poster: '/media/news-card.webp',
+          poster: '/media/news-cover.webp',
           src: '/media/news-featured.mp4',
         },
       },

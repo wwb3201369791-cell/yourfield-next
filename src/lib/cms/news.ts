@@ -118,7 +118,7 @@ function mediaUrl(file: CmsNews['cover']) {
     return emptyNewsImage;
   }
 
-  return normalizeCmsMediaUrl(file.sizes?.card?.url ?? file.url, emptyNewsImage);
+  return normalizeCmsMediaUrl(file.url ?? file.sizes?.card?.url, emptyNewsImage);
 }
 
 function mediaOriginalUrl(file: CmsUpload | number | string | undefined) {
