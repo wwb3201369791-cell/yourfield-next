@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { JsonLd } from '@/components/public/JsonLd';
+import { shouldUseUnoptimizedImage } from '@/lib/cms/media';
 import { getCmsPageByKey } from '@/lib/cms/pages';
 import { getCmsSolutions } from '@/lib/cms/solutions';
 import { buildSolutionsPageSections } from '@/lib/content/solutionPage';
@@ -128,6 +129,7 @@ export default async function SolutionsPage({ params }: SolutionsPageProps) {
                       alt={solution.imageAlt}
                       fill
                       sizes="(min-width: 1024px) 50vw, 100vw"
+                      unoptimized={shouldUseUnoptimizedImage(solution.image)}
                     />
                   </div>
                 ) : null}
