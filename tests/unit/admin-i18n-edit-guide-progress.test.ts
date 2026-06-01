@@ -100,6 +100,49 @@ describe('admin i18n edit guide progress', () => {
     });
   });
 
+  it('keeps saved translations when current Payload form state only contains empty placeholder rows', () => {
+    const summaries = collectLocaleSummaries({
+      currentLocale: 'zh',
+      currentValues: {
+        content: richText(''),
+        features: [{ id: 'placeholder-feature', value: '' }],
+        productTags: [],
+        summary: '',
+        title: '石油石化',
+      },
+      doc: {
+        content: {
+          zh: richText('中文详细说明。'),
+          en: richText('Detailed petrochemical solution copy.'),
+          ru: richText('Подробное описание решения.'),
+        },
+        features: {
+          zh: [{ value: '风险识别' }],
+          en: [{ value: 'Chemical splash planning' }],
+          ru: [{ value: 'Планирование химических рисков' }],
+        },
+        productTags: {
+          zh: [{ value: '防化服' }],
+          en: [{ value: 'Chemical protective clothing' }],
+          ru: [{ value: 'Химзащитная одежда' }],
+        },
+        summary: {
+          zh: '石油石化防护配置。',
+          en: 'PPE configuration for oil and gas.',
+          ru: 'Комплектация СИЗ для нефти и газа.',
+        },
+        title: { zh: '石油石化', en: 'Petrochemical', ru: 'Нефтехимия' },
+      },
+      requiredPaths,
+    });
+
+    expect(summaries.find((summary) => summary.code === 'zh')).toMatchObject({
+      completed: 5,
+      missingLabels: [],
+      total: 5,
+    });
+  });
+
   it('dedupes nested array checks into the visible five solution progress items', () => {
     expect(requiredLabelSummary(requiredPaths)).toBe(
       '方案标题、卡片说明、方案要点、核心产品标签、详细说明',

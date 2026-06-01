@@ -5,7 +5,6 @@ import {
   cloneValue,
   isRecord,
   isSpecComplete,
-  mergeDefined,
   type CheckSpec,
   type RequiredI18nPath,
 } from '@/lib/i18n/i18nCompleteness';
@@ -89,6 +88,69 @@ function specsFromRequiredPaths(paths: readonly RequiredI18nPath[]) {
   });
 }
 
+function hasMeaningfulSummaryValue(value: unknown): boolean {
+  if (typeof value === 'undefined' || value === null) {
+    return false;
+  }
+
+  if (typeof value === 'string') {
+    return value.trim().length > 0;
+  }
+
+  if (Array.isArray(value)) {
+    return value.some((item) => hasMeaningfulSummaryValue(item));
+  }
+
+  if (isRecord(value)) {
+    const textValue = value['text'];
+    if (typeof textValue === 'string') {
+      return textValue.trim().length > 0;
+    }
+
+    return Object.entries(value).some(([key, nestedValue]) => {
+      if (
+        key === 'id' ||
+        key.startsWith('_') ||
+        key === 'type' ||
+        key === 'version' ||
+        key === 'format' ||
+        key === 'indent' ||
+        key === 'direction' ||
+        key === 'textFormat' ||
+        key === 'textStyle'
+      ) {
+        return false;
+      }
+
+      return hasMeaningfulSummaryValue(nestedValue);
+    });
+  }
+
+  return true;
+}
+
+function mergeCurrentLocaleForSummary(base: unknown, incoming: unknown): unknown {
+  if (!hasMeaningfulSummaryValue(incoming)) {
+    return cloneValue(base);
+  }
+
+  if (Array.isArray(incoming)) {
+    return cloneValue(incoming);
+  }
+
+  if (isRecord(base) && isRecord(incoming)) {
+    const merged: Record<string, unknown> = { ...cloneValue(base) };
+
+    for (const [key, value] of Object.entries(incoming)) {
+      merged[key] = mergeCurrentLocaleForSummary(merged[key], value);
+    }
+
+    return merged;
+  }
+
+  return cloneValue(incoming);
+}
+
 export function collectLocaleSummaries(args: {
   currentLocale: ContentLocale;
   currentValues: Record<string, unknown>;
@@ -102,7 +164,7 @@ export function collectLocaleSummaries(args: {
     const savedDoc = docForLocale(args.doc, locale);
     const localeDoc =
       locale === args.currentLocale
-        ? (mergeDefined(savedDoc, args.currentValues) as Record<string, unknown>)
+        ? (mergeCurrentLocaleForSummary(savedDoc, args.currentValues) as Record<string, unknown>)
         : savedDoc;
     const missingLabels = Array.from(
       new Set(specs.filter((spec) => !isSpecComplete(localeDoc, spec)).map((spec) => spec.label)),

@@ -47,10 +47,20 @@ describe('product English/Russian translation backfill migration', () => {
     expect(hanTextPattern.test(backfillProductEnRuTranslationsSql)).toBe(false);
   });
 
-  it('uses an idempotent upsert against products_locales', () => {
+  it('uses an idempotent upsert against products_locales without overwriting edited translations', () => {
     expect(backfillProductEnRuTranslationsSql).toContain(
       'ON CONFLICT (_locale, _parent_id) DO UPDATE',
     );
     expect(backfillProductEnRuTranslationsSql).toContain('JOIN products ON products.product_id');
+    expect(backfillProductEnRuTranslationsSql).toContain(
+      "WHEN NULLIF(trim(products_locales.name), '') IS NULL THEN EXCLUDED.name",
+    );
+    expect(backfillProductEnRuTranslationsSql).toContain('ELSE products_locales.description');
+    expect(backfillProductEnRuTranslationsSql).toContain(
+      "WHERE NULLIF(trim(products_locales.name), '') IS NULL",
+    );
+    expect(backfillProductEnRuTranslationsSql).not.toContain(
+      'SET name = EXCLUDED.name,\n  description = EXCLUDED.description',
+    );
   });
 });

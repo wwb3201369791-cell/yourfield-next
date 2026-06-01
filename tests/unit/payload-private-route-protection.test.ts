@@ -9,6 +9,7 @@ const baseEnv = {
   PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_USER: undefined,
   PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION: false,
   PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST: undefined,
+  PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST: false,
   PAYLOAD_PRIVATE_ROUTES_TRUST_PROXY_HEADERS: false,
   PAYLOAD_PUBLIC_ADMIN_PATH: '/admin',
   PAYLOAD_PUBLIC_API_PATH: '/payload-api',
@@ -105,5 +106,51 @@ describe('Payload private route protection', () => {
 
     expect(next).toHaveBeenCalledOnce();
     expect(response.status).not.toHaveBeenCalled();
+  });
+
+  it('blocks private routes from unbound IPs when forced IP binding is enabled', () => {
+    const next = makeNext();
+    const response = makeResponse();
+
+    makeMiddleware({
+      PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST: '203.0.113.10',
+      PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST: true,
+    })(makeRequest('/admin'), response, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(403);
+    expect(response.send).toHaveBeenCalledWith('Payload admin access is restricted to bound IPs.');
+  });
+
+  it('requires both the bound IP and Basic Auth when both are configured', () => {
+    const next = makeNext();
+    const response = makeResponse();
+
+    makeMiddleware({
+      PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_PASSWORD: 'secret-password',
+      PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_USER: 'admin',
+      PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST: '127.0.0.1',
+      PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST: true,
+    })(makeRequest('/admin'), response, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(401);
+
+    const nextWithAuth = makeNext();
+    const responseWithAuth = makeResponse();
+
+    makeMiddleware({
+      PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_PASSWORD: 'secret-password',
+      PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_USER: 'admin',
+      PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST: '127.0.0.1',
+      PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST: true,
+    })(
+      makeRequest('/admin', basicAuth('admin', 'secret-password')),
+      responseWithAuth,
+      nextWithAuth,
+    );
+
+    expect(nextWithAuth).toHaveBeenCalledOnce();
+    expect(responseWithAuth.status).not.toHaveBeenCalled();
   });
 });

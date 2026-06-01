@@ -115,6 +115,7 @@ const envSchema = z
     PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_USER: optionalString,
     PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_PASSWORD: optionalString,
     PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST: optionalString,
+    PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST: booleanFlag.default(false),
     PAYLOAD_PRIVATE_ROUTES_TRUST_PROXY_HEADERS: booleanFlag.default(false),
     PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION: booleanFlag.default(false),
     PAYLOAD_DB_PUSH: booleanFlag.default(false),
@@ -289,6 +290,18 @@ const envSchema = z
             'PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_PASSWORD is required when Payload private route Basic Auth is configured',
         });
       }
+    }
+
+    if (
+      data.PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST &&
+      !data.PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST'],
+        message:
+          'PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST is required when PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST=true',
+      });
     }
 
     if (shouldRequireProductionRuntimeSecrets) {

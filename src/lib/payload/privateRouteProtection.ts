@@ -11,6 +11,7 @@ type PayloadPrivateRouteEnv = Pick<
   | 'PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_USER'
   | 'PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION'
   | 'PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST'
+  | 'PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST'
   | 'PAYLOAD_PRIVATE_ROUTES_TRUST_PROXY_HEADERS'
   | 'PAYLOAD_PUBLIC_ADMIN_PATH'
   | 'PAYLOAD_PUBLIC_API_PATH'
@@ -90,6 +91,7 @@ export function createPayloadPrivateRouteProtection(envValues: PayloadPrivateRou
   ].map(normalizePath);
 
   const allowlist = parseAllowlist(envValues.PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST);
+  const requireIpAllowlist = envValues.PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST;
   const basicUser = envValues.PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_USER;
   const basicPassword = envValues.PAYLOAD_PRIVATE_ROUTES_BASIC_AUTH_PASSWORD;
   const hasBasicAuth = Boolean(basicUser && basicPassword);
@@ -120,7 +122,23 @@ export function createPayloadPrivateRouteProtection(envValues: PayloadPrivateRou
     }
 
     const ip = clientIp(request, envValues.PAYLOAD_PRIVATE_ROUTES_TRUST_PROXY_HEADERS);
-    if (ip && allowlist.has(ip)) {
+
+    if (requireIpAllowlist) {
+      if (!allowlist.size) {
+        response.status(503).send('Payload private route IP binding is not configured.');
+        return;
+      }
+
+      if (!ip || !allowlist.has(ip)) {
+        response.status(403).send('Payload admin access is restricted to bound IPs.');
+        return;
+      }
+
+      if (!hasBasicAuth) {
+        next();
+        return;
+      }
+    } else if (ip && allowlist.has(ip)) {
       next();
       return;
     }

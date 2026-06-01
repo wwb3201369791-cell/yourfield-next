@@ -123,8 +123,17 @@ SELECT localized_translations.name,
 FROM localized_translations
 JOIN products ON products.product_id = localized_translations.product_id
 ON CONFLICT (_locale, _parent_id) DO UPDATE
-SET name = EXCLUDED.name,
-  description = EXCLUDED.description;
+SET name = CASE
+    WHEN NULLIF(trim(products_locales.name), '') IS NULL THEN EXCLUDED.name
+    ELSE products_locales.name
+  END,
+  description = CASE
+    WHEN NULLIF(trim(products_locales.description #>> '{root,children,0,children,0,text}'), '') IS NULL
+      THEN EXCLUDED.description
+    ELSE products_locales.description
+  END
+WHERE NULLIF(trim(products_locales.name), '') IS NULL
+  OR NULLIF(trim(products_locales.description #>> '{root,children,0,children,0,text}'), '') IS NULL;
 `;
 
 export async function up({ payload }: MigrateUpArgs): Promise<void> {

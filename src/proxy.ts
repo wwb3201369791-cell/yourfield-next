@@ -4,6 +4,10 @@ import createMiddleware from 'next-intl/middleware';
 
 import { routing } from './lib/i18n/routing';
 import {
+  canonicalHostFromSiteUrl,
+  shouldRedirectToCanonicalHost,
+} from './lib/security/canonicalHost';
+import {
   buildContentSecurityPolicy,
   CONTENT_SECURITY_POLICY_HEADER,
   CSP_NONCE_HEADER,
@@ -16,6 +20,31 @@ const LEGACY_DETAIL_REDIRECTS = {
   '/product-detail.html': '/zh/products',
   '/news-detail.html': '/zh/news',
 } as const;
+
+function createCanonicalHostRedirect(request: NextRequest) {
+  // eslint-disable-next-line no-restricted-syntax -- Proxy runs before app env parsing and must use deploy-time canonical URL.
+  const canonicalUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const canonicalHost = canonicalHostFromSiteUrl(canonicalUrl);
+  const requestHost = request.headers.get('host') || request.nextUrl.host;
+
+  if (
+    !shouldRedirectToCanonicalHost({
+      canonicalHost,
+      // eslint-disable-next-line no-restricted-syntax -- Proxy runs at the framework boundary before typed env is loaded.
+      nodeEnv: process.env.NODE_ENV,
+      requestHost,
+    })
+  ) {
+    return null;
+  }
+
+  const target = new URL(request.url);
+  const canonical = new URL(canonicalUrl as string);
+  target.protocol = canonical.protocol;
+  target.host = canonical.host;
+
+  return NextResponse.redirect(target, 308);
+}
 
 function isAdminPath(pathname: string) {
   return pathname === '/admin' || pathname.startsWith('/admin/');
@@ -80,6 +109,12 @@ function applyContentSecurityPolicy(response: NextResponse, policy: string) {
 
 export default function proxy(request: NextRequest) {
   const { policy, requestHeaders } = createCspRequestHeaders(request);
+  const canonicalHostRedirect = createCanonicalHostRedirect(request);
+
+  if (canonicalHostRedirect) {
+    return applyContentSecurityPolicy(canonicalHostRedirect, policy);
+  }
+
   if (isAdminPath(request.nextUrl.pathname) || isPayloadPath(request.nextUrl.pathname)) {
     return applyContentSecurityPolicy(
       NextResponse.next({ request: { headers: requestHeaders } }),

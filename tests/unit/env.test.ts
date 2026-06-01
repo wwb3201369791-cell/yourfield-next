@@ -143,6 +143,22 @@ describe('environment validation', () => {
     );
   });
 
+  it('requires an IP allowlist when forced Payload IP binding is enabled', async () => {
+    const error = await importEnvWith({
+      PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION: 'true',
+      PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST: '',
+      PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST: 'true',
+    }).then(
+      () => undefined,
+      (caughtError: unknown) => caughtError,
+    );
+
+    expect(error).toBeInstanceOf(Error);
+    expect(error instanceof Error ? error.message : '').toContain(
+      'PAYLOAD_PRIVATE_ROUTES_IP_ALLOWLIST is required when PAYLOAD_PRIVATE_ROUTES_REQUIRE_IP_ALLOWLIST=true',
+    );
+  });
+
   it('allows explicit validation skips for temporary production build-only secrets', async () => {
     const { env } = await importEnvWith({
       DATABASE_URI: '',
