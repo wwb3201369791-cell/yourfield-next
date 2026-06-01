@@ -35,6 +35,7 @@ import { SearchLogsStatsPanel as SearchLogsStatsPanel_465a1122331e14da4af3e21d5a
 import { AdminLogoutButton as AdminLogoutButton_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
 import { YourfieldAdminIcon as YourfieldAdminIcon_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
 import { YourfieldAdminLogo as YourfieldAdminLogo_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
+import { AdminPageQuickActions as AdminPageQuickActions_8cbc2c443dfacd4d265d46a61152f988 } from '@/components/admin/AdminPageQuickActions'
 import { AdminInterfaceLanguageSwitch as AdminInterfaceLanguageSwitch_9721b8f7fa1ddef27c995aba5aba0bfa } from '@/components/admin/AdminInterfaceLanguageSwitch'
 import { AdminLoginSupport as AdminLoginSupport_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
 import { AdminDashboardIntro as AdminDashboardIntro_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
@@ -84,6 +85,7 @@ export const importMap = {
   "@/components/admin/AdminBrand#AdminLogoutButton": AdminLogoutButton_c3544fd04a86558fd1f1e4a8d6afed38,
   "@/components/admin/AdminBrand#YourfieldAdminIcon": YourfieldAdminIcon_c3544fd04a86558fd1f1e4a8d6afed38,
   "@/components/admin/AdminBrand#YourfieldAdminLogo": YourfieldAdminLogo_c3544fd04a86558fd1f1e4a8d6afed38,
+  "@/components/admin/AdminPageQuickActions#AdminPageQuickActions": AdminPageQuickActions_8cbc2c443dfacd4d265d46a61152f988,
   "@/components/admin/AdminInterfaceLanguageSwitch#AdminInterfaceLanguageSwitch": AdminInterfaceLanguageSwitch_9721b8f7fa1ddef27c995aba5aba0bfa,
   "@/components/admin/AdminBrand#AdminLoginSupport": AdminLoginSupport_c3544fd04a86558fd1f1e4a8d6afed38,
   "@/components/admin/AdminBrand#AdminDashboardIntro": AdminDashboardIntro_c3544fd04a86558fd1f1e4a8d6afed38,
