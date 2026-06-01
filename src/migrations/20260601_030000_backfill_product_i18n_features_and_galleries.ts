@@ -143,7 +143,7 @@ WITH target_locales(locale) AS (
     NULL,
     product_db_id,
     'visualGroups.' || group_index::text || '.images.' || image_index::text || '.file',
-    locale,
+    locale::_locales,
     media_id
   FROM zh_visual_images
 )
