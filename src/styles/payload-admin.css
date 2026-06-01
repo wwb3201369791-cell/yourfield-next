@@ -1358,6 +1358,11 @@
   box-shadow: 0 14px 42px rgba(15, 38, 64, 0.055);
 }
 
+.collection-list .table:has(.yf-list-row-actions__panel) {
+  z-index: 20;
+  overflow: visible;
+}
+
 .collection-list .table table {
   background: transparent;
   border-collapse: separate;

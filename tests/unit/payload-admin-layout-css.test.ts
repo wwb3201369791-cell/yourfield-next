@@ -34,6 +34,7 @@ describe('Payload admin layout CSS', () => {
   it('keeps opened row action menus above table row hover backgrounds', () => {
     const css = readFileSync(path.join(projectRoot, 'src/styles/payload-admin.css'), 'utf8');
 
+    expect(css).toContain('.collection-list .table:has(.yf-list-row-actions__panel)');
     expect(css).toContain('.collection-list .table tbody tr:has(.yf-list-row-actions__panel)');
     expect(css).toContain('td:has(.yf-list-row-actions)');
     expect(css).toContain('.yf-list-row-actions:has(.yf-list-row-actions__panel)');
