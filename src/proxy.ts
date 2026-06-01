@@ -5,6 +5,7 @@ import createMiddleware from 'next-intl/middleware';
 import { routing } from './lib/i18n/routing';
 import {
   canonicalHostFromSiteUrl,
+  canonicalRedirectUrlForRequest,
   shouldRedirectToCanonicalHost,
 } from './lib/security/canonicalHost';
 import {
@@ -38,12 +39,12 @@ function createCanonicalHostRedirect(request: NextRequest) {
     return null;
   }
 
-  const target = new URL(request.url);
-  const canonical = new URL(canonicalUrl as string);
-  target.protocol = canonical.protocol;
-  target.host = canonical.host;
+  const redirectUrl = canonicalRedirectUrlForRequest({
+    canonicalSiteUrl: canonicalUrl as string,
+    requestUrl: request.url,
+  });
 
-  return NextResponse.redirect(target, 308);
+  return redirectUrl ? NextResponse.redirect(redirectUrl, 308) : null;
 }
 
 function isAdminPath(pathname: string) {

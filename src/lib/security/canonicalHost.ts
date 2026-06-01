@@ -39,3 +39,21 @@ export function shouldRedirectToCanonicalHost(args: {
 
   return Boolean(canonicalHost && requestHost && requestHost !== canonicalHost);
 }
+
+export function canonicalRedirectUrlForRequest(args: {
+  canonicalSiteUrl: string;
+  requestUrl: string;
+}) {
+  try {
+    const target = new URL(args.requestUrl);
+    const canonical = new URL(args.canonicalSiteUrl);
+
+    target.protocol = canonical.protocol;
+    target.hostname = canonical.hostname;
+    target.port = canonical.port;
+
+    return target.toString();
+  } catch {
+    return '';
+  }
+}
