@@ -98,7 +98,7 @@ WITH target_locales(locale) AS (
     product_db_id,
     locale::_locales,
     target_group_id,
-    COALESCE(NULLIF(variant, ''), 'gallery'),
+    COALESCE(NULLIF(variant::text, ''), 'gallery')::enum_products_visual_groups_variant,
     translated_title,
     translated_description
   FROM target_visual_groups
