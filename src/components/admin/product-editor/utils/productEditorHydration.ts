@@ -1,3 +1,5 @@
+import { hasDisplayablePayloadArrayRows } from './payloadFieldArrayRows';
+
 export function buildProductDocumentHydrationUrl({
   apiBase,
   id,
@@ -27,6 +29,79 @@ export function getProductDocumentIdFromPathname(pathname: string) {
   }
 
   return decodeURIComponent(segment);
+}
+
+function relationshipIdValue(value: unknown): unknown {
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+
+  const id = (value as { id?: unknown }).id;
+  return typeof id === 'number' || typeof id === 'string' ? id : value;
+}
+
+function normalizeUploadRows(rows: unknown): unknown {
+  if (!Array.isArray(rows)) {
+    return rows;
+  }
+
+  const rowList = rows as unknown[];
+  return rowList.map((row) => {
+    if (!row || typeof row !== 'object') {
+      return row;
+    }
+
+    const record = row as Record<string, unknown>;
+    return {
+      ...record,
+      file: relationshipIdValue(record.file),
+    };
+  });
+}
+
+function normalizeRowsUploadField(rows: unknown, fieldName: string): unknown {
+  if (!Array.isArray(rows)) {
+    return rows;
+  }
+
+  const rowList = rows as unknown[];
+  return rowList.map((row) => {
+    if (!row || typeof row !== 'object') {
+      return row;
+    }
+
+    const record = row as Record<string, unknown>;
+    return {
+      ...record,
+      [fieldName]: relationshipIdValue(record[fieldName]),
+    };
+  });
+}
+
+export function normalizeProductDocumentForFormReset(doc: Record<string, unknown>) {
+  const visualGroups = Array.isArray(doc.visualGroups) ? (doc.visualGroups as unknown[]) : null;
+
+  return {
+    ...doc,
+    certifications: normalizeRowsUploadField(doc.certifications, 'attachment'),
+    images: normalizeUploadRows(doc.images),
+    productGroup: relationshipIdValue(doc.productGroup),
+    qualityEvidence: normalizeRowsUploadField(doc.qualityEvidence, 'attachment'),
+    sellingPoints: normalizeRowsUploadField(doc.sellingPoints, 'icon'),
+    visualGroups: visualGroups
+      ? visualGroups.map((group) => {
+          if (!group || typeof group !== 'object') {
+            return group;
+          }
+
+          const record = group as Record<string, unknown>;
+          return {
+            ...record,
+            images: normalizeUploadRows(record.images),
+          };
+        })
+      : doc.visualGroups,
+  };
 }
 
 function textLike(value: unknown): boolean {
@@ -102,22 +177,12 @@ function imageRowsLike(value: unknown): boolean {
   );
 }
 
-function arrayRowsLike(value: unknown): boolean {
-  return Array.isArray(value) && value.length > 0;
+function arrayRowsLike(value: unknown, path = ''): boolean {
+  return hasDisplayablePayloadArrayRows(value, path);
 }
 
 function visualGroupRowsLike(value: unknown): boolean {
-  return (
-    Array.isArray(value) &&
-    value.some((group) => {
-      if (!group || typeof group !== 'object') {
-        return false;
-      }
-
-      const images = (group as { images?: unknown }).images;
-      return imageRowsLike(images);
-    })
-  );
+  return hasDisplayablePayloadArrayRows(value, 'visualGroups');
 }
 
 export function hasVisualEditorSeedValues(values: Record<string, unknown>) {
@@ -165,14 +230,16 @@ export function mergeHydratedVisualEditorValues(
     'specifications',
     'standards',
   ] as const) {
-    if (!arrayRowsLike(formValues[key]) && arrayRowsLike(hydratedDoc[key])) {
+    if (!arrayRowsLike(formValues[key], key) && arrayRowsLike(hydratedDoc[key], key)) {
       merged[key] = hydratedDoc[key];
     }
   }
 
-  if (!arrayRowsLike((formValues.sizeGuide as { rows?: unknown } | undefined)?.rows)) {
+  if (
+    !arrayRowsLike((formValues.sizeGuide as { rows?: unknown } | undefined)?.rows, 'sizeGuide.rows')
+  ) {
     const hydratedSizeGuide = hydratedDoc.sizeGuide as { rows?: unknown } | undefined;
-    if (arrayRowsLike(hydratedSizeGuide?.rows)) {
+    if (arrayRowsLike(hydratedSizeGuide?.rows, 'sizeGuide.rows')) {
       merged.sizeGuide = hydratedDoc.sizeGuide;
     }
   }

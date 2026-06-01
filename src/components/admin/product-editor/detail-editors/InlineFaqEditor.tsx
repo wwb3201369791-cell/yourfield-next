@@ -78,14 +78,14 @@ export function InlineFaqEditor() {
           className="ype-click-edit is-empty"
           onClick={() => startNewRow('question')}
         >
-          {t('点击填写问题')}
+          {t(rows.length > 0 ? '添加问题' : '点击填写问题')}
         </button>
         <button
           type="button"
           className="ype-click-edit is-empty is-multiline"
           onClick={() => startNewRow('answer')}
         >
-          {t('点击填写答案')}
+          {t(rows.length > 0 ? '添加答案' : '点击填写答案')}
         </button>
       </article>
     </section>

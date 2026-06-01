@@ -4,6 +4,7 @@ import { useField, useFormFields } from '@payloadcms/ui';
 import { reduceFieldsToValues } from 'payload/shared';
 import { useCallback, useMemo, useState } from 'react';
 
+import { useHydratedProductDocumentValue } from '../ProductEditorHydrationContext';
 import {
   resolvePayloadFieldArrayRows,
   valueAtPath,
@@ -17,18 +18,22 @@ export function usePayloadFieldArray<T extends ArrayRow = ArrayRow>(path: string
   const { value, setValue } = useField<T[]>({ path });
   const fields = useFormFields(([formFields]) => formFields);
   const [hasLocalOverride, setHasLocalOverride] = useState(false);
+  const fallbackValue = useHydratedProductDocumentValue(path);
   const reducedValue = useMemo(() => {
     const values = reduceFieldsToValues(fields, true, true) as Record<string, unknown>;
     return valueAtPath(values, path);
   }, [fields, path]);
+
   const rows = useMemo(
     () =>
       resolvePayloadFieldArrayRows<T>({
+        fallbackValue,
         fieldValue: value,
         hasLocalOverride,
+        path,
         reducedValue,
       }),
-    [hasLocalOverride, reducedValue, value],
+    [fallbackValue, hasLocalOverride, path, reducedValue, value],
   );
   const setRows = useCallback(
     (nextRows: T[]) => {

@@ -5,6 +5,7 @@ import {
   getProductDocumentIdFromPathname,
   hasVisualEditorSeedValues,
   mergeHydratedVisualEditorValues,
+  normalizeProductDocumentForFormReset,
 } from '../productEditorHydration';
 
 describe('product editor hydration helpers', () => {
@@ -114,11 +115,13 @@ describe('product editor hydration helpers', () => {
       mergeHydratedVisualEditorValues(
         {
           images: [{ file: { url: '/media/main.png' } }],
+          materials: [{ id: 'placeholder-material', value: '' }],
           name: 'A级阻燃服',
           productGroup: { id: 2, name: '热防护与焊接防护' },
-          visualGroups: [],
+          visualGroups: [{ images: [], title: '场景图', variant: 'scene' }],
         },
         {
+          materials: [{ value: '阻燃防护面料' }],
           sellingPoints: [{ title: '阻燃防护', text: '满足现场防护展示。' }],
           visualGroups: [
             {
@@ -131,6 +134,7 @@ describe('product editor hydration helpers', () => {
       ),
     ).toMatchObject({
       images: [{ file: { url: '/media/main.png' } }],
+      materials: [{ value: '阻燃防护面料' }],
       name: 'A级阻燃服',
       productGroup: { id: 2, name: '热防护与焊接防护' },
       sellingPoints: [{ title: '阻燃防护', text: '满足现场防护展示。' }],
@@ -142,6 +146,41 @@ describe('product editor hydration helpers', () => {
         },
       ],
     });
+  });
+
+  it('normalizes hydrated relationship objects before resetting Payload form state', () => {
+    const hydratedDoc = {
+      certifications: [{ attachment: { id: 44, url: '/media/cert.pdf' }, name: '证书' }],
+      images: [{ file: { id: 11, url: '/media/main.png' } }],
+      productGroup: { id: 3, name: '电力电弧与电磁防护' },
+      qualityEvidence: [
+        { attachment: { id: 'doc-7', url: '/media/report.pdf' }, title: '检测报告' },
+      ],
+      sellingPoints: [{ icon: { id: 22, url: '/media/icon.png' }, title: '可视化卖点' }],
+      visualGroups: [
+        {
+          images: [{ file: { id: 31, url: '/media/detail-1.png' } }, { file: 32 }],
+          title: '建模图',
+          variant: 'detail',
+        },
+      ],
+    };
+
+    expect(normalizeProductDocumentForFormReset(hydratedDoc)).toEqual({
+      certifications: [{ attachment: 44, name: '证书' }],
+      images: [{ file: 11 }],
+      productGroup: 3,
+      qualityEvidence: [{ attachment: 'doc-7', title: '检测报告' }],
+      sellingPoints: [{ icon: 22, title: '可视化卖点' }],
+      visualGroups: [
+        {
+          images: [{ file: 31 }, { file: 32 }],
+          title: '建模图',
+          variant: 'detail',
+        },
+      ],
+    });
+    expect(hydratedDoc.images[0]?.file).toEqual({ id: 11, url: '/media/main.png' });
   });
 
   it('extracts existing product ids from Payload admin edit paths', () => {

@@ -379,7 +379,9 @@ export function InlineStringList({
         </div>
       ))}
       <button type="button" className="ype-click-edit is-empty is-ghost" onClick={startNewRow}>
-        {addLabel ? t(addLabel) : t({ en: `Add ${t(label)}`, zh: `点击填写${label}` })}
+        {addLabel
+          ? t(addLabel)
+          : t({ en: `Add ${t(label)}`, zh: rows.length > 0 ? `添加${label}` : `点击填写${label}` })}
       </button>
     </div>
   );
@@ -455,14 +457,20 @@ export function InlineCardList({
           className="ype-click-edit is-empty"
           onClick={() => startNewRow('title')}
         >
-          {t({ en: `Add ${t(titleLabel)}`, zh: `点击填写${titleLabel}` })}
+          {t({
+            en: `Add ${t(titleLabel)}`,
+            zh: rows.length > 0 ? `添加${titleLabel}` : `点击填写${titleLabel}`,
+          })}
         </button>
         <button
           type="button"
           className="ype-click-edit is-empty is-multiline"
           onClick={() => startNewRow('description')}
         >
-          {t({ en: `Add ${t(descriptionLabel)}`, zh: `点击填写${descriptionLabel}` })}
+          {t({
+            en: `Add ${t(descriptionLabel)}`,
+            zh: rows.length > 0 ? `添加${descriptionLabel}` : `点击填写${descriptionLabel}`,
+          })}
         </button>
       </article>
     </div>

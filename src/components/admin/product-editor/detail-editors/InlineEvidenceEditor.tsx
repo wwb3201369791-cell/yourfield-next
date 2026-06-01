@@ -85,21 +85,21 @@ export function InlineEvidenceEditor() {
           className="ype-click-edit is-empty"
           onClick={() => startNewRow('title')}
         >
-          {t('点击填写证据标题')}
+          {t(rows.length > 0 ? '添加证据标题' : '点击填写证据标题')}
         </button>
         <button
           type="button"
           className="ype-click-edit is-empty"
           onClick={() => startNewRow('status')}
         >
-          {t('点击填写状态')}
+          {t(rows.length > 0 ? '添加状态' : '点击填写状态')}
         </button>
         <button
           type="button"
           className="ype-click-edit is-empty is-multiline"
           onClick={() => startNewRow('description')}
         >
-          {t('点击填写说明')}
+          {t(rows.length > 0 ? '添加说明' : '点击填写说明')}
         </button>
       </article>
     </section>

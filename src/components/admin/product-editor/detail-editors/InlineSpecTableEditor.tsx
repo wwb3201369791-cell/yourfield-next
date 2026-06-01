@@ -72,14 +72,14 @@ export function InlineSpecTableEditor() {
           className="ype-click-edit is-empty"
           onClick={() => startNewRow('label')}
         >
-          {t('点击填写参数名')}
+          {t(rows.length > 0 ? '添加参数名' : '点击填写参数名')}
         </button>
         <button
           type="button"
           className="ype-click-edit is-empty"
           onClick={() => startNewRow('value')}
         >
-          {t('点击填写参数值')}
+          {t(rows.length > 0 ? '添加参数值' : '点击填写参数值')}
         </button>
       </div>
     </section>

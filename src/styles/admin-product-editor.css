@@ -637,21 +637,32 @@ button.ype-overview-chip {
     transform 160ms ease;
 }
 
+.ype-image-replace-target__status,
 .ype-image-replace-target__hint {
   position: absolute;
-  right: 14px;
-  bottom: 14px;
   display: inline-flex;
   align-items: center;
   min-height: 34px;
   padding: 0 12px;
   border-radius: 999px;
-  background: rgba(23, 49, 79, 0.88);
   box-shadow: 0 10px 24px rgba(15, 38, 64, 0.18);
-  color: #ffffff;
   font-size: 13px;
   font-weight: 800;
   line-height: 1;
+}
+
+.ype-image-replace-target__status {
+  top: 14px;
+  left: 14px;
+  background: rgba(236, 253, 245, 0.94);
+  color: #047857;
+}
+
+.ype-image-replace-target__hint {
+  right: 14px;
+  bottom: 14px;
+  background: rgba(23, 49, 79, 0.88);
+  color: #ffffff;
   opacity: 0;
   transform: translateY(6px);
   transition:

@@ -36,6 +36,7 @@ import {
   InlineTextField,
   InlineVisualGroupsEditor,
 } from './InlineDetailEditors';
+import { ProductEditorHydrationContext } from './ProductEditorHydrationContext';
 import { ProductEditorSidebar } from './ProductEditorSidebar';
 import { registerDrawer } from './SectionDrawer';
 import { CareDrawer } from './drawers/CareDrawer';
@@ -55,6 +56,7 @@ import {
   buildProductDocumentHydrationUrl,
   getProductDocumentIdFromPathname,
   mergeHydratedVisualEditorValues,
+  normalizeProductDocumentForFormReset,
 } from './utils/productEditorHydration';
 
 registerDrawer('care', CareDrawer);
@@ -214,6 +216,7 @@ function AdminHeroPreview({
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- Payload admin preview reads in-progress media URLs from form state. */}
               <img src={mainImage} alt={title || category || adminT('产品主图')} />
+              <span className="ype-image-replace-target__status">{adminT('主图已上传')}</span>
               <span className="ype-image-replace-target__hint">
                 {uploading ? adminT('图片上传中…') : adminT('点击替换主图')}
               </span>
@@ -233,7 +236,7 @@ function AdminHeroPreview({
         </div>
         <p className="ype-main-image-guidance">
           {adminT(
-            '建议 JPG / PNG / WebP / GIF，上传 1600 × 1600 px 的 1:1 方图，主体居中，单图建议不超过 10MB；后台预览使用原图资源并等比完整显示，页面显示尺寸会随版式缩放。',
+            '建议 JPG / PNG / WebP / GIF，上传 1600 × 1600 px 的 1:1 方图，主体居中，单图建议不超过 10MB；已有主图时悬浮图片可替换，后台预览使用原图资源并等比完整显示。',
           )}
         </p>
         {uploadError ? <p className="ype-inline-upload-error">{uploadError}</p> : null}
@@ -314,8 +317,9 @@ function useHydratedProductDocument(currentLocale: Locale, formValues: Record<st
       .then((response) => (response.ok ? response.json() : null))
       .then((doc) => {
         if (!controller.signal.aborted && doc && typeof doc === 'object') {
-          setHydratedDoc(doc as Record<string, unknown>);
-          void reset(doc);
+          const hydratedProduct = doc as Record<string, unknown>;
+          setHydratedDoc(hydratedProduct);
+          void reset(normalizeProductDocumentForFormReset(hydratedProduct)).catch(() => undefined);
         }
       })
       .catch(() => {
@@ -337,6 +341,10 @@ function ProductVisualEditorContent() {
   const currentLocale = (locale?.code || 'zh') as Locale;
   const formValues = useFormValues();
   const hydratedDoc = useHydratedProductDocument(currentLocale, formValues);
+  const hydratedFormValues = useMemo(
+    () => (hydratedDoc ? normalizeProductDocumentForFormReset(hydratedDoc) : null),
+    [hydratedDoc],
+  );
   const visualValues = mergeHydratedVisualEditorValues(formValues, hydratedDoc);
   const detail = useMemo(
     () => buildSectionPropsFromFormValues(visualValues, currentLocale, productLabel),
@@ -353,123 +361,125 @@ function ProductVisualEditorContent() {
           ? [detail.mainProductImage]
           : [];
   return (
-    <EditorShell
-      sidebar={
-        <ProductEditorSidebar
-          formValues={visualValues}
-          navTitle="详情目录"
-          sections={detail.sections}
-        />
-      }
-      canvas={
-        <div className="ype-product-canvas ype-detail-preview">
-          <CanvasSection
-            id="hero"
-            section="hero"
-            label={adminT('主图与简介')}
-            emptyHint={adminT('产品名称 / 型号 / 主图 / 摘要')}
-          >
-            <input
-              ref={productImages.inputRef}
-              className="ype-hidden-file-input"
-              type="file"
-              accept="image/gif,image/jpeg,image/png,image/webp"
-              disabled={productImages.uploading}
-              onChange={productImages.onFilesSelected}
-            />
-            <AdminHeroPreview
-              category={detail.productCategory}
-              images={heroImages}
-              onSelectMainImage={productImages.openFileDialog}
-              title={detail.productTitle}
-              uploadError={productImages.error}
-              uploading={productImages.uploading}
-            />
-          </CanvasSection>
-          <CanvasSection
-            id="product-intro"
-            section="intro"
-            label={adminT('商品介绍')}
-            isEmpty={!detail.sections.intro}
-            emptyHint={adminT('概述 / 材料 / 特点 / 适用场景')}
-          >
-            <InlineProductIntroEditor />
-          </CanvasSection>
-          <CanvasSection
-            id="selling-points"
-            section="selling-points"
-            label={adminT('核心卖点')}
-            isEmpty={!detail.sections.sellingPoints}
-            emptyHint={adminT('添加卖点标题和说明')}
-          >
-            <InlineSellingPointsEditor />
-          </CanvasSection>
-          <CanvasSection
-            id="specifications"
-            section="specifications"
-            label={adminT('参数规格')}
-            isEmpty={!detail.sections.specifications}
-            emptyHint={adminT('添加参数名和值')}
-          >
-            <InlineSpecTableEditor />
-          </CanvasSection>
-          <CanvasSection
-            id="size-guide"
-            section="size-guide"
-            label={adminT('尺码对应表')}
-            isEmpty={!detail.sections.sizeGuide}
-            emptyHint={adminT('可选：添加尺码对应表')}
-          >
-            <InlineSizeGuideEditor />
-          </CanvasSection>
-          <CanvasSection
-            id="application-scenarios"
-            section="scenarios"
-            label={adminT('适用场景')}
-            isEmpty={!detail.sections.scenarios}
-            emptyHint={adminT('添加场景标题和说明')}
-          >
-            <InlineScenariosEditor />
-          </CanvasSection>
-          <CanvasSection
-            id="visual-gallery"
-            section="visual-groups"
-            label={adminT('场景图、建模图与模特上身图')}
-            isEmpty={!detail.sections.visualGroups}
-            emptyHint={adminT('添加场景图 / 建模图 / 模特图')}
-          >
-            <InlineVisualGroupsEditor />
-          </CanvasSection>
-          <CanvasSection
-            id="quality-evidence"
-            section="evidence"
-            label={adminT('资料与认证状态')}
-            isEmpty={!detail.sections.qualityEvidence}
-            emptyHint={adminT('添加质量证据和认证状态')}
-          >
-            <InlineEvidenceEditor />
-          </CanvasSection>
-          <CanvasSection
-            id="care-instructions"
-            section="care"
-            label={adminT('洗护与维护')}
-            isEmpty={!detail.sections.care}
-            emptyHint={adminT('添加洗护说明')}
-          >
-            <InlineCareEditor />
-          </CanvasSection>
-          <CanvasSection
-            id="faq"
-            section="faq"
-            label={adminT('常见问题')}
-            isEmpty={!detail.sections.faq}
-            emptyHint={adminT('关联常见问题')}
-          >
-            <InlineFaqEditor />
-          </CanvasSection>
-        </div>
-      }
-    />
+    <ProductEditorHydrationContext.Provider value={hydratedFormValues}>
+      <EditorShell
+        sidebar={
+          <ProductEditorSidebar
+            formValues={visualValues}
+            navTitle="详情目录"
+            sections={detail.sections}
+          />
+        }
+        canvas={
+          <div className="ype-product-canvas ype-detail-preview">
+            <CanvasSection
+              id="hero"
+              section="hero"
+              label={adminT('主图与简介')}
+              emptyHint={adminT('产品名称 / 型号 / 主图 / 摘要')}
+            >
+              <input
+                ref={productImages.inputRef}
+                className="ype-hidden-file-input"
+                type="file"
+                accept="image/gif,image/jpeg,image/png,image/webp"
+                disabled={productImages.uploading}
+                onChange={productImages.onFilesSelected}
+              />
+              <AdminHeroPreview
+                category={detail.productCategory}
+                images={heroImages}
+                onSelectMainImage={productImages.openFileDialog}
+                title={detail.productTitle}
+                uploadError={productImages.error}
+                uploading={productImages.uploading}
+              />
+            </CanvasSection>
+            <CanvasSection
+              id="product-intro"
+              section="intro"
+              label={adminT('商品介绍')}
+              isEmpty={!detail.sections.intro}
+              emptyHint={adminT('概述 / 材料 / 特点 / 适用场景')}
+            >
+              <InlineProductIntroEditor />
+            </CanvasSection>
+            <CanvasSection
+              id="selling-points"
+              section="selling-points"
+              label={adminT('核心卖点')}
+              isEmpty={!detail.sections.sellingPoints}
+              emptyHint={adminT('添加卖点标题和说明')}
+            >
+              <InlineSellingPointsEditor />
+            </CanvasSection>
+            <CanvasSection
+              id="specifications"
+              section="specifications"
+              label={adminT('参数规格')}
+              isEmpty={!detail.sections.specifications}
+              emptyHint={adminT('添加参数名和值')}
+            >
+              <InlineSpecTableEditor />
+            </CanvasSection>
+            <CanvasSection
+              id="size-guide"
+              section="size-guide"
+              label={adminT('尺码对应表')}
+              isEmpty={!detail.sections.sizeGuide}
+              emptyHint={adminT('可选：添加尺码对应表')}
+            >
+              <InlineSizeGuideEditor />
+            </CanvasSection>
+            <CanvasSection
+              id="application-scenarios"
+              section="scenarios"
+              label={adminT('适用场景')}
+              isEmpty={!detail.sections.scenarios}
+              emptyHint={adminT('添加场景标题和说明')}
+            >
+              <InlineScenariosEditor />
+            </CanvasSection>
+            <CanvasSection
+              id="visual-gallery"
+              section="visual-groups"
+              label={adminT('场景图、建模图与模特上身图')}
+              isEmpty={!detail.sections.visualGroups}
+              emptyHint={adminT('添加场景图 / 建模图 / 模特图')}
+            >
+              <InlineVisualGroupsEditor />
+            </CanvasSection>
+            <CanvasSection
+              id="quality-evidence"
+              section="evidence"
+              label={adminT('资料与认证状态')}
+              isEmpty={!detail.sections.qualityEvidence}
+              emptyHint={adminT('添加质量证据和认证状态')}
+            >
+              <InlineEvidenceEditor />
+            </CanvasSection>
+            <CanvasSection
+              id="care-instructions"
+              section="care"
+              label={adminT('洗护与维护')}
+              isEmpty={!detail.sections.care}
+              emptyHint={adminT('添加洗护说明')}
+            >
+              <InlineCareEditor />
+            </CanvasSection>
+            <CanvasSection
+              id="faq"
+              section="faq"
+              label={adminT('常见问题')}
+              isEmpty={!detail.sections.faq}
+              emptyHint={adminT('关联常见问题')}
+            >
+              <InlineFaqEditor />
+            </CanvasSection>
+          </div>
+        }
+      />
+    </ProductEditorHydrationContext.Provider>
   );
 }
 

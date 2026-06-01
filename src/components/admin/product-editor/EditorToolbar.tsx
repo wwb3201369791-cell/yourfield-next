@@ -427,7 +427,7 @@ export function EditorToolbar() {
             <strong>{t('前台展示')}</strong>
             <span>
               {storefrontState === 'visible'
-                ? t('已满足展示条件')
+                ? t('已满足最低展示条件')
                 : isPublished && !hasPublishedAt
                   ? t('已发布，缺发布时间')
                   : !hasProductGroup
@@ -438,9 +438,10 @@ export function EditorToolbar() {
         </div>
         {previewError ? <p className="ype-toolbar-error">{previewError}</p> : null}
         <p className="ype-toolbar-help">
-          {t(
-            '填写完成后直接点“保存草稿”暂存；确认三语和图片无误后点“发布上线”，不需要切换到经典表单页面。切换语言时如有未保存内容会先自动保存。',
-          )}
+          {t({
+            en: `Click "${isPublished ? 'Save changes' : 'Save draft'}" after editing; publish after checking all languages and images. Locale switches auto-save unsaved content first.`,
+            zh: `填写完成后直接点“${isPublished ? '保存修改' : '保存草稿'}”暂存；确认三语和图片无误后点“发布上线”，不需要切换到经典表单页面。切换语言时如有未保存内容会先自动保存。`,
+          })}
         </p>
       </header>
       {preflight ? (
