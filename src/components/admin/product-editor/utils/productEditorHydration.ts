@@ -31,13 +31,65 @@ export function getProductDocumentIdFromPathname(pathname: string) {
   return decodeURIComponent(segment);
 }
 
+export function claimProductHydrationAttempt(
+  hydratedKeyRef: { current: string },
+  hydrationKey: string,
+) {
+  if (hydratedKeyRef.current === hydrationKey) {
+    return false;
+  }
+
+  hydratedKeyRef.current = hydrationKey;
+  return true;
+}
+
+export function releasePendingProductHydrationAttempt(
+  hydratedKeyRef: { current: string },
+  hydrationKey: string,
+  completed: boolean,
+) {
+  if (!completed && hydratedKeyRef.current === hydrationKey) {
+    hydratedKeyRef.current = '';
+  }
+}
+
+function recordOrNull(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : null;
+}
+
+export function productDocumentFromDocumentInfo(documentInfo: {
+  data?: unknown;
+  initialData?: unknown;
+}) {
+  return recordOrNull(documentInfo.data) ?? recordOrNull(documentInfo.initialData);
+}
+
 function relationshipIdValue(value: unknown): unknown {
   if (!value || typeof value !== 'object') {
     return value;
   }
 
-  const id = (value as { id?: unknown }).id;
-  return typeof id === 'number' || typeof id === 'string' ? id : value;
+  const record = value as { id?: unknown; value?: unknown };
+  const id = record.id;
+  if (typeof id === 'number' || typeof id === 'string') {
+    return id;
+  }
+
+  const relationValue = record.value;
+  if (typeof relationValue === 'number' || typeof relationValue === 'string') {
+    return relationValue;
+  }
+
+  if (relationValue && typeof relationValue === 'object') {
+    const nestedValue = relationshipIdValue(relationValue);
+    if (typeof nestedValue === 'number' || typeof nestedValue === 'string') {
+      return nestedValue;
+    }
+  }
+
+  return value;
 }
 
 function normalizeUploadRows(rows: unknown): unknown {

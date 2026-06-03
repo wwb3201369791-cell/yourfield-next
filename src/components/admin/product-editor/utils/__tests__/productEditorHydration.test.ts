@@ -2,10 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import {
   buildProductDocumentHydrationUrl,
+  claimProductHydrationAttempt,
   getProductDocumentIdFromPathname,
   hasVisualEditorSeedValues,
   mergeHydratedVisualEditorValues,
   normalizeProductDocumentForFormReset,
+  productDocumentFromDocumentInfo,
+  releasePendingProductHydrationAttempt,
 } from '../productEditorHydration';
 
 describe('product editor hydration helpers', () => {
@@ -151,7 +154,10 @@ describe('product editor hydration helpers', () => {
   it('normalizes hydrated relationship objects before resetting Payload form state', () => {
     const hydratedDoc = {
       certifications: [{ attachment: { id: 44, url: '/media/cert.pdf' }, name: '证书' }],
-      images: [{ file: { id: 11, url: '/media/main.png' } }],
+      images: [
+        { file: { id: 11, url: '/media/main.png' } },
+        { file: { relationTo: 'media', value: 12 } },
+      ],
       productGroup: { id: 3, name: '电力电弧与电磁防护' },
       qualityEvidence: [
         { attachment: { id: 'doc-7', url: '/media/report.pdf' }, title: '检测报告' },
@@ -159,7 +165,11 @@ describe('product editor hydration helpers', () => {
       sellingPoints: [{ icon: { id: 22, url: '/media/icon.png' }, title: '可视化卖点' }],
       visualGroups: [
         {
-          images: [{ file: { id: 31, url: '/media/detail-1.png' } }, { file: 32 }],
+          images: [
+            { file: { id: 31, url: '/media/detail-1.png' } },
+            { file: 32 },
+            { file: { relationTo: 'media', value: 33 } },
+          ],
           title: '建模图',
           variant: 'detail',
         },
@@ -168,13 +178,13 @@ describe('product editor hydration helpers', () => {
 
     expect(normalizeProductDocumentForFormReset(hydratedDoc)).toEqual({
       certifications: [{ attachment: 44, name: '证书' }],
-      images: [{ file: 11 }],
+      images: [{ file: 11 }, { file: 12 }],
       productGroup: 3,
       qualityEvidence: [{ attachment: 'doc-7', title: '检测报告' }],
       sellingPoints: [{ icon: 22, title: '可视化卖点' }],
       visualGroups: [
         {
-          images: [{ file: 31 }, { file: 32 }],
+          images: [{ file: 31 }, { file: 32 }, { file: 33 }],
           title: '建模图',
           variant: 'detail',
         },
@@ -189,6 +199,38 @@ describe('product editor hydration helpers', () => {
       'draft-product',
     );
     expect(getProductDocumentIdFromPathname('/admin/collections/products/create')).toBe('');
+  });
+
+  it('uses Payload DocumentInfo data or initialData as the first hydration source', () => {
+    const initialData = { images: [{ file: 193 }], name: '干式水域救援服' };
+    const liveData = { images: [{ file: 194 }], name: '当前表单数据' };
+
+    expect(productDocumentFromDocumentInfo({ initialData })).toBe(initialData);
+    expect(productDocumentFromDocumentInfo({ data: liveData, initialData })).toBe(liveData);
+    expect(productDocumentFromDocumentInfo({ data: [], initialData })).toBe(initialData);
+    expect(productDocumentFromDocumentInfo({})).toBeNull();
+  });
+
+  it('retries document hydration when a pending request is aborted before completion', () => {
+    const hydrationKeyRef = { current: '' };
+
+    expect(claimProductHydrationAttempt(hydrationKeyRef, '132:zh')).toBe(true);
+    expect(claimProductHydrationAttempt(hydrationKeyRef, '132:zh')).toBe(false);
+
+    releasePendingProductHydrationAttempt(hydrationKeyRef, '132:zh', false);
+    expect(hydrationKeyRef.current).toBe('');
+    expect(claimProductHydrationAttempt(hydrationKeyRef, '132:zh')).toBe(true);
+  });
+
+  it('keeps completed document hydration keys so stable renders do not refetch', () => {
+    const hydrationKeyRef = { current: '' };
+
+    expect(claimProductHydrationAttempt(hydrationKeyRef, '132:zh')).toBe(true);
+    releasePendingProductHydrationAttempt(hydrationKeyRef, '132:zh', true);
+
+    expect(hydrationKeyRef.current).toBe('132:zh');
+    expect(claimProductHydrationAttempt(hydrationKeyRef, '132:zh')).toBe(false);
+    expect(claimProductHydrationAttempt(hydrationKeyRef, '132:en')).toBe(true);
   });
 
   it('builds a no-fallback draft document API URL for the current locale', () => {

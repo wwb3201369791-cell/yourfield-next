@@ -32,9 +32,28 @@ export function isProductImageMedia(value: UploadImageRow['file']): value is Pro
   return Boolean(value && typeof value === 'object');
 }
 
+function relationshipValueId(value: unknown): number | string | undefined {
+  if (!value || typeof value !== 'object') {
+    return undefined;
+  }
+
+  const record = value as { id?: unknown; value?: unknown };
+  if (typeof record.id === 'number' || typeof record.id === 'string') {
+    return record.id;
+  }
+  if (typeof record.value === 'number' || typeof record.value === 'string') {
+    return record.value;
+  }
+  if (record.value && typeof record.value === 'object') {
+    return relationshipValueId(record.value);
+  }
+
+  return undefined;
+}
+
 export function productImageMediaId(value: UploadImageRow['file']) {
   if (isProductImageMedia(value)) {
-    return value.id;
+    return relationshipValueId(value);
   }
 
   if (typeof value === 'string') {
@@ -123,7 +142,7 @@ export function useProductImageArrayUpload(
     usePayloadFieldArray<UploadImageRow>(path);
   const { value: productNameValue } = useField<string>({ path: 'name' });
   const {
-    config: { routes, serverURL },
+    config: { routes },
   } = useConfig();
   const locale = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -131,7 +150,7 @@ export function useProductImageArrayUpload(
   const [uploading, setUploading] = useState(false);
   const [resolvedMedia, setResolvedMedia] = useState<Record<string, ProductImageMedia>>({});
 
-  const apiBase = `${serverURL ?? ''}${routes.api}`;
+  const apiBase = routes.api;
   const productName = typeof productNameValue === 'string' ? productNameValue : '';
   const localeCode = locale?.code ?? 'zh';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useConfig, useField, useLocale } from '@payloadcms/ui';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAdminText } from '../../adminUiLocale';
 import { usePayloadFieldArray } from '../hooks/usePayloadFieldArray';
@@ -12,26 +12,26 @@ import {
   textFromUnknown,
   type VisualGroupImageRow,
   type VisualGroupRow,
-  type VisualUploadTarget,
-  visualUploadTargets,
 } from '../inline/InlineControls';
 import { type ProductImageMedia } from '../utils/productImageUpload';
+import {
+  buildVisualUploadDisplayTargets,
+  type DisplayVisualUploadTarget,
+} from '../utils/visualUploadTargets';
 
 export function InlineVisualGroupsEditor() {
   const t = useAdminText();
   const { rows, setRows } = usePayloadFieldArray<VisualGroupRow>('visualGroups');
   const { value: productNameValue } = useField<string>({ path: 'name' });
   const {
-    config: { routes, serverURL },
+    config: { routes },
   } = useConfig();
   const locale = useLocale();
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const [error, setError] = useState('');
   const [resolvedMedia, setResolvedMedia] = useState<Record<string, ProductImageMedia>>({});
-  const [uploadingVariant, setUploadingVariant] = useState<VisualUploadTarget['variant'] | null>(
-    null,
-  );
-  const apiBase = `${serverURL ?? ''}${routes.api}`;
+  const [uploadingTargetKey, setUploadingTargetKey] = useState<string | null>(null);
+  const apiBase = routes.api;
   const localeCode = locale?.code ?? 'zh';
   const productName = typeof productNameValue === 'string' ? productNameValue : '';
 
@@ -81,11 +81,13 @@ export function InlineVisualGroupsEditor() {
     return () => controller.abort();
   }, [apiBase, localeCode, resolvedMedia, rows]);
 
-  const findGroupIndex = (target: VisualUploadTarget) =>
-    rows.findIndex((row) => row.variant === target.variant || row.title === target.title);
+  const findGroupIndex = (target: DisplayVisualUploadTarget) =>
+    typeof target.rowIndex === 'number'
+      ? target.rowIndex
+      : rows.findIndex((row) => row.variant === target.variant || row.title === target.title);
 
   const updateTargetImages = (
-    target: VisualUploadTarget,
+    target: DisplayVisualUploadTarget,
     updater: (images: VisualGroupImageRow[]) => VisualGroupImageRow[],
   ) => {
     const groupIndex = findGroupIndex(target);
@@ -118,7 +120,7 @@ export function InlineVisualGroupsEditor() {
     setRows(nextRows);
   };
 
-  const uploadFilesToTarget = async (target: VisualUploadTarget, files: readonly File[]) => {
+  const uploadFilesToTarget = async (target: DisplayVisualUploadTarget, files: readonly File[]) => {
     if (files.length === 0) {
       return;
     }
@@ -136,7 +138,7 @@ export function InlineVisualGroupsEditor() {
     }
 
     setError('');
-    setUploadingVariant(target.variant);
+    setUploadingTargetKey(target.key);
 
     try {
       const uploadedRows: VisualGroupImageRow[] = [];
@@ -161,7 +163,7 @@ export function InlineVisualGroupsEditor() {
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : t('上传失败，请稍后重试。'));
     } finally {
-      setUploadingVariant(null);
+      setUploadingTargetKey(null);
     }
   };
 
@@ -169,6 +171,7 @@ export function InlineVisualGroupsEditor() {
     (total, row) => total + (Array.isArray(row.images) ? row.images.length : 0),
     0,
   );
+  const displayTargets = useMemo(() => buildVisualUploadDisplayTargets(rows), [rows]);
 
   return (
     <section className="ype-inline-editor ype-visual-upload-editor" data-ype-path="visualGroups">
@@ -180,18 +183,18 @@ export function InlineVisualGroupsEditor() {
         <span>{t({ en: `${imageCount} images`, zh: `${imageCount} 张图` })}</span>
       </div>
       <div className="ype-visual-upload-grid">
-        {visualUploadTargets.map((target) => {
+        {displayTargets.map((target) => {
           const groupIndex = findGroupIndex(target);
           const row = groupIndex >= 0 ? rows[groupIndex] : undefined;
           const images = Array.isArray(row?.images) ? row.images : [];
-          const uploading = uploadingVariant === target.variant;
+          const uploading = uploadingTargetKey === target.key;
           const targetTitle = t(target.title);
 
           return (
-            <article className="ype-visual-upload-card" key={target.variant}>
+            <article className="ype-visual-upload-card" key={target.key}>
               <input
                 ref={(input) => {
-                  inputRefs.current[target.variant] = input;
+                  inputRefs.current[target.key] = input;
                 }}
                 className="ype-hidden-file-input"
                 type="file"
@@ -215,7 +218,7 @@ export function InlineVisualGroupsEditor() {
                 type="button"
                 className={`ype-visual-upload-drop ${images.length > 0 ? 'has-images' : 'is-empty'}`}
                 disabled={uploading}
-                onClick={() => inputRefs.current[target.variant]?.click()}
+                onClick={() => inputRefs.current[target.key]?.click()}
               >
                 {images.length > 0 ? (
                   <span className="ype-visual-upload-thumbs">
@@ -258,7 +261,7 @@ export function InlineVisualGroupsEditor() {
                   <button
                     type="button"
                     disabled={uploading}
-                    onClick={() => inputRefs.current[target.variant]?.click()}
+                    onClick={() => inputRefs.current[target.key]?.click()}
                   >
                     {t({ en: 'Add more images', zh: '继续添加图片' })}
                   </button>

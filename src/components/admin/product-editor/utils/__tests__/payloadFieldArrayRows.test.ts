@@ -92,6 +92,12 @@ describe('payload field array row resolution', () => {
     expect(
       hasDisplayablePayloadArrayRows([{ images: [{ file: 31 }], title: '场景图' }], 'visualGroups'),
     ).toBe(true);
+    expect(
+      hasDisplayablePayloadArrayRows(
+        [{ images: [{ file: { relationTo: 'media', value: 31 } }], title: '场景图' }],
+        'visualGroups',
+      ),
+    ).toBe(true);
   });
 
   it('reads nested values by dotted path', () => {

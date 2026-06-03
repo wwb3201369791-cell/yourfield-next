@@ -42,11 +42,16 @@ function hasMediaReference(value: unknown): boolean {
     sizes?: Record<string, { url?: string } | undefined>;
     thumbnailURL?: string;
     url?: string;
+    value?: unknown;
   };
+  const relationValue = media.value;
 
   return Boolean(
     typeof media.id === 'number' ||
     typeof media.id === 'string' ||
+    typeof relationValue === 'number' ||
+    typeof relationValue === 'string' ||
+    hasMediaReference(relationValue) ||
     media.url ||
     media.thumbnailURL ||
     media.sizes?.card?.url ||

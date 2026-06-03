@@ -1,16 +1,8 @@
 'use client';
 
-import {
-  Form,
-  OperationProvider,
-  useConfig,
-  useDocumentInfo,
-  useField,
-  useForm,
-  useLocale,
-} from '@payloadcms/ui';
+import { Form, OperationProvider, useDocumentInfo, useField, useLocale } from '@payloadcms/ui';
 import type { DocumentViewClientProps } from 'payload';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import {
   buildProductFromFormValues,
@@ -50,13 +42,13 @@ import { SellingPointsDrawer } from './drawers/SellingPointsDrawer';
 import { SizeGuideDrawer } from './drawers/SizeGuideDrawer';
 import { SpecDrawer } from './drawers/SpecDrawer';
 import { VisualGroupsDrawer } from './drawers/VisualGroupsDrawer';
+import { useHydratedProductDocument } from './hooks/useHydratedProductDocument';
 import { useProductImageArrayUpload } from './hooks/useProductImageArrayUpload';
 import { useFormValues } from './utils/buildProductFromForm';
 import {
-  buildProductDocumentHydrationUrl,
-  getProductDocumentIdFromPathname,
   mergeHydratedVisualEditorValues,
   normalizeProductDocumentForFormReset,
+  productDocumentFromDocumentInfo,
 } from './utils/productEditorHydration';
 
 registerDrawer('care', CareDrawer);
@@ -276,76 +268,20 @@ function AdminHeroPreview({
   );
 }
 
-function useHydratedProductDocument(currentLocale: Locale, formValues: Record<string, unknown>) {
-  const {
-    config: { routes, serverURL },
-  } = useConfig();
-  const { id } = useDocumentInfo();
-  const { reset } = useForm();
-  const [hydratedDoc, setHydratedDoc] = useState<Record<string, unknown> | null>(null);
-  const hydratedKeyRef = useRef('');
-
-  useEffect(() => {
-    const documentId =
-      id && String(id).trim()
-        ? String(id)
-        : typeof window !== 'undefined'
-          ? getProductDocumentIdFromPathname(window.location.pathname)
-          : '';
-
-    if (!documentId) {
-      setHydratedDoc(null);
-      hydratedKeyRef.current = '';
-      return undefined;
-    }
-
-    const hydrationKey = `${String(documentId)}:${currentLocale}`;
-    if (hydratedKeyRef.current === hydrationKey) {
-      return undefined;
-    }
-
-    hydratedKeyRef.current = hydrationKey;
-    const controller = new AbortController();
-    const apiBase = `${serverURL ?? ''}${routes.api}`;
-    const url = buildProductDocumentHydrationUrl({
-      apiBase,
-      id: documentId,
-      locale: currentLocale,
-    });
-
-    void fetch(url, { credentials: 'include', signal: controller.signal })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((doc) => {
-        if (!controller.signal.aborted && doc && typeof doc === 'object') {
-          const hydratedProduct = doc as Record<string, unknown>;
-          setHydratedDoc(hydratedProduct);
-          void reset(normalizeProductDocumentForFormReset(hydratedProduct)).catch(() => undefined);
-        }
-      })
-      .catch(() => {
-        if (!controller.signal.aborted && hydratedKeyRef.current === hydrationKey) {
-          hydratedKeyRef.current = '';
-          setHydratedDoc(null);
-        }
-      });
-
-    return () => controller.abort();
-  }, [currentLocale, formValues, id, reset, routes.api, serverURL]);
-
-  return hydratedDoc;
-}
-
 function ProductVisualEditorContent() {
   const adminT = useAdminText();
+  const documentInfo = useDocumentInfo();
   const locale = useLocale();
   const currentLocale = (locale?.code || 'zh') as Locale;
   const formValues = useFormValues();
-  const hydratedDoc = useHydratedProductDocument(currentLocale, formValues);
+  const initialProductDoc = productDocumentFromDocumentInfo(documentInfo);
+  const hydratedDoc = useHydratedProductDocument(currentLocale);
+  const editorDocument = hydratedDoc ?? initialProductDoc;
   const hydratedFormValues = useMemo(
-    () => (hydratedDoc ? normalizeProductDocumentForFormReset(hydratedDoc) : null),
-    [hydratedDoc],
+    () => (editorDocument ? normalizeProductDocumentForFormReset(editorDocument) : null),
+    [editorDocument],
   );
-  const visualValues = mergeHydratedVisualEditorValues(formValues, hydratedDoc);
+  const visualValues = mergeHydratedVisualEditorValues(formValues, editorDocument);
   const detail = useMemo(
     () => buildSectionPropsFromFormValues(visualValues, currentLocale, productLabel),
     [currentLocale, visualValues],

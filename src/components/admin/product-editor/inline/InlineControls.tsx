@@ -10,6 +10,14 @@ import {
   getMediaPreviewUrl,
   type ProductImageMedia,
 } from '../utils/productImageUpload';
+import { type VisualGroupImageRow } from '../utils/visualUploadTargets';
+
+export type {
+  VisualGroupImageRow,
+  VisualGroupRow,
+  VisualUploadTarget,
+} from '../utils/visualUploadTargets';
+export { visualUploadTargets } from '../utils/visualUploadTargets';
 
 type InlineTextFieldProps = Readonly<{
   className?: string;
@@ -36,41 +44,6 @@ type InlineCardListProps = Readonly<{
   path: string;
   titleLabel: string;
 }>;
-
-export type VisualGroupImageRow = Record<string, unknown> & {
-  file?: ProductImageMedia | number | string | null;
-};
-
-export type VisualGroupRow = Record<string, unknown> & {
-  description?: string;
-  images?: VisualGroupImageRow[];
-  title?: string;
-  variant?: string;
-};
-
-export type VisualUploadTarget = Readonly<{
-  description: string;
-  title: string;
-  variant: 'model' | 'modeling' | 'scene';
-}>;
-
-export const visualUploadTargets: readonly VisualUploadTarget[] = [
-  {
-    description: '产品在真实使用场景里的图片。',
-    title: '场景图',
-    variant: 'scene',
-  },
-  {
-    description: '产品结构、款式或建模展示图。',
-    title: '建模图',
-    variant: 'modeling',
-  },
-  {
-    description: '模特穿着或上身效果图。',
-    title: '模特上身图',
-    variant: 'model',
-  },
-];
 
 export function textFromUnknown(value: unknown): string {
   if (typeof value === 'string') {
@@ -128,9 +101,28 @@ function isProductImageMedia(value: unknown): value is ProductImageMedia {
   return Boolean(value && typeof value === 'object');
 }
 
+function relationshipValueId(value: unknown): number | string | undefined {
+  if (!value || typeof value !== 'object') {
+    return undefined;
+  }
+
+  const record = value as { id?: unknown; value?: unknown };
+  if (typeof record.id === 'number' || typeof record.id === 'string') {
+    return record.id;
+  }
+  if (typeof record.value === 'number' || typeof record.value === 'string') {
+    return record.value;
+  }
+  if (record.value && typeof record.value === 'object') {
+    return relationshipValueId(record.value);
+  }
+
+  return undefined;
+}
+
 export function imageMediaId(value: VisualGroupImageRow['file']) {
   if (isProductImageMedia(value)) {
-    return value.id;
+    return relationshipValueId(value);
   }
 
   if (typeof value === 'number') {
