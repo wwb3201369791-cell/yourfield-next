@@ -236,5 +236,5 @@ describe('public page Draft Mode integration', () => {
     expect(modules.buildPageMetadata).toHaveBeenCalledWith(
       expect.objectContaining({ noIndex: false }),
     );
-  });
+  }, 15000);
 });

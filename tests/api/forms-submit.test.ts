@@ -1,10 +1,11 @@
 import { NextRequest } from 'next/server';
+import type { Mock } from 'vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type * as FormsSubmitRoute from '@/app/(site)/api/forms/submit/route';
 
 type RouteModule = typeof FormsSubmitRoute;
-type FetchMock = ReturnType<typeof vi.fn<Parameters<typeof fetch>, ReturnType<typeof fetch>>>;
+type FetchMock = Mock<typeof fetch>;
 
 const contactFormSessionCookieName = 'yourfield.contactFormSession';
 const contactFormSessionCookie = (value: string) => `${contactFormSessionCookieName}=${value}`;

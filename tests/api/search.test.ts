@@ -431,6 +431,9 @@ describe('POST /api/search/click', () => {
   it('validates click payloads before writing search click logs', async () => {
     const payload = createPayloadStub();
     vi.resetModules();
+    vi.doMock('next/cache', () => ({
+      unstable_cache: (fn: unknown) => fn,
+    }));
     vi.doMock('@/lib/cms/payload', () => ({
       getPayloadClient: vi.fn(async () => payload),
     }));
@@ -461,6 +464,9 @@ describe('POST /api/search/click', () => {
   it('writes result-click events for safe internal search result URLs', async () => {
     const payload = createPayloadStub();
     vi.resetModules();
+    vi.doMock('next/cache', () => ({
+      unstable_cache: (fn: unknown) => fn,
+    }));
     vi.doMock('@/lib/cms/payload', () => ({
       getPayloadClient: vi.fn(async () => payload),
     }));

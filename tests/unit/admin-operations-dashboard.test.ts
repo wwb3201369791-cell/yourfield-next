@@ -273,13 +273,17 @@ describe('AdminOperationsDashboard loading behavior', () => {
     const observe = vi.fn();
     const disconnect = vi.fn();
 
-    vi.stubGlobal(
-      'ResizeObserver',
-      vi.fn((callback: ResizeObserverCallback) => {
+    class ResizeObserverMock {
+      disconnect = disconnect;
+      observe = observe;
+      unobserve = vi.fn();
+
+      constructor(callback: ResizeObserverCallback) {
         resizeCallbacks.push(callback);
-        return { disconnect, observe, unobserve: vi.fn() };
-      }),
-    );
+      }
+    }
+
+    vi.stubGlobal('ResizeObserver', ResizeObserverMock);
 
     renderTrendChart();
 

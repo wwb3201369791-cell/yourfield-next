@@ -54,11 +54,8 @@ function basicAuth(user: string, password: string) {
   return `Basic ${Buffer.from(`${user}:${password}`).toString('base64')}`;
 }
 
-type NextMock = ReturnType<typeof vi.fn<Parameters<NextFunction>, ReturnType<NextFunction>>> &
-  NextFunction;
-
-function makeNext(): NextMock {
-  return vi.fn<Parameters<NextFunction>, ReturnType<NextFunction>>() as NextMock;
+function makeNext(): NextFunction {
+  return vi.fn<NextFunction>() as unknown as NextFunction;
 }
 
 describe('Payload private route protection', () => {

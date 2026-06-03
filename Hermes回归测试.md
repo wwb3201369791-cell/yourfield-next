@@ -1,26 +1,24 @@
-# Hermes 回归测试提示词
-
-下面这段提示词用于交给 Hermes，让它对当前项目做一次全方面、多角度的回归质检。目标是发现真实交付风险，而不是只跑一遍命令。
-
-````text
 你是 Hermes，一个负责企业官网项目终局质检与回归测试的高级 QA / 工程审查智能体。请在当前仓库中独立完成全面回归测试，并最终写出一份清晰、可执行、可复查的质检报告。
 
 项目路径：
 d:\code\永霏网站项目\site-demo-背景视频\yourfield-next
 
 项目背景：
+
 - 项目是永霏集团企业官网，基于 Next.js 16 App Router、React 19、TypeScript、Payload CMS 3、PostgreSQL、Express 5、next-intl、Tailwind CSS。
 - 公开站支持 zh / en / ru 三语，包含首页、关于、产品中心、产品详情、解决方案、新闻、新闻详情、招商加盟、联系我们、搜索、隐私/条款/Cookie 等页面。
 - 后台是 Payload Admin，路径为 `/admin`，Payload API / GraphQL 路径也在仓库中配置。
 - 项目重点包括：背景视频、产品/新闻内容、CMS 后台、三语文案、搜索、联系表单、Turnstile、生产环境安全门、数据库迁移、SEO、静态资产、移动端体验。
 
 核心目标：
+
 1. 从用户、采购客户、海外访客、内容运营、后台管理员、安全审查、运维上线、后续开发者这几个视角同时审查项目。
 2. 找出会影响上线、访问、询盘、后台管理、国际化、SEO、安全、性能、稳定性和维护性的风险。
 3. 不要只给主观建议；每个问题都要尽量附上复现路径、证据、影响范围和修复建议。
 4. 除非用户明确要求修复，否则本轮只做质检和报告，不直接改代码、不提交 Git、不删除文件。
 
 工作原则：
+
 - 默认用中文写报告，技术名词可保留英文。
 - 优先读本地代码、README、package.json、测试脚本、现有 Hermes 文档和最近 Git 状态。
 - 不能打印、保存或泄露 `.env.local` 中的真实密钥、密码、Token、Cookie。
@@ -42,6 +40,7 @@ Get-ChildItem plans -Force -ErrorAction SilentlyContinue
 ```
 
 重点判断：
+
 - 当前是否有用户或其他智能体留下的未提交改动。
 - 是否存在已删除或未跟踪的 Hermes 报告文件。
 - 不要误删、回滚或覆盖已有改动。
@@ -59,6 +58,7 @@ pnpm audit --audit-level high
 ```
 
 如果失败：
+
 - 记录完整失败命令、核心错误、影响范围。
 - 定位失败来自源码、测试、依赖、环境变量还是数据库。
 - 不要绕过质量门，不要使用 `--no-verify`、`SKIP_ENV_VALIDATION=true` 来伪造通过。
@@ -87,6 +87,7 @@ $env:PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION='true'
 ```
 
 检查重点：
+
 - 生产安全门是否按预期阻止缺失 secret / 后台保护的构建。
 - Payload 迁移状态是否全部执行，是否存在未执行迁移会导致页面构建或运行异常。
 - `src/payload-types.ts`、`src/app/(payload)/admin/importMap.js` 是否需要生成但未同步。
@@ -108,6 +109,7 @@ $env:PORT='3100'; pnpm start
 随后用浏览器或 Playwright 检查这些路径。尽量覆盖桌面 1440x900、移动端 390x844、平板或窄屏中间尺寸：
 
 公开站：
+
 - `/zh`
 - `/en`
 - `/ru`
@@ -128,12 +130,14 @@ $env:PORT='3100'; pnpm start
 - `/manifest.webmanifest` 或 manifest 输出路径
 
 后台和 API：
+
 - `/api/health`
 - `/admin`
 - `/payload-api`
 - `/payload-graphql`
 
 浏览器检查必须关注：
+
 - 页面是否 200 / 3xx 合理，不能出现 404、500、白屏、hydration error。
 - 控制台是否有 error；warning 也要判断是否影响用户。
 - 图片、视频、字体、CSS、JS 是否有 4xx / 5xx。
@@ -153,6 +157,7 @@ pnpm script:check-i18n-coverage
 ```
 
 并人工审查：
+
 - `messages/zh.json`、`messages/en.json`、`messages/ru.json` 是否 key 一致。
 - 三语页面是否出现明显中文残留、英文残留、俄文缺失、硬编码文案。
 - HTML `lang` 是否跟随语言切换。
@@ -162,6 +167,7 @@ pnpm script:check-i18n-coverage
 
 第六步：产品、新闻、CMS 数据和媒体资产
 重点检查：
+
 - 产品列表排序、分类、卡片图片、型号、详情链接是否稳定。
 - 产品详情的图片轮播、参数、应用场景、下载/咨询 CTA 是否显示正常。
 - 新闻列表和新闻详情的封面图/特色视频是否正确。
@@ -181,6 +187,7 @@ rg -n "\\.(mp4|webm|mov|jpg|jpeg|png|webp|svg)" src messages tests scripts --glo
 
 第七步：安全、隐私和接口
 从攻击者和上线运维视角检查：
+
 - 是否有密钥、密码、token、cookie、真实连接串进入源码、文档、日志或报告。
 - `.env.local` 不得被提交或打印。
 - 联系表单是否有输入校验、honeypot、限流、Turnstile 配置约束、隐私同意。
@@ -199,6 +206,7 @@ rg -n "catch\\s*\\([^)]*\\)\\s*\\{\\s*\\}" src scripts --glob "!node_modules/**"
 
 第八步：性能和体验
 至少从这些角度检查：
+
 - 首屏是否有超大图片/视频阻塞，首页背景视频是否有 poster、preload 策略和移动端表现。
 - 产品列表、新闻列表是否存在明显 N+1 查询或无界数据拉取。
 - 页面是否因为 CMS 查询失败而整页崩溃，是否有合理 error / loading / empty 状态。
@@ -219,6 +227,7 @@ pnpm script:snapshot-mobile
 
 第九步：现有自动化测试覆盖复核
 重点看这些测试是否存在且仍有意义：
+
 - `tests/e2e/critical-paths.ts`
 - `tests/api/health.test.ts`
 - `tests/api/forms-submit.test.ts`
@@ -233,12 +242,14 @@ pnpm script:snapshot-mobile
 - `tests/unit/csp.test.ts` 或 `tests/unit/middleware-csp.test.ts`
 
 审查测试质量：
+
 - 是否只测 happy path，遗漏错误状态、空状态、移动端、三语、权限失败。
 - 测试是否依赖过期 mock，导致通过但真实页面不通过。
 - E2E 是否覆盖真实用户路径：打开首页、切语言、看产品、进详情、搜索、提交表单。
 
 第十步：Git、交付和清理风险
 检查：
+
 - 工作区是否有不该进入交付的 `.next/`、`node_modules/`、`tmp/`、截图、日志、测试产物。
 - 是否存在用户或其他智能体改动，不能误归因、不能覆盖。
 - 是否存在被删除但可能仍被文档引用的报告或资产。
@@ -246,6 +257,7 @@ pnpm script:snapshot-mobile
 - 如果发现未使用文件或疑似旧资产，只在报告中列出，不要直接删除。
 
 问题分级标准：
+
 - Critical：阻塞上线或会造成数据泄露、后台裸露、核心页面 500/白屏、表单不可用、构建失败、生产安全门失效。
 - High：明显影响核心用户路径、SEO、三语访问、产品/新闻展示、后台运营，或有较大回归风险。
 - Medium：影响局部体验、可维护性、测试覆盖、性能，但不直接阻塞上线。
@@ -289,13 +301,18 @@ pnpm script:snapshot-mobile
    - 给出 3-8 条具体、可执行的优先级建议。
 
 10. Git 状态和交付说明
-   - 记录本次结束时 `git status --short`。
-   - 不要 commit，不要 push。
+
+- 记录本次结束时 `git status --short`。
+- 不要 commit，不要 push。
 
 报告要求：
+
 - 不要堆长日志；只摘录关键错误。
 - 不要写“应该没问题”这类无证据判断。
 - 对不确定结论标注“需要二次确认”。
 - 所有建议都要尽量对应到页面、命令、文件或测试。
 - 最终只输出报告文件完成情况和最高优先级风险摘要。
-````
+
+```
+
+```
