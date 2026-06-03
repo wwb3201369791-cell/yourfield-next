@@ -72,6 +72,7 @@ export default buildConfig({
       beforeLogin: ['@/components/admin/AdminBrand#AdminLoginIntro'],
       beforeNavLinks: [
         '@/components/admin/AdminContentLocaleReset#AdminContentLocaleReset',
+        '@/components/admin/AdminNavLocalizationSync#AdminNavLocalizationSync',
         '@/components/admin/AdminBrand#AdminNavBrand',
       ],
       graphics: {

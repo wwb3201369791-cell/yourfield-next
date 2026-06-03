@@ -42,6 +42,7 @@ import { AdminDashboardIntro as AdminDashboardIntro_c3544fd04a86558fd1f1e4a8d6af
 import { AdminOperationsDashboard as AdminOperationsDashboard_0e0cdefc58d3f93cf38b61c23c66418d } from '@/components/admin/AdminOperationsDashboard'
 import { AdminLoginIntro as AdminLoginIntro_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
 import { AdminContentLocaleReset as AdminContentLocaleReset_678957329d8b26c53d954510f28a1385 } from '@/components/admin/AdminContentLocaleReset'
+import { AdminNavLocalizationSync as AdminNavLocalizationSync_3dc850992f4558454c023b5a0910f4e4 } from '@/components/admin/AdminNavLocalizationSync'
 import { AdminNavBrand as AdminNavBrand_c3544fd04a86558fd1f1e4a8d6afed38 } from '@/components/admin/AdminBrand'
 import { AdminDashboardHealthView as AdminDashboardHealthView_25cbe1c033177d9471ba18d50547a2f7 } from '@/components/admin/AdminDashboardHealthView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
@@ -92,6 +93,7 @@ export const importMap = {
   "@/components/admin/AdminOperationsDashboard#AdminOperationsDashboard": AdminOperationsDashboard_0e0cdefc58d3f93cf38b61c23c66418d,
   "@/components/admin/AdminBrand#AdminLoginIntro": AdminLoginIntro_c3544fd04a86558fd1f1e4a8d6afed38,
   "@/components/admin/AdminContentLocaleReset#AdminContentLocaleReset": AdminContentLocaleReset_678957329d8b26c53d954510f28a1385,
+  "@/components/admin/AdminNavLocalizationSync#AdminNavLocalizationSync": AdminNavLocalizationSync_3dc850992f4558454c023b5a0910f4e4,
   "@/components/admin/AdminBrand#AdminNavBrand": AdminNavBrand_c3544fd04a86558fd1f1e4a8d6afed38,
   "@/components/admin/AdminDashboardHealthView#AdminDashboardHealthView": AdminDashboardHealthView_25cbe1c033177d9471ba18d50547a2f7,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1

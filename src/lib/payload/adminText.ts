@@ -519,6 +519,7 @@ export const adminTextDictionary: Readonly<Record<string, string>> = {
   '可选。展示在前台详情页主图右侧和规格参数区。':
     'Optional. Shown beside the storefront detail hero image and in the specifications area.',
   '可选分组，如“尺寸”“性能”。': 'Optional group, such as “Size” or “Performance”.',
+  超级管理员: 'Super Admin',
   后台用户: 'Admin users',
   启用二次验证: 'Enable two-factor authentication',
   咨询内容: 'Inquiry content',

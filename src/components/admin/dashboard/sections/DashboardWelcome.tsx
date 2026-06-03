@@ -60,7 +60,9 @@ export function DashboardWelcome({ data, now, rangeLabel }: DashboardWelcomeProp
     <section className="yourfield-dashboard-welcome" aria-label={t('今日运营概览')}>
       <div>
         <p className="yourfield-ops-dashboard__eyebrow">
-          {t(dashboardGreeting(now))}，{name}
+          {t(dashboardGreeting(now))}
+          {t({ en: ', ', zh: '，' })}
+          {name}
         </p>
         <h2>
           {newSubmissions > 0
