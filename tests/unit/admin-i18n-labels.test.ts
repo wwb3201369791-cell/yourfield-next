@@ -3,7 +3,7 @@ import * as path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { adminTextDictionary } from '@/lib/payload/adminText';
+import { adminListLabel, adminTextDictionary } from '@/lib/payload/adminText';
 
 const sourceRoots = ['src/collections', 'src/globals', 'src/lib/payload/fields'] as const;
 const hanRegex = /[\u4e00-\u9fff]/;
@@ -105,5 +105,18 @@ describe('admin schema i18n labels', () => {
     });
 
     expect(unsafeCollectionLabels).toEqual([]);
+  });
+
+  it('keeps sortable Solutions list labels as plain strings to avoid Payload aria [object Object]', () => {
+    expect(adminListLabel('方案标题')).toBe('方案标题');
+
+    const source = readFileSync('src/collections/Solutions.ts', 'utf8');
+
+    expect(source).toContain("label: adminListLabel('方案标题')");
+    expect(source).toContain("label: adminListLabel('前台位置')");
+    expect(source).toContain("label: adminListLabel('发布时间')");
+    expect(source).not.toContain("label: adminLabel('方案标题')");
+    expect(source).not.toContain("label: adminLabel('前台位置')");
+    expect(source).not.toContain("label: adminLabel('发布时间')");
   });
 });

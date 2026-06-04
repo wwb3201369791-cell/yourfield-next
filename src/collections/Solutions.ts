@@ -1,7 +1,12 @@
 import type { CollectionConfig, Field, TextareaField } from 'payload';
 
 import { canCreate, canDelete, canUpdate, isAdminOrPublished } from '../lib/payload/access';
-import { adminCollectionLabel, adminLabel, adminNavLabel } from '../lib/payload/adminText';
+import {
+  adminCollectionLabel,
+  adminLabel,
+  adminListLabel,
+  adminNavLabel,
+} from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { textArrayField } from '../lib/payload/fields/arrays';
@@ -121,7 +126,7 @@ export const Solutions: CollectionConfig = {
               type: 'text',
               required: true,
               localized: true,
-              label: adminLabel('方案标题'),
+              label: adminListLabel('方案标题'),
               admin: {
                 description: adminLabel('前台卡片标题，例如“电力与能源”“应急救援”。'),
               },
@@ -145,7 +150,7 @@ export const Solutions: CollectionConfig = {
               type: 'number',
               defaultValue: 1,
               index: true,
-              label: adminLabel('前台位置'),
+              label: adminListLabel('前台位置'),
               admin: {
                 description: frontendOrderDescription,
                 disableListFilter: true,
@@ -187,7 +192,7 @@ export const Solutions: CollectionConfig = {
     {
       name: 'publishedAt',
       type: 'date',
-      label: adminLabel('发布时间'),
+      label: adminListLabel('发布时间'),
       admin: {
         condition: () => false,
         date: {

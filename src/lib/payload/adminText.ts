@@ -745,3 +745,7 @@ export function adminCollectionLabel(value: string) {
 export function adminNavLabel(value: string) {
   return value;
 }
+
+export function adminListLabel(value: string) {
+  return value;
+}
