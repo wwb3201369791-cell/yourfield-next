@@ -119,4 +119,14 @@ describe('Header navigation prefetching', () => {
     expect(fetch).not.toHaveBeenCalled();
     expect(routerMocks.prefetch).not.toHaveBeenCalled();
   });
+
+  it('does not render static navigation or logo fallbacks when CMS data is empty', () => {
+    render(<Header locale="zh" siteSettings={{ logoDark: null, logoLight: null, siteName: '' }} />);
+
+    expect(screen.queryByRole('link', { name: '关于我们' })).toBeNull();
+    expect(screen.queryByRole('link', { name: '产品中心' })).toBeNull();
+    const homeLink = screen.getByRole('link', { name: 'nav.home' });
+    expect(homeLink.querySelector('img')).toBeNull();
+    expect(homeLink.textContent).toBe('');
+  });
 });

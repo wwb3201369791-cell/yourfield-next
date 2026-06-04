@@ -696,6 +696,12 @@ export const adminTextDictionary: Readonly<Record<string, string>> = {
   '默认 SEO 关键词': 'Default SEO keywords',
   '默认 SEO 描述': 'Default SEO description',
   '默认 SEO 标题': 'Default SEO title',
+  'SEO 搜索': 'SEO search',
+  搜索引擎站点验证: 'Search engine site verification',
+  '用于 Google Search Console 与百度搜索资源平台的站点验证 meta 标签；只填写平台给出的 content/token，不要填写整段 HTML。':
+    'Site verification meta tokens for Google Search Console and Baidu Search Resource Platform. Enter only the content/token value from the platform, not the full HTML tag.',
+  'Google 站点验证码': 'Google site verification token',
+  百度站点验证码: 'Baidu site verification token',
   '默认从 productId 生成；P2.S4 接入完整拼音与唯一性处理。':
     'Generated from productId by default. P2.S4 adds full pinyin and uniqueness handling.',
   '分享封面图（可选）': 'Share cover image (optional)',

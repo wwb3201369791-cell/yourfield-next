@@ -50,7 +50,6 @@ type FormStatus =
   | Readonly<{ fallbackEmailHref?: string; kind: 'success'; message: string }>
   | Readonly<{ fallbackEmailHref?: string; kind: 'error'; message: string }>;
 
-const defaultSupportEmail = 'hnyf@yourfield.net';
 const safeEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 
 export type LeadFormPayload = {
@@ -107,7 +106,11 @@ function responseErrorCode(data: unknown) {
   return typeof code === 'string' ? code : undefined;
 }
 
-function messageForErrorCode(code: string | undefined, copy: ReturnType<typeof getLeadFormCopy>) {
+function messageForErrorCode(
+  code: string | undefined,
+  copy: ReturnType<typeof getLeadFormCopy>,
+  hasEmailFallback: boolean,
+) {
   switch (code) {
     case 'VALIDATION_ERROR':
       return copy.validationError;
@@ -117,16 +120,16 @@ function messageForErrorCode(code: string | undefined, copy: ReturnType<typeof g
     case 'CAPTCHA_REQUIRED':
       return copy.captchaError;
     case 'SERVER_ERROR':
-      return copy.serverError;
+      return hasEmailFallback ? copy.serverError : copy.backendOnlyError;
     default:
-      return copy.genericError;
+      return hasEmailFallback ? copy.genericError : copy.backendOnlyError;
   }
 }
 
 function normalizeSupportEmail(email: string | undefined) {
   const trimmed = email?.trim();
 
-  return trimmed && safeEmailPattern.test(trimmed) ? trimmed : defaultSupportEmail;
+  return trimmed && safeEmailPattern.test(trimmed) ? trimmed : undefined;
 }
 
 function buildFallbackMailtoHref(
@@ -135,6 +138,10 @@ function buildFallbackMailtoHref(
   payload: LeadFormPayload,
 ) {
   const email = normalizeSupportEmail(supportEmail);
+  if (!email) {
+    return undefined;
+  }
+
   const bodyLines = [
     `Name: ${payload.name}`,
     payload.mobile ? `Phone: ${payload.mobile}` : undefined,
@@ -257,7 +264,7 @@ export function LeadSubmitForm({
   messagePlaceholder,
   productKey,
   submitLabel,
-  supportEmail = defaultSupportEmail,
+  supportEmail,
   textareaClassName = 'min-h-36 rounded border border-border bg-white px-4 py-3 text-base font-normal text-text disabled:cursor-not-allowed disabled:opacity-70',
   turnstileSiteKey,
 }: LeadSubmitFormProps) {
@@ -337,12 +344,15 @@ export function LeadSubmitForm({
     }
 
     const fallbackEmailHref = buildFallbackMailtoHref(supportEmail, copy, payload);
+    const fallbackEmailStatus = fallbackEmailHref ? { fallbackEmailHref } : {};
     setStatus({
-      fallbackEmailHref,
+      ...fallbackEmailStatus,
       kind: 'submitting',
-      message: copy.emailOpeningStatus,
+      ...(fallbackEmailHref ? { message: copy.emailOpeningStatus } : {}),
     });
-    openEmailClient(fallbackEmailHref);
+    if (fallbackEmailHref) {
+      openEmailClient(fallbackEmailHref);
+    }
 
     try {
       const response = await fetch('/api/forms/submit', {
@@ -366,9 +376,9 @@ export function LeadSubmitForm({
         }
 
         setStatus({
-          fallbackEmailHref,
+          ...fallbackEmailStatus,
           kind: 'error',
-          message: messageForErrorCode(responseErrorCode(data), copy),
+          message: messageForErrorCode(responseErrorCode(data), copy, Boolean(fallbackEmailHref)),
         });
 
         return;
@@ -376,9 +386,9 @@ export function LeadSubmitForm({
 
       form.reset();
       setStatus({
-        fallbackEmailHref,
+        ...fallbackEmailStatus,
         kind: 'success',
-        message: copy.success,
+        message: fallbackEmailHref ? copy.success : copy.backendOnlySuccess,
       });
     } catch {
       if (turnstileSiteKey) {
@@ -386,9 +396,9 @@ export function LeadSubmitForm({
       }
 
       setStatus({
-        fallbackEmailHref,
+        ...fallbackEmailStatus,
         kind: 'error',
-        message: copy.genericError,
+        message: fallbackEmailHref ? copy.genericError : copy.backendOnlyError,
       });
     }
   }

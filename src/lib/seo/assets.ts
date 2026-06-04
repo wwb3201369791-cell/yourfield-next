@@ -216,6 +216,16 @@ export function createRobotsRules(
       disallow: [...robotsDisallowPaths],
     },
     {
+      userAgent: 'Googlebot',
+      allow: '/',
+      disallow: [...robotsDisallowPaths],
+    },
+    {
+      userAgent: 'Baiduspider',
+      allow: '/',
+      disallow: [...robotsDisallowPaths],
+    },
+    {
       userAgent: 'Yandex',
       allow: '/',
       disallow: [...robotsDisallowPaths],

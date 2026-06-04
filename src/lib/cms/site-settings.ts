@@ -20,8 +20,8 @@ export type CmsSiteSettings = Readonly<{
   siteName: string;
   tagline: string;
   themeColor: string;
-  logoLight: CmsImageAsset;
-  logoDark: CmsImageAsset;
+  logoLight: CmsImageAsset | null;
+  logoDark: CmsImageAsset | null;
   contact: Readonly<{
     address: string;
     businessHours: string;
@@ -51,6 +51,10 @@ export type CmsSiteSettings = Readonly<{
   }>;
   mapService: CmsMapServiceName;
   publicSecurityRecord?: string;
+  seoVerification: Readonly<{
+    baiduSiteVerification?: string;
+    googleSiteVerification?: string;
+  }>;
 }>;
 
 type CmsUploadSize = {
@@ -102,125 +106,49 @@ type CmsSiteSettingsDoc = {
     service?: string;
   }>;
   publicSecurityRecord?: string;
+  seoVerification?: {
+    baiduSiteVerification?: string;
+    googleSiteVerification?: string;
+  };
   siteName?: string;
   tagline?: string;
   themeColor?: string;
 };
 
-const defaultSettingsByLocale: Record<Locale, CmsSiteSettings> = {
+const technicalDefaultsByLocale: Record<
+  Locale,
+  Readonly<{
+    analytics: Readonly<{ enabled: boolean }>;
+    cookieConsent: Readonly<{ enabled: boolean }>;
+    coordinates: Readonly<{ lat: number; lng: number; zoom: number }>;
+    logoDimensions: Readonly<{ height: number; width: number }>;
+    mapService: CmsMapServiceName;
+    themeColor: string;
+  }>
+> = {
   zh: {
-    siteName: '永霏防护',
-    tagline: '特种防护装备制造商',
-    themeColor: '#1e3a5f',
-    logoLight: {
-      alt: '永霏防护',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-a.png',
-      width: 233,
-    },
-    logoDark: {
-      alt: '永霏防护',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-b.png',
-      width: 233,
-    },
-    contact: {
-      address: '湖南省湘潭市高新区创业东路1号湖湘防护科创园',
-      businessHours: '周一至周五 09:00-18:00',
-      email: 'hnyf@yourfield.net',
-      emailHref: 'mailto:hnyf@yourfield.net',
-      phone: '400-6800181',
-      phoneHref: 'tel:+864006800181',
-    },
-    coordinates: {
-      lat: 27.816329,
-      lng: 112.989066,
-      zoom: 15,
-    },
-    icp: '湘ICP备18013725号-1',
-    cookieConsent: {
-      enabled: true,
-    },
-    analytics: {
-      enabled: false,
-    },
+    analytics: { enabled: false },
+    cookieConsent: { enabled: false },
+    coordinates: { lat: 0, lng: 0, zoom: 1 },
+    logoDimensions: { height: 75, width: 233 },
     mapService: 'amap',
+    themeColor: '#1e3a5f',
   },
   en: {
-    siteName: 'YourField Group',
-    tagline: 'Protective equipment manufacturer',
-    themeColor: '#1e3a5f',
-    logoLight: {
-      alt: 'YourField Group',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-a.png',
-      width: 233,
-    },
-    logoDark: {
-      alt: 'YourField Group',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-b.png',
-      width: 233,
-    },
-    contact: {
-      address: 'No. 1 Chuangye East Road, Xiangtan High-Tech Zone, Hunan, China',
-      businessHours: 'Monday-Friday 09:00-18:00',
-      email: 'hnyf@yourfield.net',
-      emailHref: 'mailto:hnyf@yourfield.net',
-      phone: '400-6800181',
-      phoneHref: 'tel:+864006800181',
-    },
-    coordinates: {
-      lat: 27.816329,
-      lng: 112.989066,
-      zoom: 15,
-    },
-    icp: '湘ICP备18013725号-1',
-    cookieConsent: {
-      enabled: true,
-    },
-    analytics: {
-      enabled: false,
-    },
+    analytics: { enabled: false },
+    cookieConsent: { enabled: false },
+    coordinates: { lat: 0, lng: 0, zoom: 1 },
+    logoDimensions: { height: 75, width: 233 },
     mapService: 'google',
+    themeColor: '#1e3a5f',
   },
   ru: {
-    siteName: 'YourField Group',
-    tagline: 'Производитель защитного снаряжения',
-    themeColor: '#1e3a5f',
-    logoLight: {
-      alt: 'YourField Group',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-a.png',
-      width: 233,
-    },
-    logoDark: {
-      alt: 'YourField Group',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-b.png',
-      width: 233,
-    },
-    contact: {
-      address: '№1, Chuangye East Road, Xiangtan High-Tech Zone, Hunan, China',
-      businessHours: 'Понедельник-пятница 09:00-18:00',
-      email: 'hnyf@yourfield.net',
-      emailHref: 'mailto:hnyf@yourfield.net',
-      phone: '400-6800181',
-      phoneHref: 'tel:+864006800181',
-    },
-    coordinates: {
-      lat: 27.816329,
-      lng: 112.989066,
-      zoom: 15,
-    },
-    icp: '湘ICP备18013725号-1',
-    cookieConsent: {
-      enabled: true,
-    },
-    analytics: {
-      enabled: false,
-    },
+    analytics: { enabled: false },
+    cookieConsent: { enabled: false },
+    coordinates: { lat: 0, lng: 0, zoom: 1 },
+    logoDimensions: { height: 75, width: 233 },
     mapService: 'google',
+    themeColor: '#1e3a5f',
   },
 };
 
@@ -242,11 +170,11 @@ function asBoolean(value: unknown, fallback: boolean) {
   return typeof value === 'boolean' ? value : fallback;
 }
 
-function phoneHref(phone: string, fallback: string) {
+function phoneHref(phone: string) {
   const digits = phone.replace(/\D/g, '');
 
   if (!digits) {
-    return fallback;
+    return '';
   }
 
   if (digits.startsWith('86')) {
@@ -260,8 +188,8 @@ function phoneHref(phone: string, fallback: string) {
   return `tel:${digits}`;
 }
 
-function emailHref(email: string, fallback: string) {
-  return email ? `mailto:${email}` : fallback;
+function emailHref(email: string) {
+  return email ? `mailto:${email}` : '';
 }
 
 function mapServiceForLocale(
@@ -274,64 +202,58 @@ function mapServiceForLocale(
   return service === 'amap' || service === 'google' ? service : fallback;
 }
 
-function mediaAsset(file: CmsUpload | number | string | undefined, fallback: CmsImageAsset) {
+function mediaAsset(
+  file: CmsUpload | number | string | undefined,
+  dimensions: Readonly<{ height: number; width: number }>,
+): CmsImageAsset | null {
   if (!file || typeof file !== 'object') {
-    return fallback;
+    return null;
   }
 
-  const src = normalizeCmsMediaUrl(file.url ?? file.sizes?.thumbnail?.url, fallback.src);
+  const src = normalizeCmsMediaUrl(file.url ?? file.sizes?.thumbnail?.url, '');
+
+  if (!src) {
+    return null;
+  }
 
   return {
-    alt: asString(file.alt, fallback.alt),
-    height: asNumber(file.height ?? file.sizes?.thumbnail?.height, fallback.height),
+    alt: asString(file.alt),
+    height: asNumber(file.height ?? file.sizes?.thumbnail?.height, dimensions.height),
     src,
-    width: asNumber(file.width ?? file.sizes?.thumbnail?.width, fallback.width),
+    width: asNumber(file.width ?? file.sizes?.thumbnail?.width, dimensions.width),
   };
 }
 
 function mapSiteSettings(doc: CmsSiteSettingsDoc | undefined, locale: Locale): CmsSiteSettings {
-  const fallback = defaultSettingsByLocale[locale];
+  const fallback = technicalDefaultsByLocale[locale];
   const contact = doc?.contact;
   const coordinates = doc?.coordinates;
-  const phone = asString(contact?.phone, fallback.contact.phone);
-  const email = asString(contact?.email, fallback.contact.email);
+  const phone = asString(contact?.phone);
+  const email = asString(contact?.email);
   const phoneSecondary = asString(contact?.phoneSecondary);
   const publicSecurityRecord = asString(doc?.publicSecurityRecord);
-  const cookieTitle = asOptionalString(doc?.cookieConsent?.title, fallback.cookieConsent.title);
-  const cookieDescription = asOptionalString(
-    doc?.cookieConsent?.description,
-    fallback.cookieConsent.description,
-  );
-  const cookieAcceptLabel = asOptionalString(
-    doc?.cookieConsent?.acceptLabel,
-    fallback.cookieConsent.acceptLabel,
-  );
-  const cookieRejectLabel = asOptionalString(
-    doc?.cookieConsent?.rejectLabel,
-    fallback.cookieConsent.rejectLabel,
-  );
-  const cookieEssentialOnlyLabel = asOptionalString(
-    doc?.cookieConsent?.essentialOnlyLabel,
-    fallback.cookieConsent.essentialOnlyLabel,
-  );
-  const umamiWebsiteId = asOptionalString(
-    doc?.analytics?.umamiWebsiteId,
-    fallback.analytics.umamiWebsiteId,
-  );
+  const cookieTitle = asOptionalString(doc?.cookieConsent?.title);
+  const cookieDescription = asOptionalString(doc?.cookieConsent?.description);
+  const cookieAcceptLabel = asOptionalString(doc?.cookieConsent?.acceptLabel);
+  const cookieRejectLabel = asOptionalString(doc?.cookieConsent?.rejectLabel);
+  const cookieEssentialOnlyLabel = asOptionalString(doc?.cookieConsent?.essentialOnlyLabel);
+  const umamiWebsiteId = asOptionalString(doc?.analytics?.umamiWebsiteId);
+  const baiduSiteVerification = asOptionalString(doc?.seoVerification?.baiduSiteVerification);
+  const googleSiteVerification = asOptionalString(doc?.seoVerification?.googleSiteVerification);
 
   return {
-    siteName: asString(doc?.siteName, fallback.siteName),
-    tagline: asString(doc?.tagline, fallback.tagline),
+    siteName: asString(doc?.siteName),
+    tagline: asString(doc?.tagline),
     themeColor: asString(doc?.themeColor, fallback.themeColor),
-    logoLight: mediaAsset(doc?.logo?.light, fallback.logoLight),
-    logoDark: mediaAsset(doc?.logo?.dark, fallback.logoDark),
+    logoLight: mediaAsset(doc?.logo?.light, fallback.logoDimensions),
+    logoDark: mediaAsset(doc?.logo?.dark, fallback.logoDimensions),
     contact: {
-      address: asString(contact?.address, fallback.contact.address),
-      businessHours: asString(contact?.businessHours, fallback.contact.businessHours),
+      address: asString(contact?.address),
+      businessHours: asString(contact?.businessHours),
       email,
-      emailHref: emailHref(email, fallback.contact.emailHref),
+      emailHref: emailHref(email),
       phone,
-      phoneHref: phoneHref(phone, fallback.contact.phoneHref),
+      phoneHref: phoneHref(phone),
       ...(phoneSecondary ? { phoneSecondary } : {}),
     },
     coordinates: {
@@ -339,7 +261,7 @@ function mapSiteSettings(doc: CmsSiteSettingsDoc | undefined, locale: Locale): C
       lng: asNumber(coordinates?.lng, fallback.coordinates.lng),
       zoom: asNumber(coordinates?.zoom, fallback.coordinates.zoom),
     },
-    icp: asString(doc?.icp, fallback.icp),
+    icp: asString(doc?.icp),
     cookieConsent: {
       enabled: asBoolean(doc?.cookieConsent?.enabled, fallback.cookieConsent.enabled),
       ...(cookieTitle ? { title: cookieTitle } : {}),
@@ -353,6 +275,10 @@ function mapSiteSettings(doc: CmsSiteSettingsDoc | undefined, locale: Locale): C
       ...(umamiWebsiteId ? { umamiWebsiteId } : {}),
     },
     mapService: mapServiceForLocale(doc?.mapServiceByLocale, locale, fallback.mapService),
+    seoVerification: {
+      ...(baiduSiteVerification ? { baiduSiteVerification } : {}),
+      ...(googleSiteVerification ? { googleSiteVerification } : {}),
+    },
     ...(publicSecurityRecord ? { publicSecurityRecord } : {}),
   };
 }

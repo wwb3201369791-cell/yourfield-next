@@ -2010,6 +2010,13 @@ export interface SiteSetting {
     email?: string | null;
     address?: string | null;
   };
+  /**
+   * 用于 Google Search Console 与百度搜索资源平台的站点验证 meta 标签；只填写平台给出的 content/token，不要填写整段 HTML。
+   */
+  seoVerification?: {
+    googleSiteVerification?: string | null;
+    baiduSiteVerification?: string | null;
+  };
   coordinates?: {
     lat?: number | null;
     lng?: number | null;
@@ -2166,6 +2173,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         phone?: T;
         email?: T;
         address?: T;
+      };
+  seoVerification?:
+    | T
+    | {
+        googleSiteVerification?: T;
+        baiduSiteVerification?: T;
       };
   coordinates?:
     | T

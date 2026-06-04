@@ -1,6 +1,8 @@
 export type LeadFormLocale = 'zh' | 'en' | 'ru';
 
 type LeadFormCopy = Readonly<{
+  backendOnlyError: string;
+  backendOnlySuccess: string;
   captchaError: string;
   consent: string;
   emailFallbackLabel: string;
@@ -17,6 +19,8 @@ type LeadFormCopy = Readonly<{
 
 const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
   zh: {
+    backendOnlyError: '后台暂时未保存成功，请稍后再试。',
+    backendOnlySuccess: '后台已收到咨询，我们会尽快联系您。',
     captchaError: '信息验证失败，请稍后再试。',
     consent: '我同意永霏为回复本次咨询使用以上信息。',
     emailFallbackLabel: '未弹出？再次打开邮箱',
@@ -31,6 +35,8 @@ const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
     validationError: '信息不完整或格式不规范，请补充后重新提交。',
   },
   en: {
+    backendOnlyError: 'The backend could not save this inquiry. Please try again later.',
+    backendOnlySuccess: 'The inquiry is saved. We will contact you soon.',
     captchaError: 'Form verification failed. Please try again later.',
     consent: 'I agree that YourField may use the information above to respond to this inquiry.',
     emailFallbackLabel: 'Email did not open? Open it again',
@@ -50,6 +56,8 @@ const leadFormCopyByLocale: Record<LeadFormLocale, LeadFormCopy> = {
       'Please complete the required fields and check that your phone and email are valid.',
   },
   ru: {
+    backendOnlyError: 'Не удалось сохранить запрос в системе. Повторите попытку позже.',
+    backendOnlySuccess: 'Запрос сохранён. Мы скоро свяжемся с вами.',
     captchaError: 'Проверка формы не пройдена. Повторите попытку позже.',
     consent: 'Я согласен(на), что YourField может использовать эти данные для ответа на запрос.',
     emailFallbackLabel: 'Не открылось? Открыть почту ещё раз',

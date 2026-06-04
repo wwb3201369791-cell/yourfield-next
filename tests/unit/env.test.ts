@@ -21,12 +21,14 @@ const productionBaseEnv = {
 
 type EnvImport = {
   env: {
+    CONTACT_NOTIFY_TO?: string;
     CRON_SECRET?: string;
     NEXT_PUBLIC_TURNSTILE_SITE_KEY?: string;
     NODE_ENV: 'development' | 'production' | 'test';
     PAYLOAD_PREVIEW_SECRET?: string;
     REVALIDATE_SECRET?: string;
     SKIP_ENV_VALIDATION: boolean;
+    SUPPORT_REPLY_TO?: string;
     TURNSTILE_SECRET?: string;
   };
 };
@@ -123,6 +125,20 @@ describe('environment validation', () => {
     expect(env.CRON_SECRET).toBe('test-cron-secret');
     expect(env.REVALIDATE_SECRET).toBe('test-revalidate-secret');
     expect(env.PAYLOAD_PREVIEW_SECRET).toBe('test-preview-secret');
+  });
+
+  it('does not default public form notification addresses to static company contact data', async () => {
+    const { env } = await importEnvWith({
+      CONTACT_NOTIFY_TO: '',
+      CRON_SECRET: 'test-cron-secret',
+      PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION: 'true',
+      PAYLOAD_PREVIEW_SECRET: 'test-preview-secret',
+      REVALIDATE_SECRET: 'test-revalidate-secret',
+      SUPPORT_REPLY_TO: '',
+    });
+
+    expect(env.CONTACT_NOTIFY_TO).toBeUndefined();
+    expect(env.SUPPORT_REPLY_TO).toBeUndefined();
   });
 
   it('requires production Payload private routes to have explicit protection', async () => {

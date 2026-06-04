@@ -13,7 +13,6 @@ import type { Locale } from '@/lib/i18n/locale';
 import { useTranslations } from '@/lib/i18n/useTranslations';
 import {
   getActiveNavigationKey,
-  getFallbackNavigation,
   isExternalNavigationHref,
   localizeNavigationHref,
   type SiteNavigationItem,
@@ -23,7 +22,7 @@ type HeaderProps = Readonly<{
   hotTerms?: readonly string[];
   locale: Locale;
   navigation?: readonly SiteNavigationItem[];
-  siteSettings?: Pick<CmsSiteSettings, 'logoDark' | 'logoLight'>;
+  siteSettings?: Pick<CmsSiteSettings, 'logoDark' | 'logoLight' | 'siteName'>;
 }>;
 
 const warmedNavigationHrefs = new Set<string>();
@@ -171,83 +170,36 @@ function NavigationLink({
   );
 }
 
-const fallbackLogos: Record<Locale, Pick<CmsSiteSettings, 'logoDark' | 'logoLight'>> = {
-  zh: {
-    logoLight: {
-      alt: '永霏防护',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-a.png',
-      width: 233,
-    },
-    logoDark: {
-      alt: '永霏防护',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-b.png',
-      width: 233,
-    },
-  },
-  en: {
-    logoLight: {
-      alt: 'YourField Group',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-a.png',
-      width: 233,
-    },
-    logoDark: {
-      alt: 'YourField Group',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-b.png',
-      width: 233,
-    },
-  },
-  ru: {
-    logoLight: {
-      alt: 'YourField Group',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-a.png',
-      width: 233,
-    },
-    logoDark: {
-      alt: 'YourField Group',
-      height: 75,
-      src: '/images/brand/yourfield-logo-official-b.png',
-      width: 233,
-    },
-  },
-};
-
-function resolveHeaderNavigation(
-  navigation: readonly SiteNavigationItem[] | undefined,
-  t: ReturnType<typeof useTranslations>,
-) {
-  return navigation && navigation.length > 0 ? navigation : getFallbackNavigation(t).mainNav;
+function resolveHeaderNavigation(navigation: readonly SiteNavigationItem[] | undefined) {
+  return navigation ?? [];
 }
 
 export function Header({ hotTerms = [], locale, navigation, siteSettings }: HeaderProps) {
   const t = useTranslations();
   const pathname = usePathname() ?? `/${locale}`;
-  const resolvedNavigation = resolveHeaderNavigation(navigation, t);
+  const resolvedNavigation = resolveHeaderNavigation(navigation);
   const activeKey = getActiveNavigationKey(pathname, locale, resolvedNavigation);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState<Set<string>>(() => new Set());
   const [desktopDropdownKey, setDesktopDropdownKey] = useState<string | null>(null);
   const [isRoutePending, setIsRoutePending] = useState(false);
   const [suppressedDropdownKey, setSuppressedDropdownKey] = useState<string | null>(null);
-  const fallbackLogo = fallbackLogos[locale];
-  const logoLight = siteSettings?.logoLight ?? fallbackLogo.logoLight;
-  const logoDark = siteSettings?.logoDark ?? fallbackLogo.logoDark;
+  const logoLight = siteSettings?.logoLight ?? null;
+  const logoDark = siteSettings?.logoDark ?? null;
   const [hasLightLogoError, setHasLightLogoError] = useState(false);
   const [hasDarkLogoError, setHasDarkLogoError] = useState(false);
-  const displayedLogoLight = hasLightLogoError ? fallbackLogo.logoLight : logoLight;
-  const displayedLogoDark = hasDarkLogoError ? fallbackLogo.logoDark : logoDark;
+  const displayedLogoLight = hasLightLogoError ? null : logoLight;
+  const displayedLogoDark = hasDarkLogoError ? null : logoDark;
+  const shouldShowTextLogo =
+    !displayedLogoLight && !displayedLogoDark && Boolean(siteSettings?.siteName);
 
   useEffect(() => {
     setHasLightLogoError(false);
-  }, [logoLight.src]);
+  }, [logoLight?.src]);
 
   useEffect(() => {
     setHasDarkLogoError(false);
-  }, [logoDark.src]);
+  }, [logoDark?.src]);
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -351,27 +303,32 @@ export function Header({ hotTerms = [], locale, navigation, siteSettings }: Head
     >
       <div className="container">
         <Link className="logo" href={`/${locale}`} aria-label={t('nav.home')} data-nav="home">
-          <Image
-            className="logo-image logo-image-light"
-            src={displayedLogoLight.src}
-            alt=""
-            width={displayedLogoLight.width}
-            height={displayedLogoLight.height}
-            aria-hidden="true"
-            onError={() => setHasLightLogoError(true)}
-            unoptimized={shouldUseUnoptimizedImage(displayedLogoLight.src)}
-          />
-          <Image
-            className="logo-image logo-image-dark"
-            src={displayedLogoDark.src}
-            alt=""
-            width={displayedLogoDark.width}
-            height={displayedLogoDark.height}
-            aria-hidden="true"
-            priority
-            onError={() => setHasDarkLogoError(true)}
-            unoptimized={shouldUseUnoptimizedImage(displayedLogoDark.src)}
-          />
+          {displayedLogoLight ? (
+            <Image
+              className="logo-image logo-image-light"
+              src={displayedLogoLight.src}
+              alt=""
+              width={displayedLogoLight.width}
+              height={displayedLogoLight.height}
+              aria-hidden="true"
+              onError={() => setHasLightLogoError(true)}
+              unoptimized={shouldUseUnoptimizedImage(displayedLogoLight.src)}
+            />
+          ) : null}
+          {displayedLogoDark ? (
+            <Image
+              className="logo-image logo-image-dark"
+              src={displayedLogoDark.src}
+              alt=""
+              width={displayedLogoDark.width}
+              height={displayedLogoDark.height}
+              aria-hidden="true"
+              priority
+              onError={() => setHasDarkLogoError(true)}
+              unoptimized={shouldUseUnoptimizedImage(displayedLogoDark.src)}
+            />
+          ) : null}
+          {shouldShowTextLogo ? <span className="logo-text">{siteSettings?.siteName}</span> : null}
         </Link>
 
         <nav

@@ -163,7 +163,7 @@ export async function generateMetadata({ params }: AboutPageProps) {
     path: '/about',
     title: page?.seoTitle || page?.title || t('page.about.title'),
     description: page?.seoDescription || t('page.about.groupBody1'),
-    image: page?.seoImage || page?.heroImage || '/images/about/about-page-hero.png',
+    image: page?.seoImage || page?.heroImage,
     noIndex: isDraft || Boolean(page?.noIndex),
   });
 }
@@ -173,7 +173,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const isDraft = await isDraftModeEnabled();
   const t = await getTranslations(locale);
   const page = await getCmsPageByKey(locale, 'about', isDraft);
-  const heroImage = page?.heroImage || '/images/about/about-page-hero.png';
+  const heroImage = page?.heroImage;
   const navSections = aboutSections.map(([id, labelKey]) => ({
     id,
     label: t(labelKey),
@@ -330,9 +330,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
         <section
           className="page-header about-page-header"
           aria-labelledby="about-page-title"
-          style={{
-            backgroundImage: `url("${heroImage}")`,
-          }}
+          style={heroImage ? { backgroundImage: `url("${heroImage}")` } : undefined}
         >
           <div className="container">
             <h1 id="about-page-title">{page?.heroTitle || t('page.about.title')}</h1>

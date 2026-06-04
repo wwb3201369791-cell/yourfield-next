@@ -119,7 +119,38 @@ const siteSettings: CmsSiteSettings = {
     enabled: false,
   },
   mapService: 'amap',
+  seoVerification: {},
   publicSecurityRecord: '湘公网安备43030002000000号',
+};
+
+const emptySiteSettings: CmsSiteSettings = {
+  siteName: '',
+  tagline: '',
+  themeColor: '#1e3a5f',
+  logoLight: null,
+  logoDark: null,
+  contact: {
+    address: '',
+    businessHours: '',
+    email: '',
+    emailHref: '',
+    phone: '',
+    phoneHref: '',
+  },
+  coordinates: {
+    lat: 0,
+    lng: 0,
+    zoom: 1,
+  },
+  icp: '',
+  cookieConsent: {
+    enabled: false,
+  },
+  analytics: {
+    enabled: false,
+  },
+  mapService: 'amap',
+  seoVerification: {},
 };
 
 const compactCmsFooterNavigation: SiteFooterGroup[] = [
@@ -189,7 +220,7 @@ const fullCmsFooterNavigation: SiteFooterGroup[] = [
 ];
 
 describe('Footer display', () => {
-  it('uses the full product footer layout and hides compliance records', async () => {
+  it('renders only CMS footer groups and hides compliance records', async () => {
     const html = renderToStaticMarkup(
       await Footer({
         footerNavigation: compactCmsFooterNavigation,
@@ -198,19 +229,23 @@ describe('Footer display', () => {
       }),
     );
 
+    expect(html).toContain('公司');
+    expect(html).toContain('产品');
     expect(html).toContain('关于我们');
-    expect(html).toContain('产品中心');
     expect(html).toContain('解决方案');
-    expect(html).toContain('新闻中心');
-    expect(html).toContain('招商加盟');
+    expect(html).toContain('招商合作');
     expect(html).toContain('联系我们');
-    expect(html).toContain('href="/zh/about" class="footer-heading-link">关于我们</a>');
-    expect(html).toContain('href="/zh/products" class="footer-heading-link">产品中心</a>');
-    expect(html).toContain('href="/zh/solutions" class="footer-heading-link">解决方案</a>');
-    expect(html).toContain('href="/zh/news" class="footer-heading-link">新闻中心</a>');
-    expect(html).toContain('href="/zh/franchise" class="footer-heading-link">招商加盟</a>');
-    expect(html).toContain('href="/zh/contact" class="footer-heading-link">联系我们</a>');
-    expect(html).not.toContain('href="/zh/products#fire-rescue"');
+    expect(html).toContain('消防救援');
+    expect(html).toContain('电力防护');
+    expect(html).not.toContain('产品中心');
+    expect(html).not.toContain('新闻中心');
+    expect(html).not.toContain('招商加盟');
+    expect(html).not.toContain('href="/zh/about" class="footer-heading-link">关于我们</a>');
+    expect(html).not.toContain('href="/zh/products" class="footer-heading-link">产品中心</a>');
+    expect(html).not.toContain('href="/zh/news" class="footer-heading-link">新闻中心</a>');
+    expect(html).not.toContain('href="/zh/franchise" class="footer-heading-link">招商加盟</a>');
+    expect(html).toContain('href="/zh/products#fire-rescue"');
+    expect(html).toContain('href="/zh/products#electrical-protection"');
     expect(html).not.toContain('全部产品');
     expect(html).not.toContain('公司新闻');
     expect(html).not.toContain('展会活动');
@@ -241,5 +276,24 @@ describe('Footer display', () => {
     expect(html).not.toContain('公司新闻');
     expect(html).not.toContain('展会活动');
     expect(html).not.toContain('合作伙伴');
+  });
+
+  it('does not render static logo or contact fallbacks when CMS settings are empty', async () => {
+    const html = renderToStaticMarkup(
+      await Footer({
+        footerNavigation: [],
+        locale: 'zh',
+        siteSettings: emptySiteSettings,
+      }),
+    );
+
+    expect(html).not.toContain('yourfield-logo-official');
+    expect(html).not.toContain('mailto:');
+    expect(html).not.toContain('tel:');
+    expect(html).not.toContain('特种防护装备制造商');
+    expect(html).not.toContain('footer.brand');
+    expect(html).not.toContain('hnyf');
+    expect(html).not.toContain('400-');
+    expect(html).not.toContain('湖南省');
   });
 });

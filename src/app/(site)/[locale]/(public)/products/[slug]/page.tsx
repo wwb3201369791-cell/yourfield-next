@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
     path: `/products/${product.id}`,
     title: productTitle,
     description: productDescription,
-    image: product.image || '/images/headers/products-center.png',
+    image: product.image,
     noIndex: isDraft,
   });
 }

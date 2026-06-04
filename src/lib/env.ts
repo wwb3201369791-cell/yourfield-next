@@ -157,8 +157,8 @@ const envSchema = z
     SMTP_PASSWORD: optionalString,
     SMTP_SECURE: booleanFlag.default(false),
     SMTP_FROM: optionalString,
-    CONTACT_NOTIFY_TO: z.string().email().default('hnyf@yourfield.net'),
-    SUPPORT_REPLY_TO: z.string().email().default('hnyf@yourfield.net'),
+    CONTACT_NOTIFY_TO: optionalEmail,
+    SUPPORT_REPLY_TO: optionalEmail,
 
     AMAP_KEY: optionalString,
     AMAP_SECURITY_CODE: optionalString,

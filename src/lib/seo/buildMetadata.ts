@@ -48,11 +48,11 @@ type BuildPageMetadataArgs = Readonly<{
   path: string;
   title: string;
   description: string;
-  image?: string;
-  imageAlt?: string;
-  keywords?: readonly string[];
-  noIndex?: boolean;
-  type?: 'website' | 'article';
+  image?: string | undefined;
+  imageAlt?: string | undefined;
+  keywords?: readonly string[] | undefined;
+  noIndex?: boolean | undefined;
+  type?: 'website' | 'article' | undefined;
 }>;
 
 export function buildPageMetadata({
@@ -67,7 +67,7 @@ export function buildPageMetadata({
   type = 'website',
 }: BuildPageMetadataArgs): Metadata {
   const url = absoluteUrl(localizedPath(locale, path));
-  const metadataImage = image === undefined ? '/images/hero-poster.jpg' : image.trim();
+  const metadataImage = typeof image === 'string' ? image.trim() : '';
   const imageUrl = metadataImage ? absoluteUrl(metadataImage) : '';
   const fullTitle = `${siteName(locale)} | ${title}`;
   const alternateOgLocales = Object.entries(ogLocaleByLocale)

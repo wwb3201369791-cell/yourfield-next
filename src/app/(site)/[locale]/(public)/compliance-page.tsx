@@ -21,7 +21,6 @@ export async function generateComplianceMetadata({ locale, pageKey }: Compliance
     path: config.path,
     title: t(`page.compliance.${pageKey}.title`),
     description: t(`page.compliance.${pageKey}.intro`),
-    image: '/images/headers/contact-us.png',
     noIndex: true,
   });
 }
@@ -36,7 +35,6 @@ export async function CompliancePage({ locale, pageKey }: CompliancePageProps) {
         <PageHero
           title={t('page.compliance.cookies.title')}
           description={t('page.compliance.cookies.intro')}
-          image="/images/headers/contact-us.png"
           imageAlt={t('page.compliance.cookies.title')}
         />
 
@@ -80,7 +78,6 @@ export async function CompliancePage({ locale, pageKey }: CompliancePageProps) {
       <PageHero
         title={t(`page.compliance.${pageKey}.title`)}
         description={t(`page.compliance.${pageKey}.intro`)}
-        image="/images/headers/contact-us.png"
         imageAlt={t(`page.compliance.${pageKey}.title`)}
       />
 

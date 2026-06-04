@@ -34,7 +34,9 @@ describe('SEO assets', () => {
 
     const productionRules = createRobotsRules(true);
 
-    expect(productionRules).toHaveLength(2);
+    expect(productionRules).toHaveLength(4);
+    expect(JSON.stringify(productionRules)).toContain('Googlebot');
+    expect(JSON.stringify(productionRules)).toContain('Baiduspider');
     expect(JSON.stringify(productionRules)).toContain('/admin');
     expect(JSON.stringify(productionRules)).toContain('/api/');
     expect(JSON.stringify(productionRules)).toContain('/*/search');

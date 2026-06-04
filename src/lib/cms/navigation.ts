@@ -5,7 +5,6 @@ import { env } from '@/lib/env';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import type { Locale } from '@/lib/i18n/locale';
 import {
-  getFallbackNavigation,
   isContactNavigationHref,
   isExternalNavigationHref,
   type SiteFooterGroup,
@@ -277,59 +276,6 @@ function withDynamicProductGroupChildren(
   });
 }
 
-function withFallbackDropdownChildren(
-  items: readonly SiteNavigationItem[],
-  fallbackItems: readonly SiteNavigationItem[],
-): readonly SiteNavigationItem[] {
-  const fallbackByPath = new Map(
-    fallbackItems
-      .map((item) => {
-        const path = navigationPathKey(item);
-
-        return path ? [path, item] : null;
-      })
-      .filter((entry): entry is [string, SiteNavigationItem] => Boolean(entry)),
-  );
-
-  return items.map((item) => {
-    const itemPath = navigationPathKey(item);
-    const fallbackItem = fallbackByPath.get(itemPath ?? '');
-    const fallbackChildren = fallbackItem?.children;
-
-    if (itemPath === '/news') {
-      return {
-        key: item.key,
-        label: item.label,
-        href: item.href,
-        target: item.target,
-        isContact: item.isContact,
-      };
-    }
-
-    if (!fallbackChildren || fallbackChildren.length === 0) {
-      return item;
-    }
-
-    if (itemPath === '/products') {
-      return {
-        ...item,
-        children: fallbackChildren,
-      };
-    }
-
-    const children = item.children ?? [];
-
-    if (children.length >= fallbackChildren.length) {
-      return item;
-    }
-
-    return {
-      ...item,
-      children: fallbackChildren,
-    };
-  });
-}
-
 function mapFooterGroups(
   groups: readonly CmsFooterGroup[] | undefined,
 ): readonly SiteFooterGroup[] {
@@ -337,13 +283,18 @@ function mapFooterGroups(
     .map((group, index) => {
       const links = mapNavigationItems(group.items, `footer-${index}`, footerNavigationPublicPaths);
       const label = normalizeFooterGroupLabel(asString(group.heading), links);
+      const rawKey = group.id ? String(group.id) : '';
 
       if (!label || links.length === 0) {
         return null;
       }
 
       return {
-        key: group.id ? `footer-${String(group.id)}` : `footer-${index}-${label}`,
+        key: rawKey
+          ? knownFooterGroupKeys.has(rawKey)
+            ? rawKey
+            : `footer-${rawKey}`
+          : `footer-${index}-${label}`,
         label,
         links,
       };
@@ -377,38 +328,29 @@ function footerGroupKey(group: SiteFooterGroup) {
   return path ? (footerGroupPaths.get(path) ?? null) : null;
 }
 
-function mergeFooterGroups(
-  fallbackGroups: readonly SiteFooterGroup[],
-  cmsGroups: readonly SiteFooterGroup[],
+function withDynamicFooterLinks(
+  groups: readonly SiteFooterGroup[],
   solutionLinks: readonly SiteNavigationItem[],
   productGroupLinks: readonly SiteNavigationItem[],
 ): readonly SiteFooterGroup[] {
-  const cmsGroupsByKey = new Map<string, SiteFooterGroup>();
-
-  cmsGroups.forEach((group) => {
+  return groups.map((group) => {
     const key = footerGroupKey(group);
 
-    if (key && key !== 'solutions') {
-      cmsGroupsByKey.set(key, group);
-    }
-  });
-
-  return fallbackGroups.map((group) => {
-    if (group.key === 'products' && productGroupLinks.length > 0) {
+    if (key === 'products') {
       return {
         ...group,
         links: productGroupLinks,
       };
     }
 
-    if (group.key === 'solutions') {
+    if (key === 'solutions') {
       return {
         ...group,
         links: solutionLinks,
       };
     }
 
-    return cmsGroupsByKey.get(group.key) ?? group;
+    return group;
   });
 }
 
@@ -419,17 +361,8 @@ async function getCmsNavigationUncached(locale: Locale): Promise<SiteNavigation>
     getCmsSolutions(locale),
     getCmsProductGroups(locale),
   ]);
-  const fallback = getFallbackNavigation(t);
   const solutionLinks = buildSolutionNavigationLinks(solutions, t);
   const productGroupLinks = buildProductGroupNavigationLinks(productGroups);
-  const fallbackMainNav = withDynamicSolutionChildren(
-    withDynamicProductGroupChildren(fallback.mainNav, productGroupLinks),
-    solutionLinks,
-  );
-  const fallbackMobileNav = withDynamicSolutionChildren(
-    withDynamicProductGroupChildren(fallback.mobileNav, productGroupLinks),
-    solutionLinks,
-  );
   const doc = (await payload.findGlobal({
     slug: 'navigation',
     depth: 2,
@@ -439,30 +372,23 @@ async function getCmsNavigationUncached(locale: Locale): Promise<SiteNavigation>
   })) as CmsNavigationDoc | undefined;
   const mappedMainNav = mapNavigationItems(doc?.mainNav, 'main', mainNavigationPublicPaths);
   const mainNav = withDynamicSolutionChildren(
-    withDynamicProductGroupChildren(
-      withFallbackDropdownChildren(mappedMainNav, fallback.mainNav),
-      productGroupLinks,
-    ),
+    withDynamicProductGroupChildren(mappedMainNav, productGroupLinks),
     solutionLinks,
   );
   const mappedMobileNav = mapNavigationItems(doc?.mobileNav, 'mobile', mainNavigationPublicPaths);
   const mobileNav = withDynamicSolutionChildren(
-    withDynamicProductGroupChildren(
-      withFallbackDropdownChildren(mappedMobileNav, fallback.mobileNav),
-      productGroupLinks,
-    ),
+    withDynamicProductGroupChildren(mappedMobileNav, productGroupLinks),
     solutionLinks,
   );
-  const footerNav = mergeFooterGroups(
-    fallback.footerNav,
+  const footerNav = withDynamicFooterLinks(
     mapFooterGroups(doc?.footerNav),
     solutionLinks,
     productGroupLinks,
   );
 
   return {
-    mainNav: mainNav.length > 0 ? mainNav : fallbackMainNav,
-    mobileNav: mobileNav.length > 0 ? mobileNav : mainNav.length > 0 ? mainNav : fallbackMobileNav,
+    mainNav,
+    mobileNav,
     footerNav,
   };
 }

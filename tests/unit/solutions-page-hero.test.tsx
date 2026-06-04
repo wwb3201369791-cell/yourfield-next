@@ -35,7 +35,7 @@ afterEach(() => {
 });
 
 describe('solutions page hero image', () => {
-  it('uses a real static fallback image when the CMS page hero has no background image', async () => {
+  it('does not render a static hero fallback when the CMS page has no background image', async () => {
     vi.doMock('next/link', () => ({
       default: ({ children, href }: { children: ReactNode; href: string }) => (
         <a href={href}>{children}</a>
@@ -106,8 +106,6 @@ describe('solutions page hero image', () => {
       String(candidate.props.className ?? '').includes('solutions-page-header'),
     );
 
-    expect(hero?.props.style).toMatchObject({
-      backgroundImage: 'url("/images/solutions/solution-electronic-information.jpg")',
-    });
+    expect(hero?.props.style).toBeUndefined();
   });
 });

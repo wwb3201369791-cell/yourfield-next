@@ -13,14 +13,6 @@ type SearchPageProps = Readonly<{
   params: LocaleRouteParams;
 }>;
 
-function splitTerms(value: string) {
-  return value
-    .split('|')
-    .map((term) => term.trim())
-    .filter(Boolean)
-    .slice(0, 8);
-}
-
 function SearchPageFallback() {
   return (
     <section className="bg-white py-14 md:py-20">
@@ -103,8 +95,7 @@ export default async function SearchPage({ params }: SearchPageProps) {
     validationErrorText: t('search.validationErrorText'),
     validationErrorTitle: t('search.validationErrorTitle'),
   };
-  const fallbackHotTerms = splitTerms(t('search.hotTerms'));
-  const hotTerms = await getPayloadHotSearchTerms(locale, fallbackHotTerms, 8);
+  const hotTerms = await getPayloadHotSearchTerms(locale, [], 8);
 
   return (
     <>

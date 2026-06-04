@@ -98,19 +98,44 @@ export const SiteSettings: GlobalConfig = {
                   name: 'phone',
                   label: adminLabel('电话'),
                   type: 'text',
-                  defaultValue: '400-6800181',
                 },
                 {
                   name: 'email',
                   label: adminLabel('邮箱'),
                   type: 'email',
-                  defaultValue: 'hnyf@yourfield.net',
                 },
                 {
                   name: 'address',
                   label: adminLabel('地址'),
                   type: 'textarea',
                   localized: true,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: adminLabel('SEO 搜索'),
+          fields: [
+            {
+              name: 'seoVerification',
+              label: adminLabel('搜索引擎站点验证'),
+              type: 'group',
+              admin: {
+                description: adminLabel(
+                  '用于 Google Search Console 与百度搜索资源平台的站点验证 meta 标签；只填写平台给出的 content/token，不要填写整段 HTML。',
+                ),
+              },
+              fields: [
+                {
+                  name: 'googleSiteVerification',
+                  label: adminLabel('Google 站点验证码'),
+                  type: 'text',
+                },
+                {
+                  name: 'baiduSiteVerification',
+                  label: adminLabel('百度站点验证码'),
+                  type: 'text',
                 },
               ],
             },
@@ -287,7 +312,6 @@ export const SiteSettings: GlobalConfig = {
       ...hiddenAdminField,
       type: 'text',
       required: true,
-      defaultValue: '湘ICP备18013725号-1',
     },
     {
       name: 'publicSecurityRecord',

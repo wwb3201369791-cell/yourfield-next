@@ -74,8 +74,7 @@ export async function generateMetadata({ params }: FranchisePageProps) {
     path: '/franchise',
     title,
     description: page?.seoDescription || t('page.franchise.heroText'),
-    image:
-      page?.seoImage || page?.heroImage || '/images/headers/franchise-partnership-hero-full.jpg',
+    image: page?.seoImage || page?.heroImage,
     noIndex: isDraft || Boolean(page?.noIndex),
   });
 }
@@ -88,7 +87,7 @@ export default async function FranchisePage({ params }: FranchisePageProps) {
     getCmsPageByKey(locale, 'franchise', isDraft),
     getCmsSiteSettings(locale),
   ]);
-  const heroImage = page?.heroImage || '/images/headers/franchise-partnership.png';
+  const heroImage = page?.heroImage;
   const turnstileSiteKey = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   return (
@@ -111,7 +110,7 @@ export default async function FranchisePage({ params }: FranchisePageProps) {
         {page?.heroEnabled !== false ? (
           <section
             className="franchise-hero"
-            style={{ backgroundImage: `url("${heroImage}")` }}
+            style={heroImage ? { backgroundImage: `url("${heroImage}")` } : undefined}
             aria-labelledby="franchise-hero-title"
           >
             <div className="container">

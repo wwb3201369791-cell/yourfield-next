@@ -117,7 +117,7 @@ describe('legal footer navigation', () => {
     );
   });
 
-  it('uses backend product group order for product children in header, mobile and footer navigation', async () => {
+  it('uses backend product group order only under CMS-declared product navigation parents', async () => {
     const findGlobal = vi.fn().mockResolvedValue({
       mainNav: [
         {
@@ -141,8 +141,21 @@ describe('legal footer navigation', () => {
           ],
         },
       ],
-      mobileNav: [],
-      footerNav: [],
+      mobileNav: [
+        {
+          id: 'products-mobile',
+          label: '产品中心',
+          href: '/products',
+          target: '_self',
+        },
+      ],
+      footerNav: [
+        {
+          id: 'products',
+          heading: '产品中心',
+          items: [{ id: 'products', label: '全部产品', href: '/products', target: '_self' }],
+        },
+      ],
     });
     const find = vi.fn(({ collection }) =>
       Promise.resolve({
@@ -217,11 +230,19 @@ describe('legal footer navigation', () => {
     );
   });
 
-  it('uses published CMS solutions for header, mobile, and footer solution links', async () => {
+  it('uses published CMS solutions only under CMS-declared solution navigation parents', async () => {
     const findGlobal = vi.fn().mockResolvedValue({
-      mainNav: [],
-      mobileNav: [],
-      footerNav: [],
+      mainNav: [{ id: 'solutions', label: '解决方案', href: '/solutions', target: '_self' }],
+      mobileNav: [
+        { id: 'solutions-mobile', label: '解决方案', href: '/solutions', target: '_self' },
+      ],
+      footerNav: [
+        {
+          id: 'solutions',
+          heading: '解决方案',
+          items: [{ id: 'solutions', label: '解决方案', href: '/solutions', target: '_self' }],
+        },
+      ],
     });
 
     vi.mocked(getPayloadClient).mockResolvedValue({
@@ -263,7 +284,7 @@ describe('legal footer navigation', () => {
     );
   });
 
-  it('keeps dynamic solution links in the footer when CMS footer groups are partial', async () => {
+  it('does not invent a dynamic solution footer group when CMS footer groups are partial', async () => {
     const findGlobal = vi.fn().mockResolvedValue({
       mainNav: [],
       mobileNav: [],
@@ -298,29 +319,34 @@ describe('legal footer navigation', () => {
     const navigation = await getCmsNavigation('zh');
     const footerSolutionsGroup = navigation.footerNav.find((group) => group.key === 'solutions');
 
-    expect(footerSolutionsGroup?.links.map((link) => link.href)).toEqual([
-      '/solutions#s1',
-      '/solutions#s2',
-    ]);
+    expect(footerSolutionsGroup).toBeUndefined();
   });
 
-  it('does not fabricate static solution dropdown entries when CMS has no published solutions', async () => {
+  it('does not expose dynamic product or solution links when CMS has no parent navigation item', async () => {
     const findGlobal = vi.fn().mockResolvedValue({
       mainNav: [],
       mobileNav: [],
       footerNav: [],
     });
+    const find = vi.fn(({ collection }) =>
+      Promise.resolve({
+        docs:
+          collection === 'product-groups'
+            ? [{ groupId: 'fire-rescue', name: '消防与应急救援防护', order: 1 }]
+            : [],
+      }),
+    );
 
     vi.mocked(getPayloadClient).mockResolvedValue({
       findGlobal,
-      find: vi.fn().mockResolvedValue({ docs: [] }),
+      find,
     } as never);
+    cmsSolutionsMock.getCmsSolutions.mockResolvedValue([{ id: 's1', order: 1, title: '方案 1' }]);
 
     const navigation = await getCmsNavigation('zh');
-    const solutionsItem = navigation.mainNav.find((item) => item.href === '/solutions');
-    const footerSolutionsGroup = navigation.footerNav.find((group) => group.key === 'solutions');
 
-    expect(solutionsItem?.children).toBeUndefined();
-    expect(footerSolutionsGroup?.links).toEqual([]);
+    expect(navigation.mainNav).toEqual([]);
+    expect(navigation.mobileNav).toEqual([]);
+    expect(navigation.footerNav).toEqual([]);
   });
 });

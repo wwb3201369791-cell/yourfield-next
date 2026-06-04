@@ -56,15 +56,14 @@ function ContactIcon({ type }: ContactIconProps) {
 export async function generateMetadata({ params }: ContactPageProps) {
   const locale = await resolveRouteLocaleFromParams(params);
   const isDraft = await isDraftModeEnabled();
-  const t = await getTranslations(locale);
   const page = await getCmsPageByKey(locale, 'contact', isDraft);
 
   return buildPageMetadata({
     locale,
     path: '/contact',
-    title: page?.seoTitle || page?.title || t('page.contact.title'),
-    description: page?.seoDescription || t('page.contact.introText'),
-    image: page?.seoImage || page?.heroImage || '/images/headers/contact-us.png',
+    title: page?.seoTitle || page?.title || '',
+    description: page?.seoDescription || page?.heroSubtitle || '',
+    image: page?.seoImage || page?.heroImage,
     noIndex: isDraft || Boolean(page?.noIndex),
   });
 }
@@ -83,10 +82,10 @@ export default async function ContactPage({ params, searchParams }: ContactPageP
   const productMessage = product
     ? t('page.contact.prefillProductMessage', { product: localized(product.name, locale) })
     : '';
-  const heroImage = page?.heroImage || '/images/headers/contact-us.png';
-  const contactAddress = siteSettings.contact.address || t('page.contact.addressValue');
-  const contactPhone = siteSettings.contact.phone || t('page.contact.hotlineValue');
-  const contactEmail = siteSettings.contact.email || t('page.contact.emailValue');
+  const heroImage = page?.heroImage;
+  const contactAddress = siteSettings.contact.address;
+  const contactPhone = siteSettings.contact.phone;
+  const contactEmail = siteSettings.contact.email;
   const turnstileSiteKey = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   return (
@@ -105,7 +104,7 @@ export default async function ContactPage({ params, searchParams }: ContactPageP
         {page?.heroEnabled !== false ? (
           <section
             className="contact-page-header"
-            style={{ backgroundImage: `url("${heroImage}")` }}
+            style={heroImage ? { backgroundImage: `url("${heroImage}")` } : undefined}
           >
             <div className="container">
               <h1>{page?.heroTitle || t('page.contact.title')}</h1>
@@ -123,40 +122,48 @@ export default async function ContactPage({ params, searchParams }: ContactPageP
           <div className="container">
             <div className="contact-grid">
               <div className="contact-info" aria-label={t('page.contact.title')}>
-                <div className="contact-info-header">
-                  <p>{page?.heroSubtitle || t('page.contact.introText')}</p>
-                </div>
+                {page?.heroSubtitle ? (
+                  <div className="contact-info-header">
+                    <p>{page.heroSubtitle}</p>
+                  </div>
+                ) : null}
 
                 <div className="info-cards">
-                  <Link className="info-card info-card--address" href="#company-map-section">
-                    <span className="info-icon" aria-hidden="true">
-                      <ContactIcon type="address" />
-                    </span>
-                    <span className="info-content">
-                      <h3>{t('page.contact.addressLabel')}</h3>
-                      <p>{contactAddress}</p>
-                    </span>
-                  </Link>
+                  {contactAddress ? (
+                    <Link className="info-card info-card--address" href="#company-map-section">
+                      <span className="info-icon" aria-hidden="true">
+                        <ContactIcon type="address" />
+                      </span>
+                      <span className="info-content">
+                        <h3>{t('page.contact.addressLabel')}</h3>
+                        <p>{contactAddress}</p>
+                      </span>
+                    </Link>
+                  ) : null}
 
-                  <Link className="info-card" href={siteSettings.contact.phoneHref}>
-                    <span className="info-icon" aria-hidden="true">
-                      <ContactIcon type="phone" />
-                    </span>
-                    <span className="info-content">
-                      <h3>{t('page.contact.hotlineLabel')}</h3>
-                      <p>{contactPhone}</p>
-                    </span>
-                  </Link>
+                  {contactPhone && siteSettings.contact.phoneHref ? (
+                    <Link className="info-card" href={siteSettings.contact.phoneHref}>
+                      <span className="info-icon" aria-hidden="true">
+                        <ContactIcon type="phone" />
+                      </span>
+                      <span className="info-content">
+                        <h3>{t('page.contact.hotlineLabel')}</h3>
+                        <p>{contactPhone}</p>
+                      </span>
+                    </Link>
+                  ) : null}
 
-                  <Link className="info-card" href={siteSettings.contact.emailHref}>
-                    <span className="info-icon" aria-hidden="true">
-                      <ContactIcon type="email" />
-                    </span>
-                    <span className="info-content">
-                      <h3>{t('page.contact.emailLabel')}</h3>
-                      <p>{contactEmail}</p>
-                    </span>
-                  </Link>
+                  {contactEmail && siteSettings.contact.emailHref ? (
+                    <Link className="info-card" href={siteSettings.contact.emailHref}>
+                      <span className="info-icon" aria-hidden="true">
+                        <ContactIcon type="email" />
+                      </span>
+                      <span className="info-content">
+                        <h3>{t('page.contact.emailLabel')}</h3>
+                        <p>{contactEmail}</p>
+                      </span>
+                    </Link>
+                  ) : null}
                 </div>
               </div>
 

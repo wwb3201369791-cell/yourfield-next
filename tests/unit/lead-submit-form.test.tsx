@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { LeadSubmitForm } from '@/components/forms/LeadSubmitForm';
 
-function leadFormElement() {
+function leadFormElement(options: Readonly<{ supportEmail?: string }> = {}) {
   return (
     <LeadSubmitForm
       className="contact-form"
@@ -39,12 +39,13 @@ function leadFormElement() {
       messageLabel="咨询问题"
       messagePlaceholder="请写下您想咨询的问题"
       submitLabel="发送咨询"
+      {...(options.supportEmail ? { supportEmail: options.supportEmail } : {})}
     />
   );
 }
 
-function renderLeadForm() {
-  return render(leadFormElement());
+function renderLeadForm(options: Readonly<{ supportEmail?: string }> = {}) {
+  return render(leadFormElement(options));
 }
 
 async function waitForHydratedSubmit() {
@@ -73,8 +74,39 @@ describe('LeadSubmitForm', () => {
     expect(html).toMatch(/<button[^>]+type="submit"[^>]+disabled=""/);
   });
 
-  it('marks email and contact phone as required fields', async () => {
+  it('does not create a hardcoded mailto fallback when CMS support email is absent', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ id: 'submission-1', ok: true }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 201,
+      }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    const clickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, 'click')
+      .mockImplementation(() => undefined);
+
     renderLeadForm();
+    await waitForHydratedSubmit();
+
+    fireEvent.change(screen.getByLabelText(/姓名/), { target: { value: '测试客户' } });
+    fireEvent.change(screen.getByLabelText(/邮箱/), { target: { value: 'lead@example.com' } });
+    fireEvent.change(screen.getByLabelText(/联系电话/), {
+      target: { value: '+44 20 7946 0958' },
+    });
+    fireEvent.change(screen.getByLabelText(/咨询问题/), {
+      target: { value: '想了解消防服产品。' },
+    });
+    fireEvent.click(screen.getByLabelText(/我同意/));
+    fireEvent.click(screen.getByRole('button', { name: '发送咨询' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    expect(clickSpy).not.toHaveBeenCalled();
+    expect(screen.queryByRole('link', { name: '未弹出？再次打开邮箱' })).toBeNull();
+  });
+
+  it('marks email and contact phone as required fields', async () => {
+    renderLeadForm({ supportEmail: 'cms-support@example.com' });
     await waitForHydratedSubmit();
 
     expect(screen.getByLabelText(/姓名/)).toHaveProperty('required', true);
@@ -97,7 +129,7 @@ describe('LeadSubmitForm', () => {
       .spyOn(HTMLAnchorElement.prototype, 'click')
       .mockImplementation(() => undefined);
 
-    renderLeadForm();
+    renderLeadForm({ supportEmail: 'cms-support@example.com' });
     await waitForHydratedSubmit();
 
     fireEvent.change(screen.getByLabelText(/姓名/), { target: { value: '测试客户' } });
@@ -115,7 +147,7 @@ describe('LeadSubmitForm', () => {
 
     expect(clickSpy).toHaveBeenCalledTimes(1);
     const openedLink = clickSpy.mock.instances[0] as unknown as HTMLAnchorElement;
-    expect(openedLink.href).toContain('mailto:hnyf@yourfield.net');
+    expect(openedLink.href).toContain('mailto:cms-support@example.com');
     expect(decodeURIComponent(openedLink.href)).toContain('测试客户');
     expect(decodeURIComponent(openedLink.href)).toContain('想了解消防服产品。');
 
@@ -138,7 +170,7 @@ describe('LeadSubmitForm', () => {
     const retryLink = screen.getByRole<HTMLAnchorElement>('link', {
       name: '未弹出？再次打开邮箱',
     });
-    expect(retryLink.href).toContain('mailto:hnyf@yourfield.net');
+    expect(retryLink.href).toContain('mailto:cms-support@example.com');
   });
 
   it('keeps the success email backup visible until the visitor edits the form again', async () => {
@@ -154,7 +186,7 @@ describe('LeadSubmitForm', () => {
     vi.stubGlobal('fetch', fetchMock);
     vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
 
-    renderLeadForm();
+    renderLeadForm({ supportEmail: 'cms-support@example.com' });
     await waitForHydratedSubmit();
 
     fireEvent.change(screen.getByLabelText(/姓名/), { target: { value: '测试客户' } });
@@ -223,7 +255,7 @@ describe('LeadSubmitForm', () => {
     vi.stubGlobal('fetch', fetchMock);
     vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
 
-    renderLeadForm();
+    renderLeadForm({ supportEmail: 'cms-support@example.com' });
     await waitForHydratedSubmit();
 
     fireEvent.change(screen.getByLabelText(/姓名/), { target: { value: '测试客户' } });
@@ -247,7 +279,7 @@ describe('LeadSubmitForm', () => {
     const fallbackLink = screen.getByRole<HTMLAnchorElement>('link', {
       name: '未弹出？再次打开邮箱',
     });
-    expect(fallbackLink.href).toContain('mailto:hnyf@yourfield.net');
+    expect(fallbackLink.href).toContain('mailto:cms-support@example.com');
     expect(decodeURIComponent(fallbackLink.href)).toContain('测试客户');
     expect(decodeURIComponent(fallbackLink.href)).toContain('想了解招商合作。');
   });
@@ -257,7 +289,7 @@ describe('LeadSubmitForm', () => {
     vi.stubGlobal('fetch', fetchMock);
     vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
 
-    renderLeadForm();
+    renderLeadForm({ supportEmail: 'cms-support@example.com' });
     await waitForHydratedSubmit();
 
     fireEvent.change(screen.getByLabelText(/姓名/), { target: { value: '测试客户' } });

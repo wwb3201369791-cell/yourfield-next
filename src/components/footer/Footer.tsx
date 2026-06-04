@@ -7,7 +7,6 @@ import { getCmsSiteSettings, type CmsSiteSettings } from '@/lib/cms/site-setting
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import type { Locale } from '@/lib/i18n/locale';
 import {
-  getFallbackNavigation,
   isExternalNavigationHref,
   localizeNavigationHref,
   type SiteFooterGroup,
@@ -202,21 +201,13 @@ function FooterTitleLink({
 }
 
 export async function Footer({ footerNavigation, locale, siteSettings }: FooterProps) {
-  const t = await getTranslations(locale);
-  const [fallbackNavigation, resolvedSiteSettings] = await Promise.all([
-    Promise.resolve(getFallbackNavigation(t)),
+  const [t, resolvedSiteSettings] = await Promise.all([
+    getTranslations(locale),
     siteSettings ? Promise.resolve(siteSettings) : getCmsSiteSettings(locale),
   ]);
-  const fallbackFooterNavigation = fallbackNavigation.footerNav.filter(
+  const resolvedFooterNavigation = (footerNavigation ?? []).filter(
     (group) => !isLegalFooterGroup(group),
   );
-  const visibleCmsFooterNavigation = (footerNavigation ?? []).filter(
-    (group) => !isLegalFooterGroup(group),
-  );
-  const resolvedFooterNavigation =
-    visibleCmsFooterNavigation.length >= fallbackFooterNavigation.length
-      ? visibleCmsFooterNavigation
-      : fallbackFooterNavigation;
   const logo = resolvedSiteSettings.logoDark;
 
   return (
@@ -225,17 +216,21 @@ export async function Footer({ footerNavigation, locale, siteSettings }: FooterP
         <div className="footer-sitemap" aria-label={t('footer.contentLabel')}>
           <div className="footer-brand">
             <Link href={`/${locale}`} className="logo footer-logo" aria-label={t('nav.home')}>
-              <Image
-                className="logo-image"
-                src={logo.src}
-                alt=""
-                width={logo.width}
-                height={logo.height}
-                aria-hidden="true"
-                unoptimized={shouldUseUnoptimizedImage(logo.src)}
-              />
+              {logo ? (
+                <Image
+                  className="logo-image"
+                  src={logo.src}
+                  alt=""
+                  width={logo.width}
+                  height={logo.height}
+                  aria-hidden="true"
+                  unoptimized={shouldUseUnoptimizedImage(logo.src)}
+                />
+              ) : resolvedSiteSettings.siteName ? (
+                <span className="logo-text">{resolvedSiteSettings.siteName}</span>
+              ) : null}
             </Link>
-            <p>{resolvedSiteSettings.tagline || t('footer.brand')}</p>
+            {resolvedSiteSettings.tagline ? <p>{resolvedSiteSettings.tagline}</p> : null}
             <ul className="footer-proof-list">
               <li>{t('footer.since')}</li>
               <li>{t('footer.globalManufacturing')}</li>
@@ -283,15 +278,21 @@ export async function Footer({ footerNavigation, locale, siteSettings }: FooterP
               </FooterTitleLink>
             </h4>
             <address>
-              <Link href={`/${locale}/contact#contact-info`}>
-                {resolvedSiteSettings.contact.address || t('footer.address')}
-              </Link>
-              <a href={resolvedSiteSettings.contact.phoneHref}>
-                {resolvedSiteSettings.contact.phone || t('footer.phone')}
-              </a>
-              <a href={resolvedSiteSettings.contact.emailHref}>
-                {resolvedSiteSettings.contact.email || t('footer.email')}
-              </a>
+              {resolvedSiteSettings.contact.address ? (
+                <Link href={`/${locale}/contact#contact-info`}>
+                  {resolvedSiteSettings.contact.address}
+                </Link>
+              ) : null}
+              {resolvedSiteSettings.contact.phone ? (
+                <a href={resolvedSiteSettings.contact.phoneHref}>
+                  {resolvedSiteSettings.contact.phone}
+                </a>
+              ) : null}
+              {resolvedSiteSettings.contact.email ? (
+                <a href={resolvedSiteSettings.contact.emailHref}>
+                  {resolvedSiteSettings.contact.email}
+                </a>
+              ) : null}
             </address>
           </div>
         </div>
