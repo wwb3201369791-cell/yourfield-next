@@ -107,16 +107,29 @@ describe('admin schema i18n labels', () => {
     expect(unsafeCollectionLabels).toEqual([]);
   });
 
-  it('keeps sortable Solutions list labels as plain strings to avoid Payload aria [object Object]', () => {
+  it('keeps sortable list labels as plain strings to avoid Payload aria [object Object]', () => {
     expect(adminListLabel('方案标题')).toBe('方案标题');
 
-    const source = readFileSync('src/collections/Solutions.ts', 'utf8');
+    const sortableLabelsByCollection = {
+      'src/collections/FormSubmissions.ts': [
+        '咨询类型',
+        '姓名',
+        '邮箱',
+        '电话',
+        '处理状态',
+        '公司',
+        '国家 / 地区',
+      ],
+      'src/collections/Solutions.ts': ['方案标题', '前台位置', '发布时间'],
+    } as const;
 
-    expect(source).toContain("label: adminListLabel('方案标题')");
-    expect(source).toContain("label: adminListLabel('前台位置')");
-    expect(source).toContain("label: adminListLabel('发布时间')");
-    expect(source).not.toContain("label: adminLabel('方案标题')");
-    expect(source).not.toContain("label: adminLabel('前台位置')");
-    expect(source).not.toContain("label: adminLabel('发布时间')");
+    for (const [file, labels] of Object.entries(sortableLabelsByCollection)) {
+      const source = readFileSync(file, 'utf8');
+
+      for (const label of labels) {
+        expect(source).toContain(`label: adminListLabel('${label}')`);
+        expect(source).not.toContain(`label: adminLabel('${label}')`);
+      }
+    }
   });
 });

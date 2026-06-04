@@ -2,7 +2,12 @@ import type { CollectionAfterChangeHook as AfterChangeHook, CollectionConfig } f
 
 import { sendNotification } from '../lib/email/sendNotification';
 import { canDelete, canRead, canUpdate, deny } from '../lib/payload/access';
-import { adminCollectionLabel, adminLabel, adminNavLabel } from '../lib/payload/adminText';
+import {
+  adminCollectionLabel,
+  adminLabel,
+  adminListLabel,
+  adminNavLabel,
+} from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import {
   inquiryTypeOptions,
@@ -85,18 +90,18 @@ export const FormSubmissions: CollectionConfig = {
           fields: [
             {
               name: 'name',
-              label: adminLabel('姓名'),
+              label: adminListLabel('姓名'),
               type: 'text',
               required: true,
             },
             {
               name: 'country',
-              label: adminLabel('国家 / 地区'),
+              label: adminListLabel('国家 / 地区'),
               type: 'text',
             },
             {
               name: 'company',
-              label: adminLabel('公司'),
+              label: adminListLabel('公司'),
               type: 'text',
             },
             {
@@ -106,13 +111,13 @@ export const FormSubmissions: CollectionConfig = {
             },
             {
               name: 'phone',
-              label: adminLabel('电话'),
+              label: adminListLabel('电话'),
               type: 'text',
               required: true,
             },
             {
               name: 'email',
-              label: adminLabel('邮箱'),
+              label: adminListLabel('邮箱'),
               type: 'email',
               required: true,
             },
@@ -123,7 +128,7 @@ export const FormSubmissions: CollectionConfig = {
           fields: [
             {
               name: 'inquiryType',
-              label: adminLabel('咨询类型'),
+              label: adminListLabel('咨询类型'),
               type: 'select',
               required: true,
               options: inquiryTypeOptions,
@@ -149,7 +154,7 @@ export const FormSubmissions: CollectionConfig = {
           fields: [
             {
               name: 'status',
-              label: adminLabel('处理状态'),
+              label: adminListLabel('处理状态'),
               type: 'select',
               required: true,
               options: submissionStatusOptions,
