@@ -65,15 +65,53 @@ describe('product i18n completeness shared checks', () => {
         features: [{ description: '', icon: 'heat', id: 'feature-placeholder', title: '' }],
         materials: [{ id: 'material-placeholder', kind: 'fabric', value: '' }],
         name: '消防服',
-        qualityEvidence: [{ description: '', file: 194, id: 'evidence-placeholder', title: '' }],
-        scenarios: [{ description: '', id: 'scenario-placeholder', image: 195, title: '' }],
+        qualityEvidence: [
+          {
+            description: '',
+            file: {
+              filename: 'qa-report.pdf',
+              filesize: 12345,
+              id: 194,
+              mimeType: 'application/pdf',
+              url: '/payload-api/media/file/qa-report.pdf',
+            },
+            id: 'evidence-placeholder',
+            title: '',
+          },
+        ],
+        scenarios: [
+          {
+            description: '',
+            id: 'scenario-placeholder',
+            image: {
+              alt: '生产图',
+              filename: 'scenario.png',
+              height: 640,
+              id: 195,
+              thumbnailURL: '/payload-api/media/file/scenario-300x200.png',
+              url: '/payload-api/media/file/scenario.png',
+              width: 960,
+            },
+            title: '',
+          },
+        ],
         sellingPoints: [{ icon: 'light', id: 'selling-point-placeholder', text: '', title: '' }],
         specifications: [{ id: 'spec-placeholder', label: '', unit: 'cm', value: '' }],
         visualGroups: [
           {
             description: '',
             id: 'visual-placeholder',
-            images: [196],
+            images: [
+              {
+                filename: 'visual.png',
+                height: 720,
+                id: 196,
+                mimeType: 'image/png',
+                sizes: { thumbnail: { url: '/payload-api/media/file/visual-300x200.png' } },
+                url: '/payload-api/media/file/visual.png',
+                width: 1080,
+              },
+            ],
             title: '',
             type: 'scene',
           },

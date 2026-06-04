@@ -117,6 +117,45 @@ function specsFromRequiredPaths(paths: readonly RequiredProductI18nPath[]) {
   );
 }
 
+const completenessMetadataKeys = new Set([
+  'alt',
+  'blockName',
+  'blockType',
+  'createdAt',
+  'direction',
+  'file',
+  'files',
+  'filename',
+  'filesize',
+  'focalX',
+  'focalY',
+  'format',
+  'height',
+  'icon',
+  'id',
+  'image',
+  'images',
+  'indent',
+  'kind',
+  'mimeType',
+  'relationTo',
+  'sizes',
+  'textFormat',
+  'textStyle',
+  'thumbnailURL',
+  'type',
+  'unit',
+  'updatedAt',
+  'url',
+  'version',
+  'warningLevel',
+  'width',
+]);
+
+function isCompletenessMetadataKey(key: string) {
+  return key.startsWith('_') || completenessMetadataKeys.has(key);
+}
+
 function hasMeaningfulCompletenessValue(value: unknown): boolean {
   if (typeof value === 'undefined' || value === null) {
     return false;
@@ -137,17 +176,7 @@ function hasMeaningfulCompletenessValue(value: unknown): boolean {
     }
 
     return Object.entries(value).some(([key, nestedValue]) => {
-      if (
-        key === 'id' ||
-        key.startsWith('_') ||
-        key === 'type' ||
-        key === 'version' ||
-        key === 'format' ||
-        key === 'indent' ||
-        key === 'direction' ||
-        key === 'textFormat' ||
-        key === 'textStyle'
-      ) {
+      if (isCompletenessMetadataKey(key)) {
         return false;
       }
 
