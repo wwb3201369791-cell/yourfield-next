@@ -55,6 +55,54 @@ describe('product i18n completeness shared checks', () => {
     expect(summary.locales.zh.missing).toEqual([]);
   });
 
+  it('keeps saved required groups when visual editor rows only contain non-required metadata', () => {
+    const summary = collectProductI18nCompleteness({
+      currentLocale: 'zh',
+      currentValues: {
+        applications: [{ icon: 'rescue', id: 'application-placeholder', value: '' }],
+        careInstructions: [{ id: 'care-placeholder', value: '', warningLevel: 'low' }],
+        description: richText(''),
+        features: [{ description: '', icon: 'heat', id: 'feature-placeholder', title: '' }],
+        materials: [{ id: 'material-placeholder', kind: 'fabric', value: '' }],
+        name: '消防服',
+        qualityEvidence: [{ description: '', file: 194, id: 'evidence-placeholder', title: '' }],
+        scenarios: [{ description: '', id: 'scenario-placeholder', image: 195, title: '' }],
+        sellingPoints: [{ icon: 'light', id: 'selling-point-placeholder', text: '', title: '' }],
+        specifications: [{ id: 'spec-placeholder', label: '', unit: 'cm', value: '' }],
+        visualGroups: [
+          {
+            description: '',
+            id: 'visual-placeholder',
+            images: [196],
+            title: '',
+            type: 'scene',
+          },
+        ],
+      },
+      doc: completeProductDoc('zh'),
+      locales: ['zh'],
+      paths: requiredProductI18nPaths,
+    });
+
+    expect(summary.locales.zh.completed).toBe(11);
+    expect(summary.locales.zh.missing).toEqual([]);
+  });
+
+  it('still reports incomplete current rows when required i18n fields are partially edited', () => {
+    const summary = collectProductI18nCompleteness({
+      currentLocale: 'zh',
+      currentValues: {
+        features: [{ description: '', icon: 'heat', id: 'feature-edit', title: '已编辑标题' }],
+      },
+      doc: completeProductDoc('zh'),
+      locales: ['zh'],
+      paths: requiredProductI18nPaths,
+    });
+
+    expect(summary.locales.zh.completed).toBe(10);
+    expect(summary.locales.zh.missing.map((item) => item.group)).toContain('features');
+  });
+
   it('checks localized arrays and nested localized fields by locale for the admin publish preflight', () => {
     const doc = {
       name: { zh: '消防服', en: 'Fire suit', ru: '' },

@@ -180,6 +180,80 @@ function mergeCurrentLocaleForCompleteness(base: unknown, incoming: unknown): un
   return cloneValue(incoming);
 }
 
+function isRequiredGroupComplete(
+  doc: Record<string, unknown>,
+  group: string,
+  specs: readonly (CheckSpec & { group: string })[],
+) {
+  return (
+    hasMeaningfulCompletenessValue(doc[group]) &&
+    specs.filter((spec) => spec.group === group).every((spec) => isSpecComplete(doc, spec))
+  );
+}
+
+function valuesAtCompletenessPath(value: unknown, path: readonly string[]): unknown[] {
+  if (path.length === 0) {
+    return [value];
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => valuesAtCompletenessPath(item, path));
+  }
+
+  if (!isRecord(value)) {
+    return [];
+  }
+
+  const [key, ...rest] = path;
+  if (!key) {
+    return [];
+  }
+
+  return valuesAtCompletenessPath(value[key], rest);
+}
+
+function hasMeaningfulCurrentRequiredValue(
+  doc: Record<string, unknown>,
+  group: string,
+  specs: readonly (CheckSpec & { group: string })[],
+) {
+  const groupSpecs = specs.filter((spec) => spec.group === group);
+  const childSpecs = groupSpecs.filter((spec) => spec.path.length > 1);
+  const relevantSpecs = childSpecs.length > 0 ? childSpecs : groupSpecs;
+
+  return relevantSpecs.some((spec) =>
+    valuesAtCompletenessPath(doc, spec.path).some((value) => hasMeaningfulCompletenessValue(value)),
+  );
+}
+
+function preserveSavedCompleteGroupsWhenCurrentRowsAreOnlyMetadata(
+  baseDoc: Record<string, unknown>,
+  currentLocaleValues: Record<string, unknown>,
+  mergedDoc: Record<string, unknown>,
+  specs: readonly (CheckSpec & { group: string })[],
+) {
+  const nextDoc: Record<string, unknown> = { ...cloneValue(mergedDoc) };
+  const groups = Array.from(new Set(specs.map((spec) => spec.group)));
+
+  for (const group of groups) {
+    if (
+      !hasMeaningfulCompletenessValue(currentLocaleValues[group]) ||
+      hasMeaningfulCurrentRequiredValue(currentLocaleValues, group, specs)
+    ) {
+      continue;
+    }
+
+    if (
+      isRequiredGroupComplete(baseDoc, group, specs) &&
+      !isRequiredGroupComplete(nextDoc, group, specs)
+    ) {
+      nextDoc[group] = cloneValue(baseDoc[group]);
+    }
+  }
+
+  return nextDoc;
+}
+
 export function collectProductI18nCompleteness({
   currentLocale = 'zh',
   currentValues = {},
@@ -197,10 +271,15 @@ export function collectProductI18nCompleteness({
     const currentLocaleValues = docForLocale(currentValues, currentLocale);
     const localeDoc =
       locale === currentLocale
-        ? (mergeCurrentLocaleForCompleteness(baseDoc, currentLocaleValues) as Record<
-            string,
-            unknown
-          >)
+        ? preserveSavedCompleteGroupsWhenCurrentRowsAreOnlyMetadata(
+            baseDoc,
+            currentLocaleValues,
+            mergeCurrentLocaleForCompleteness(baseDoc, currentLocaleValues) as Record<
+              string,
+              unknown
+            >,
+            specs,
+          )
         : baseDoc;
     const missingSpecs = specs.filter((spec) => !isSpecComplete(localeDoc, spec));
     const missingGroups = new Set(missingSpecs.map((spec) => spec.group));
