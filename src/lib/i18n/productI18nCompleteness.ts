@@ -3,13 +3,7 @@ import {
   type RequiredProductI18nPath,
 } from '../product/productI18nRequirements';
 
-import {
-  cloneValue,
-  isRecord,
-  isSpecComplete,
-  mergeDefined,
-  type CheckSpec,
-} from './i18nCompleteness';
+import { cloneValue, isRecord, isSpecComplete, type CheckSpec } from './i18nCompleteness';
 
 export type ProductI18nLocale = 'zh' | 'en' | 'ru';
 
@@ -123,6 +117,69 @@ function specsFromRequiredPaths(paths: readonly RequiredProductI18nPath[]) {
   );
 }
 
+function hasMeaningfulCompletenessValue(value: unknown): boolean {
+  if (typeof value === 'undefined' || value === null) {
+    return false;
+  }
+
+  if (typeof value === 'string') {
+    return value.trim().length > 0;
+  }
+
+  if (Array.isArray(value)) {
+    return value.some((item) => hasMeaningfulCompletenessValue(item));
+  }
+
+  if (isRecord(value)) {
+    const textValue = value['text'];
+    if (typeof textValue === 'string') {
+      return textValue.trim().length > 0;
+    }
+
+    return Object.entries(value).some(([key, nestedValue]) => {
+      if (
+        key === 'id' ||
+        key.startsWith('_') ||
+        key === 'type' ||
+        key === 'version' ||
+        key === 'format' ||
+        key === 'indent' ||
+        key === 'direction' ||
+        key === 'textFormat' ||
+        key === 'textStyle'
+      ) {
+        return false;
+      }
+
+      return hasMeaningfulCompletenessValue(nestedValue);
+    });
+  }
+
+  return true;
+}
+
+function mergeCurrentLocaleForCompleteness(base: unknown, incoming: unknown): unknown {
+  if (!hasMeaningfulCompletenessValue(incoming)) {
+    return cloneValue(base);
+  }
+
+  if (Array.isArray(incoming)) {
+    return cloneValue(incoming);
+  }
+
+  if (isRecord(base) && isRecord(incoming)) {
+    const merged: Record<string, unknown> = { ...cloneValue(base) };
+
+    for (const [key, value] of Object.entries(incoming)) {
+      merged[key] = mergeCurrentLocaleForCompleteness(merged[key], value);
+    }
+
+    return merged;
+  }
+
+  return cloneValue(incoming);
+}
+
 export function collectProductI18nCompleteness({
   currentLocale = 'zh',
   currentValues = {},
@@ -140,7 +197,10 @@ export function collectProductI18nCompleteness({
     const currentLocaleValues = docForLocale(currentValues, currentLocale);
     const localeDoc =
       locale === currentLocale
-        ? (mergeDefined(baseDoc, currentLocaleValues) as Record<string, unknown>)
+        ? (mergeCurrentLocaleForCompleteness(baseDoc, currentLocaleValues) as Record<
+            string,
+            unknown
+          >)
         : baseDoc;
     const missingSpecs = specs.filter((spec) => !isSpecComplete(localeDoc, spec));
     const missingGroups = new Set(missingSpecs.map((spec) => spec.group));

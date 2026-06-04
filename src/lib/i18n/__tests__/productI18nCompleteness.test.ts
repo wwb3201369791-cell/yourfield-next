@@ -30,6 +30,31 @@ describe('product i18n completeness shared checks', () => {
     expect(requiredProductI18nPaths.some((item) => item.path.startsWith('tags'))).toBe(false);
   });
 
+  it('keeps saved current-locale arrays when the visual editor form has empty placeholder rows', () => {
+    const summary = collectProductI18nCompleteness({
+      currentLocale: 'zh',
+      currentValues: {
+        applications: [],
+        careInstructions: [],
+        description: richText(''),
+        features: [{ description: '', title: '' }],
+        materials: [],
+        name: '消防服',
+        qualityEvidence: [],
+        scenarios: [],
+        sellingPoints: [],
+        specifications: [],
+        visualGroups: [],
+      },
+      doc: completeProductDoc('zh'),
+      locales: ['zh'],
+      paths: requiredProductI18nPaths,
+    });
+
+    expect(summary.locales.zh.completed).toBe(11);
+    expect(summary.locales.zh.missing).toEqual([]);
+  });
+
   it('checks localized arrays and nested localized fields by locale for the admin publish preflight', () => {
     const doc = {
       name: { zh: '消防服', en: 'Fire suit', ru: '' },
@@ -77,6 +102,22 @@ describe('product i18n completeness shared checks', () => {
     expect(summary.locales.ru.completed).toBe(0);
   });
 });
+
+function completeProductDoc(locale: (typeof locales)[number]) {
+  return {
+    applications: { [locale]: [{ value: '灭火救援' }] },
+    careInstructions: { [locale]: [{ value: '阴凉处晾干' }] },
+    description: { [locale]: richText('完整产品介绍') },
+    features: { [locale]: [{ description: '耐高温', title: '阻燃' }] },
+    materials: { [locale]: [{ value: '芳纶' }] },
+    name: { [locale]: '消防服' },
+    qualityEvidence: { [locale]: [{ description: '有效', title: '检测报告' }] },
+    scenarios: { [locale]: [{ description: '现场', title: '救援' }] },
+    sellingPoints: { [locale]: [{ text: '说明', title: '轻便' }] },
+    specifications: [{ label: { [locale]: '型号' }, value: { [locale]: 'A1' } }],
+    visualGroups: { [locale]: [{ description: '展示', title: '场景图' }] },
+  };
+}
 
 function richText(text: string) {
   return {
