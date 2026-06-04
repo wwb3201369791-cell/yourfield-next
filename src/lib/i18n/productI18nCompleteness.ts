@@ -137,9 +137,10 @@ export function collectProductI18nCompleteness({
 
   for (const locale of locales) {
     const baseDoc = docForLocale(doc, locale);
+    const currentLocaleValues = docForLocale(currentValues, currentLocale);
     const localeDoc =
       locale === currentLocale
-        ? (mergeDefined(baseDoc, currentValues) as Record<string, unknown>)
+        ? (mergeDefined(baseDoc, currentLocaleValues) as Record<string, unknown>)
         : baseDoc;
     const missingSpecs = specs.filter((spec) => !isSpecComplete(localeDoc, spec));
     const missingGroups = new Set(missingSpecs.map((spec) => spec.group));

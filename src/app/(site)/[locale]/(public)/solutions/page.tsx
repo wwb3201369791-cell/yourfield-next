@@ -19,6 +19,8 @@ type SolutionsPageProps = Readonly<{
   params: LocaleRouteParams;
 }>;
 
+const fallbackSolutionsHeroImage = '/images/solutions/solution-electronic-information.jpg';
+
 function emptySolutionsCopy(locale: Locale) {
   if (locale === 'en') {
     return {
@@ -46,7 +48,7 @@ export async function generateMetadata({ params }: SolutionsPageProps) {
   const t = await getTranslations(locale);
   const page = await getCmsPageByKey(locale, 'solutions', isDraft);
   const fallbackDescription = t('page.solutions.introText');
-  const metadataImage = page?.seoImage || page?.heroImage;
+  const metadataImage = page?.seoImage || page?.heroImage || fallbackSolutionsHeroImage;
 
   return buildPageMetadata({
     locale,
@@ -64,7 +66,7 @@ export default async function SolutionsPage({ params }: SolutionsPageProps) {
   const t = await getTranslations(locale);
   const page = await getCmsPageByKey(locale, 'solutions', isDraft);
   const cmsSolutions = await getCmsSolutions(locale, isDraft);
-  const heroImage = page?.heroImage || '';
+  const heroImage = page?.heroImage || fallbackSolutionsHeroImage;
   const solutionSections = buildSolutionsPageSections(cmsSolutions);
   const emptyCopy = emptySolutionsCopy(locale);
 

@@ -81,14 +81,36 @@ function isGenericFeatureTitle(value: string) {
   );
 }
 
-function bestFeatureText(title: unknown, description: unknown) {
-  const titleText = textFromUnknown(title);
-  const descriptionText = textFromUnknown(description);
+function bestFeatureText(title: unknown, description: unknown, locale: Locale = 'zh') {
+  const titleText = textFromUnknown(title, locale);
+  const descriptionText = textFromUnknown(description, locale);
 
   return titleText && !isGenericFeatureTitle(titleText) ? titleText : descriptionText || titleText;
 }
 
-function textFromUnknown(value: unknown): string {
+function localizedEntryText(value: unknown, locale: Locale): string {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return '';
+  }
+
+  const record = value as Record<string, unknown>;
+  const localeValue = record[locale];
+
+  if (typeof localeValue === 'string') {
+    return localeValue.trim();
+  }
+
+  if (localeValue && typeof localeValue === 'object') {
+    const nestedText = textFromUnknown(localeValue, locale);
+    if (nestedText) {
+      return nestedText;
+    }
+  }
+
+  return '';
+}
+
+function textFromUnknown(value: unknown, locale: Locale = 'zh'): string {
   if (typeof value === 'string') {
     return value.trim();
   }
@@ -98,15 +120,26 @@ function textFromUnknown(value: unknown): string {
   }
 
   const record = value as Record<string, unknown>;
+
+  const directLocalizedText = localizedEntryText(record, locale);
+  if (directLocalizedText) {
+    return directLocalizedText;
+  }
+
   for (const key of ['value', 'label', 'title', 'name', 'groupId', 'slug', 'productId', 'model']) {
     const entry = record[key];
     if (typeof entry === 'string' && entry.trim()) {
       return entry.trim();
     }
+
+    const nestedLocalizedText = localizedEntryText(entry, locale);
+    if (nestedLocalizedText) {
+      return nestedLocalizedText;
+    }
   }
 
   const localizedZh = record.zh;
-  if (typeof localizedZh === 'string' && localizedZh.trim()) {
+  if (locale === 'zh' && typeof localizedZh === 'string' && localizedZh.trim()) {
     return localizedZh.trim();
   }
 
@@ -133,44 +166,51 @@ function textFromUnknown(value: unknown): string {
   return parts.join(' ').replace(/\s+/g, ' ').trim();
 }
 
-function rowValues(value: unknown): readonly string[] {
-  if (!Array.isArray(value)) {
-    return [];
+function arrayForLocale(value: unknown, locale: Locale = 'zh'): readonly unknown[] {
+  if (Array.isArray(value)) {
+    return value;
   }
 
-  return value
+  if (value && typeof value === 'object') {
+    const localizedValue = (value as Record<string, unknown>)[locale];
+    if (Array.isArray(localizedValue)) {
+      return localizedValue;
+    }
+  }
+
+  return [];
+}
+
+function rowValues(value: unknown, locale: Locale = 'zh'): readonly string[] {
+  return arrayForLocale(value, locale)
     .map((row) => {
       if (typeof row === 'string') {
         return row.trim();
       }
       if (row && typeof row === 'object') {
         const record = row as Record<string, unknown>;
-        return textFromUnknown(record.value ?? record.label ?? record.title);
+        return textFromUnknown(record.value ?? record.label ?? record.title, locale);
       }
       return '';
     })
     .filter(Boolean);
 }
 
-function sizeGuideCellValues(value: unknown): readonly string[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value.map((row) => {
+function sizeGuideCellValues(value: unknown, locale: Locale = 'zh'): readonly string[] {
+  return arrayForLocale(value, locale).map((row) => {
     if (typeof row === 'string') {
       return row.trim();
     }
     if (row && typeof row === 'object') {
       const record = row as Record<string, unknown>;
-      return textFromUnknown(record.value ?? record.label ?? record.title);
+      return textFromUnknown(record.value ?? record.label ?? record.title, locale);
     }
     return '';
   });
 }
 
-function localizedRows(value: unknown): readonly LocalizedText[] {
-  return rowValues(value).map(sameText);
+function localizedRows(value: unknown, locale: Locale = 'zh'): readonly LocalizedText[] {
+  return rowValues(value, locale).map(sameText);
 }
 
 const imageUrlPattern =
@@ -252,87 +292,76 @@ function imageRows(value: unknown): readonly string[] {
     .filter((url): url is string => Boolean(url));
 }
 
-function detailCards(value: unknown): readonly ProductDetailCard[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value
+function detailCards(value: unknown, locale: Locale = 'zh'): readonly ProductDetailCard[] {
+  return arrayForLocale(value, locale)
     .map((row) => {
       const record = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
       return {
-        text: sameText(record.text ?? record.description),
-        title: sameText(bestFeatureText(record.title, record.text ?? record.description)),
+        text: sameText(textFromUnknown(record.text ?? record.description, locale)),
+        title: sameText(bestFeatureText(record.title, record.text ?? record.description, locale)),
       };
     })
     .filter((row) => row.title.zh);
 }
 
-function qualityEvidenceRows(value: unknown): readonly ProductQualityEvidence[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value
+function qualityEvidenceRows(
+  value: unknown,
+  locale: Locale = 'zh',
+): readonly ProductQualityEvidence[] {
+  return arrayForLocale(value, locale)
     .map((row) => {
       const record = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
       return {
-        description: sameText(record.description),
-        status: sameText(record.status),
-        title: sameText(record.title),
+        description: sameText(textFromUnknown(record.description, locale)),
+        status: sameText(textFromUnknown(record.status, locale)),
+        title: sameText(textFromUnknown(record.title, locale)),
         ...(typeof record.type === 'string' ? { type: record.type } : {}),
       };
     })
     .filter((row) => row.title.zh);
 }
 
-function specRows(value: unknown): readonly ProductSpec[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value
+function specRows(value: unknown, locale: Locale = 'zh'): readonly ProductSpec[] {
+  return arrayForLocale(value, locale)
     .map((row) => {
       const record = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
       return {
-        label: sameText(record.label),
-        value: sameText(record.value),
+        label: sameText(textFromUnknown(record.label, locale)),
+        value: sameText(textFromUnknown(record.value, locale)),
       };
     })
     .filter((row) => row.label.zh && localized(row.value, 'zh'));
 }
 
-function faqRows(value: unknown): Product['faqs'] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value
+function faqRows(value: unknown, locale: Locale = 'zh'): Product['faqs'] {
+  return arrayForLocale(value, locale)
     .map((row) => {
       const record = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
       return {
-        answer: sameText(record.answer ?? record.text ?? record.description),
-        question: sameText(record.question ?? record.title),
+        answer: sameText(
+          textFromUnknown(record.answer ?? record.text ?? record.description, locale),
+        ),
+        question: sameText(textFromUnknown(record.question ?? record.title, locale)),
       };
     })
     .filter((row) => row.question.zh && row.answer.zh);
 }
 
-function sizeGuideFromValues(value: unknown): ProductSizeGuide | undefined {
+function sizeGuideFromValues(value: unknown, locale: Locale = 'zh'): ProductSizeGuide | undefined {
   if (!value || typeof value !== 'object') {
     return undefined;
   }
 
   const record = value as Record<string, unknown>;
-  const columns = rowValues(record.columns);
+  const columns = rowValues(record.columns, locale);
   const rows = Array.isArray(record.rows)
     ? record.rows
         .map((row) => {
           const rowRecord = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
-          const values = sizeGuideCellValues(rowRecord.values);
+          const values = sizeGuideCellValues(rowRecord.values, locale);
 
           return {
-            label: textFromUnknown(rowRecord.label),
+            label: textFromUnknown(rowRecord.label, locale),
             values,
           };
         })
@@ -343,26 +372,28 @@ function sizeGuideFromValues(value: unknown): ProductSizeGuide | undefined {
     return undefined;
   }
 
+  const cornerLabel = textFromUnknown(record.cornerLabel, locale);
+  const title = textFromUnknown(record.title, locale);
+
   return {
     columns,
     rows,
-    ...(textFromUnknown(record.cornerLabel) ? { cornerLabel: sameText(record.cornerLabel) } : {}),
-    ...(textFromUnknown(record.title) ? { title: sameText(record.title) } : {}),
+    ...(cornerLabel ? { cornerLabel: sameText(cornerLabel) } : {}),
+    ...(title ? { title: sameText(title) } : {}),
   };
 }
 
-function visualGroupsFromValues(value: unknown): readonly ProductVisualGroup[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value
+function visualGroupsFromValues(
+  value: unknown,
+  locale: Locale = 'zh',
+): readonly ProductVisualGroup[] {
+  return arrayForLocale(value, locale)
     .map((row) => {
       const record = row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
       return {
-        description: sameText(record.description),
+        description: sameText(textFromUnknown(record.description, locale)),
         images: imageRows(record.images),
-        title: sameText(record.title),
+        title: sameText(textFromUnknown(record.title, locale)),
         variant: typeof record.variant === 'string' ? record.variant : 'gallery',
       };
     })
@@ -641,47 +672,52 @@ export function buildSectionPropsFromCms(
   };
 }
 
-export function buildProductFromFormValues(values: Record<string, unknown>): Product {
+export function buildProductFromFormValues(
+  values: Record<string, unknown>,
+  locale: Locale = 'zh',
+): Product {
   const productId =
-    textFromUnknown(values.productId) || textFromUnknown(values.slug) || 'draft-product';
+    textFromUnknown(values.productId, locale) ||
+    textFromUnknown(values.slug, locale) ||
+    'draft-product';
   const categoryName = sameText(
-    textFromUnknown(values.productGroup) || textFromUnknown(values.category),
+    textFromUnknown(values.productGroup, locale) || textFromUnknown(values.category, locale),
   );
   const images = imageRows(values.images);
-  const sizeGuide = sizeGuideFromValues(values.sizeGuide);
+  const sizeGuide = sizeGuideFromValues(values.sizeGuide, locale);
 
   return {
-    applications: localizedRows(values.applications),
-    careInstructions: localizedRows(values.careInstructions),
-    categoryId: textFromUnknown(values.category) || 'draft',
+    applications: localizedRows(values.applications, locale),
+    careInstructions: localizedRows(values.careInstructions, locale),
+    categoryId: textFromUnknown(values.category, locale) || 'draft',
     categoryName: categoryName.zh ? categoryName : emptyLocalizedText,
-    description: sameText(textFromUnknown(values.description)),
-    faqs: faqRows(values.productFaqs),
+    description: sameText(textFromUnknown(values.description, locale)),
+    faqs: faqRows(values.productFaqs, locale),
     features: Array.isArray(values.features)
       ? values.features
           .map((feature) => {
             const record =
               feature && typeof feature === 'object' ? (feature as Record<string, unknown>) : {};
-            return sameText(bestFeatureText(record.title, record.description));
+            return sameText(bestFeatureText(record.title, record.description, locale));
           })
           .filter((feature) => feature.zh)
       : [],
-    groupId: textFromUnknown(values.productGroup) || 'draft',
+    groupId: textFromUnknown(values.productGroup, locale) || 'draft',
     id: productId,
     image: images[0] ?? '',
     images,
-    materials: localizedRows(values.materials),
-    model: textFromUnknown(values.model) || textFromUnknown(values.sku),
-    name: sameText(textFromUnknown(values.name)),
-    qualityEvidence: qualityEvidenceRows(values.qualityEvidence),
-    scenarios: detailCards(values.scenarios),
-    sellingPoints: detailCards(values.sellingPoints),
-    sizeRange: rowValues(values.sizeRange),
+    materials: localizedRows(values.materials, locale),
+    model: textFromUnknown(values.model, locale) || textFromUnknown(values.sku, locale),
+    name: sameText(textFromUnknown(values.name, locale)),
+    qualityEvidence: qualityEvidenceRows(values.qualityEvidence, locale),
+    scenarios: detailCards(values.scenarios, locale),
+    sellingPoints: detailCards(values.sellingPoints, locale),
+    sizeRange: rowValues(values.sizeRange, locale),
     ...(sizeGuide ? { sizeGuide } : {}),
-    sku: textFromUnknown(values.sku),
-    specifications: specRows(values.specifications),
-    standards: rowValues(values.standards),
-    visualGroups: visualGroupsFromValues(values.visualGroups),
+    sku: textFromUnknown(values.sku, locale),
+    specifications: specRows(values.specifications, locale),
+    standards: rowValues(values.standards, locale),
+    visualGroups: visualGroupsFromValues(values.visualGroups, locale),
   };
 }
 
@@ -690,5 +726,5 @@ export function buildSectionPropsFromFormValues(
   locale: Locale,
   t: ProductDetailTranslator,
 ): ProductDetailDerivedData {
-  return buildSectionPropsFromCms(buildProductFromFormValues(values), locale, t);
+  return buildSectionPropsFromCms(buildProductFromFormValues(values, locale), locale, t);
 }

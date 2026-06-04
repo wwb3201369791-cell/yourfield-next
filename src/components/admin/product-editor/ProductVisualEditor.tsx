@@ -286,7 +286,10 @@ function ProductVisualEditorContent() {
     () => buildSectionPropsFromFormValues(visualValues, currentLocale, productLabel),
     [currentLocale, visualValues],
   );
-  const product = useMemo(() => buildProductFromFormValues(visualValues), [visualValues]);
+  const product = useMemo(
+    () => buildProductFromFormValues(visualValues, currentLocale),
+    [currentLocale, visualValues],
+  );
   const productImages = useProductImageArrayUpload('images', { maxRows: 1 });
   const heroImages =
     productImages.imageUrls.length > 0

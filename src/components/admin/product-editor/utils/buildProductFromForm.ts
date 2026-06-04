@@ -23,7 +23,7 @@ export function useFormValues() {
 export function useFormProduct(_locale: Locale = 'zh') {
   const values = useFormValues();
 
-  return useMemo(() => buildProductFromFormValues(values), [values]);
+  return useMemo(() => buildProductFromFormValues(values, _locale), [_locale, values]);
 }
 
 export function useSectionPropsFromForm(locale: Locale, t: ProductDetailTranslator) {

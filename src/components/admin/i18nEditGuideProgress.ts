@@ -162,9 +162,10 @@ export function collectLocaleSummaries(args: {
 
   return localeOrder.map((locale): LocaleSummary => {
     const savedDoc = docForLocale(args.doc, locale);
+    const currentLocaleValues = docForLocale(args.currentValues, args.currentLocale);
     const localeDoc =
       locale === args.currentLocale
-        ? (mergeCurrentLocaleForSummary(savedDoc, args.currentValues) as Record<string, unknown>)
+        ? (mergeCurrentLocaleForSummary(savedDoc, currentLocaleValues) as Record<string, unknown>)
         : savedDoc;
     const missingLabels = Array.from(
       new Set(specs.filter((spec) => !isSpecComplete(localeDoc, spec)).map((spec) => spec.label)),
