@@ -2,7 +2,11 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { localizeAdminChromeRoot, localizeAdminNavText } from '../adminNavLocalization';
+import {
+  localizeAdminChromeRoot,
+  localizeAdminDocumentTitle,
+  localizeAdminNavText,
+} from '../adminNavLocalization';
 import { adminUiText } from '@/lib/payload/adminText';
 
 describe('AdminNavLocalizationSync', () => {
@@ -16,6 +20,19 @@ describe('AdminNavLocalizationSync', () => {
     expect(localizeAdminNavText('产品', 'en')).toBe('Products');
     expect(localizeAdminNavText('全局设置', 'en')).toBe('Global Settings');
     expect(localizeAdminNavText('联系方式', 'en')).toBe('Contact Info');
+    expect(localizeAdminNavText('永霏网站后台', 'en')).toBe('YourField Admin');
+  });
+
+  it('localizes browser document titles without translating edited content names', () => {
+    expect(localizeAdminDocumentTitle('Editing - 产品 - 永霏网站后台', 'en')).toBe(
+      'Editing - Products - YourField Admin',
+    );
+    expect(localizeAdminDocumentTitle('Editing - Products - YourField Admin', 'zh')).toBe(
+      'Editing - 产品 - 永霏网站后台',
+    );
+    expect(localizeAdminDocumentTitle('Editing - 干式水域救援服 - 永霏网站后台', 'en')).toBe(
+      'Editing - 干式水域救援服 - YourField Admin',
+    );
   });
 
   it('restores English nav labels to Chinese when the admin interface returns to ZH', () => {

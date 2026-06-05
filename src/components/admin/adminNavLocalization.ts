@@ -18,6 +18,8 @@ const adminChromeTextOverrides: Readonly<Record<string, string>> = {
   常见问题: 'FAQ',
   页面: 'Pages',
   系统设置: 'System settings',
+  仪表板: 'Dashboard',
+  永霏网站后台: 'YourField Admin',
 };
 
 const adminChromeSourceLabels = Object.keys(
@@ -61,6 +63,13 @@ export function localizeAdminNavText(value: string, locale: AdminInterfaceLocale
   }
 
   return value.replace(trimmed, replacement);
+}
+
+export function localizeAdminDocumentTitle(value: string, locale: AdminInterfaceLocale) {
+  return value
+    .split(' - ')
+    .map((part) => localizeAdminNavText(part, locale))
+    .join(' - ');
 }
 
 function nodeElement(node: Node) {

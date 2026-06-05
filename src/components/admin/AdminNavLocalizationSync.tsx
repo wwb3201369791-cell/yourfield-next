@@ -4,7 +4,7 @@ import { useTranslation } from '@payloadcms/ui';
 import { useEffect } from 'react';
 
 import { asAdminInterfaceLocale } from './AdminInterfaceLanguageSwitch';
-import { localizeAdminChromeRoot } from './adminNavLocalization';
+import { localizeAdminChromeRoot, localizeAdminDocumentTitle } from './adminNavLocalization';
 
 const adminChromeRootSelector = [
   'aside',
@@ -23,6 +23,12 @@ export function AdminNavLocalizationSync() {
 
   useEffect(() => {
     const localizeChrome = () => {
+      const localizedTitle = localizeAdminDocumentTitle(document.title, locale);
+
+      if (localizedTitle !== document.title) {
+        document.title = localizedTitle;
+      }
+
       const roots = Array.from(document.querySelectorAll(adminChromeRootSelector));
 
       for (const root of roots) {
@@ -38,6 +44,16 @@ export function AdminNavLocalizationSync() {
       childList: true,
       subtree: true,
     });
+
+    const title = document.querySelector('title');
+
+    if (title) {
+      observer.observe(title, {
+        characterData: true,
+        childList: true,
+        subtree: true,
+      });
+    }
 
     return () => observer.disconnect();
   }, [locale]);
