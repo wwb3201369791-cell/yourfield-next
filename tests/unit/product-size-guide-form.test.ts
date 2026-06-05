@@ -38,7 +38,7 @@ describe('product size guide form values', () => {
     expect(product.sizeGuide).toBeUndefined();
   });
 
-  it('uses real image URLs from editor image rows and ignores unresolved media ids', () => {
+  it('uses original image URLs from editor image rows and ignores unresolved media ids', () => {
     const product = buildProductFromFormValues({
       images: [
         { file: 105 },
@@ -54,7 +54,7 @@ describe('product size guide form values', () => {
 
     expect(product.images).toEqual([
       '/media/products/main.png',
-      '/media/products/card.png',
+      '/media/raw.png',
       '/media/products/local-card.png',
     ]);
   });

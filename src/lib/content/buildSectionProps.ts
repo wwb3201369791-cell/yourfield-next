@@ -279,8 +279,8 @@ function imageRows(value: unknown): readonly string[] {
           url?: string;
         };
         return imageUrlFromText(
-          media.sizes?.card?.url ??
-            media.url ??
+          media.url ??
+            media.sizes?.card?.url ??
             media.sizes?.thumbnail?.url ??
             media.thumbnailURL ??
             media.sizes?.feature?.url ??

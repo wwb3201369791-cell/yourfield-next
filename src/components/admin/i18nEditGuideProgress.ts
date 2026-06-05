@@ -8,7 +8,7 @@ import {
   type CheckSpec,
   type RequiredI18nPath,
 } from '@/lib/i18n/i18nCompleteness';
-import { adminUiText } from '@/lib/payload/adminText';
+import { adminUiText, type AdminInterfaceLocale } from '@/lib/payload/adminText';
 
 export const localeOrder = ['zh', 'en', 'ru'] as const;
 
@@ -28,6 +28,16 @@ export const localeLabels: Record<ContentLocale, string> = {
   en: '英文',
   ru: '俄文',
 };
+
+const nativeLocaleLabels: Record<ContentLocale, string> = {
+  zh: '中文',
+  en: 'English',
+  ru: 'Русский',
+};
+
+export function contentLocaleLabel(locale: ContentLocale, adminLocale: AdminInterfaceLocale) {
+  return adminLocale === 'en' ? nativeLocaleLabels[locale] : localeLabels[locale];
+}
 
 export function asContentLocale(value: unknown): ContentLocale {
   return typeof value === 'string' && localeCodeSet.has(value) ? (value as ContentLocale) : 'zh';

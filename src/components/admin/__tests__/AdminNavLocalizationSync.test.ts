@@ -1,6 +1,8 @@
+// @vitest-environment jsdom
+
 import { describe, expect, it } from 'vitest';
 
-import { localizeAdminNavText } from '../adminNavLocalization';
+import { localizeAdminChromeRoot, localizeAdminNavText } from '../adminNavLocalization';
 import { adminUiText } from '@/lib/payload/adminText';
 
 describe('AdminNavLocalizationSync', () => {
@@ -31,5 +33,43 @@ describe('AdminNavLocalizationSync', () => {
   it('translates the built-in super admin display name used by the dashboard greeting', () => {
     expect(adminUiText('en', '超级管理员')).toBe('Super Admin');
     expect(adminUiText('zh', '超级管理员')).toBe('超级管理员');
+  });
+
+  it('translates Payload page titles, breadcrumbs and tabs outside the sidebar', () => {
+    document.body.innerHTML = `
+      <main>
+        <div class="payload-breadcrumb" aria-label="联系方式">联系方式</div>
+        <h1>联系方式</h1>
+        <div role="tablist"><button type="button" title="联系方式">联系方式</button></div>
+      </main>
+    `;
+
+    localizeAdminChromeRoot(document.body, 'en');
+
+    expect(document.querySelector('.payload-breadcrumb')?.textContent).toBe('Contact Info');
+    expect(document.querySelector('.payload-breadcrumb')?.getAttribute('aria-label')).toBe(
+      'Contact Info',
+    );
+    expect(document.querySelector('h1')?.textContent).toBe('Contact Info');
+    expect(document.querySelector('button')?.textContent).toBe('Contact Info');
+    expect(document.querySelector('button')?.getAttribute('title')).toBe('Contact Info');
+  });
+
+  it('restores translated page chrome to Chinese and leaves content-locale chips native', () => {
+    document.body.innerHTML = `
+      <main>
+        <h1>Contact Info</h1>
+        <section data-yf-preserve-admin-text>
+          <a><span>中文</span><small>编辑</small></a>
+        </section>
+      </main>
+    `;
+
+    localizeAdminChromeRoot(document.body, 'zh');
+
+    expect(document.querySelector('h1')?.textContent).toBe('联系方式');
+    expect(
+      document.querySelector('[data-yf-preserve-admin-text]')?.textContent?.replace(/\s+/g, ''),
+    ).toBe('中文编辑');
   });
 });

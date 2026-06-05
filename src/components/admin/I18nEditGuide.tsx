@@ -10,8 +10,8 @@ import { useAdminInterfaceLocale, useAdminText } from './adminUiLocale';
 import {
   asContentLocale,
   collectLocaleSummaries,
+  contentLocaleLabel,
   formValuesForI18nSummary,
-  localeLabels,
   requiredLabelSummary,
   type ContentLocale,
 } from './i18nEditGuideProgress';
@@ -111,7 +111,7 @@ export default function I18nEditGuide({ custom }: I18nEditGuideProps) {
       <div className="yf-i18n-guide__copy">
         <strong>{t('三语内容编辑')}</strong>
         <span>
-          {t({ en: 'Editing', zh: '当前编辑' })}：{t(localeLabels[currentLocale])}。
+          {t({ en: 'Editing', zh: '当前编辑' })}：{contentLocaleLabel(currentLocale, adminLocale)}。
           {canShowProgress
             ? t({
                 en: `Progress counts only required multilingual content: ${requiredLabels}.`,
@@ -123,19 +123,24 @@ export default function I18nEditGuide({ custom }: I18nEditGuideProps) {
               })}
         </span>
       </div>
-      <div className="yf-i18n-guide__locales" aria-label={t('切换内容语言')}>
+      <div
+        className="yf-i18n-guide__locales"
+        aria-label={t('切换内容语言')}
+        data-yf-preserve-admin-text
+      >
         {summaries.map((summary) => {
           const isActive = summary.code === currentLocale;
           const hasMissing = canShowProgress && summary.missingLabels.length > 0;
           const missingLabels = summary.missingLabels.map((label) => t(label));
+          const displayLocaleLabel = contentLocaleLabel(summary.code, adminLocale);
           const title = hasMissing
             ? t({
-                en: `${t(localeLabels[summary.code])} missing: ${missingLabels.join(', ')}`,
-                zh: `${localeLabels[summary.code]}缺失：${missingLabels.join('、')}`,
+                en: `${displayLocaleLabel} missing: ${missingLabels.join(', ')}`,
+                zh: `${displayLocaleLabel}缺失：${missingLabels.join('、')}`,
               })
             : t({
-                en: `${t(localeLabels[summary.code])} content ${canShowProgress ? 'complete' : 'editing'}`,
-                zh: `${localeLabels[summary.code]}内容${canShowProgress ? '已完成' : '编辑'}`,
+                en: `${displayLocaleLabel} content ${canShowProgress ? 'complete' : 'editing'}`,
+                zh: `${displayLocaleLabel}内容${canShowProgress ? '已完成' : '编辑'}`,
               });
 
           return (
@@ -152,7 +157,7 @@ export default function I18nEditGuide({ custom }: I18nEditGuideProps) {
               title={title}
               onClick={(event) => onLocaleClick(event, summary.code)}
             >
-              <span>{t(localeLabels[summary.code])}</span>
+              <span>{displayLocaleLabel}</span>
               <small>{canShowProgress ? `${summary.completed}/${summary.total}` : t('编辑')}</small>
             </a>
           );

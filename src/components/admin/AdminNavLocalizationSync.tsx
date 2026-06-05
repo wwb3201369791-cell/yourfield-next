@@ -4,79 +4,35 @@ import { useTranslation } from '@payloadcms/ui';
 import { useEffect } from 'react';
 
 import { asAdminInterfaceLocale } from './AdminInterfaceLanguageSwitch';
-import { localizeAdminNavText } from './adminNavLocalization';
+import { localizeAdminChromeRoot } from './adminNavLocalization';
 
-const navRootSelector = [
+const adminChromeRootSelector = [
   'aside',
+  'header',
+  'main',
   'nav',
-  '[class*="nav" i]',
-  '[class*="sidebar" i]',
   '[class*="collection" i]',
+  '[class*="doc" i]',
+  '[class*="global" i]',
+  '[class*="sidebar" i]',
 ].join(',');
-
-function localizeElementAttributes(
-  element: Element,
-  locale: ReturnType<typeof asAdminInterfaceLocale>,
-) {
-  for (const attributeName of ['aria-label', 'title']) {
-    const attributeValue = element.getAttribute(attributeName);
-
-    if (!attributeValue) {
-      continue;
-    }
-
-    const localizedValue = localizeAdminNavText(attributeValue, locale);
-
-    if (localizedValue !== attributeValue) {
-      element.setAttribute(attributeName, localizedValue);
-    }
-  }
-}
-
-export function localizeAdminNavRoot(
-  root: ParentNode,
-  locale: ReturnType<typeof asAdminInterfaceLocale>,
-) {
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const textNodes: Text[] = [];
-
-  while (walker.nextNode()) {
-    textNodes.push(walker.currentNode as Text);
-  }
-
-  for (const node of textNodes) {
-    const localizedValue = localizeAdminNavText(node.nodeValue ?? '', locale);
-
-    if (localizedValue !== node.nodeValue) {
-      node.nodeValue = localizedValue;
-    }
-  }
-
-  if (root instanceof Element) {
-    localizeElementAttributes(root, locale);
-  }
-
-  for (const element of Array.from(root.querySelectorAll('*'))) {
-    localizeElementAttributes(element, locale);
-  }
-}
 
 export function AdminNavLocalizationSync() {
   const { i18n } = useTranslation();
   const locale = asAdminInterfaceLocale(i18n.language);
 
   useEffect(() => {
-    const localizeNavigation = () => {
-      const roots = Array.from(document.querySelectorAll(navRootSelector));
+    const localizeChrome = () => {
+      const roots = Array.from(document.querySelectorAll(adminChromeRootSelector));
 
       for (const root of roots) {
-        localizeAdminNavRoot(root, locale);
+        localizeAdminChromeRoot(root, locale);
       }
     };
 
-    localizeNavigation();
+    localizeChrome();
 
-    const observer = new MutationObserver(() => localizeNavigation());
+    const observer = new MutationObserver(() => localizeChrome());
     observer.observe(document.body, {
       attributes: true,
       childList: true,

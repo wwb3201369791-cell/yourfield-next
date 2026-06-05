@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   collectLocaleSummaries,
+  contentLocaleLabel,
   formValuesForI18nSummary,
   requiredLabelSummary,
 } from '@/components/admin/i18nEditGuideProgress';
@@ -147,5 +148,14 @@ describe('admin i18n edit guide progress', () => {
     expect(requiredLabelSummary(requiredPaths)).toBe(
       '方案标题、卡片说明、方案要点、核心产品标签、详细说明',
     );
+  });
+
+  it('keeps content locale names native when the admin interface is English', () => {
+    expect(contentLocaleLabel('zh', 'zh')).toBe('中文');
+    expect(contentLocaleLabel('en', 'zh')).toBe('英文');
+    expect(contentLocaleLabel('ru', 'zh')).toBe('俄文');
+    expect(contentLocaleLabel('zh', 'en')).toBe('中文');
+    expect(contentLocaleLabel('en', 'en')).toBe('English');
+    expect(contentLocaleLabel('ru', 'en')).toBe('Русский');
   });
 });
