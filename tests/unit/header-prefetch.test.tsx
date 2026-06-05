@@ -129,4 +129,24 @@ describe('Header navigation prefetching', () => {
     expect(homeLink.querySelector('img')).toBeNull();
     expect(homeLink.textContent).toBe('');
   });
+
+  it('renders only the visible CMS logo in the fixed scrolled header chrome', () => {
+    render(
+      <Header
+        locale="zh"
+        siteSettings={{
+          logoDark: { alt: '', height: 75, src: '/media/logo-dark.webp', width: 233 },
+          logoLight: { alt: '', height: 75, src: '/media/logo-light.webp', width: 233 },
+          siteName: '永霏防护',
+        }}
+      />,
+    );
+
+    const homeLink = screen.getByRole('link', { name: 'nav.home' });
+    const logoImages = homeLink.querySelectorAll('img');
+
+    expect(logoImages.length).toBe(1);
+    expect(logoImages[0]?.getAttribute('src')).toBe('/media/logo-dark.webp');
+    expect(logoImages[0]?.className).toContain('logo-image-dark');
+  });
 });

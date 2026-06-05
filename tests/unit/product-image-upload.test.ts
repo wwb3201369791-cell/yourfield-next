@@ -35,7 +35,7 @@ describe('product image upload helpers', () => {
     });
   });
 
-  it('prefers thumbnail media URL for compact previews', () => {
+  it('prefers original media URL for admin previews so images are not dependent on generated sizes', () => {
     expect(
       getMediaPreviewUrl({
         sizes: {
@@ -44,7 +44,7 @@ describe('product image upload helpers', () => {
         },
         url: '/media/original.webp',
       }),
-    ).toBe('/media/thumb.webp');
+    ).toBe('/media/original.webp');
     expect(getMediaPreviewUrl({ thumbnailURL: '/media/thumb-url.webp' })).toBe(
       '/media/thumb-url.webp',
     );

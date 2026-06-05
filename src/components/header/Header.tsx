@@ -190,6 +190,8 @@ export function Header({ hotTerms = [], locale, navigation, siteSettings }: Head
   const [hasDarkLogoError, setHasDarkLogoError] = useState(false);
   const displayedLogoLight = hasLightLogoError ? null : logoLight;
   const displayedLogoDark = hasDarkLogoError ? null : logoDark;
+  const displayedHeaderLogo = displayedLogoDark ?? displayedLogoLight;
+  const isDisplayedHeaderLogoDark = Boolean(displayedLogoDark);
   const shouldShowTextLogo =
     !displayedLogoLight && !displayedLogoDark && Boolean(siteSettings?.siteName);
 
@@ -303,29 +305,19 @@ export function Header({ hotTerms = [], locale, navigation, siteSettings }: Head
     >
       <div className="container">
         <Link className="logo" href={`/${locale}`} aria-label={t('nav.home')} data-nav="home">
-          {displayedLogoLight ? (
-            <Image
-              className="logo-image logo-image-light"
-              src={displayedLogoLight.src}
-              alt=""
-              width={displayedLogoLight.width}
-              height={displayedLogoLight.height}
-              aria-hidden="true"
-              onError={() => setHasLightLogoError(true)}
-              unoptimized={shouldUseUnoptimizedImage(displayedLogoLight.src)}
-            />
-          ) : null}
-          {displayedLogoDark ? (
+          {displayedHeaderLogo ? (
             <Image
               className="logo-image logo-image-dark"
-              src={displayedLogoDark.src}
+              src={displayedHeaderLogo.src}
               alt=""
-              width={displayedLogoDark.width}
-              height={displayedLogoDark.height}
+              width={displayedHeaderLogo.width}
+              height={displayedHeaderLogo.height}
               aria-hidden="true"
               priority
-              onError={() => setHasDarkLogoError(true)}
-              unoptimized={shouldUseUnoptimizedImage(displayedLogoDark.src)}
+              onError={() =>
+                isDisplayedHeaderLogoDark ? setHasDarkLogoError(true) : setHasLightLogoError(true)
+              }
+              unoptimized={shouldUseUnoptimizedImage(displayedHeaderLogo.src)}
             />
           ) : null}
           {shouldShowTextLogo ? <span className="logo-text">{siteSettings?.siteName}</span> : null}

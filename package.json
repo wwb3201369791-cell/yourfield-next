@@ -30,6 +30,7 @@
     "script:db-restore": "tsc -p tsconfig.scripts.json && node node_modules/.cache/yourfield-scripts/scripts/db-restore.js",
     "script:asset-audit": "tsx scripts/static-asset-audit.ts",
     "script:perf-check": "tsc -p tsconfig.scripts.json && node node_modules/.cache/yourfield-scripts/scripts/performance-check.js",
+    "script:media-smoke": "tsx scripts/production-media-smoke.ts",
     "script:prod-baseline": "tsx scripts/production-baseline.ts",
     "script:verify-home-hero": "tsc -p tsconfig.scripts.json && node node_modules/.cache/yourfield-scripts/scripts/verify-home-hero.js",
     "prepare": "husky",

@@ -192,11 +192,11 @@ export function normalizeMediaUploadError(
 
 export function getMediaPreviewUrl(media: AdminMediaDoc | undefined) {
   return normalizeAdminMediaUrl(
-    media?.sizes?.thumbnail?.url ??
+    media?.url ??
       media?.thumbnailURL ??
+      media?.sizes?.thumbnail?.url ??
       media?.sizes?.card?.url ??
-      media?.sizes?.feature?.url ??
-      media?.url,
+      media?.sizes?.feature?.url,
   );
 }
 
