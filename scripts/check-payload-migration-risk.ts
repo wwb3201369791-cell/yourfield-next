@@ -24,8 +24,9 @@ async function main() {
     console.error(
       'Unsafe Payload migration state: dev-mode dynamic schema push records exist (batch=-1). Do not run payload:migrate non-interactively.',
     );
-    process.exit(2);
   }
+
+  setTimeout(() => process.exit(summary.ok ? 0 : 2), 50);
 }
 
 main().catch((error) => {
