@@ -84,12 +84,60 @@ export function normalizeCmsMediaUrl(url: string | undefined, fallback: string) 
 }
 
 type CmsMediaLike = Readonly<{
-  sizes?: Record<string, { url?: string } | undefined> | undefined;
-  url?: string | undefined;
+  filename?: string | null | undefined;
+  filesize?: number | null | undefined;
+  sizes?: Record<string, { url?: string | null | undefined } | undefined> | undefined;
+  updatedAt?: string | null | undefined;
+  url?: string | null | undefined;
 }>;
 
+function mediaVersionToken(media: CmsMediaLike) {
+  if (media.updatedAt) {
+    const parsed = Date.parse(media.updatedAt);
+
+    return Number.isFinite(parsed) ? String(parsed) : media.updatedAt;
+  }
+
+  if (typeof media.filesize === 'number' && Number.isFinite(media.filesize) && media.filesize > 0) {
+    return String(media.filesize);
+  }
+
+  return media.filename ?? '';
+}
+
+function isLocalCmsMediaUrl(url: string) {
+  if (url.startsWith(localMediaPrefix)) {
+    return true;
+  }
+
+  try {
+    const parsed = new URL(url);
+
+    return isAllowedMediaHostname(parsed.hostname) && parsed.pathname.includes(localMediaPrefix);
+  } catch {
+    return url.includes(localMediaPrefix);
+  }
+}
+
+function appendCmsMediaVersion(url: string | null | undefined, media: CmsMediaLike) {
+  const version = mediaVersionToken(media);
+
+  if (!url || !version || !isLocalCmsMediaUrl(url)) {
+    return url ?? undefined;
+  }
+
+  const hashIndex = url.indexOf('#');
+  const base = hashIndex >= 0 ? url.slice(0, hashIndex) : url;
+  const hash = hashIndex >= 0 ? url.slice(hashIndex) : '';
+  const separator = base.includes('?') ? '&' : '?';
+
+  return `${base}${separator}v=${encodeURIComponent(version)}${hash}`;
+}
+
 export function selectCmsMediaUrl(media: CmsMediaLike | undefined) {
-  return media?.url ?? media?.sizes?.card?.url;
+  const url = media?.url ?? media?.sizes?.card?.url;
+
+  return media ? appendCmsMediaVersion(url, media) : undefined;
 }
 
 export function shouldUseUnoptimizedImage(src: string) {

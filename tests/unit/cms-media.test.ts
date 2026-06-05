@@ -46,6 +46,18 @@ describe('normalizeCmsMediaUrl', () => {
     ).toBe('/media/new-product-1.png');
   });
 
+  it('adds a media document version to local upload URLs so restored files bypass stale immutable caches', () => {
+    expect(
+      selectCmsMediaUrl({
+        updatedAt: '2026-06-05T14:00:00.000Z',
+        url: '/media/new-product-1.png',
+        sizes: {
+          card: { url: '/media/new-product-1-600x400.webp' },
+        },
+      }),
+    ).toBe('/media/new-product-1.png?v=1780668000000');
+  });
+
   it('keeps Payload 3 media upload metadata columns covered by migrations', () => {
     expect(mediaPayload3UploadColumnsSql).toContain(
       'ADD COLUMN IF NOT EXISTS "thumbnail_u_r_l" varchar',
