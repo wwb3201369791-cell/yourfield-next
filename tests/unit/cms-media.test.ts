@@ -35,6 +35,15 @@ describe('normalizeCmsMediaUrl', () => {
     );
   });
 
+  it('preserves cache-busting search params when normalizing absolute Payload media URLs', () => {
+    expect(
+      normalizeCmsMediaUrl(
+        'http://localhost:3000/payload-api/media/file/arc-flash-suit-001.png?v=1780668000000',
+        '',
+      ),
+    ).toBe('/media/file/arc-flash-suit-001.png?v=1780668000000');
+  });
+
   it('prefers original CMS media URLs over generated sizes for product material images', () => {
     expect(
       selectCmsMediaUrl({

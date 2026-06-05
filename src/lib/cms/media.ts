@@ -30,7 +30,7 @@ const officialBrandLogoFallbacks = {
 } as const;
 
 const officialBrandLogoMediaPattern =
-  /^\/media\/yourfield-logo-official-([ab])(?:-\d+)?(?:-\d+x\d+)?\.(?:png|webp)$/i;
+  /^\/media\/yourfield-logo-official-([ab])(?:-\d+)?(?:-\d+x\d+)?\.(?:png|webp)(?:[?#].*)?$/i;
 
 function officialBrandLogoFallback(url: string, fallback: string) {
   const expectedVariant = Object.entries(officialBrandLogoFallbacks).find(
@@ -72,7 +72,10 @@ export function normalizeCmsMediaUrl(url: string | undefined, fallback: string) 
     const mediaPathIndex = parsed.pathname.indexOf(localMediaPrefix);
 
     if (mediaPathIndex >= 0) {
-      return normalizeLocalMediaUrl(parsed.pathname.slice(mediaPathIndex), fallback);
+      return normalizeLocalMediaUrl(
+        `${parsed.pathname.slice(mediaPathIndex)}${parsed.search}${parsed.hash}`,
+        fallback,
+      );
     }
 
     return url;
