@@ -564,11 +564,11 @@ describe('admin collection tabs', () => {
     expect(editViewConfig(SiteSettings)?.default).toBeDefined();
     expect(editViewConfig(SiteSettings)?.Default).toBeUndefined();
     expect(editTabCondition(SiteSettings)?.()).toBe(false);
-    expect(tabs.map((tab) => zhLabel(tab.label))).toEqual(['联系方式', 'SEO 搜索']);
+    expect(tabs.map((tab) => zhLabel(tab.label))).toEqual(['联系方式']);
     expect(tabs.some((tab) => 'name' in tab && typeof tab.name === 'string')).toBe(false);
     expect(defaultSeo).toMatchObject({ type: 'group' });
     expect(isHidden(namedField(SiteSettings.fields, 'contact'))).toBeUndefined();
-    expect(isHidden(namedField(SiteSettings.fields, 'seoVerification'))).toBeUndefined();
+    expect(isHidden(namedField(SiteSettings.fields, 'seoVerification'))).toBe(true);
     expect(isHidden(namedField(SiteSettings.fields, 'siteName'))).toBe(true);
     expect(isHidden(namedField(SiteSettings.fields, 'logo'))).toBe(true);
     expect(namedField(SiteSettings.fields, 'favicon')).toBeUndefined();

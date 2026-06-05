@@ -114,32 +114,28 @@ export const SiteSettings: GlobalConfig = {
             },
           ],
         },
+      ],
+    },
+    {
+      name: 'seoVerification',
+      label: adminLabel('搜索引擎站点验证'),
+      type: 'group',
+      admin: {
+        hidden: true,
+        description: adminLabel(
+          '用于 Google Search Console 与百度搜索资源平台的站点验证 meta 标签；只填写平台给出的 content/token，不要填写整段 HTML。',
+        ),
+      },
+      fields: [
         {
-          label: adminLabel('SEO 搜索'),
-          fields: [
-            {
-              name: 'seoVerification',
-              label: adminLabel('搜索引擎站点验证'),
-              type: 'group',
-              admin: {
-                description: adminLabel(
-                  '用于 Google Search Console 与百度搜索资源平台的站点验证 meta 标签；只填写平台给出的 content/token，不要填写整段 HTML。',
-                ),
-              },
-              fields: [
-                {
-                  name: 'googleSiteVerification',
-                  label: adminLabel('Google 站点验证码'),
-                  type: 'text',
-                },
-                {
-                  name: 'baiduSiteVerification',
-                  label: adminLabel('百度站点验证码'),
-                  type: 'text',
-                },
-              ],
-            },
-          ],
+          name: 'googleSiteVerification',
+          label: adminLabel('Google 站点验证码'),
+          type: 'text',
+        },
+        {
+          name: 'baiduSiteVerification',
+          label: adminLabel('百度站点验证码'),
+          type: 'text',
         },
       ],
     },
