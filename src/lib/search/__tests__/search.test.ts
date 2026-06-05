@@ -185,6 +185,46 @@ describe('searchContent', () => {
     });
   });
 
+  it('does not let shared model prefixes swamp exact identifier searches', async () => {
+    const response = await searchContent(
+      {
+        hitsPerPage: 10,
+        locale: 'zh',
+        page: 1,
+        q: 'HYF-5506',
+        type: 'all',
+      },
+      () =>
+        Promise.resolve({
+          faqs: [],
+          industryCases: [],
+          news: [],
+          pages: [],
+          products: [
+            product,
+            {
+              ...product,
+              id: 'product-db-2',
+              model: 'HYF-3537',
+              name: '熔融金属飞溅防护服',
+              productId: 'molten-metal-splash-suit',
+              sku: 'HYF-3537',
+              slug: 'molten-metal-splash-suit',
+            },
+          ],
+          solutions: [],
+        }),
+    );
+
+    expect(response.totalHits).toBe(1);
+    expect(response.hits).toEqual([
+      expect.objectContaining({
+        model: 'HYF-5506',
+        title: '消防员灭火防护服',
+      }),
+    ]);
+  });
+
   it('searches dynamic solutions as first-class public content', async () => {
     const response = await searchContent(
       {

@@ -16,6 +16,7 @@ function scoreField(field: WeightedField, normalizedQuery: string, tokens: reado
   const text = normalizeSearchText(field.text);
   const compactText = normalizeCompactSearchText(field.text);
   const compactQuery = normalizeCompactSearchText(normalizedQuery);
+  const isIdentifierQuery = /\p{L}/u.test(compactQuery) && /\p{N}/u.test(compactQuery);
 
   if (!text) {
     return 0;
@@ -43,6 +44,10 @@ function scoreField(field: WeightedField, normalizedQuery: string, tokens: reado
 
   for (const token of tokens) {
     if (!token || token === normalizedQuery) {
+      continue;
+    }
+
+    if (isIdentifierQuery && !/\p{N}/u.test(token)) {
       continue;
     }
 
