@@ -1,6 +1,6 @@
 import { getPayload } from 'payload';
 
-import configPromise from '../src/payload.config';
+import { loadLocalEnv } from '../src/lib/loadEnvFile';
 
 import {
   summarizePayloadMigrationRisk,
@@ -8,6 +8,8 @@ import {
 } from './lib/payloadMigrationRisk';
 
 async function main() {
+  loadLocalEnv(process.cwd());
+  const { default: configPromise } = await import('../src/payload.config');
   const payload = await getPayload({ config: configPromise });
   const migrations = (await payload.find({
     collection: 'payload-migrations' as never,

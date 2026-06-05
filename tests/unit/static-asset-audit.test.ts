@@ -1,3 +1,6 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -18,6 +21,10 @@ describe('static asset audit', () => {
     expect(classifyPublicAsset('/images/products/a.png', 10).migrationPriority).toBe('high');
     expect(classifyPublicAsset('/images/about/a.jpg', 10).migrationPriority).toBe('high');
     expect(classifyPublicAsset('/images/icons/a.svg', 10).migrationPriority).toBe('medium');
+  });
+
+  it('keeps extracted source-product dumps out of the public release tree', () => {
+    expect(fs.existsSync(path.join(process.cwd(), 'public/images/products/extracted'))).toBe(false);
   });
 
   it('summarizes folders, largest files, and migration candidates', () => {

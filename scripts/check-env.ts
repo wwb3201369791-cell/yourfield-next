@@ -1,5 +1,8 @@
+import { loadLocalEnv } from '../src/lib/loadEnvFile';
+
 async function main() {
   try {
+    loadLocalEnv(process.cwd());
     await import('../src/lib/env');
     console.info('Environment validation passed.');
   } catch (error) {

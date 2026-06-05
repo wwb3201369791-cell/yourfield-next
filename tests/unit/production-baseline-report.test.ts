@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   defaultProductionBaselinePaths,
+  defaultProductionBaselineTransitions,
   formatProductionBaselineMarkdown,
   resolveProductionBaselineConfig,
 } from '../../scripts/production-baseline';
@@ -11,6 +12,12 @@ describe('production baseline script', () => {
     expect(defaultProductionBaselinePaths).toContain('/zh');
     expect(defaultProductionBaselinePaths).toContain('/zh/products');
     expect(defaultProductionBaselinePaths).toContain('/zh/products/firefighter-suit-combat');
+    expect(defaultProductionBaselineTransitions).toContainEqual(
+      expect.objectContaining({
+        label: 'home-to-first-product-detail',
+        selector: 'main a[href^="/zh/products/"]',
+      }),
+    );
   });
 
   it('lets CLI paths override environment paths', () => {

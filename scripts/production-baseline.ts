@@ -104,7 +104,7 @@ export const defaultProductionBaselineTransitions = [
   {
     from: '/zh',
     label: 'home-to-first-product-detail',
-    selector: 'a[href="/zh/products/firefighter-suit-combat"]',
+    selector: 'main a[href^="/zh/products/"]',
   },
 ] as const;
 
