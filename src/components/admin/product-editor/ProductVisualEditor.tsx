@@ -1,6 +1,7 @@
 'use client';
 
 import { Form, OperationProvider, useDocumentInfo, useField, useLocale } from '@payloadcms/ui';
+import { useSearchParams } from 'next/navigation';
 import type { DocumentViewClientProps } from 'payload';
 import React, { useMemo } from 'react';
 
@@ -8,7 +9,6 @@ import {
   buildProductFromFormValues,
   buildSectionPropsFromFormValues,
 } from '@/lib/content/buildSectionProps';
-import type { Locale } from '@/lib/i18n/locale';
 
 import { useAdminText } from '../adminUiLocale';
 
@@ -44,6 +44,7 @@ import { SpecDrawer } from './drawers/SpecDrawer';
 import { VisualGroupsDrawer } from './drawers/VisualGroupsDrawer';
 import { useHydratedProductDocument } from './hooks/useHydratedProductDocument';
 import { useProductImageArrayUpload } from './hooks/useProductImageArrayUpload';
+import { resolveProductEditorContentLocale } from './productEditorContentLocale';
 import { productEditorPreviewLabel } from './productEditorPreviewLabels';
 import { useFormValues } from './utils/buildProductFromForm';
 import {
@@ -233,7 +234,11 @@ function ProductVisualEditorContent() {
   const adminT = useAdminText();
   const documentInfo = useDocumentInfo();
   const locale = useLocale();
-  const currentLocale = (locale?.code || 'zh') as Locale;
+  const searchParams = useSearchParams();
+  const currentLocale = resolveProductEditorContentLocale({
+    payloadLocaleCode: locale?.code,
+    queryLocale: searchParams?.get('locale') ?? null,
+  });
   const formValues = useFormValues();
   const initialProductDoc = productDocumentFromDocumentInfo(documentInfo);
   const hydratedDoc = useHydratedProductDocument(currentLocale);
