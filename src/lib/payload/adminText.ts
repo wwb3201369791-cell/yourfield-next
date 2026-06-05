@@ -710,6 +710,61 @@ export const adminTextDictionary: Readonly<Record<string, string>> = {
   活动动态: 'Events',
   公告: 'Announcement',
   展会信息: 'Exhibitions',
+  '集中查看询盘跟进、内容更新与产品展示状态，优先处理今天最要紧的事项。':
+    'Review inquiry follow-up, content updates, and product-display status in one place, then handle today’s highest-priority items first.',
+  今日运营工作台: 'Today’s operations workspace',
+  '读取中…': 'Loading…',
+  未设置产品大类: 'No product group set',
+  '最近 30 天': 'Last 30 days',
+  视频: 'Video',
+  替换产品主图: 'Replace product main image',
+  点击替换主图: 'Click to replace main image',
+  '概述 / 材料 / 特点 / 适用场景': 'Overview / materials / features / applications',
+  产品编辑抽屉: 'Product edit drawer',
+  '该区块的抽屉尚未实现。': 'The drawer for this section is not implemented yet.',
+  '这里只能上传 JPG、PNG、WebP 或 GIF 图片。':
+    'Only JPG, PNG, WebP, or GIF images can be uploaded here.',
+  可一次选择多张图片: 'You can select multiple images at once',
+  继续添加图片: 'Add more images',
+  删除最后一张: 'Delete last image',
+  '维护洗护说明列表。': 'Maintain the care-instruction list.',
+  '维护质量证据和认证状态。': 'Maintain quality evidence and certification status.',
+  '维护 FAQ 关系。': 'Maintain FAQ relationships.',
+  'FAQ 关系': 'FAQ relationships',
+  '编辑详情页首屏会直接显示的名称、型号、介绍和图片。':
+    'Edit the name, model, introduction, and image shown directly in the detail-page hero area.',
+  '产品名称 *': 'Product name *',
+  '编辑概述、材料、特点和适用场景文本。':
+    'Edit the overview, materials, features, and application text.',
+  '维护场景卡片或适用场景文本。': 'Maintain scenario cards or application text.',
+  '维护营销卖点数组。': 'Maintain the selling-points list.',
+  '维护详情页参数表。': 'Maintain the detail-page specification table.',
+  '身高 cm / 体重 kg': 'Height cm / weight kg',
+  '有尺码表就填写；没有可以清空，前台不会展示这个区块。':
+    'Fill in the size guide when available. Clear it when unavailable; the storefront will hide this section.',
+  清空: 'Clear',
+  当前产品未配置尺码表: 'No size guide is configured for this product',
+  添加示例表格: 'Add sample table',
+  左上角表头: 'Top-left header',
+  添加体重列: 'Add weight column',
+  添加身高行: 'Add height row',
+  '先添加体重列，再填写每个身高区间对应的尺码。':
+    'Add weight columns first, then fill in the size for each height range.',
+  '身高 / 体重': 'Height / weight',
+  体重段: 'Weight range',
+  删除列: 'Delete column',
+  身高区间: 'Height range',
+  删除行: 'Delete row',
+  '还没有身高行。': 'No height rows yet.',
+  '维护详情页下方图组。当前抽屉先帮你核对图组结构和图片数量，前台预览会同步更新。':
+    'Maintain the image groups below the detail page. This drawer helps check group structure and image counts; the storefront preview updates with the same data.',
+  当前图组: 'Current image groups',
+  '这个图组还没有添加图片。': 'This image group has no images yet.',
+  '当前还没有详情页图组。添加后，这里会按分组展示图片数量和缩略图。':
+    'No detail-page image groups yet. After adding groups, image counts and thumbnails will appear here by group.',
+  打开经典表单编辑图组: 'Open the classic form to edit image groups',
+  '新增、删除、排序或上传分组图片仍使用经典表单里的“详情页图组”；本页用于快速预览和检查前台呈现。':
+    'Use “Detail-page image groups” in the classic form to add, delete, reorder, or upload grouped images. This page is for quick preview and storefront checks.',
 };
 
 export function adminUiText(

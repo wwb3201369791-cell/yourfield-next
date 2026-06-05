@@ -411,6 +411,7 @@ export const Products: CollectionConfig = {
     plural: adminCollectionLabel('产品'),
   },
   admin: {
+    hideAPIURL: true,
     useAsTitle: 'name',
     group: adminNavLabel('产品管理'),
     defaultColumns: ['model', 'name', 'productGroup', 'statusBadge', 'publishedAt', 'rowActions'],
