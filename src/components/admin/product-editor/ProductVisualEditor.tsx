@@ -2,12 +2,13 @@
 
 import { Form, OperationProvider, useDocumentInfo, useField, useLocale } from '@payloadcms/ui';
 import type { DocumentViewClientProps } from 'payload';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import {
   buildProductFromFormValues,
   buildSectionPropsFromFormValues,
 } from '@/lib/content/buildSectionProps';
+import type { Locale } from '@/lib/i18n/locale';
 
 import { useAdminText } from '../adminUiLocale';
 
@@ -236,11 +237,22 @@ function ProductVisualEditorContent() {
   const adminT = useAdminText();
   const documentInfo = useDocumentInfo();
   const locale = useLocale();
+  const [queryLocale, setQueryLocale] = useState<Locale | null>(null);
+
+  useEffect(() => {
+    const syncQueryLocale = () => {
+      setQueryLocale(productEditorContentLocaleFromSearch(window.location.search));
+    };
+
+    syncQueryLocale();
+    window.addEventListener('popstate', syncQueryLocale);
+
+    return () => window.removeEventListener('popstate', syncQueryLocale);
+  }, []);
+
   const currentLocale = resolveProductEditorContentLocale({
     payloadLocaleCode: locale?.code,
-    queryLocale: productEditorContentLocaleFromSearch(
-      typeof window === 'undefined' ? null : window.location.search,
-    ),
+    queryLocale,
   });
   const formValues = useFormValues();
   const initialProductDoc = productDocumentFromDocumentInfo(documentInfo);
