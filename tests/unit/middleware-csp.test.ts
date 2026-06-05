@@ -69,4 +69,22 @@ describe('proxy CSP', () => {
     expect(response.headers.get(`x-middleware-request-${CSP_NONCE_HEADER}`)).toBe(nonce);
     expect(response.headers.get('x-middleware-rewrite')).toBeNull();
   });
+
+  it('adds shared-cache hints to normal public pages only', () => {
+    const publicResponse = proxy(request('/zh/products'));
+    const adminResponse = proxy(request('/admin'));
+    const previewResponse = proxy(
+      new NextRequest(new URL('/zh/products', 'https://www.yourfield.example'), {
+        headers: { cookie: '__prerender_bypass=preview' },
+      }),
+    );
+    const searchResponse = proxy(request('/zh/search'));
+
+    expect(publicResponse.headers.get('Cache-Control')).toBe(
+      'public, max-age=0, s-maxage=600, stale-while-revalidate=86400',
+    );
+    expect(adminResponse.headers.get('Cache-Control')).toBeNull();
+    expect(previewResponse.headers.get('Cache-Control')).toBeNull();
+    expect(searchResponse.headers.get('Cache-Control')).toBeNull();
+  });
 });

@@ -47,6 +47,8 @@ function createCanonicalHostRedirect(request: NextRequest) {
   return redirectUrl ? NextResponse.redirect(redirectUrl, 308) : null;
 }
 
+const PUBLIC_PAGE_CACHE_CONTROL = 'public, max-age=0, s-maxage=600, stale-while-revalidate=86400';
+
 function isAdminPath(pathname: string) {
   return pathname === '/admin' || pathname.startsWith('/admin/');
 }
@@ -108,12 +110,41 @@ function applyContentSecurityPolicy(response: NextResponse, policy: string) {
   return response;
 }
 
+function isPreviewRequest(request: NextRequest) {
+  return Boolean(
+    request.cookies.get('__prerender_bypass')?.value ||
+    request.cookies.get('__next_preview_data')?.value,
+  );
+}
+
+function isCacheablePublicPageRequest(request: NextRequest) {
+  const { pathname, search } = request.nextUrl;
+
+  if (search || isPreviewRequest(request) || isAdminPath(pathname) || isPayloadPath(pathname)) {
+    return false;
+  }
+
+  return /^\/(?:zh|en|ru)(?:\/(?!search(?:\/|$))[a-z0-9-]+(?:\/[a-z0-9-]+)*)?$/.test(pathname);
+}
+
+function applyPublicPageCacheHeaders(response: NextResponse, request: NextRequest) {
+  if (isCacheablePublicPageRequest(request)) {
+    response.headers.set('Cache-Control', PUBLIC_PAGE_CACHE_CONTROL);
+  }
+
+  return response;
+}
+
+function applyPublicResponseHeaders(response: NextResponse, request: NextRequest, policy: string) {
+  return applyPublicPageCacheHeaders(applyContentSecurityPolicy(response, policy), request);
+}
+
 export default function proxy(request: NextRequest) {
   const { policy, requestHeaders } = createCspRequestHeaders(request);
   const canonicalHostRedirect = createCanonicalHostRedirect(request);
 
   if (canonicalHostRedirect) {
-    return applyContentSecurityPolicy(canonicalHostRedirect, policy);
+    return applyPublicResponseHeaders(canonicalHostRedirect, request, policy);
   }
 
   if (isAdminPath(request.nextUrl.pathname) || isPayloadPath(request.nextUrl.pathname)) {
@@ -130,19 +161,21 @@ export default function proxy(request: NextRequest) {
     const legacyId = normalizeLegacyId(request.nextUrl.searchParams.get('id'));
 
     if (legacyId) {
-      return applyContentSecurityPolicy(
+      return applyPublicResponseHeaders(
         NextResponse.redirect(new URL(`${detailRedirectBase}/${legacyId}`, request.url), 308),
+        request,
         policy,
       );
     }
 
-    return applyContentSecurityPolicy(
+    return applyPublicResponseHeaders(
       NextResponse.next({ request: { headers: requestHeaders } }),
+      request,
       policy,
     );
   }
 
-  return applyContentSecurityPolicy(intlMiddleware(request), policy);
+  return applyPublicResponseHeaders(intlMiddleware(request), request, policy);
 }
 
 export const config = {

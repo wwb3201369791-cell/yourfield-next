@@ -3,7 +3,11 @@ import type { SearchHit } from '@/lib/search/types';
 export const directSearchHitsPerPage = 12;
 
 export function normalizeDirectSearchTerm(value: string | undefined) {
-  return (value ?? '').normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, '').trim();
+  return (value ?? '')
+    .normalize('NFKC')
+    .toLocaleLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '')
+    .trim();
 }
 
 function directSearchTerms(hit: SearchHit) {

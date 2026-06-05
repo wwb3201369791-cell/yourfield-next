@@ -190,6 +190,36 @@ describe('GET /api/search', () => {
     );
   });
 
+  it('normalizes compact model-number queries without separators', async () => {
+    const payload = createPayloadStub();
+    const { route } = await loadRoute(payload);
+
+    const response = await route.GET(
+      searchRequest(
+        {
+          hitsPerPage: '5',
+          locale: 'zh',
+          q: 'HYF5506',
+        },
+        { 'x-forwarded-for': '198.51.100.31' },
+      ),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await responseJson(response)).toMatchObject({
+      hits: [
+        {
+          productId: 'firefighter-suit-combat',
+          title: '消防员灭火防护服',
+          type: 'product',
+          url: '/zh/products/firefighter-suit-combat',
+        },
+      ],
+      ok: true,
+      totalHits: 1,
+    });
+  });
+
   it('does not write a search log for direct-resolution checks without an exact match', async () => {
     const payload = createPayloadStub();
     const { route } = await loadRoute(payload);

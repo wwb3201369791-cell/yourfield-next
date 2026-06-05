@@ -247,7 +247,7 @@ export async function Footer({ footerNavigation, locale, siteSettings }: FooterP
                 className={isProductsGroup ? 'footer-links footer-products-nav' : 'footer-links'}
                 aria-labelledby={`footer-${displayGroup.key}-title`}
               >
-                <h4 id={`footer-${displayGroup.key}-title`}>
+                <p className="footer-links__title" id={`footer-${displayGroup.key}-title`}>
                   {titleHref ? (
                     <FooterTitleLink href={titleHref} locale={locale}>
                       {displayGroup.label}
@@ -255,7 +255,7 @@ export async function Footer({ footerNavigation, locale, siteSettings }: FooterP
                   ) : (
                     displayGroup.label
                   )}
-                </h4>
+                </p>
                 {displayGroup.links.length > 0 ? (
                   <ul className={isProductsGroup ? 'footer-product-links' : undefined}>
                     {displayGroup.links.map((link) => (
@@ -272,11 +272,11 @@ export async function Footer({ footerNavigation, locale, siteSettings }: FooterP
           })}
 
           <div className="footer-contact-card" aria-labelledby="footer-contact-title">
-            <h4 id="footer-contact-title">
+            <p className="footer-contact-card__title" id="footer-contact-title">
               <FooterTitleLink href="/contact" locale={locale}>
                 {t('nav.contact')}
               </FooterTitleLink>
-            </h4>
+            </p>
             <address>
               {resolvedSiteSettings.contact.address ? (
                 <Link href={`/${locale}/contact#contact-info`}>

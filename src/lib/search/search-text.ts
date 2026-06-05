@@ -146,6 +146,10 @@ export function normalizeSearchText(value: string) {
   return value.normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
 }
 
+export function normalizeCompactSearchText(value: string) {
+  return normalizeSearchText(value).replace(/[^\p{L}\p{N}]+/gu, '');
+}
+
 export function normalizeKey(value: string) {
   return normalizeSearchText(value).replace(/\s+/g, '-');
 }

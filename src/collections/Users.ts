@@ -77,7 +77,7 @@ export const Users: CollectionConfig = {
   auth: {
     tokenExpiration: 60 * 60 * 24,
     maxLoginAttempts: 5,
-    lockTime: 15 * 60 * 1000,
+    lockTime: 5 * 60 * 1000,
     useAPIKey: false,
     cookies: {
       secure: useSecureAuthCookies,

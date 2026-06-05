@@ -1636,8 +1636,8 @@
   width: min(100%, 400px);
 }
 
-.footer-contact-card h4,
-.footer-links h4 {
+.footer-contact-card__title,
+.footer-links__title {
   color: var(--primary);
   font-size: 15px;
   font-weight: 800;
@@ -1733,12 +1733,12 @@
 }
 
 .footer-bottom p {
-  color: #7a8493;
+  color: #667085;
   font-size: 14px;
 }
 
 .footer-legal {
-  color: #7a8493;
+  color: #667085;
   display: flex;
   flex-wrap: wrap;
   font-size: 14px;

@@ -1,7 +1,7 @@
 import type { SearchHitType } from '@/lib/search/types';
 
 import type { SearchCandidate, WeightedField } from './search-candidates';
-import { normalizeSearchText, tokenizeQuery } from './search-text';
+import { normalizeCompactSearchText, normalizeSearchText, tokenizeQuery } from './search-text';
 
 export const searchTypeOrder: Record<SearchHitType, number> = {
   product: 0,
@@ -14,6 +14,8 @@ export const searchTypeOrder: Record<SearchHitType, number> = {
 
 function scoreField(field: WeightedField, normalizedQuery: string, tokens: readonly string[]) {
   const text = normalizeSearchText(field.text);
+  const compactText = normalizeCompactSearchText(field.text);
+  const compactQuery = normalizeCompactSearchText(normalizedQuery);
 
   if (!text) {
     return 0;
@@ -27,6 +29,16 @@ function scoreField(field: WeightedField, normalizedQuery: string, tokens: reado
     score += field.weight * 24;
   } else if (text.includes(normalizedQuery)) {
     score += field.weight * 16;
+  }
+
+  if (compactQuery && compactText && (compactQuery !== normalizedQuery || compactText !== text)) {
+    if (compactText === compactQuery) {
+      score += field.weight * 50;
+    } else if (compactText.startsWith(compactQuery)) {
+      score += field.weight * 24;
+    } else if (compactText.includes(compactQuery)) {
+      score += field.weight * 16;
+    }
   }
 
   for (const token of tokens) {

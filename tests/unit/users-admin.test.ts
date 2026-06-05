@@ -41,4 +41,11 @@ describe('Users admin configuration', () => {
     expect(admin?.hidden).toBe(true);
     expect(admin?.allowCreate).toBe(false);
   });
+
+  it('locks the admin account for five minutes after five failed login attempts', () => {
+    expect(Users.auth).toMatchObject({
+      lockTime: 5 * 60 * 1000,
+      maxLoginAttempts: 5,
+    });
+  });
 });
