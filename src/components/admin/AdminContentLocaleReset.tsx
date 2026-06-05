@@ -53,9 +53,10 @@ export function AdminContentLocaleReset() {
   useEffect(() => {
     patchHistoryEvents();
 
-    const syncContentLocale = () => {
+    const syncContentLocale = (event?: Event) => {
       const nextUrl = defaultAdminContentLocaleUrl(currentLocationParts(), {
         adminPath: routes.admin,
+        preserveExplicitLocaleQuery: event?.type !== adminLocationChangeEvent,
       });
 
       if (!nextUrl) {

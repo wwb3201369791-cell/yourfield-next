@@ -96,6 +96,7 @@ const envSchema = z
     NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
     NEXT_PUBLIC_DEFAULT_LOCALE: z.enum(localeValues).default('zh'),
     NEXT_PUBLIC_LOCALES: localeList,
+    APP_RELEASE_REVISION: optionalString,
     APP_VERSION: z.string().min(1).default('0.0.0-local'),
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: optionalString,
     NEXT_PHASE: optionalString,

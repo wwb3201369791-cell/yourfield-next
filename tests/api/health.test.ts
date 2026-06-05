@@ -21,6 +21,7 @@ const loadRoute = async (payload: PayloadStub = createPayloadStub()) => {
   }));
   vi.doMock('@/lib/env', () => ({
     env: {
+      APP_RELEASE_REVISION: process.env.APP_RELEASE_REVISION,
       APP_VERSION: 'test-version',
     },
   }));
@@ -34,6 +35,7 @@ const responseJson = async (response: Response) =>
   (await response.json()) as Record<string, unknown>;
 
 afterEach(() => {
+  vi.unstubAllEnvs();
   vi.doUnmock('@/lib/cms/payload');
   vi.doUnmock('@/lib/env');
   vi.resetModules();
@@ -55,6 +57,10 @@ describe('GET /api/health', () => {
         },
       },
       ok: true,
+      release: {
+        revision: null,
+        shortRevision: null,
+      },
       service: 'yourfield-next',
       version: expect.any(String),
     });
@@ -69,6 +75,22 @@ describe('GET /api/health', () => {
     );
   });
 
+  it('exposes the deployed release revision when provided by the runtime', async () => {
+    vi.stubEnv('APP_RELEASE_REVISION', '1a8ccf1c4447b9a71f224f1ae77ec60da07dfaa8');
+    const { route } = await loadRoute();
+
+    const response = await route.GET();
+    const body = await responseJson(response);
+
+    expect(response.status).toBe(200);
+    expect(body).toMatchObject({
+      release: {
+        revision: '1a8ccf1c4447b9a71f224f1ae77ec60da07dfaa8',
+        shortRevision: '1a8ccf1',
+      },
+    });
+  });
+
   it('returns 503 without leaking internals when the database ping fails', async () => {
     vi.resetModules();
     vi.doMock('@/lib/cms/payload', () => ({
@@ -76,6 +98,7 @@ describe('GET /api/health', () => {
     }));
     vi.doMock('@/lib/env', () => ({
       env: {
+        APP_RELEASE_REVISION: undefined,
         APP_VERSION: 'test-version',
       },
     }));

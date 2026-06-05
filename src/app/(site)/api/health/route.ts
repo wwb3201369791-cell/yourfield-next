@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { NextResponse } from 'next/server';
 
 import { getPayloadClient } from '@/lib/cms/payload';
@@ -13,6 +16,35 @@ type HealthCheck = Readonly<{
 }>;
 
 const serviceName = 'yourfield-next';
+
+function normalizeReleaseRevision(value: string | undefined) {
+  const revision = value?.trim();
+
+  return revision ? revision : null;
+}
+
+function readReleaseRevision() {
+  const envRevision = normalizeReleaseRevision(env.APP_RELEASE_REVISION);
+
+  if (envRevision) {
+    return envRevision;
+  }
+
+  try {
+    return normalizeReleaseRevision(readFileSync(join(process.cwd(), '.release_revision'), 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function releaseInfo() {
+  const revision = readReleaseRevision();
+
+  return {
+    revision,
+    shortRevision: revision ? revision.slice(0, 7) : null,
+  };
+}
 
 async function pingDatabase(): Promise<HealthCheck> {
   const startedAt = Date.now();
@@ -50,6 +82,7 @@ export async function GET() {
         database,
       },
       ok: database.ok,
+      release: releaseInfo(),
       service: serviceName,
       timestamp: new Date().toISOString(),
       version: env.APP_VERSION,

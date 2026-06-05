@@ -25,6 +25,7 @@ type BrowserLocationParts = Readonly<{
 type NormalizeOptions = Readonly<{
   adminPath?: string;
   now?: number;
+  preserveExplicitLocaleQuery?: boolean;
   storage?: StorageLike;
 }>;
 
@@ -149,6 +150,8 @@ export function defaultAdminContentLocaleUrl(
   const storage = options.storage ?? browserSessionStorage();
   const now = options.now ?? Date.now();
   const intent = readContentLocaleIntent(storage);
+  const intentIsCurrentAndFresh =
+    intent?.pathname === location.pathname && isFreshIntent(intent, now) ? intent : null;
 
   if (intent && (intent.pathname !== location.pathname || !isFreshIntent(intent, now))) {
     clearContentLocaleIntent(storage);
@@ -169,12 +172,13 @@ export function defaultAdminContentLocaleUrl(
     return null;
   }
 
-  const canUseIntent =
-    intent?.pathname === location.pathname &&
-    intent.locale === locale &&
-    isFreshIntent(intent, now);
+  const canUseIntent = intentIsCurrentAndFresh?.locale === locale;
 
   if (canUseIntent) {
+    return null;
+  }
+
+  if (options.preserveExplicitLocaleQuery && !intentIsCurrentAndFresh) {
     return null;
   }
 

@@ -67,4 +67,19 @@ describe('admin content locale reset', () => {
       ),
     ).toBeNull();
   });
+
+  it('preserves an explicit locale deep link when the admin first loads that edit page', () => {
+    const storage = createStorage();
+
+    expect(
+      defaultAdminContentLocaleUrl(
+        {
+          hash: '',
+          pathname: '/admin/collections/products/132',
+          search: '?locale=en&fallback-locale=null',
+        },
+        { preserveExplicitLocaleQuery: true, storage },
+      ),
+    ).toBeNull();
+  });
 });
