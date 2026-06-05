@@ -1,7 +1,6 @@
 'use client';
 
 import { Form, OperationProvider, useDocumentInfo, useField, useLocale } from '@payloadcms/ui';
-import { useSearchParams } from 'next/navigation';
 import type { DocumentViewClientProps } from 'payload';
 import React, { useMemo } from 'react';
 
@@ -44,7 +43,10 @@ import { SpecDrawer } from './drawers/SpecDrawer';
 import { VisualGroupsDrawer } from './drawers/VisualGroupsDrawer';
 import { useHydratedProductDocument } from './hooks/useHydratedProductDocument';
 import { useProductImageArrayUpload } from './hooks/useProductImageArrayUpload';
-import { resolveProductEditorContentLocale } from './productEditorContentLocale';
+import {
+  productEditorContentLocaleFromSearch,
+  resolveProductEditorContentLocale,
+} from './productEditorContentLocale';
 import { productEditorPreviewLabel } from './productEditorPreviewLabels';
 import { useFormValues } from './utils/buildProductFromForm';
 import {
@@ -234,10 +236,11 @@ function ProductVisualEditorContent() {
   const adminT = useAdminText();
   const documentInfo = useDocumentInfo();
   const locale = useLocale();
-  const searchParams = useSearchParams();
   const currentLocale = resolveProductEditorContentLocale({
     payloadLocaleCode: locale?.code,
-    queryLocale: searchParams?.get('locale') ?? null,
+    queryLocale: productEditorContentLocaleFromSearch(
+      typeof window === 'undefined' ? null : window.location.search,
+    ),
   });
   const formValues = useFormValues();
   const initialProductDoc = productDocumentFromDocumentInfo(documentInfo);

@@ -11,6 +11,16 @@ function asProductEditorLocale(value: string | null | undefined): Locale | null 
   return productEditorLocales.includes(value as Locale) ? (value as Locale) : null;
 }
 
+export function productEditorContentLocaleFromSearch(
+  search: string | null | undefined,
+): Locale | null {
+  if (!search) {
+    return null;
+  }
+
+  return asProductEditorLocale(new URLSearchParams(search).get('locale'));
+}
+
 export function resolveProductEditorContentLocale({
   payloadLocaleCode,
   queryLocale,
