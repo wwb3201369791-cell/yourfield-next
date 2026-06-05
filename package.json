@@ -19,6 +19,7 @@
     "format": "prettier --write .",
     "test": "cross-env NODE_ENV=test vitest run",
     "check:env": "cross-env NODE_ENV=production PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx scripts/check-env.ts",
+    "check:migrations": "cross-env NODE_ENV=production PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx scripts/check-payload-migration-risk.ts",
     "test:e2e": "pnpm test:e2e:dev",
     "test:e2e:dev": "cross-env NODE_ENV=development tsx tests/e2e/critical-paths.ts",
     "test:e2e:production": "cross-env E2E_BASE_URL=http://localhost:3100 tsx tests/e2e/critical-paths.ts",

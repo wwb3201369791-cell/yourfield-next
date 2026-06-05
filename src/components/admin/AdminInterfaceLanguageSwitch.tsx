@@ -4,12 +4,28 @@ import { useTranslation } from '@payloadcms/ui';
 import { useEffect, useState } from 'react';
 
 const adminLanguageStorageKey = 'lng';
+const payloadAdminLanguageCookieKey = 'payload-lng';
 const adminInterfaceLocales = ['zh', 'en'] as const;
 
 export type AdminInterfaceLocale = (typeof adminInterfaceLocales)[number];
 
+type PayloadSwitchLanguage = ((locale: AdminInterfaceLocale) => void | Promise<void>) | undefined;
+
 function canUseStorage() {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+}
+
+function localeFromCookie(cookieName: string) {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  const cookie = document.cookie
+    .split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${cookieName}=`));
+
+  return cookie ? decodeURIComponent(cookie.slice(cookieName.length + 1)) : null;
 }
 
 export function asAdminInterfaceLocale(value: unknown): AdminInterfaceLocale {
@@ -26,16 +42,44 @@ export function asAdminInterfaceLocale(value: unknown): AdminInterfaceLocale {
   return 'zh';
 }
 
+export function persistedAdminInterfaceLocale(): AdminInterfaceLocale | null {
+  const storageValue = canUseStorage()
+    ? window.localStorage.getItem(adminLanguageStorageKey)
+    : null;
+  const cookieValue =
+    localeFromCookie(payloadAdminLanguageCookieKey) ?? localeFromCookie(adminLanguageStorageKey);
+  const candidate = storageValue ?? cookieValue;
+
+  return candidate === 'zh' || candidate === 'en' ? candidate : null;
+}
+
 export function persistAdminInterfaceLocale(locale: AdminInterfaceLocale) {
   if (canUseStorage()) {
     window.localStorage.setItem(adminLanguageStorageKey, locale);
   }
 
   if (typeof document !== 'undefined') {
-    document.cookie = `${adminLanguageStorageKey}=${locale}; max-age=${
-      60 * 60 * 24 * 365
-    }; path=/; SameSite=Lax`;
+    const cookieOptions = `max-age=${60 * 60 * 24 * 365}; path=/; SameSite=Lax`;
+    document.cookie = `${adminLanguageStorageKey}=${locale}; ${cookieOptions}`;
+    document.cookie = `${payloadAdminLanguageCookieKey}=${locale}; ${cookieOptions}`;
+    document.documentElement.lang = locale;
   }
+}
+
+function initialAdminInterfaceLocale(i18nLanguage: string | undefined) {
+  return persistedAdminInterfaceLocale() ?? asAdminInterfaceLocale(i18nLanguage);
+}
+
+function syncPayloadAdminLanguage(
+  nextLocale: AdminInterfaceLocale,
+  i18nLanguage: string | undefined,
+  switchLanguage: PayloadSwitchLanguage,
+) {
+  if (nextLocale === asAdminInterfaceLocale(i18nLanguage)) {
+    return;
+  }
+
+  void switchLanguage?.(nextLocale);
 }
 
 function switchCopy(locale: AdminInterfaceLocale) {
@@ -51,13 +95,16 @@ function switchCopy(locale: AdminInterfaceLocale) {
 export function AdminInterfaceLanguageSwitch() {
   const { i18n, switchLanguage } = useTranslation();
   const [currentLocale, setCurrentLocale] = useState<AdminInterfaceLocale>(() =>
-    asAdminInterfaceLocale(i18n.language),
+    initialAdminInterfaceLocale(i18n.language),
   );
   const copy = switchCopy(currentLocale);
 
   useEffect(() => {
-    setCurrentLocale(asAdminInterfaceLocale(i18n.language));
-  }, [i18n.language]);
+    const nextLocale = initialAdminInterfaceLocale(i18n.language);
+
+    setCurrentLocale(nextLocale);
+    syncPayloadAdminLanguage(nextLocale, i18n.language, switchLanguage);
+  }, [i18n.language, switchLanguage]);
 
   const changeLocale = (nextLocale: AdminInterfaceLocale) => {
     if (nextLocale === currentLocale) {
@@ -66,7 +113,7 @@ export function AdminInterfaceLanguageSwitch() {
 
     persistAdminInterfaceLocale(nextLocale);
     setCurrentLocale(nextLocale);
-    void switchLanguage?.(nextLocale);
+    syncPayloadAdminLanguage(nextLocale, i18n.language, switchLanguage);
   };
 
   return (

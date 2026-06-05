@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -54,6 +54,18 @@ describe('AdminInterfaceLanguageSwitch', () => {
     expect(translationMock.switchLanguage).toHaveBeenCalledWith('en');
     expect(window.localStorage.getItem('lng')).toBe('en');
     expect(document.cookie).toContain('lng=en');
+    expect(document.cookie).toContain('payload-lng=en');
+    expect(document.documentElement.lang).toBe('en');
     expect(screen.getByLabelText('Switch admin interface language')).toBeTruthy();
+  });
+
+  it('hydrates Payload admin language from persisted preference on first render', async () => {
+    window.localStorage.setItem('lng', 'en');
+    document.cookie = 'payload-lng=en; path=/';
+
+    render(<AdminInterfaceLanguageSwitch />);
+
+    expect(screen.getByLabelText('Switch admin interface language')).toBeTruthy();
+    await waitFor(() => expect(translationMock.switchLanguage).toHaveBeenCalledWith('en'));
   });
 });
