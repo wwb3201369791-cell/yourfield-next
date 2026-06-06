@@ -302,7 +302,10 @@ export const importLegacyNews = async (
       isFeatured: legacyNewsSeeds.indexOf(item) < 3,
       _status: 'published',
     };
-    const { zhData, localizedData } = splitLocalizedData(data);
+    const { zhData, localizedData } = splitLocalizedData({
+      ...data,
+      _status: 'draft',
+    });
 
     const upserted = await upsertCollection({
       collection: 'news',
@@ -315,6 +318,15 @@ export const importLegacyNews = async (
 
     if (!upserted.skipped) {
       await updateLocalizedNewsData(payload, upserted.id, localizedData);
+
+      await payload.update({
+        collection: 'news',
+        data: { _status: 'published' },
+        depth: 0,
+        id: upserted.id,
+        locale: 'zh',
+        overrideAccess: true,
+      });
     }
 
     result.created += upserted.created;
