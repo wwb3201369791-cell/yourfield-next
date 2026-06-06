@@ -20,4 +20,18 @@ describe('legacy page SEO seed copy', () => {
       }
     }
   });
+
+  it('keeps seeded SEO copy within Payload field limits', () => {
+    for (const page of legacyPages) {
+      for (const locale of locales) {
+        expect(page.seoTitle[locale].length, `${page.pageKey} ${locale} title`).toBeLessThanOrEqual(
+          70,
+        );
+        expect(
+          page.seoDescription[locale].length,
+          `${page.pageKey} ${locale} description`,
+        ).toBeLessThanOrEqual(200);
+      }
+    }
+  });
 });

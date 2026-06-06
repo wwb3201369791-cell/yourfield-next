@@ -18,7 +18,6 @@ const drawerLabels: Record<EditorSection, string> = {
   identity: '展示顺序',
   intro: '商品介绍',
   scenarios: '适用场景',
-  seo: 'SEO 搜索优化',
   'selling-points': '核心卖点',
   'size-guide': '尺码对应表',
   specifications: '参数规格',

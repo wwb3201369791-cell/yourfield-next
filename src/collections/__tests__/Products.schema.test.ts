@@ -195,7 +195,6 @@ describe('Products schema for visual product editing', () => {
       '资料与认证状态',
       '洗护与维护',
       '常见问题',
-      'SEO 搜索优化',
       '媒体',
     ]);
   });
@@ -208,11 +207,15 @@ describe('Products schema for visual product editing', () => {
     expect(findFieldByName(rootFields, 'isFeatured')).toBeUndefined();
   });
 
-  it('exposes product SEO fields in their own visible editor tab', () => {
+  it('preserves product SEO fields as hidden data fields', () => {
     const seo = findFieldByName(rootFields, 'seo');
 
-    expect(hasField('SEO 搜索优化', 'seo')).toBe(true);
     expect(seo).toMatchObject({
+      admin: {
+        disableListColumn: true,
+        disableListFilter: true,
+        hidden: true,
+      },
       name: 'seo',
       type: 'group',
     });

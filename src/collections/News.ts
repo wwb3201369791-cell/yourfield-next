@@ -6,7 +6,7 @@ import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { newsCategoryOptions } from '../lib/payload/fields/options';
-import { createSeoGroup } from '../lib/payload/fields/seo';
+import { createHiddenSeoGroup } from '../lib/payload/fields/seo';
 import { imageUploadField, videoUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { autoSetPublishedAtOnPublish } from '../lib/payload/hooks/autoPublishedAt';
 import { generateSlug } from '../lib/payload/hooks/generateSlug';
@@ -264,12 +264,9 @@ export const News: CollectionConfig = {
             },
           ],
         },
-        {
-          label: newsAdminLabels.seoTab,
-          fields: [createSeoGroup({ label: newsAdminLabels.seoTab })],
-        },
       ],
     },
+    createHiddenSeoGroup({ label: newsAdminLabels.seoTab }),
     {
       name: 'tags',
       label: newsAdminLabels.tags,

@@ -43,7 +43,6 @@ const sectionAnchors: Partial<Record<EditorSection, string>> = {
   identity: 'hero',
   intro: 'product-intro',
   scenarios: 'application-scenarios',
-  seo: 'seo',
   'selling-points': 'selling-points',
   'size-guide': 'size-guide',
   specifications: 'specifications',
@@ -67,7 +66,6 @@ function asEditorSection(value: string | null): EditorSection | null {
     'care',
     'faq',
     'identity',
-    'seo',
   ]);
 
   return value && sections.has(value as EditorSection) ? (value as EditorSection) : null;

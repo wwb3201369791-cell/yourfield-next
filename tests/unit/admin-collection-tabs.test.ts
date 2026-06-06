@@ -165,11 +165,10 @@ describe('admin collection tabs', () => {
         '资料与认证状态',
         '洗护与维护',
         '常见问题',
-        'SEO 搜索优化',
         '媒体',
       ],
     ],
-    [News, ['新闻信息', '正文内容', 'SEO 搜索优化']],
+    [News, ['新闻信息', '正文内容']],
     [Solutions, ['前台展示', '内容要点']],
   ] as const)('uses label-only tabs for %s', (collection, expectedLabels) => {
     const tabs = tabsOf(collection);
@@ -546,10 +545,15 @@ describe('admin collection tabs', () => {
     expect(namedField(collection.fields, 'seo')).toBeUndefined();
   });
 
-  it.each([Products, News] as const)('exposes editable SEO fields for %s', (collection) => {
+  it.each([Products, News] as const)('preserves hidden SEO data fields for %s', (collection) => {
     const seo = namedField(collection.fields, 'seo');
 
     expect(seo).toMatchObject({
+      admin: {
+        disableListColumn: true,
+        disableListFilter: true,
+        hidden: true,
+      },
       name: 'seo',
       type: 'group',
     });

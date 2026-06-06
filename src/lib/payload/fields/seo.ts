@@ -70,4 +70,18 @@ export const createSeoGroup = ({ label, name = 'seo' }: SeoGroupArgs = {}): Fiel
   ],
 });
 
+export const createHiddenSeoGroup = (args: SeoGroupArgs = {}): Field => {
+  const group = createSeoGroup(args);
+
+  return {
+    ...group,
+    admin: {
+      ...('admin' in group && group.admin ? group.admin : {}),
+      disableListColumn: true,
+      disableListFilter: true,
+      hidden: true,
+    },
+  } as Field;
+};
+
 export const seoGroup = createSeoGroup();
