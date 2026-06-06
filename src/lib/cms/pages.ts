@@ -103,7 +103,13 @@ async function getCmsPageByKeyUncached(locale: Locale, pageKey: string, draft = 
   return page ? mapCmsPage(page) : null;
 }
 
-const getCachedCmsPageByKey = unstable_cache(
+const passThroughUnstableCache = ((fn: Parameters<typeof unstable_cache>[0]) =>
+  fn) as typeof unstable_cache;
+
+const unstableCacheOrPassThrough: typeof unstable_cache =
+  typeof unstable_cache === 'function' ? unstable_cache : passThroughUnstableCache;
+
+const getCachedCmsPageByKey = unstableCacheOrPassThrough(
   async (locale: Locale, pageKey: string) => getCmsPageByKeyUncached(locale, pageKey, false),
   ['cms-page-by-key'],
   {

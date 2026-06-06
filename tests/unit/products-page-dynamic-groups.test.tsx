@@ -116,6 +116,9 @@ describe('products page dynamic catalog groups', () => {
       breadcrumbJsonLd: vi.fn(() => ({})),
       collectionPageJsonLd: vi.fn(() => ({})),
     }));
+    vi.doMock('@/lib/cms/pages', () => ({
+      getCmsPageByKey: vi.fn(() => Promise.resolve(null)),
+    }));
     vi.doMock('@/lib/cms/products', () => ({
       getCmsProductCategories: vi.fn(() => Promise.resolve([])),
       getCmsProductGroups: vi.fn(() =>

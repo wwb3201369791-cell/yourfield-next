@@ -18,8 +18,18 @@ type AdminUser = Readonly<{
   username?: string | null;
 }>;
 
+function shanghaiHour(now: Date) {
+  const hourText = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Shanghai',
+  }).format(now);
+
+  return Number(hourText);
+}
+
 export function dashboardGreeting(now = new Date()) {
-  const hour = now.getHours();
+  const hour = shanghaiHour(now);
 
   if (hour < 12) {
     return '早上好';

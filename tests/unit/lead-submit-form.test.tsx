@@ -164,8 +164,10 @@ describe('LeadSubmitForm', () => {
       mobile: '+44 20 7946 0958',
       name: '测试客户',
     });
-    expect((await screen.findByRole('status')).textContent).toBe(
-      '后台已收到咨询；邮箱已为您打开，请在邮件客户端确认发送。',
+    await waitFor(() =>
+      expect(screen.getByRole('status').textContent).toBe(
+        '后台已收到咨询；邮箱已为您打开，请在邮件客户端确认发送。',
+      ),
     );
     const retryLink = screen.getByRole<HTMLAnchorElement>('link', {
       name: '未弹出？再次打开邮箱',
