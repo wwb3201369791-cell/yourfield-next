@@ -49,14 +49,17 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
 
   const productTitle = localizedPublicText(product.name, locale) || product.id;
   const productDescription = localizedPublicText(product.description, locale) || productTitle;
+  const seo = product.seo;
 
   return buildPageMetadata({
     locale,
     path: `/products/${product.id}`,
-    title: productTitle,
-    description: productDescription,
-    image: product.image,
-    noIndex: isDraft,
+    title: seo?.title || productTitle,
+    description: seo?.description || productDescription,
+    image: seo?.image || product.image,
+    canonical: seo?.canonical,
+    keywords: seo?.keywords,
+    noIndex: isDraft || Boolean(seo?.noIndex),
   });
 }
 

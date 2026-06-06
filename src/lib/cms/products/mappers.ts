@@ -8,6 +8,8 @@ import type {
   ProductVisualGroup,
 } from '@/lib/product/types';
 
+import { hasPublicSeo, mapCmsSeo } from '../seo';
+
 import type {
   CmsCategory,
   CmsFaq,
@@ -175,6 +177,7 @@ export function mapCmsProduct(product: CmsProduct): Product {
   const images = (product.images ?? []).map((image) => mediaUrl(image.file)).filter(Boolean);
   const sizeGuide = mapSizeGuide(product.sizeGuide);
   const directFaqs = mapProductFaqs(product.productFaqs);
+  const seo = mapCmsSeo(product.seo);
 
   const mappedProduct: MappedCmsProduct = {
     id,
@@ -182,6 +185,7 @@ export function mapCmsProduct(product: CmsProduct): Product {
     ...(slug ? { slug } : {}),
     model: asString(product.model, asString(product.sku)),
     ...(product.sku ? { sku: product.sku } : {}),
+    ...(hasPublicSeo(seo) ? { seo } : {}),
     categoryId: hasDirectProductGroup ? groupId : asString(category?.categoryId, groupId),
     categoryName: localizedText(
       hasDirectProductGroup

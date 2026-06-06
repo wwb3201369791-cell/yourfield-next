@@ -64,6 +64,8 @@ export async function generateMetadata({ params }: ContactPageProps) {
     title: page?.seoTitle || page?.title || '',
     description: page?.seoDescription || page?.heroSubtitle || '',
     image: page?.seoImage || page?.heroImage,
+    canonical: page?.seoCanonical,
+    keywords: page?.seoKeywords,
     noIndex: isDraft || Boolean(page?.noIndex),
   });
 }

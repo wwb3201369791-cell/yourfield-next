@@ -48,6 +48,7 @@ type BuildPageMetadataArgs = Readonly<{
   path: string;
   title: string;
   description: string;
+  canonical?: string | undefined;
   image?: string | undefined;
   imageAlt?: string | undefined;
   keywords?: readonly string[] | undefined;
@@ -55,11 +56,26 @@ type BuildPageMetadataArgs = Readonly<{
   type?: 'website' | 'article' | undefined;
 }>;
 
+function resolveCanonicalUrl(value: string | undefined, fallbackUrl: string) {
+  const canonical = typeof value === 'string' ? value.trim() : '';
+
+  if (!canonical) {
+    return fallbackUrl;
+  }
+
+  try {
+    return new URL(canonical, env.NEXT_PUBLIC_SITE_URL).toString();
+  } catch {
+    return fallbackUrl;
+  }
+}
+
 export function buildPageMetadata({
   locale,
   path,
   title,
   description,
+  canonical,
   image,
   imageAlt = title,
   keywords,
@@ -67,9 +83,12 @@ export function buildPageMetadata({
   type = 'website',
 }: BuildPageMetadataArgs): Metadata {
   const url = absoluteUrl(localizedPath(locale, path));
+  const canonicalUrl = resolveCanonicalUrl(canonical, url);
+  const metadataDescription = description.trim();
   const metadataImage = typeof image === 'string' ? image.trim() : '';
   const imageUrl = metadataImage ? absoluteUrl(metadataImage) : '';
-  const fullTitle = `${siteName(locale)} | ${title}`;
+  const metadataTitle = title.trim();
+  const fullTitle = metadataTitle ? `${siteName(locale)} | ${metadataTitle}` : siteName(locale);
   const alternateOgLocales = Object.entries(ogLocaleByLocale)
     .filter(([alternateLocale]) => alternateLocale !== locale)
     .map(([, ogLocale]) => ogLocale);
@@ -77,16 +96,16 @@ export function buildPageMetadata({
   const metadata: Metadata = {
     metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
     title: fullTitle,
-    description,
+    description: metadataDescription,
     alternates: {
-      canonical: url,
+      canonical: canonicalUrl,
       languages: buildLanguageAlternates(path),
     },
     openGraph: {
       type,
-      url,
+      url: canonicalUrl,
       title: fullTitle,
-      description,
+      description: metadataDescription,
       siteName: siteName(locale),
       locale: ogLocaleByLocale[locale],
       alternateLocale: alternateOgLocales,
@@ -95,7 +114,7 @@ export function buildPageMetadata({
     twitter: {
       card: imageUrl ? 'summary_large_image' : 'summary',
       title: fullTitle,
-      description,
+      description: metadataDescription,
       ...(imageUrl ? { images: [imageUrl] } : {}),
     },
     robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },

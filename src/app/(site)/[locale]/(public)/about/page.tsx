@@ -164,6 +164,8 @@ export async function generateMetadata({ params }: AboutPageProps) {
     title: page?.seoTitle || page?.title || t('page.about.title'),
     description: page?.seoDescription || t('page.about.groupBody1'),
     image: page?.seoImage || page?.heroImage,
+    canonical: page?.seoCanonical,
+    keywords: page?.seoKeywords,
     noIndex: isDraft || Boolean(page?.noIndex),
   });
 }

@@ -4,6 +4,7 @@ import { JsonLd } from '@/components/public/JsonLd';
 import { PageHero } from '@/components/public/PageHero';
 import { SectionIntro } from '@/components/public/SectionIntro';
 import { getCmsNews, getFeaturedNewsItems, getNewsListItemsAfterFeatured } from '@/lib/cms/news';
+import { getCmsPageByKey } from '@/lib/cms/pages';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocaleFromParams, type LocaleRouteParams } from '@/lib/i18n/route';
 import { isDraftModeEnabled } from '@/lib/preview/draft';
@@ -18,14 +19,18 @@ export async function generateMetadata({ params }: NewsPageProps) {
   const locale = await resolveRouteLocaleFromParams(params);
   const isDraft = await isDraftModeEnabled();
   const t = await getTranslations(locale);
+  const page = await getCmsPageByKey(locale, 'news-index', isDraft);
+  const metadataImage = page?.seoImage || page?.heroImage || '/images/headers/news-center.png';
 
   return buildPageMetadata({
     locale,
     path: '/news',
-    title: t('page.news.title'),
-    description: t('page.news.ctaText'),
-    image: '/images/headers/news-center.png',
-    noIndex: isDraft,
+    title: page?.seoTitle || page?.title || t('page.news.title'),
+    description: page?.seoDescription || page?.heroSubtitle || t('page.news.ctaText'),
+    image: metadataImage,
+    canonical: page?.seoCanonical,
+    keywords: page?.seoKeywords,
+    noIndex: isDraft || Boolean(page?.noIndex),
   });
 }
 

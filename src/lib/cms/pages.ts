@@ -4,13 +4,10 @@ import { cache } from 'react';
 import type { Locale } from '@/lib/i18n/locale';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from './cache';
-import { normalizeCmsMediaUrl } from './media';
 import { getPayloadClient } from './payload';
+import { cmsSeoMediaUrl, mapCmsSeo, type CmsSeoUpload } from './seo';
 
-type CmsUpload = {
-  sizes?: Record<string, { url?: string } | undefined>;
-  url?: string;
-};
+type CmsUpload = CmsSeoUpload;
 
 type CmsPageHero = {
   backgroundImage?: CmsUpload | number | string;
@@ -20,7 +17,9 @@ type CmsPageHero = {
 };
 
 type CmsPageSeo = {
+  canonical?: string;
   description?: string;
+  keywords?: string;
   noindex?: boolean;
   ogImage?: CmsUpload | number | string;
   title?: string;
@@ -40,8 +39,10 @@ export type CmsPageContent = Readonly<{
   heroSubtitle?: string;
   heroTitle?: string;
   noIndex: boolean;
+  seoCanonical?: string;
   seoDescription?: string;
   seoImage?: string;
+  seoKeywords: readonly string[];
   seoTitle?: string;
   slug: string;
   title: string;
@@ -52,11 +53,7 @@ function asString(value: unknown, fallback = '') {
 }
 
 function mediaUrl(file: CmsUpload | number | string | undefined) {
-  if (!file || typeof file !== 'object') {
-    return undefined;
-  }
-
-  return normalizeCmsMediaUrl(file.url ?? file.sizes?.card?.url, '');
+  return cmsSeoMediaUrl(file);
 }
 
 function mapCmsPage(page: CmsPage): CmsPageContent {
@@ -66,19 +63,19 @@ function mapCmsPage(page: CmsPage): CmsPageContent {
   const heroImage = mediaUrl(hero?.backgroundImage);
   const heroSubtitle = asString(hero?.subtitle);
   const heroTitle = asString(hero?.title);
-  const seoDescription = asString(seo?.description);
-  const seoImage = mediaUrl(seo?.ogImage);
-  const seoTitle = asString(seo?.title);
+  const seoFields = mapCmsSeo(seo);
 
   return {
     heroEnabled: hero?.enabled ?? true,
     ...(heroImage ? { heroImage } : {}),
     ...(heroSubtitle ? { heroSubtitle } : {}),
     ...(heroTitle ? { heroTitle } : {}),
-    noIndex: Boolean(seo?.noindex),
-    ...(seoDescription ? { seoDescription } : {}),
-    ...(seoImage ? { seoImage } : {}),
-    ...(seoTitle ? { seoTitle } : {}),
+    noIndex: seoFields.noIndex,
+    ...(seoFields.canonical ? { seoCanonical: seoFields.canonical } : {}),
+    ...(seoFields.description ? { seoDescription: seoFields.description } : {}),
+    ...(seoFields.image ? { seoImage: seoFields.image } : {}),
+    seoKeywords: seoFields.keywords,
+    ...(seoFields.title ? { seoTitle: seoFields.title } : {}),
     slug: asString(page.slug),
     title,
   };

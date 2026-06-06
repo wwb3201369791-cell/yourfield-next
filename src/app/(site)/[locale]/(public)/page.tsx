@@ -26,6 +26,7 @@ import { SectionIntro } from '@/components/public/SectionIntro';
 import { ArrowRightIcon } from '@/components/ui/icons';
 import { getHomeFeaturedProducts } from '@/lib/cms/home';
 import { getCmsNews, getFeaturedNewsItems } from '@/lib/cms/news';
+import { getCmsPageByKey } from '@/lib/cms/pages';
 import { getCmsSiteSettings } from '@/lib/cms/site-settings';
 import {
   capabilityCards,
@@ -54,14 +55,19 @@ export async function generateMetadata({ params }: LocalePageProps) {
   const locale = await resolveRouteLocaleFromParams(params);
   const isDraft = await isDraftModeEnabled();
   const t = await getTranslations(locale);
+  const page = await getCmsPageByKey(locale, 'home', isDraft);
+  const metadataImage =
+    page?.seoImage || page?.heroImage || '/images/home/franchise-campus-hero-clean-hd.jpg';
 
   return buildPageMetadata({
     locale,
     path: '/',
-    title: t('home.hero.title'),
-    description: t('home.hero.subtitle'),
-    image: '/images/home/franchise-campus-hero-clean-hd.jpg',
-    noIndex: isDraft,
+    title: page?.seoTitle || page?.title || t('home.hero.title'),
+    description: page?.seoDescription || page?.heroSubtitle || t('home.hero.subtitle'),
+    image: metadataImage,
+    canonical: page?.seoCanonical,
+    keywords: page?.seoKeywords,
+    noIndex: isDraft || Boolean(page?.noIndex),
   });
 }
 

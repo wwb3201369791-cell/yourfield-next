@@ -92,6 +92,7 @@ function productImage(product: SearchSourceDocument) {
 
 function productCandidate(product: SearchSourceDocument, locale: string): SearchCandidate {
   const category = readRecord(product.category);
+  const seo = readRecord(product.seo);
   const productId = asString(product.productId);
   const slug = asString(product.slug, productId);
   const model = asString(product.model);
@@ -111,6 +112,10 @@ function productCandidate(product: SearchSourceDocument, locale: string): Search
   const applications = asStringArray(product.applications).join(' ');
   const features = collectPublicText(product.features);
   const specifications = collectPublicText(product.specifications);
+  const seoTitle = asString(seo?.title);
+  const seoDescription = asString(seo?.description);
+  const seoKeywords = asString(seo?.keywords);
+  const seoText = compact([seoTitle, seoDescription, seoKeywords]).join(' ');
   const image = productImage(product);
   const hitCategory = categoryId
     ? {
@@ -136,6 +141,7 @@ function productCandidate(product: SearchSourceDocument, locale: string): Search
       { text: applications, weight: 1 },
       { text: features, weight: 1 },
       { text: specifications, weight: 1 },
+      { text: seoText, weight: 0.6 },
     ],
     id: `product:${asString(product.id, slug)}`,
     ...(image ? { image } : {}),
@@ -150,12 +156,17 @@ function productCandidate(product: SearchSourceDocument, locale: string): Search
 }
 
 function newsCandidate(item: SearchSourceDocument, locale: string): SearchCandidate {
+  const seo = readRecord(item.seo);
   const slug = asString(item.slug);
   const title = asString(item.title, slug);
   const content = richTextToPlainText(item.content);
   const excerpt = asString(item.excerpt, content || title);
   const categoryId = asString(item.category, 'news');
   const tags = asStringArray(item.tags).join(' ');
+  const seoTitle = asString(seo?.title);
+  const seoDescription = asString(seo?.description);
+  const seoKeywords = asString(seo?.keywords);
+  const seoText = compact([seoTitle, seoDescription, seoKeywords]).join(' ');
   const image = mediaUrl(item.cover);
   const publishedAt = asString(item.publishedAt);
 
@@ -169,6 +180,7 @@ function newsCandidate(item: SearchSourceDocument, locale: string): SearchCandid
       { text: content, weight: 1 },
       { text: tags, weight: 1.2 },
       { text: categoryId, weight: 0.5 },
+      { text: seoText, weight: 0.6 },
     ],
     id: `news:${asString(item.id, slug)}`,
     ...(image ? { image } : {}),
@@ -188,7 +200,11 @@ function pageCandidate(page: SearchSourceDocument, locale: string): SearchCandid
   const seo = readRecord(page.seo);
   const blocksText = collectPublicText(page.blocks);
   const heroText = compact([asString(hero?.title), asString(hero?.subtitle)]).join(' ');
-  const seoText = compact([asString(seo?.title), asString(seo?.description)]).join(' ');
+  const seoText = compact([
+    asString(seo?.title),
+    asString(seo?.description),
+    asString(seo?.keywords),
+  ]).join(' ');
   const content = compact([heroText, blocksText, seoText]).join(' ');
 
   return {

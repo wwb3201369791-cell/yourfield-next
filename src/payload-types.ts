@@ -412,6 +412,32 @@ export interface Product {
       }[]
     | null;
   faqs?: (number | Faq)[] | null;
+  seo?: {
+    /**
+     * Shown in the browser title and search-result title. If empty, the page name is usually used.
+     */
+    title?: string | null;
+    /**
+     * Summary text for search results. Keep it within 200 Chinese characters when possible.
+     */
+    description?: string | null;
+    /**
+     * Separate with commas; 3–7 keywords are recommended. Search engines no longer rely on this heavily, so enter only core terms.
+     */
+    keywords?: string | null;
+    /**
+     * May be used as the preview image when the page is shared on WeChat, social media, or chat apps.
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Usually leave this off. When enabled, this page will be kept out of search results where possible.
+     */
+    noindex?: boolean | null;
+    /**
+     * Tells search engines which URL is the canonical version. Leave empty if unsure.
+     */
+    canonical?: string | null;
+  };
   video?: (number | null) | Media;
   /**
    * Enter 1, 2, or 3. Smaller numbers appear first. Required before publishing; use 0 only for draft temporary saves.
@@ -898,6 +924,32 @@ export interface News {
       version: number;
     };
     [k: string]: unknown;
+  };
+  seo?: {
+    /**
+     * Shown in the browser title and search-result title. If empty, the page name is usually used.
+     */
+    title?: string | null;
+    /**
+     * Summary text for search results. Keep it within 200 Chinese characters when possible.
+     */
+    description?: string | null;
+    /**
+     * Separate with commas; 3–7 keywords are recommended. Search engines no longer rely on this heavily, so enter only core terms.
+     */
+    keywords?: string | null;
+    /**
+     * May be used as the preview image when the page is shared on WeChat, social media, or chat apps.
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Usually leave this off. When enabled, this page will be kept out of search results where possible.
+     */
+    noindex?: boolean | null;
+    /**
+     * Tells search engines which URL is the canonical version. Leave empty if unsure.
+     */
+    canonical?: string | null;
   };
   tags?:
     | {
@@ -1508,6 +1560,16 @@ export interface ProductsSelect<T extends boolean = true> {
         id?: T;
       };
   faqs?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        keywords?: T;
+        ogImage?: T;
+        noindex?: T;
+        canonical?: T;
+      };
   video?: T;
   displayOrder?: T;
   publishedAt?: T;
@@ -1564,6 +1626,16 @@ export interface NewsSelect<T extends boolean = true> {
   featuredOrder?: T;
   isFeatured?: T;
   content?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        keywords?: T;
+        ogImage?: T;
+        noindex?: T;
+        canonical?: T;
+      };
   tags?:
     | T
     | {
@@ -2011,7 +2083,7 @@ export interface SiteSetting {
     address?: string | null;
   };
   /**
-   * 用于 Google Search Console 与百度搜索资源平台的站点验证 meta 标签；只填写平台给出的 content/token，不要填写整段 HTML。
+   * Site verification meta tokens for Google Search Console and Baidu Search Resource Platform. Enter only the content/token value from the platform, not the full HTML tag.
    */
   seoVerification?: {
     googleSiteVerification?: string | null;

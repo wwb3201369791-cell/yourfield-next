@@ -13,7 +13,8 @@ export type EditorSection =
   | 'evidence'
   | 'care'
   | 'faq'
-  | 'identity';
+  | 'identity'
+  | 'seo';
 
 export type EditorMode = 'edit' | 'preview';
 

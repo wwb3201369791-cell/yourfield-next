@@ -6,8 +6,9 @@ import { locales, type Locale } from '@/lib/i18n/locale';
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from './cache';
 import { normalizeCmsMediaUrl } from './media';
 import { getPayloadClient } from './payload';
+import { hasPublicSeo, mapCmsSeo, type CmsSeo, type CmsSeoUpload, type PublicSeo } from './seo';
 
-type CmsUpload = {
+type CmsUpload = CmsSeoUpload & {
   alt?: string;
   caption?: string;
   height?: number;
@@ -29,6 +30,7 @@ type CmsNews = {
   isFeatured?: boolean;
   publishedAt?: string;
   slug?: string;
+  seo?: CmsSeo;
   title?: string;
   updatedAt?: string;
 };
@@ -44,6 +46,7 @@ export type NewsItem = Readonly<{
   image: string;
   isFeatured?: boolean;
   slug: string;
+  seo?: PublicSeo;
   title: string;
   video?: Readonly<{
     poster: string;
@@ -301,6 +304,7 @@ function mapCmsNews(item: CmsNews, locale: Locale): NewsItem {
   const image = mediaUrl(item.cover);
   const featuredVideoSrc = mediaOriginalUrl(localizedFeaturedVideo(item, locale));
   const isFeatured = Boolean(item.isFeatured || featuredOrder);
+  const seo = mapCmsSeo(item.seo);
 
   return {
     author: publicNewsAuthor(item.author, locale),
@@ -312,6 +316,7 @@ function mapCmsNews(item: CmsNews, locale: Locale): NewsItem {
     ...(featuredOrder ? { featuredOrder } : {}),
     image,
     ...(isFeatured ? { isFeatured: true } : {}),
+    ...(hasPublicSeo(seo) ? { seo } : {}),
     slug,
     title,
     ...(featuredVideoSrc ? { video: { poster: image, src: featuredVideoSrc } } : {}),

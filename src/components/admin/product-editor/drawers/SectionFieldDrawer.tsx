@@ -17,7 +17,15 @@ import { getMediaPreviewUrl } from '../utils/productImageUpload';
 type FieldSpec = Readonly<{
   help?: string;
   hasMany?: boolean;
-  kind?: 'text' | 'textarea' | 'number' | 'array' | 'readonly' | 'upload-array' | 'relationship';
+  kind?:
+    | 'text'
+    | 'textarea'
+    | 'number'
+    | 'checkbox'
+    | 'array'
+    | 'readonly'
+    | 'upload-array'
+    | 'relationship';
   label: string;
   localized?: boolean;
   maxRows?: number;
@@ -49,6 +57,16 @@ function TextControl({ field }: { field: FieldSpec }) {
           const nextValue = event.target.value.trim();
           setValue(nextValue ? Number(nextValue) : undefined);
         }}
+      />
+    );
+  }
+
+  if (field.kind === 'checkbox') {
+    return (
+      <input
+        type="checkbox"
+        checked={Boolean(value)}
+        onChange={(event) => setValue(event.target.checked)}
       />
     );
   }

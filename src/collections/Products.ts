@@ -16,6 +16,7 @@ import {
   qualityEvidenceTypeOptions,
   visualVariantOptions,
 } from '../lib/payload/fields/options';
+import { createSeoGroup } from '../lib/payload/fields/seo';
 import { imageUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { slugField } from '../lib/payload/fields/slug';
 import { autoSetPublishedAtOnPublish } from '../lib/payload/hooks/autoPublishedAt';
@@ -598,6 +599,10 @@ export const Products: CollectionConfig = {
         {
           label: adminLabel('常见问题'),
           fields: [productFaqsField, legacyFaqRelationsField],
+        },
+        {
+          label: adminLabel('SEO 搜索优化'),
+          fields: [createSeoGroup({ label: adminLabel('SEO 搜索优化') })],
         },
         {
           label: adminLabel('媒体'),

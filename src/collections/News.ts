@@ -6,6 +6,7 @@ import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { i18nEditGuideField } from '../lib/payload/fields/i18nEditGuide';
 import { newsCategoryOptions } from '../lib/payload/fields/options';
+import { createSeoGroup } from '../lib/payload/fields/seo';
 import { imageUploadField, videoUploadField } from '../lib/payload/fields/simpleMediaUpload';
 import { autoSetPublishedAtOnPublish } from '../lib/payload/hooks/autoPublishedAt';
 import { generateSlug } from '../lib/payload/hooks/generateSlug';
@@ -35,6 +36,7 @@ const newsAdminLabels = {
   publishedAt: { en: 'Publish time', zh: '发布时间' },
   relatedNews: { en: 'Related news', zh: '相关新闻' },
   relatedProducts: { en: 'Related products', zh: '关联产品' },
+  seoTab: { en: 'SEO Search Optimization', zh: 'SEO 搜索优化' },
   slug: { en: 'URL slug (system)', zh: '访问链接后缀（系统）' },
   status: { en: 'Status', zh: '状态' },
   tags: { en: 'Tags', zh: '标签' },
@@ -261,6 +263,10 @@ export const News: CollectionConfig = {
               },
             },
           ],
+        },
+        {
+          label: newsAdminLabels.seoTab,
+          fields: [createSeoGroup({ label: newsAdminLabels.seoTab })],
         },
       ],
     },

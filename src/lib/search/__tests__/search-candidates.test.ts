@@ -106,6 +106,61 @@ describe('search candidates', () => {
     );
   });
 
+  it('includes CMS SEO fields as lower-weight searchable text for products, news, and pages', () => {
+    const candidates = toCandidates(
+      emptySources({
+        news: [
+          {
+            id: 'n1',
+            slug: 'arc-flash-news',
+            title: '行业动态',
+            seo: {
+              description: 'Arc flash safety bulletin',
+              keywords: 'arc flash, 电弧防护',
+              title: 'Arc Flash News SEO',
+            },
+          },
+        ],
+        pages: [
+          {
+            id: 'page1',
+            pageKey: 'products-index',
+            title: '产品中心',
+            seo: {
+              description: 'PPE catalog landing page',
+              keywords: 'ppe catalog, safety products',
+              title: 'PPE Catalog SEO',
+            },
+          },
+        ],
+        products: [
+          {
+            id: 'p1',
+            name: '防护服',
+            slug: 'protective-suit',
+            seo: {
+              description: 'Arc flash protective clothing',
+              keywords: 'arc flash suit, 电弧服',
+              title: 'Arc Flash Suit SEO',
+            },
+          },
+        ],
+      }),
+      'zh',
+    );
+
+    const searchableTextByType = Object.fromEntries(
+      candidates.map((candidate) => [
+        candidate.type,
+        candidate.fields.map((field) => field.text).join(' '),
+      ]),
+    );
+
+    expect(searchableTextByType.product).toContain('arc flash suit');
+    expect(searchableTextByType.news).toContain('Arc Flash News SEO');
+    expect(searchableTextByType.page).toContain('safety products');
+  });
+
   it('builds deterministic recommended product hits and honors limits', () => {
     const hits = recommendedProductHitsFromSources(
       {

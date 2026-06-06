@@ -2,9 +2,11 @@ import Link from 'next/link';
 
 import { PageHero } from '@/components/public/PageHero';
 import { SectionIntro } from '@/components/public/SectionIntro';
+import { getCmsPageByKey } from '@/lib/cms/pages';
 import { legalPageConfigByKey, type LegalPageKey } from '@/lib/compliance/legalPages';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import type { Locale } from '@/lib/i18n/locale';
+import { isDraftModeEnabled } from '@/lib/preview/draft';
 import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 
 type CompliancePageProps = Readonly<{
@@ -15,12 +17,18 @@ type CompliancePageProps = Readonly<{
 export async function generateComplianceMetadata({ locale, pageKey }: CompliancePageProps) {
   const t = await getTranslations(locale);
   const config = legalPageConfigByKey[pageKey];
+  const isDraft = await isDraftModeEnabled();
+  const page = await getCmsPageByKey(locale, pageKey, isDraft);
 
   return buildPageMetadata({
     locale,
     path: config.path,
-    title: t(`page.compliance.${pageKey}.title`),
-    description: t(`page.compliance.${pageKey}.intro`),
+    title: page?.seoTitle || page?.title || t(`page.compliance.${pageKey}.title`),
+    description:
+      page?.seoDescription || page?.heroSubtitle || t(`page.compliance.${pageKey}.intro`),
+    image: page?.seoImage || page?.heroImage,
+    canonical: page?.seoCanonical,
+    keywords: page?.seoKeywords,
     noIndex: true,
   });
 }

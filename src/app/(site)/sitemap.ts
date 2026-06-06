@@ -16,6 +16,7 @@ type SitemapCollection = 'news' | 'products';
 type CmsSitemapDoc = Readonly<{
   productId?: unknown;
   publishedAt?: unknown;
+  seo?: { noindex?: unknown };
   slug?: unknown;
   updatedAt?: unknown;
 }>;
@@ -30,7 +31,11 @@ function asDate(value: unknown) {
   return Number.isNaN(date.getTime()) ? undefined : date;
 }
 
-function toSitemapContentItem(doc: CmsSitemapDoc): SitemapContentItem | null {
+export function toSitemapContentItem(doc: CmsSitemapDoc): SitemapContentItem | null {
+  if (doc.seo?.noindex === true) {
+    return null;
+  }
+
   const slug = isSafeSitemapSlug(doc.slug)
     ? doc.slug
     : isSafeSitemapSlug(doc.productId)

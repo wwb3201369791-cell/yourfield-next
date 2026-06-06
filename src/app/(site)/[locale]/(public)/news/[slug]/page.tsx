@@ -93,13 +93,17 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
     return {};
   }
 
+  const seo = item.seo;
+
   return buildPageMetadata({
     locale,
     path: `/news/${item.slug}`,
-    title: item.title,
-    description: item.excerpt,
-    image: item.image,
-    noIndex: isDraft,
+    title: seo?.title || item.title,
+    description: seo?.description || item.excerpt,
+    image: seo?.image || item.image,
+    canonical: seo?.canonical,
+    keywords: seo?.keywords,
+    noIndex: isDraft || Boolean(seo?.noIndex),
     type: 'article',
   });
 }

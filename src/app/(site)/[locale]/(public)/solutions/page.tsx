@@ -54,6 +54,8 @@ export async function generateMetadata({ params }: SolutionsPageProps) {
     title: page?.seoTitle || page?.title || t('page.solutions.title'),
     description: page?.seoDescription || fallbackDescription,
     ...(metadataImage ? { image: metadataImage } : {}),
+    canonical: page?.seoCanonical,
+    keywords: page?.seoKeywords,
     noIndex: isDraft || Boolean(page?.noIndex),
   });
 }

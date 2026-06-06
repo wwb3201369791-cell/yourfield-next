@@ -1,5 +1,7 @@
 import type { Product, ProductGroupId } from '@/lib/product/types';
 
+import type { CmsSeo } from '../seo';
+
 export type TextRow = {
   value?: string;
 };
@@ -107,6 +109,7 @@ export type CmsProduct = {
   sizeGuide?: CmsProductSizeGuide;
   sku?: string;
   slug?: string;
+  seo?: CmsSeo;
   faqs?: Array<CmsFaq | number | string>;
   productFaqs?: CmsProductFaq[];
   specifications?: CmsProductSpecification[];

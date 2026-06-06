@@ -39,6 +39,7 @@ import { IntroDrawer } from './drawers/IntroDrawer';
 import { OperationsDrawer } from './drawers/OperationsDrawer';
 import { ScenariosDrawer } from './drawers/ScenariosDrawer';
 import { SellingPointsDrawer } from './drawers/SellingPointsDrawer';
+import { SeoDrawer } from './drawers/SeoDrawer';
 import { SizeGuideDrawer } from './drawers/SizeGuideDrawer';
 import { SpecDrawer } from './drawers/SpecDrawer';
 import { VisualGroupsDrawer } from './drawers/VisualGroupsDrawer';
@@ -63,6 +64,7 @@ registerDrawer('hero', HeroDrawer);
 registerDrawer('identity', OperationsDrawer);
 registerDrawer('intro', IntroDrawer);
 registerDrawer('scenarios', ScenariosDrawer);
+registerDrawer('seo', SeoDrawer);
 registerDrawer('selling-points', SellingPointsDrawer);
 registerDrawer('size-guide', SizeGuideDrawer);
 registerDrawer('specifications', SpecDrawer);
@@ -319,6 +321,13 @@ function ProductVisualEditorContent() {
                 uploading={productImages.uploading}
               />
             </CanvasSection>
+            <CanvasSection
+              id="seo"
+              section="seo"
+              label={adminT('SEO 搜索优化')}
+              isEmpty
+              emptyHint={adminT('编辑搜索标题、描述、关键词、分享封面和规范链接')}
+            />
             <CanvasSection
               id="product-intro"
               section="intro"

@@ -8,6 +8,7 @@ import {
   type ProductCatalogGroupView,
 } from '@/components/product/ProductCatalog';
 import { JsonLd } from '@/components/public/JsonLd';
+import { getCmsPageByKey } from '@/lib/cms/pages';
 import { getCmsProductGroups, getCmsProducts, type CmsProductGroup } from '@/lib/cms/products';
 import { productPrimaryImage } from '@/lib/content/productVisuals';
 import { getTranslations } from '@/lib/i18n/getTranslations';
@@ -163,14 +164,18 @@ export async function generateMetadata({ params }: ProductsPageProps) {
   const locale = await resolveRouteLocaleFromParams(params);
   const isDraft = await isDraftModeEnabled();
   const t = await getTranslations(locale);
+  const page = await getCmsPageByKey(locale, 'products-index', isDraft);
+  const metadataImage = page?.seoImage || page?.heroImage || '/images/headers/products-center.png';
 
   return buildPageMetadata({
     locale,
     path: '/products',
-    title: t('page.products.title'),
-    description: t('home.products.description'),
-    image: '/images/headers/products-center.png',
-    noIndex: isDraft,
+    title: page?.seoTitle || page?.title || t('page.products.title'),
+    description: page?.seoDescription || page?.heroSubtitle || t('home.products.description'),
+    image: metadataImage,
+    canonical: page?.seoCanonical,
+    keywords: page?.seoKeywords,
+    noIndex: isDraft || Boolean(page?.noIndex),
   });
 }
 

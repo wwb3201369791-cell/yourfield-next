@@ -55,6 +55,16 @@ function namedField(fields: readonly Field[], name: string) {
   return flattenedFields(fields).find((field) => 'name' in field && field.name === name);
 }
 
+function nestedFieldNames(field: Field | undefined) {
+  if (!field || !('fields' in field) || !Array.isArray(field.fields)) {
+    return [];
+  }
+
+  return field.fields.flatMap((nestedField) =>
+    'name' in nestedField && typeof nestedField.name === 'string' ? [nestedField.name] : [],
+  );
+}
+
 function isHidden(field: Field | undefined) {
   return field && 'admin' in field
     ? (field.admin as { hidden?: boolean } | undefined)?.hidden
@@ -155,10 +165,11 @@ describe('admin collection tabs', () => {
         '资料与认证状态',
         '洗护与维护',
         '常见问题',
+        'SEO 搜索优化',
         '媒体',
       ],
     ],
-    [News, ['新闻信息', '正文内容']],
+    [News, ['新闻信息', '正文内容', 'SEO 搜索优化']],
     [Solutions, ['前台展示', '内容要点']],
   ] as const)('uses label-only tabs for %s', (collection, expectedLabels) => {
     const tabs = tabsOf(collection);
@@ -531,12 +542,26 @@ describe('admin collection tabs', () => {
     });
   });
 
-  it.each([Products, News, Solutions] as const)(
-    'does not expose manual SEO fields for %s',
-    (collection) => {
-      expect(namedField(collection.fields, 'seo')).toBeUndefined();
-    },
-  );
+  it.each([Solutions] as const)('does not expose manual SEO fields for %s', (collection) => {
+    expect(namedField(collection.fields, 'seo')).toBeUndefined();
+  });
+
+  it.each([Products, News] as const)('exposes editable SEO fields for %s', (collection) => {
+    const seo = namedField(collection.fields, 'seo');
+
+    expect(seo).toMatchObject({
+      name: 'seo',
+      type: 'group',
+    });
+    expect(nestedFieldNames(seo)).toEqual([
+      'title',
+      'description',
+      'keywords',
+      'ogImage',
+      'noindex',
+      'canonical',
+    ]);
+  });
 
   it.each([
     [Solutions, ['solutionId', 'slug']],

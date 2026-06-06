@@ -75,6 +75,8 @@ export async function generateMetadata({ params }: FranchisePageProps) {
     title,
     description: page?.seoDescription || t('page.franchise.heroText'),
     image: page?.seoImage || page?.heroImage,
+    canonical: page?.seoCanonical,
+    keywords: page?.seoKeywords,
     noIndex: isDraft || Boolean(page?.noIndex),
   });
 }

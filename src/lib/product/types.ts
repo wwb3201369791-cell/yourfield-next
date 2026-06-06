@@ -1,3 +1,4 @@
+import type { PublicSeo } from '@/lib/cms/seo';
 import type { Locale } from '@/lib/i18n/locale';
 
 export type LocalizedText = Readonly<Record<Locale, string>>;
@@ -49,6 +50,7 @@ export type Product = Readonly<{
   id: string;
   model: string;
   sku?: string;
+  seo?: PublicSeo;
   categoryId: string;
   categoryName: LocalizedText;
   groupId: ProductGroupId;

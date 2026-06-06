@@ -195,6 +195,7 @@ describe('Products schema for visual product editing', () => {
       '资料与认证状态',
       '洗护与维护',
       '常见问题',
+      'SEO 搜索优化',
       '媒体',
     ]);
   });
@@ -205,7 +206,24 @@ describe('Products schema for visual product editing', () => {
     expect(findFieldByName(rootFields, 'tags')).toBeUndefined();
     expect(findFieldByName(rootFields, 'relatedProducts')).toBeUndefined();
     expect(findFieldByName(rootFields, 'isFeatured')).toBeUndefined();
-    expect(findFieldByName(rootFields, 'seo')).toBeUndefined();
+  });
+
+  it('exposes product SEO fields in their own visible editor tab', () => {
+    const seo = findFieldByName(rootFields, 'seo');
+
+    expect(hasField('SEO 搜索优化', 'seo')).toBe(true);
+    expect(seo).toMatchObject({
+      name: 'seo',
+      type: 'group',
+    });
+    expect(seo?.fields?.map((field) => field.name)).toEqual([
+      'title',
+      'description',
+      'keywords',
+      'ogImage',
+      'noindex',
+      'canonical',
+    ]);
   });
 
   it('lifts frontend detail fields out of the old P3+ collapsible into first-class tabs', () => {
