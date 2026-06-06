@@ -24,7 +24,10 @@ export const importProductGroups = async (
         noindex: false,
       },
     };
-    const { zhData, localizedData } = splitLocalizedData(data);
+    const { zhData, localizedData } = splitLocalizedData({
+      ...data,
+      showOnFrontend: false,
+    });
 
     const upserted = await upsertCollection({
       collection: 'product-groups',
@@ -35,6 +38,17 @@ export const importProductGroups = async (
       uniqueValue: group.groupId,
       options,
     });
+
+    if (!options.skipExisting) {
+      await payload.update({
+        collection: 'product-groups',
+        data: { showOnFrontend: true },
+        depth: 0,
+        id: upserted.id,
+        locale: 'zh',
+        overrideAccess: true,
+      });
+    }
 
     result.created += upserted.created;
     result.updated += upserted.updated;
