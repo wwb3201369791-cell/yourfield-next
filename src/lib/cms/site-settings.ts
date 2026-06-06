@@ -1,7 +1,7 @@
-import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
 import type { Locale } from '@/lib/i18n/locale';
+import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsGlobalCacheTag } from './cache';
 import { normalizeCmsMediaUrl } from './media';
@@ -296,9 +296,13 @@ async function getCmsSiteSettingsUncached(locale: Locale) {
   return mapSiteSettings(doc, locale);
 }
 
-const getCachedCmsSiteSettings = unstable_cache(getCmsSiteSettingsUncached, ['cms-site-settings'], {
-  revalidate: CMS_CACHE_REVALIDATE_SECONDS,
-  tags: [cmsGlobalCacheTag('site-settings')],
-});
+const getCachedCmsSiteSettings = unstableCacheOrPassThrough(
+  getCmsSiteSettingsUncached,
+  ['cms-site-settings'],
+  {
+    revalidate: CMS_CACHE_REVALIDATE_SECONDS,
+    tags: [cmsGlobalCacheTag('site-settings')],
+  },
+);
 
 export const getCmsSiteSettings = cache(getCachedCmsSiteSettings);

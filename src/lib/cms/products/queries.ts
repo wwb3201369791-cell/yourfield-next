@@ -1,9 +1,9 @@
-﻿import { unstable_cache } from 'next/cache';
-import type { Where } from 'payload';
+﻿import type { Where } from 'payload';
 import { cache } from 'react';
 
 import { env } from '@/lib/env';
 import { locales, type Locale } from '@/lib/i18n/locale';
+import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from '../cache';
 import { getPayloadClient } from '../payload';
@@ -72,7 +72,7 @@ async function getCmsProductsUncached(locale: Locale, draft = false) {
   return cmsProducts;
 }
 
-const getCachedCmsProducts = unstable_cache(
+const getCachedCmsProducts = unstableCacheOrPassThrough(
   async (locale: Locale) => getCmsProductsUncached(locale, false),
   ['cms-products', cmsProductCacheVersion],
   {
@@ -133,7 +133,7 @@ async function getCmsProductBySlugUncached(locale: Locale, slug: string, draft =
   return mappedProduct;
 }
 
-const getCachedCmsProductBySlug = unstable_cache(
+const getCachedCmsProductBySlug = unstableCacheOrPassThrough(
   async (locale: Locale, slug: string) => getCmsProductBySlugUncached(locale, slug, false),
   ['cms-product-by-slug', cmsProductCacheVersion],
   {
@@ -157,7 +157,7 @@ async function getFeaturedCmsProductsUncached(locale: Locale, limit = 6, draft =
   return (draft && productsWithImages.length > 0 ? productsWithImages : products).slice(0, limit);
 }
 
-const getCachedFeaturedCmsProducts = unstable_cache(
+const getCachedFeaturedCmsProducts = unstableCacheOrPassThrough(
   async (locale: Locale, limit: number = 6) => getFeaturedCmsProductsUncached(locale, limit, false),
   ['cms-featured-products', cmsProductCacheVersion],
   {

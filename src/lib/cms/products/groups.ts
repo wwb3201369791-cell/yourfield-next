@@ -1,8 +1,8 @@
-import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
 import { env } from '@/lib/env';
 import type { Locale } from '@/lib/i18n/locale';
+import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from '../cache';
 import { getPayloadClient } from '../payload';
@@ -37,7 +37,7 @@ async function getCmsProductCategoriesUncached(
     .sort((left, right) => left.order - right.order);
 }
 
-const getCachedCmsProductCategories = unstable_cache(
+const getCachedCmsProductCategories = unstableCacheOrPassThrough(
   getCmsProductCategoriesUncached,
   ['cms-product-categories'],
   {
@@ -101,7 +101,7 @@ async function getCmsProductGroupsUncached(locale: Locale): Promise<readonly Cms
   return groups.sort((left, right) => left.order - right.order);
 }
 
-const getCachedCmsProductGroups = unstable_cache(
+const getCachedCmsProductGroups = unstableCacheOrPassThrough(
   getCmsProductGroupsUncached,
   ['cms-product-groups'],
   {

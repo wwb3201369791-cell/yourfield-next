@@ -1,4 +1,3 @@
-import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
 import { env } from '@/lib/env';
@@ -11,6 +10,7 @@ import {
   type SiteNavigation,
   type SiteNavigationItem,
 } from '@/lib/navigation';
+import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag, cmsGlobalCacheTag } from './cache';
 import { getPayloadClient } from './payload';
@@ -393,14 +393,18 @@ async function getCmsNavigationUncached(locale: Locale): Promise<SiteNavigation>
   };
 }
 
-const getCachedCmsNavigation = unstable_cache(getCmsNavigationUncached, ['cms-navigation'], {
-  revalidate: CMS_CACHE_REVALIDATE_SECONDS,
-  tags: [
-    cmsGlobalCacheTag('navigation'),
-    cmsCollectionCacheTag('solutions'),
-    cmsCollectionCacheTag('product-groups'),
-  ],
-});
+const getCachedCmsNavigation = unstableCacheOrPassThrough(
+  getCmsNavigationUncached,
+  ['cms-navigation'],
+  {
+    revalidate: CMS_CACHE_REVALIDATE_SECONDS,
+    tags: [
+      cmsGlobalCacheTag('navigation'),
+      cmsCollectionCacheTag('solutions'),
+      cmsCollectionCacheTag('product-groups'),
+    ],
+  },
+);
 
 function shouldBypassNavigationCache() {
   return env.NODE_ENV !== 'production' || !env.REVALIDATE_SECRET;

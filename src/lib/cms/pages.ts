@@ -1,7 +1,7 @@
-import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
 import type { Locale } from '@/lib/i18n/locale';
+import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from './cache';
 import { getPayloadClient } from './payload';
@@ -102,12 +102,6 @@ async function getCmsPageByKeyUncached(locale: Locale, pageKey: string, draft = 
 
   return page ? mapCmsPage(page) : null;
 }
-
-const passThroughUnstableCache = ((fn: Parameters<typeof unstable_cache>[0]) =>
-  fn) as typeof unstable_cache;
-
-const unstableCacheOrPassThrough: typeof unstable_cache =
-  typeof unstable_cache === 'function' ? unstable_cache : passThroughUnstableCache;
 
 const getCachedCmsPageByKey = unstableCacheOrPassThrough(
   async (locale: Locale, pageKey: string) => getCmsPageByKeyUncached(locale, pageKey, false),

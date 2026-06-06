@@ -1,8 +1,8 @@
-import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
 import { env } from '@/lib/env';
 import type { Locale } from '@/lib/i18n/locale';
+import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from './cache';
 import { normalizeCmsMediaUrl } from './media';
@@ -162,7 +162,7 @@ async function getCmsSolutionsUncached(locale: Locale, draft = false) {
     .sort((left, right) => left.order - right.order);
 }
 
-const getCachedCmsSolutions = unstable_cache(
+const getCachedCmsSolutions = unstableCacheOrPassThrough(
   async (locale: Locale) => getCmsSolutionsUncached(locale, false),
   ['cms-solutions'],
   {

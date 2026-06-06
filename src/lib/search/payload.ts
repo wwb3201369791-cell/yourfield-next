@@ -1,8 +1,8 @@
-﻿import { unstable_cache } from 'next/cache';
-import type { Where } from 'payload';
+﻿import type { Where } from 'payload';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from '@/lib/cms/cache';
 import { getPayloadClient } from '@/lib/cms/payload';
+import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 import { recommendedProductHitsFromSources } from '@/lib/search/search';
 import {
   defaultSearchStatsLimit,
@@ -105,7 +105,7 @@ async function findPublishedSearchProducts(locale: SearchLocale) {
   });
 }
 
-const getCachedSearchProducts = unstable_cache(
+const getCachedSearchProducts = unstableCacheOrPassThrough(
   findPublishedSearchProducts,
   ['payload-search-products'],
   {
@@ -129,10 +129,14 @@ async function findPublishedSearchNews(locale: SearchLocale) {
   });
 }
 
-const getCachedSearchNews = unstable_cache(findPublishedSearchNews, ['payload-search-news'], {
-  revalidate: CMS_CACHE_REVALIDATE_SECONDS,
-  tags: [cmsCollectionCacheTag('news')],
-});
+const getCachedSearchNews = unstableCacheOrPassThrough(
+  findPublishedSearchNews,
+  ['payload-search-news'],
+  {
+    revalidate: CMS_CACHE_REVALIDATE_SECONDS,
+    tags: [cmsCollectionCacheTag('news')],
+  },
+);
 
 async function findPublishedSearchPages(locale: SearchLocale) {
   const payload = await getPayloadClient();
@@ -149,10 +153,14 @@ async function findPublishedSearchPages(locale: SearchLocale) {
   });
 }
 
-const getCachedSearchPages = unstable_cache(findPublishedSearchPages, ['payload-search-pages'], {
-  revalidate: CMS_CACHE_REVALIDATE_SECONDS,
-  tags: [cmsCollectionCacheTag('pages')],
-});
+const getCachedSearchPages = unstableCacheOrPassThrough(
+  findPublishedSearchPages,
+  ['payload-search-pages'],
+  {
+    revalidate: CMS_CACHE_REVALIDATE_SECONDS,
+    tags: [cmsCollectionCacheTag('pages')],
+  },
+);
 
 async function findPublishedSearchFaqs(locale: SearchLocale) {
   const payload = await getPayloadClient();
@@ -167,10 +175,14 @@ async function findPublishedSearchFaqs(locale: SearchLocale) {
   });
 }
 
-const getCachedSearchFaqs = unstable_cache(findPublishedSearchFaqs, ['payload-search-faqs'], {
-  revalidate: CMS_CACHE_REVALIDATE_SECONDS,
-  tags: [cmsCollectionCacheTag('faqs')],
-});
+const getCachedSearchFaqs = unstableCacheOrPassThrough(
+  findPublishedSearchFaqs,
+  ['payload-search-faqs'],
+  {
+    revalidate: CMS_CACHE_REVALIDATE_SECONDS,
+    tags: [cmsCollectionCacheTag('faqs')],
+  },
+);
 
 async function findPublishedSearchSolutions(locale: SearchLocale) {
   const payload = await getPayloadClient();
@@ -188,7 +200,7 @@ async function findPublishedSearchSolutions(locale: SearchLocale) {
   });
 }
 
-const getCachedSearchSolutions = unstable_cache(
+const getCachedSearchSolutions = unstableCacheOrPassThrough(
   findPublishedSearchSolutions,
   ['payload-search-solutions'],
   {
@@ -401,7 +413,7 @@ async function getPayloadHotSearchTermsUncached(
   }
 }
 
-const getCachedPayloadHotSearchTerms = unstable_cache(
+const getCachedPayloadHotSearchTerms = unstableCacheOrPassThrough(
   getPayloadHotSearchTermsUncached,
   ['payload-hot-search-terms'],
   {

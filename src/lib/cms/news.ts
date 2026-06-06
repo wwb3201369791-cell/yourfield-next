@@ -1,7 +1,7 @@
-import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
 import { locales, type Locale } from '@/lib/i18n/locale';
+import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from './cache';
 import { normalizeCmsMediaUrl } from './media';
@@ -352,7 +352,7 @@ async function getCmsNewsUncached(locale: Locale, draft = false) {
   return items;
 }
 
-const getCachedCmsNews = unstable_cache(
+const getCachedCmsNews = unstableCacheOrPassThrough(
   async (locale: Locale) => getCmsNewsUncached(locale, false),
   ['cms-news'],
   {
@@ -427,7 +427,7 @@ async function getCmsNewsBySlugUncached(locale: Locale, slug: string, draft = fa
   return item ? mapCmsNews(item, locale) : null;
 }
 
-const getCachedCmsNewsBySlug = unstable_cache(
+const getCachedCmsNewsBySlug = unstableCacheOrPassThrough(
   async (locale: Locale, slug: string) => getCmsNewsBySlugUncached(locale, slug, false),
   ['cms-news-by-slug'],
   {
