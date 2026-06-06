@@ -64,14 +64,15 @@ afterEach(() => {
 });
 
 describe('LeadSubmitForm', () => {
-  it('renders a safe POST fallback and disables native submit before hydration', () => {
+  it('renders a safe POST fallback and keeps native submit available before hydration', () => {
     const html = renderToStaticMarkup(leadFormElement());
 
     expect(html).toContain('action="/api/forms/submit"');
     expect(html).toContain('method="post"');
     expect(html).toContain('data-hydrated="false"');
     expect(html).toContain('name="sourceLocale"');
-    expect(html).toMatch(/<button[^>]+type="submit"[^>]+disabled=""/);
+    expect(html).toMatch(/<button[^>]+type="submit"/);
+    expect(html).not.toMatch(/<button[^>]+type="submit"[^>]+disabled=""/);
   });
 
   it('does not create a hardcoded mailto fallback when CMS support email is absent', async () => {

@@ -6,7 +6,12 @@ import {
   canUpdate,
   isAdminOrPublishedWithPublishedAt,
 } from '../lib/payload/access';
-import { adminCollectionLabel, adminLabel, adminNavLabel } from '../lib/payload/adminText';
+import {
+  adminCollectionLabel,
+  adminLabel,
+  adminListLabel,
+  adminNavLabel,
+} from '../lib/payload/adminText';
 import { auditAfterChange, auditAfterDelete } from '../lib/payload/audit';
 import { adminRowActionsField } from '../lib/payload/fields/adminRowActions';
 import { textArrayField, textareaArrayField, uploadArrayField } from '../lib/payload/fields/arrays';
@@ -497,7 +502,7 @@ export const Products: CollectionConfig = {
               name: 'model',
               type: 'text',
               index: true,
-              label: adminLabel('型号 / 规格'),
+              label: adminListLabel('型号 / 规格'),
               admin: {
                 description: adminLabel('可选。展示在前台详情页主图右侧和规格参数区。'),
               },
@@ -507,7 +512,7 @@ export const Products: CollectionConfig = {
               type: 'text',
               required: true,
               localized: true,
-              label: adminLabel('产品名称'),
+              label: adminListLabel('产品名称'),
             },
             slugField({
               description: adminLabel('默认从 productId 生成；P2.S4 接入完整拼音与唯一性处理。'),
@@ -518,7 +523,7 @@ export const Products: CollectionConfig = {
               relationTo: 'product-groups',
               index: true,
               required: true,
-              label: adminLabel('所属产品大类'),
+              label: adminListLabel('所属产品大类'),
               admin: {
                 description: adminLabel(
                   '必填。创建产品时先选择产品大类，前台产品中心会直接把该产品放到这个大类下面。',

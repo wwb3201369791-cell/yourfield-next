@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import { GlobeIcon } from '@/components/ui/icons';
@@ -33,6 +33,7 @@ const languageOptions: Record<Locale, { code: string; name: string; lang: string
 export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   const t = useTranslations();
   const pathname = usePathname() ?? `/${locale}`;
+  const searchParams = useSearchParams();
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -78,7 +79,12 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
     document.documentElement.lang = getHtmlLang(nextLocale);
 
     const nextPath = pathname.replace(/^\/(zh|en|ru)(?=\/|$)/, `/${nextLocale}`);
-    router.push(nextPath || `/${nextLocale}`);
+    const nextQuery = searchParams?.toString() ?? '';
+    const nextHref = nextQuery
+      ? `${nextPath || `/${nextLocale}`}?${nextQuery}`
+      : nextPath || `/${nextLocale}`;
+
+    router.push(nextHref);
     setIsOpen(false);
   }
 

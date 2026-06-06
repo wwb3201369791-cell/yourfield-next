@@ -2,7 +2,7 @@ import type { Field } from 'payload';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Products } from '@/collections/Products';
-import { adminLabel } from '@/lib/payload/adminText';
+import { adminLabel, adminListLabel } from '@/lib/payload/adminText';
 
 vi.mock('@/components/admin/media-upload/SimpleMediaUploadField', () => ({
   default: () => null,
@@ -91,7 +91,7 @@ describe('Products admin structure', () => {
           Cell: '@/components/admin/cells/ProductGroupCell',
         },
       },
-      label: adminLabel('所属产品大类'),
+      label: adminListLabel('所属产品大类'),
       relationTo: 'product-groups',
       required: true,
       type: 'relationship',

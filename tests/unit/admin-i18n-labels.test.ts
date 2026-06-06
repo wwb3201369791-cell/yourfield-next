@@ -121,6 +121,7 @@ describe('admin schema i18n labels', () => {
         '国家 / 地区',
       ],
       'src/collections/Solutions.ts': ['方案标题', '前台位置', '发布时间'],
+      'src/collections/Products.ts': ['型号 / 规格', '产品名称', '所属产品大类'],
     } as const;
 
     for (const [file, labels] of Object.entries(sortableLabelsByCollection)) {

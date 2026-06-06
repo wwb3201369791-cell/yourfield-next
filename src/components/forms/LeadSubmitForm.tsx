@@ -272,7 +272,7 @@ export function LeadSubmitForm({
   const [isHydrated, setIsHydrated] = useState(false);
   const [status, setStatus] = useState<FormStatus>({ kind: 'idle' });
   const isSubmitting = status.kind === 'submitting';
-  const isSubmitDisabled = isSubmitting || !isHydrated;
+  const isSubmitDisabled = isSubmitting;
 
   useEffect(() => {
     setIsHydrated(true);
