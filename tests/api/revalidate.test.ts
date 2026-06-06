@@ -37,6 +37,7 @@ const loadRoute = async ({
   vi.doMock('next/cache', () => ({
     revalidatePath: revalidatePathMock,
     revalidateTag: revalidateTagMock,
+    unstable_cache: <T extends (...args: never[]) => unknown>(fn: T) => fn,
   }));
 
   const route: RouteModule = await import('@/app/(site)/api/revalidate/route');
