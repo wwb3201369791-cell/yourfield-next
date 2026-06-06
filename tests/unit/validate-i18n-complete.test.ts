@@ -100,6 +100,30 @@ describe('requireAllLocalesOnPublish', () => {
     ).rejects.toThrow('正文');
   });
 
+  it('allows seed mode to perform multi-step locale backfills before the final document is complete', async () => {
+    const hook = requireAllLocalesOnPublish(locales);
+    const originalSeedModeValue = env.PAYLOAD_SEED_MODE;
+
+    env.PAYLOAD_SEED_MODE = true;
+
+    try {
+      await expect(
+        hook({
+          collection,
+          context: {},
+          data: {
+            _status: 'published',
+            title: '中文标题',
+          },
+          operation: 'create',
+          req,
+        }),
+      ).resolves.toMatchObject({ _status: 'published' });
+    } finally {
+      env.PAYLOAD_SEED_MODE = originalSeedModeValue;
+    }
+  });
+
   it('only warns when strict publish validation is disabled', async () => {
     const hook = requireAllLocalesOnPublish(locales);
     const originalStrictValue = env.STRICT_I18N_PUBLISH;

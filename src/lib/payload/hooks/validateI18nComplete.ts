@@ -127,6 +127,10 @@ async function findExistingGlobalAllLocales(args: {
   });
 }
 
+function shouldSkipCompletenessValidation() {
+  return env.PAYLOAD_SEED_MODE;
+}
+
 function handleMissing(
   message: string,
   missing: MissingByLocale,
@@ -161,7 +165,10 @@ export function requireAllLocalesOnPublish(
     const incomingData = data as Record<string, unknown>;
     const original = originalDoc as Record<string, unknown> | undefined;
 
-    if (!shouldValidateForStatus(incomingData, original, options.status)) {
+    if (
+      shouldSkipCompletenessValidation() ||
+      !shouldValidateForStatus(incomingData, original, options.status)
+    ) {
       return incomingData;
     }
 
@@ -197,6 +204,10 @@ export function requireAllLocalesOnGlobalSave(
 ): GlobalBeforeChangeHook {
   return async ({ data, global, req }) => {
     const incomingData = data as Record<string, unknown>;
+    if (shouldSkipCompletenessValidation()) {
+      return incomingData;
+    }
+
     const fields = global.fields as readonly Field[];
     const specs = filterSpecs(collectCheckSpecs(fields), options.paths);
     const existingAllLocales = (await findExistingGlobalAllLocales({
