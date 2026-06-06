@@ -50,7 +50,7 @@ describe('admin i18n edit guide', () => {
     [News, 'news', ['新闻标题', '列表摘要', '新闻正文']],
     [Solutions, 'solutions', ['方案标题', '卡片说明', '方案要点', '核心产品标签', '详细说明']],
     [ProductGroups, 'product-groups', ['前台显示名称', '大类说明']],
-    [Pages, 'pages', []],
+    [Pages, 'pages', ['页面标题']],
     [FAQs, 'faqs', ['问题', '答案']],
   ] as const)('adds a trilingual edit guide to %s', (collection, collectionSlug, labels) => {
     const field = guideField(collection.fields);

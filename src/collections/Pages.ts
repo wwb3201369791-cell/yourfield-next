@@ -14,6 +14,7 @@ import { revalidateCollectionAfterChange } from '../lib/payload/hooks/revalidate
 import { requireAllLocalesOnPublish } from '../lib/payload/hooks/validateI18nComplete';
 
 const contentLocales = ['zh', 'en', 'ru'] as const;
+const requiredI18nPaths = [{ path: 'title', label: '页面标题' }] as const;
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -34,7 +35,10 @@ export const Pages: CollectionConfig = {
     delete: canDelete('pages'),
   },
   hooks: {
-    beforeChange: [requireAllLocalesOnPublish(contentLocales), autoSetPublishedAtOnPublish()],
+    beforeChange: [
+      requireAllLocalesOnPublish(contentLocales, { paths: requiredI18nPaths }),
+      autoSetPublishedAtOnPublish(),
+    ],
     afterChange: [auditAfterChange('pages'), revalidateCollectionAfterChange('pages')],
     afterDelete: [auditAfterDelete('pages')],
   },
@@ -47,7 +51,7 @@ export const Pages: CollectionConfig = {
     maxPerDoc: 10,
   },
   fields: [
-    i18nEditGuideField({ collectionSlug: 'pages' }),
+    i18nEditGuideField({ collectionSlug: 'pages', requiredPaths: requiredI18nPaths }),
     {
       name: 'pageKey',
       type: 'select',

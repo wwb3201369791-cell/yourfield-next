@@ -62,7 +62,10 @@ export const importLegacyPages = async (
       publishedAt: new Date().toISOString(),
       _status: 'published',
     };
-    const { zhData, localizedData } = splitLocalizedData(data);
+    const { zhData, localizedData } = splitLocalizedData({
+      ...data,
+      _status: 'draft',
+    });
 
     const upserted = await upsertCollection({
       collection: 'pages',
@@ -73,6 +76,17 @@ export const importLegacyPages = async (
       uniqueValue: page.pageKey,
       options,
     });
+
+    if (!options.skipExisting) {
+      await payload.update({
+        collection: 'pages',
+        data: { _status: 'published' },
+        depth: 0,
+        id: upserted.id,
+        locale: 'zh',
+        overrideAccess: true,
+      });
+    }
 
     result.created += upserted.created;
     result.updated += upserted.updated;
