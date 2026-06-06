@@ -12,10 +12,34 @@ type ProductCardProps = Readonly<{
   detailLabel: string;
 }>;
 
+function standardDisplayLabel(standard: string, locale: Locale) {
+  const label = standard.trim();
+
+  if (!label) {
+    return null;
+  }
+
+  if (locale === 'zh') {
+    return label;
+  }
+
+  const sanitized = label
+    .replace(/《[^》]*》/g, '')
+    .replace(/[\u3400-\u9fff]+/gu, '')
+    .replace(/[（）()，、；：。]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return /[\p{L}\p{N}]/u.test(sanitized) ? sanitized : null;
+}
+
 export function ProductCard({ product, locale, detailLabel }: ProductCardProps) {
   const isCmsMediaImage = shouldUseUnoptimizedImage(product.image);
   const productTitle = localized(product.name, locale);
   const productCategory = localized(product.categoryName, locale);
+  const standardLabels = product.standards
+    .map((standard) => standardDisplayLabel(standard, locale))
+    .filter((standard): standard is string => Boolean(standard));
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded border border-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
@@ -49,7 +73,7 @@ export function ProductCard({ product, locale, detailLabel }: ProductCardProps) 
           {localized(product.description, locale)}
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
-          {product.standards.slice(0, 2).map((standard) => (
+          {standardLabels.slice(0, 2).map((standard) => (
             <span
               key={standard}
               className="border-primary/15 bg-primary/5 rounded-full border px-3 py-1 text-xs font-semibold text-primary"
