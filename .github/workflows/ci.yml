@@ -33,7 +33,7 @@ jobs:
     env:
       DATABASE_URI: postgresql://postgres:postgres@localhost:5432/yourfield_ci
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
-      NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: ''
       NEXT_TELEMETRY_DISABLED: '1'
       NODE_OPTIONS: --max-old-space-size=4096
       PAYLOAD_DB_PUSH: 'true'
@@ -42,7 +42,8 @@ jobs:
       CRON_SECRET: ci-only-cron-secret
       REVALIDATE_SECRET: ci-only-revalidate-secret
       PAYLOAD_PREVIEW_SECRET: ci-only-preview-secret
-      TURNSTILE_SECRET: ci-only-turnstile-secret
+      TURNSTILE_SECRET: ''
+      PAYLOAD_PRIVATE_ROUTES_EXTERNAL_PROTECTION: 'true'
 
     steps:
       - name: Checkout

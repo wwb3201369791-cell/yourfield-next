@@ -216,19 +216,27 @@ const richTextFromBlocks = (
   mediaManifest: MediaManifest,
 ) => ({
   root: {
-    children: blocks.map((block) => {
-      if (block.type === 'paragraph') {
-        return paragraphNode(block.text[locale]);
+    children: (() => {
+      const children: Array<ReturnType<typeof paragraphNode> | ReturnType<typeof uploadNode>> = [];
+
+      for (const block of blocks) {
+        if (block.type === 'paragraph') {
+          children.push(paragraphNode(block.text[locale]));
+          continue;
+        }
+
+        const mediaId = mediaManifest.get(block.imagePath);
+
+        if (!mediaId) {
+          console.warn(`[seed] news body image skipped: ${block.imagePath}`);
+          continue;
+        }
+
+        children.push(uploadNode(mediaId));
       }
 
-      const mediaId = mediaManifest.get(block.imagePath);
-
-      if (!mediaId) {
-        throw new Error(`Missing media for news body image: ${block.imagePath}`);
-      }
-
-      return uploadNode(mediaId);
-    }),
+      return children;
+    })(),
     direction: null,
     format: '',
     indent: 0,
@@ -273,18 +281,13 @@ export const importLegacyNews = async (
 
   for (const item of legacyNewsSeeds) {
     const cover = mediaManifest.get(item.imagePath);
-
-    if (!cover) {
-      throw new Error(`Missing media for news ${item.slug}: ${item.imagePath}`);
-    }
-
     const { categoryLabel, excerpt, title } = item;
     const content = localizedRichTextFromBlocks(item.body, mediaManifest);
     const data = {
       title,
       slug: item.slug,
       category: 'news',
-      cover,
+      ...(cover ? { cover } : {}),
       excerpt,
       content,
       author: '永霏集团',

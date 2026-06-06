@@ -20,6 +20,20 @@ type MediaSeed = {
   title: string;
 };
 
+const resolveSeedAssetPath = (seedPath: string) => {
+  const candidates = [path.join(process.cwd(), seedPath), path.join(projectRoot, seedPath)];
+
+  if (seedPath.startsWith('assets/')) {
+    const publicAssetPath = seedPath.slice('assets/'.length);
+    candidates.push(
+      path.join(process.cwd(), 'public', publicAssetPath),
+      path.join(projectRoot, 'public', publicAssetPath),
+    );
+  }
+
+  return candidates.find((candidate) => fs.existsSync(candidate)) ?? null;
+};
+
 const mediaSeeds: MediaSeed[] = [
   {
     path: 'assets/images/brand/yourfield-logo-official-a.png',
@@ -105,9 +119,12 @@ export const importLegacyMedia = async (
   const manifest: MediaManifest = new Map();
 
   for (const seed of mediaSeeds) {
-    const absolutePath = path.join(projectRoot, seed.path);
-    if (!fs.existsSync(absolutePath)) {
-      throw new Error(`Missing seed media asset: ${absolutePath}`);
+    const absolutePath = resolveSeedAssetPath(seed.path);
+
+    if (!absolutePath) {
+      console.warn(`[seed] optional media asset skipped: ${seed.path}`);
+      result.skipped += 1;
+      continue;
     }
 
     const existing = await payload.find({
