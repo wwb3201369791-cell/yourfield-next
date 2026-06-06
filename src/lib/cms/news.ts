@@ -256,10 +256,22 @@ function textFromContentBlock(block: NewsContentBlock): string {
   return block.text;
 }
 
+const hanTextPattern = /[\u3400-\u9fff]/u;
+
 function categoryLabel(category: string | undefined, locale: Locale) {
   const key = asString(category, 'news');
 
   return categoryLabels[key]?.[locale] ?? key;
+}
+
+function publicNewsAuthor(author: string | undefined, locale: Locale) {
+  const value = asString(author);
+
+  if (locale !== 'zh' && hanTextPattern.test(value)) {
+    return '';
+  }
+
+  return value;
 }
 
 function normalizedFeaturedOrder(value: unknown) {
@@ -291,7 +303,7 @@ function mapCmsNews(item: CmsNews, locale: Locale): NewsItem {
   const isFeatured = Boolean(item.isFeatured || featuredOrder);
 
   return {
-    author: asString(item.author, '永霏集团'),
+    author: publicNewsAuthor(item.author, locale),
     category: categoryLabel(item.category, locale),
     content: content.length > 0 ? content : [{ text: excerpt, type: 'paragraph' }],
     ...(dateModified ? { dateModified } : {}),
