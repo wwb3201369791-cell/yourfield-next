@@ -195,6 +195,29 @@ export const adminTextDictionary: Readonly<Record<string, string>> = {
   未命名关键词: 'Untitled keyword',
   '还没有可展示的实时搜索。': 'No real-time searches to display yet.',
   搜索: 'Searches',
+  'SEO 搜索优化': 'SEO and search optimization',
+  SEO标题: 'SEO title',
+  'SEO 标题': 'SEO title',
+  'SEO 描述': 'SEO description',
+  'SEO 关键词': 'SEO keywords',
+  分享封面图: 'Share cover image',
+  规范链接: 'Canonical URL',
+  '编辑搜索标题、描述、关键词、分享封面和规范链接':
+    'Edit the search title, description, keywords, share cover, and canonical URL',
+  '编辑搜索引擎和分享卡片优先读取的标题、描述、关键词和规范链接。不填写时前台会自动使用产品名称与介绍。':
+    'Edit the title, description, keywords, and canonical URL used first by search engines and sharing cards. Leave blank to use the product name and introduction automatically.',
+  '建议 30-70 个字符，包含产品名称、用途或核心型号。':
+    'Recommended: 30–70 characters, including the product name, use case, or key model.',
+  '建议 80-160 个字符，概括产品用途、材料、标准或应用场景。':
+    'Recommended: 80–160 characters summarizing use case, materials, standards, or applications.',
+  '用逗号分隔，例如：消防服, 阻燃防护服, firefighter suit。':
+    'Separate with commas, for example: firefighter suit, flame-retardant protective clothing.',
+  '可选。微信、社媒或聊天软件分享时优先使用；不填则使用产品主图。':
+    'Optional. Used first for WeChat, social, or chat-app shares; leave blank to use the product hero image.',
+  '通常留空。只有需要指定搜索引擎主链接时再填写。':
+    'Usually leave blank. Fill only when a specific canonical search-engine URL is required.',
+  '一般不要勾选。勾选后该产品详情页会输出 noindex。':
+    'Usually keep this unchecked. When checked, the product detail page outputs noindex.',
   点击: 'Clicks',
   询盘: 'Inquiries',
   互动趋势: 'interaction trend',

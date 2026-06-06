@@ -72,6 +72,7 @@ describe('Products admin structure', () => {
       adminLabel('资料与认证状态'),
       adminLabel('洗护与维护'),
       adminLabel('常见问题'),
+      adminLabel('SEO 搜索优化'),
       adminLabel('媒体'),
     ]);
     expect(
