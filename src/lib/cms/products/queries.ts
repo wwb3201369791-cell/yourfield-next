@@ -1,9 +1,9 @@
 ﻿import type { Where } from 'payload';
-import { cache } from 'react';
 
 import { env } from '@/lib/env';
 import { locales, type Locale } from '@/lib/i18n/locale';
 import { unstableCacheOrPassThrough } from '@/lib/next-cache';
+import { reactCacheOrPassThrough } from '@/lib/react-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from '../cache';
 import { getPayloadClient } from '../payload';
@@ -93,7 +93,7 @@ function onlyPublicProductsWithImages(products: readonly ReturnType<typeof mapCm
   return products.filter(hasVisibleProductImage);
 }
 
-export const getCmsProducts = cache(async (locale: Locale, draft = false) => {
+export const getCmsProducts = reactCacheOrPassThrough(async (locale: Locale, draft = false) => {
   const products =
     draft || shouldBypassProductCache()
       ? await getCmsProductsUncached(locale, draft)
@@ -142,11 +142,13 @@ const getCachedCmsProductBySlug = unstableCacheOrPassThrough(
   },
 );
 
-export const getCmsProductBySlug = cache(async (locale: Locale, slug: string, draft = false) => {
-  return draft || shouldBypassProductCache()
-    ? getCmsProductBySlugUncached(locale, slug, draft)
-    : getCachedCmsProductBySlug(locale, slug);
-});
+export const getCmsProductBySlug = reactCacheOrPassThrough(
+  async (locale: Locale, slug: string, draft = false) => {
+    return draft || shouldBypassProductCache()
+      ? getCmsProductBySlugUncached(locale, slug, draft)
+      : getCachedCmsProductBySlug(locale, slug);
+  },
+);
 
 async function getFeaturedCmsProductsUncached(locale: Locale, limit = 6, draft = false) {
   const products = draft
@@ -166,11 +168,13 @@ const getCachedFeaturedCmsProducts = unstableCacheOrPassThrough(
   },
 );
 
-export const getFeaturedCmsProducts = cache(async (locale: Locale, limit = 6, draft = false) => {
-  return draft || shouldBypassProductCache()
-    ? getFeaturedCmsProductsUncached(locale, limit, draft)
-    : getCachedFeaturedCmsProducts(locale, limit);
-});
+export const getFeaturedCmsProducts = reactCacheOrPassThrough(
+  async (locale: Locale, limit = 6, draft = false) => {
+    return draft || shouldBypassProductCache()
+      ? getFeaturedCmsProductsUncached(locale, limit, draft)
+      : getCachedFeaturedCmsProducts(locale, limit);
+  },
+);
 
 export async function getCmsProductStaticParams() {
   const products = await getCmsProducts('zh');

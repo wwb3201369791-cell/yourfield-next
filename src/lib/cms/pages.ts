@@ -1,7 +1,6 @@
-import { cache } from 'react';
-
 import type { Locale } from '@/lib/i18n/locale';
 import { unstableCacheOrPassThrough } from '@/lib/next-cache';
+import { reactCacheOrPassThrough } from '@/lib/react-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from './cache';
 import { getPayloadClient } from './payload';
@@ -112,8 +111,10 @@ const getCachedCmsPageByKey = unstableCacheOrPassThrough(
   },
 );
 
-export const getCmsPageByKey = cache(async (locale: Locale, pageKey: string, draft = false) => {
-  return draft
-    ? getCmsPageByKeyUncached(locale, pageKey, true)
-    : getCachedCmsPageByKey(locale, pageKey);
-});
+export const getCmsPageByKey = reactCacheOrPassThrough(
+  async (locale: Locale, pageKey: string, draft = false) => {
+    return draft
+      ? getCmsPageByKeyUncached(locale, pageKey, true)
+      : getCachedCmsPageByKey(locale, pageKey);
+  },
+);

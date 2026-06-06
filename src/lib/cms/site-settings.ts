@@ -1,7 +1,6 @@
-import { cache } from 'react';
-
 import type { Locale } from '@/lib/i18n/locale';
 import { unstableCacheOrPassThrough } from '@/lib/next-cache';
+import { reactCacheOrPassThrough } from '@/lib/react-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsGlobalCacheTag } from './cache';
 import { normalizeCmsMediaUrl } from './media';
@@ -305,4 +304,4 @@ const getCachedCmsSiteSettings = unstableCacheOrPassThrough(
   },
 );
 
-export const getCmsSiteSettings = cache(getCachedCmsSiteSettings);
+export const getCmsSiteSettings = reactCacheOrPassThrough(getCachedCmsSiteSettings);

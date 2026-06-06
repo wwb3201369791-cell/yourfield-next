@@ -1,8 +1,7 @@
-import { cache } from 'react';
-
 import { env } from '@/lib/env';
 import type { Locale } from '@/lib/i18n/locale';
 import { unstableCacheOrPassThrough } from '@/lib/next-cache';
+import { reactCacheOrPassThrough } from '@/lib/react-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from '../cache';
 import { getPayloadClient } from '../payload';
@@ -50,7 +49,7 @@ function shouldBypassProductGroupCache() {
   return env.NODE_ENV !== 'production' || !env.REVALIDATE_SECRET;
 }
 
-export const getCmsProductCategories = cache(async (locale: Locale) =>
+export const getCmsProductCategories = reactCacheOrPassThrough(async (locale: Locale) =>
   shouldBypassProductGroupCache()
     ? getCmsProductCategoriesUncached(locale)
     : getCachedCmsProductCategories(locale),
@@ -110,7 +109,7 @@ const getCachedCmsProductGroups = unstableCacheOrPassThrough(
   },
 );
 
-export const getCmsProductGroups = cache(async (locale: Locale) =>
+export const getCmsProductGroups = reactCacheOrPassThrough(async (locale: Locale) =>
   shouldBypassProductGroupCache()
     ? getCmsProductGroupsUncached(locale)
     : getCachedCmsProductGroups(locale),

@@ -1,8 +1,7 @@
-import { cache } from 'react';
-
 import { env } from '@/lib/env';
 import type { Locale } from '@/lib/i18n/locale';
 import { unstableCacheOrPassThrough } from '@/lib/next-cache';
+import { reactCacheOrPassThrough } from '@/lib/react-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from './cache';
 import { normalizeCmsMediaUrl } from './media';
@@ -171,7 +170,7 @@ const getCachedCmsSolutions = unstableCacheOrPassThrough(
   },
 );
 
-export const getCmsSolutions = cache(async (locale: Locale, draft = false) => {
+export const getCmsSolutions = reactCacheOrPassThrough(async (locale: Locale, draft = false) => {
   if (draft || env.NODE_ENV !== 'production') {
     return getCmsSolutionsUncached(locale, draft);
   }

@@ -1,5 +1,3 @@
-import { cache } from 'react';
-
 import { env } from '@/lib/env';
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import type { Locale } from '@/lib/i18n/locale';
@@ -11,6 +9,7 @@ import {
   type SiteNavigationItem,
 } from '@/lib/navigation';
 import { unstableCacheOrPassThrough } from '@/lib/next-cache';
+import { reactCacheOrPassThrough } from '@/lib/react-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag, cmsGlobalCacheTag } from './cache';
 import { getPayloadClient } from './payload';
@@ -410,6 +409,6 @@ function shouldBypassNavigationCache() {
   return env.NODE_ENV !== 'production' || !env.REVALIDATE_SECRET;
 }
 
-export const getCmsNavigation = cache(async (locale: Locale) =>
+export const getCmsNavigation = reactCacheOrPassThrough(async (locale: Locale) =>
   shouldBypassNavigationCache() ? getCmsNavigationUncached(locale) : getCachedCmsNavigation(locale),
 );

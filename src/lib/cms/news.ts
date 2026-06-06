@@ -1,7 +1,6 @@
-import { cache } from 'react';
-
 import { locales, type Locale } from '@/lib/i18n/locale';
 import { unstableCacheOrPassThrough } from '@/lib/next-cache';
+import { reactCacheOrPassThrough } from '@/lib/react-cache';
 
 import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from './cache';
 import { normalizeCmsMediaUrl } from './media';
@@ -361,7 +360,7 @@ const getCachedCmsNews = unstableCacheOrPassThrough(
   },
 );
 
-export const getCmsNews = cache(async (locale: Locale, draft = false) => {
+export const getCmsNews = reactCacheOrPassThrough(async (locale: Locale, draft = false) => {
   return draft ? getCmsNewsUncached(locale, true) : getCachedCmsNews(locale);
 });
 
@@ -436,11 +435,13 @@ const getCachedCmsNewsBySlug = unstableCacheOrPassThrough(
   },
 );
 
-export const getCmsNewsBySlug = cache(async (locale: Locale, slug: string, draft = false) => {
-  return draft
-    ? getCmsNewsBySlugUncached(locale, slug, true)
-    : getCachedCmsNewsBySlug(locale, slug);
-});
+export const getCmsNewsBySlug = reactCacheOrPassThrough(
+  async (locale: Locale, slug: string, draft = false) => {
+    return draft
+      ? getCmsNewsBySlugUncached(locale, slug, true)
+      : getCachedCmsNewsBySlug(locale, slug);
+  },
+);
 
 export async function getCmsNewsStaticParams() {
   const items = await getCmsNews('zh');
