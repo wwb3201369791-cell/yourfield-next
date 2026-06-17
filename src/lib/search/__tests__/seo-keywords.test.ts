@@ -4,6 +4,15 @@ import { searchContent } from '@/lib/search/search';
 import { getSeoHotTerms, getSeoIndustryCaseDocuments } from '@/lib/search/seo-keywords';
 import type { SearchSourceProvider } from '@/lib/search/types';
 
+const seoSourceProvider: SearchSourceProvider = async (input) => ({
+  faqs: [],
+  industryCases: getSeoIndustryCaseDocuments(input.locale, input.q),
+  news: [],
+  pages: [],
+  products: [],
+  solutions: [],
+});
+
 describe('SEO procurement keyword search data', () => {
   it('exposes procurement hot terms per locale', () => {
     expect(getSeoHotTerms('en')).toEqual(
@@ -18,15 +27,6 @@ describe('SEO procurement keyword search data', () => {
   });
 
   it('makes English procurement searches resolve to static industry cases', async () => {
-    const sourceProvider: SearchSourceProvider = async (input) => ({
-      faqs: [],
-      industryCases: getSeoIndustryCaseDocuments(input.locale),
-      news: [],
-      pages: [],
-      products: [],
-      solutions: [],
-    });
-
     const response = await searchContent(
       {
         hitsPerPage: 10,
@@ -35,7 +35,7 @@ describe('SEO procurement keyword search data', () => {
         q: 'FR Coveralls Manufacturer',
         type: 'all',
       },
-      sourceProvider,
+      seoSourceProvider,
     );
 
     expect(response.totalHits).toBeGreaterThan(0);
@@ -47,10 +47,34 @@ describe('SEO procurement keyword search data', () => {
     });
   });
 
-  it('keeps localized procurement terms as header/search-page hot terms without injecting non-English static hits', () => {
-    expect(getSeoHotTerms('zh')).toContain('防电弧服厂家');
-    expect(getSeoHotTerms('ru')).toContain('Производитель огнестойких комбинезонов');
-    expect(getSeoIndustryCaseDocuments('zh')).toEqual([]);
-    expect(getSeoIndustryCaseDocuments('ru')).toEqual([]);
+  it('makes localized procurement searches resolve while keeping short generic searches untouched', async () => {
+    const procurementResponse = await searchContent(
+      {
+        hitsPerPage: 10,
+        locale: 'zh',
+        page: 1,
+        q: '阻燃连体服厂家',
+        type: 'all',
+      },
+      seoSourceProvider,
+    );
+    const genericResponse = await searchContent(
+      {
+        hitsPerPage: 10,
+        locale: 'zh',
+        page: 1,
+        q: '消防',
+        type: 'all',
+      },
+      seoSourceProvider,
+    );
+
+    expect(procurementResponse.hits[0]).toMatchObject({
+      id: 'industry-case:seo-oil-gas-fr-clothing',
+      title: '石油天然气阻燃防护服采购方案',
+      type: 'industry-case',
+      url: '/zh/products#industry-petrochemical',
+    });
+    expect(genericResponse.totalHits).toBe(0);
   });
 });

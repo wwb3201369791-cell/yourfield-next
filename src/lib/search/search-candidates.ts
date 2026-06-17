@@ -296,6 +296,7 @@ function industryCaseCandidate(item: SearchSourceDocument, locale: string): Sear
   const meta = asString(item.meta);
   const image = asString(item.image);
   const href = asString(item.href);
+  const queryTerms = asStringArray(item.queryTerms).join(' ');
 
   return {
     category: { id: 'industry-case', ...(meta ? { name: meta } : {}) },
@@ -303,6 +304,7 @@ function industryCaseCandidate(item: SearchSourceDocument, locale: string): Sear
     excerpt: truncate(text),
     fields: [
       { text: title, weight: 3 },
+      { text: queryTerms, weight: 3 },
       { text, weight: 1.5 },
       { text: meta, weight: 1.2 },
       { text: anchor, weight: 0.8 },

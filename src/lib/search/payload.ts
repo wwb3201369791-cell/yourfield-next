@@ -221,7 +221,7 @@ export async function getPayloadSearchSources(input: SearchQuery): Promise<Searc
 
   return {
     faqs: faqs.docs,
-    industryCases: getSeoIndustryCaseDocuments(input.locale),
+    industryCases: getSeoIndustryCaseDocuments(input.locale, input.q),
     news: news.docs,
     pages: pages.docs,
     products: onlyPublicProductSearchDocs(products.docs),
