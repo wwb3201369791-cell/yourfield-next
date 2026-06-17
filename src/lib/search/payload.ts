@@ -4,6 +4,7 @@ import { CMS_CACHE_REVALIDATE_SECONDS, cmsCollectionCacheTag } from '@/lib/cms/c
 import { getPayloadClient } from '@/lib/cms/payload';
 import { unstableCacheOrPassThrough } from '@/lib/next-cache';
 import { recommendedProductHitsFromSources } from '@/lib/search/search';
+import { getSeoIndustryCaseDocuments } from '@/lib/search/seo-keywords';
 import {
   defaultSearchStatsLimit,
   getHotSearchTermsFromPayload,
@@ -220,7 +221,7 @@ export async function getPayloadSearchSources(input: SearchQuery): Promise<Searc
 
   return {
     faqs: faqs.docs,
-    industryCases: [],
+    industryCases: getSeoIndustryCaseDocuments(input.locale),
     news: news.docs,
     pages: pages.docs,
     products: onlyPublicProductSearchDocs(products.docs),

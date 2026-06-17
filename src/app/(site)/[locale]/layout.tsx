@@ -18,6 +18,7 @@ import { getTranslations } from '@/lib/i18n/getTranslations';
 import { isLocale, locales } from '@/lib/i18n/locale';
 import { normalizeMessageKey, type MessageTree } from '@/lib/i18n/messages';
 import { getPayloadHotSearchTerms } from '@/lib/search/payload';
+import { getSeoHotTerms } from '@/lib/search/seo-keywords';
 
 type LocaleLayoutProps = Readonly<{
   children: ReactNode;
@@ -86,7 +87,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const [navigation, siteSettings, hotTerms] = await Promise.all([
     getCmsNavigation(locale),
     getCmsSiteSettings(locale),
-    getPayloadHotSearchTerms(locale, [], 6),
+    getPayloadHotSearchTerms(locale, getSeoHotTerms(locale), 6),
   ]);
 
   const cookieBannerCopy: CookieBannerCopy = {

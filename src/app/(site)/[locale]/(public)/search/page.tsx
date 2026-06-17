@@ -6,6 +6,7 @@ import { SearchResultsPage, type SearchResultsCopy } from '@/components/search/S
 import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocaleFromParams, type LocaleRouteParams } from '@/lib/i18n/route';
 import { getPayloadHotSearchTerms } from '@/lib/search/payload';
+import { getSeoHotTerms } from '@/lib/search/seo-keywords';
 import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, collectionPageJsonLd } from '@/lib/seo/jsonld';
 
@@ -95,7 +96,7 @@ export default async function SearchPage({ params }: SearchPageProps) {
     validationErrorText: t('search.validationErrorText'),
     validationErrorTitle: t('search.validationErrorTitle'),
   };
-  const hotTerms = await getPayloadHotSearchTerms(locale, [], 8);
+  const hotTerms = await getPayloadHotSearchTerms(locale, getSeoHotTerms(locale), 8);
 
   return (
     <>

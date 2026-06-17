@@ -104,4 +104,34 @@ describe('getPayloadSearchSources', () => {
 
     expect(sources.products.map((product) => product.name)).toEqual(['有图产品', '卡片图产品']);
   });
+
+  it('adds static SEO procurement cases to search sources without extra Payload collections', async () => {
+    const payload = createPayloadStub();
+    const unstableCache = vi.fn((fn: unknown) => fn);
+
+    vi.resetModules();
+    vi.doMock('next/cache', () => ({
+      unstable_cache: unstableCache,
+    }));
+    vi.doMock('@/lib/cms/payload', () => ({
+      getPayloadClient: vi.fn(() => Promise.resolve(payload)),
+    }));
+    const { getPayloadSearchSources } = await import('@/lib/search/payload');
+
+    const sources = await getPayloadSearchSources({
+      ...input,
+      locale: 'en',
+      q: 'FR Coveralls Manufacturer',
+    });
+
+    expect(payload.find).toHaveBeenCalledTimes(5);
+    expect(sources.industryCases).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'seo-oil-gas-fr-clothing',
+          title: 'FR Coveralls & Flame Resistant Clothing for Oil & Gas',
+        }),
+      ]),
+    );
+  });
 });
