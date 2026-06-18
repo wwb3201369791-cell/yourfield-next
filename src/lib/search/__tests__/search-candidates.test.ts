@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { recommendedProductHitsFromSources, toCandidates } from '../search-candidates';
+import { scoreCandidate } from '../search-scoring';
 import type { SearchSources } from '../types';
 
 function emptySources(overrides: Partial<SearchSources> = {}): SearchSources {
@@ -159,6 +160,33 @@ describe('search candidates', () => {
     expect(searchableTextByType.product).toContain('arc flash suit');
     expect(searchableTextByType.news).toContain('Arc Flash News SEO');
     expect(searchableTextByType.page).toContain('safety products');
+  });
+
+  it('indexes generated product SEO procurement terms for currently listed product families', () => {
+    const [product] = toCandidates(
+      emptySources({
+        products: [
+          {
+            id: 'p1',
+            name: 'A级阻燃服',
+            slug: 'official-hyf-3105',
+            model: 'HYF-3105',
+            description: richText('适用于工业热防护场景'),
+            category: {
+              categoryId: 'thermal-welding',
+              group: 'thermal-welding',
+              name: '工业热防护与阻燃工装',
+            },
+            standards: ['GB8965.1-2020《防护服装阻燃服》'],
+          },
+        ],
+      }),
+      'zh',
+    );
+    const searchableText = product?.fields.map((field) => field.text).join(' ') ?? '';
+
+    expect(searchableText).toContain('阻燃连体服厂家');
+    expect(scoreCandidate(product!, '阻燃连体服厂家')).toBeGreaterThan(0);
   });
 
   it('builds deterministic recommended product hits and honors limits', () => {

@@ -1,7 +1,9 @@
+import { buildProductSeoKeywords } from '@/lib/product/seoKeywords';
 import type {
   SearchHit,
   SearchHitCategory,
   SearchHitType,
+  SearchLocale,
   SearchQuery,
   SearchSourceDocument,
   SearchSourceProvider,
@@ -116,6 +118,23 @@ function productCandidate(product: SearchSourceDocument, locale: string): Search
   const seoDescription = asString(seo?.description);
   const seoKeywords = asString(seo?.keywords);
   const seoText = compact([seoTitle, seoDescription, seoKeywords]).join(' ');
+  const productSeoTerms = buildProductSeoKeywords(
+    {
+      applications: asStringArray(product.applications),
+      categoryId,
+      categoryName,
+      description,
+      features: [features],
+      groupId: categoryGroup,
+      materials: asStringArray(product.materials),
+      model,
+      name: title,
+      productId,
+      sku,
+      standards: asStringArray(product.standards),
+    },
+    locale as SearchLocale,
+  ).join(' ');
   const image = productImage(product);
   const hitCategory = categoryId
     ? {
@@ -142,6 +161,7 @@ function productCandidate(product: SearchSourceDocument, locale: string): Search
       { text: features, weight: 1 },
       { text: specifications, weight: 1 },
       { text: seoText, weight: 0.6 },
+      { text: productSeoTerms, weight: 1.8 },
     ],
     id: `product:${asString(product.id, slug)}`,
     ...(image ? { image } : {}),

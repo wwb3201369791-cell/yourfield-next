@@ -2,6 +2,7 @@ import type { NewsItem } from '@/lib/cms/news';
 import type { CmsSiteSettings } from '@/lib/cms/site-settings';
 import type { Locale } from '@/lib/i18n/locale';
 import { localizedPublicText, publicLocaleText } from '@/lib/product/publicText';
+import { productSeoKeywords } from '@/lib/product/seoKeywords';
 import { specValue, type Product, type ProductFaq } from '@/lib/product/types';
 import { absoluteUrl, localizedPath } from '@/lib/seo/buildMetadata';
 
@@ -135,6 +136,7 @@ export function productJsonLd(product: Product, locale: Locale, settings?: CmsSi
   const name = localizedPublicText(product.name, locale) || product.id;
   const category = localizedPublicText(product.categoryName, locale);
   const description = localizedPublicText(product.description, locale);
+  const alternateNames = productSeoKeywords(product, locale);
   const additionalProperty = product.specifications
     .map((item) => ({
       '@type': 'PropertyValue',
@@ -153,6 +155,10 @@ export function productJsonLd(product: Product, locale: Locale, settings?: CmsSi
     model: product.model,
     image: product.images.filter(Boolean).map((image) => absoluteUrl(image)),
   };
+
+  if (alternateNames.length > 0) {
+    data.alternateName = alternateNames;
+  }
 
   if (brandName) {
     data.brand = {

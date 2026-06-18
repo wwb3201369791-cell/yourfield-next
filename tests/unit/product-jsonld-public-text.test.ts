@@ -96,6 +96,7 @@ describe('product public JSON-LD localization', () => {
       name: 'Dry Water Rescue Suit',
       category: 'Water Rescue Protection',
       description: 'Translated water rescue summary.',
+      alternateName: expect.arrayContaining(['Water Rescue Suit', 'Dry Water Rescue Suit']),
       additionalProperty: [{ '@type': 'PropertyValue', name: 'Model', value: 'HYF-9905' }],
     });
     expect(text).not.toMatch(/[\u3400-\u9fff]/u);

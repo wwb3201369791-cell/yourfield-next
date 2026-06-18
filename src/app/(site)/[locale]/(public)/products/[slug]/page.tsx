@@ -25,6 +25,7 @@ import { getTranslations } from '@/lib/i18n/getTranslations';
 import { resolveRouteLocaleAndSlug, type LocaleSlugRouteParams } from '@/lib/i18n/route';
 import { isDraftModeEnabled } from '@/lib/preview/draft';
 import { localizedPublicText } from '@/lib/product/publicText';
+import { productSeoKeywords } from '@/lib/product/seoKeywords';
 import { buildPageMetadata, localizedPath } from '@/lib/seo/buildMetadata';
 import { breadcrumbJsonLd, faqPageJsonLd, productJsonLd } from '@/lib/seo/jsonld';
 
@@ -50,6 +51,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
   const productTitle = localizedPublicText(product.name, locale) || product.id;
   const productDescription = localizedPublicText(product.description, locale) || productTitle;
   const seo = product.seo;
+  const keywords = [...(seo?.keywords ?? []), ...productSeoKeywords(product, locale)];
 
   return buildPageMetadata({
     locale,
@@ -58,7 +60,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
     description: seo?.description || productDescription,
     image: seo?.image || product.image,
     canonical: seo?.canonical,
-    keywords: seo?.keywords,
+    keywords,
     noIndex: isDraft || Boolean(seo?.noIndex),
   });
 }
