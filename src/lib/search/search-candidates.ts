@@ -21,6 +21,7 @@ import {
 } from './search-text';
 
 export type WeightedField = Readonly<{
+  snippet?: boolean;
   text: string;
   weight: number;
 }>;
@@ -151,7 +152,7 @@ function productCandidate(product: SearchSourceDocument, locale: string): Search
       { text: title, weight: 3 },
       { text: model, weight: 3 },
       { text: sku, weight: 3 },
-      { text: productId, weight: 3 },
+      { snippet: false, text: productId, weight: 3 },
       { text: description, weight: 1 },
       { text: tags, weight: 1.5 },
       { text: standards, weight: 1 },
@@ -161,7 +162,7 @@ function productCandidate(product: SearchSourceDocument, locale: string): Search
       { text: features, weight: 1 },
       { text: specifications, weight: 1 },
       { text: seoText, weight: 0.6 },
-      { text: productSeoTerms, weight: 1.8 },
+      { snippet: false, text: productSeoTerms, weight: 1.8 },
     ],
     id: `product:${asString(product.id, slug)}`,
     ...(image ? { image } : {}),

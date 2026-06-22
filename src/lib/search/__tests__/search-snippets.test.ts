@@ -65,4 +65,21 @@ describe('search snippets', () => {
       ),
     ).toBe('型号 HYF 5506 消防服');
   });
+
+  it('does not expose internal slug or generated SEO-only fields as visible snippets', () => {
+    expect(
+      snippetFor(
+        {
+          ...baseCandidate,
+          excerpt: '2级防电弧服(夹克款深蓝)',
+          fields: [
+            { snippet: false, text: '2-ji-fang-dian-hu-fu-jia-ke-kuan', weight: 3 },
+            { snippet: false, text: '防电弧服厂家 Arc Flash Clothing Manufacturer', weight: 1.8 },
+          ],
+          title: '2级防电弧服(夹克款深蓝)',
+        },
+        'a',
+      ),
+    ).toBe('2级防电弧服(夹克款深蓝)');
+  });
 });
