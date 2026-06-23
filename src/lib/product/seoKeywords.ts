@@ -242,15 +242,16 @@ function inferKeywordGroups(input: ProductSeoKeywordInput) {
     return [explicit];
   }
 
+  // Infer broad SEO keyword families only from high-signal product taxonomy and identity.
+  // Descriptions, features, and materials often mention cross-cutting properties such as
+  // “阻燃材料” on non-FR products; using them here makes generic procurement queries
+  // rank unrelated products equally.
   const haystack = [
     input.groupId,
     input.categoryId,
     input.categoryName,
     input.name,
-    input.description,
     ...(input.applications ?? []),
-    ...(input.features ?? []),
-    ...(input.materials ?? []),
     ...(input.standards ?? []),
   ]
     .filter(Boolean)

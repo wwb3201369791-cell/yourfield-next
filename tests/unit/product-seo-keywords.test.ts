@@ -66,4 +66,26 @@ describe('product SEO keyword generation', () => {
       'Dry Water Rescue Suit',
     );
   });
+
+  it('does not add thermal procurement keywords from incidental flame-retardant material copy', () => {
+    const terms = productSeoKeywords(
+      product({
+        applications: [text('电力电网带电作业中心')],
+        categoryId: '',
+        categoryName: text(''),
+        description: text('进入高电场的工作人员应穿全套屏蔽服。'),
+        features: [text('辅料均采用阻燃材料，安全性能更优异。')],
+        groupId: '',
+        id: 'live-line-shielding-suit',
+        materials: [text('本质阻燃/金属纤维混纺面料')],
+        model: 'HYF-3703',
+        name: text('1000kv带电作业用屏蔽服'),
+        standards: ['GB/T6568-2008《带电作业用屏蔽服装》'],
+      }),
+      'zh',
+    );
+
+    expect(terms).toContain('防电弧服厂家');
+    expect(terms).not.toContain('阻燃连体服厂家');
+  });
 });
